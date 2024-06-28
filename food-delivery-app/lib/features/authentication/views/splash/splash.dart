@@ -12,21 +12,6 @@ import 'package:get_storage/get_storage.dart';
 class SplashView extends StatelessWidget {
   final SplashController _controller = Get.put(SplashController());
 
-  Widget _getCurrentView(int index) {
-    switch (index) {
-      case 0:
-        return SplashStart();
-      case 1:
-        return SplashMiddle();
-      case 2:
-        return SplashDone();
-      case 3:
-        return SplashWelcome();
-      default:
-        return SplashStart();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -34,7 +19,16 @@ class SplashView extends StatelessWidget {
       child: Scaffold(
         body: Stack(
           children: [
-            Obx(() => _getCurrentView(_controller.currentIndex.value)),
+            PageView(
+              physics: NeverScrollableScrollPhysics(),
+              controller: _controller.pageController,
+              children: [
+                SplashStart(),
+                SplashMiddle(),
+                SplashDone(),
+                SplashWelcome()
+              ],
+            )
           ],
         ),
       ),

@@ -9,7 +9,7 @@ import 'package:food_delivery_app/utils/device/device_utility.dart';
 import 'package:get/get.dart';
 
 class SplashDone extends StatelessWidget {
-  final SplashController _controller = Get.put(SplashController());
+  final SplashController _controller = SplashController.instance;
 
   @override
   Widget build(BuildContext context) {

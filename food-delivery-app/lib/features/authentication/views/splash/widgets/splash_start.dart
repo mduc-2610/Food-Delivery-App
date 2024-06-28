@@ -5,7 +5,7 @@ import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:get/get.dart';
 
 class SplashStart extends StatelessWidget {
-  final SplashController _controller = Get.put(SplashController());
+  final SplashController _controller = SplashController.instance;
 
   @override
   Widget build(BuildContext context) {

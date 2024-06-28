@@ -1,19 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:food_delivery_app/features/authentication/views/splash/widgets/splash_welcome.dart';
-import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
-import 'package:food_delivery_app/features/authentication/views/splash/widgets/splash_done.dart';
-import 'package:food_delivery_app/features/authentication/views/splash/widgets/splash_middle.dart';
-import 'package:food_delivery_app/features/authentication/views/splash/widgets/splash_start.dart';
 
 class SplashController extends GetxController {
-  var currentIndex = 0.obs;
-  var progress = 0.0.obs;
-  late Timer _timer;
+  static SplashController get instance => Get.find();
 
-  final int totalDuration = 1;
-  final int delayed = 75;
+  Rx<int> currentPageIndex = 0.obs;
+  Rx<double> progress = 0.0.obs;
+  late Timer _timer;
+  final pageController = PageController();
+
+  final int totalDuration = 150;
+  final int delayed = 25;
 
   @override
   void onInit() {
@@ -22,19 +20,32 @@ class SplashController extends GetxController {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(Duration(milliseconds: totalDuration), (timer) {
-      progress.value += 0.05 / (totalDuration * delayed);
-      if (progress.value >= 2) {
+    _timer = Timer.periodic(Duration(milliseconds: delayed), (timer) {
+      progress.value += 0.05 / (totalDuration / delayed);
+      if (progress.value >= 1 + 3 / 4) {
         Get.offAll(() => Placeholder());
         _timer.cancel();
-      } else if (progress.value >= 1 + 1 / 2) {
-        currentIndex.value = 3;
-      } else if (progress.value >= 1) {
-        currentIndex.value = 2;
-      } else if (progress.value >= 1 / 5) {
-        currentIndex.value = 1;
+      } else {
+        _updateCurrentIndex();
       }
     });
+  }
+
+  void _updateCurrentIndex() {
+    if (progress.value >= 1 + 1 / 3) {
+      currentPageIndex.value = 3;
+    } else if (progress.value >= 1) {
+      currentPageIndex.value = 2;
+    } else if (progress.value >= 1 / 10) {
+      currentPageIndex.value = 1;
+    } else {
+      currentPageIndex.value = 0;
+    }
+    pageController.animateToPage(
+      currentPageIndex.value,
+      duration: Duration(microseconds: 1),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
