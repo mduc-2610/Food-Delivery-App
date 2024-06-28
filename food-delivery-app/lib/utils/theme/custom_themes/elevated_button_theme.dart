@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/utils/constants/colors.dart';
 
 class TElevatedButtonTheme {
   TElevatedButtonTheme._();
@@ -7,12 +8,12 @@ class TElevatedButtonTheme {
     style: ElevatedButton.styleFrom(
       elevation: 0,
       foregroundColor: Colors.white,
-      backgroundColor: Colors.blue,
+      backgroundColor: TColor.primary,
       disabledForegroundColor: Colors.grey,
       disabledBackgroundColor: Colors.grey,
-      side: BorderSide(color: Colors.blue),
+      side: BorderSide(color: TColor.primary),
       padding: EdgeInsets.symmetric(vertical: 18),
-      textStyle: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600)
+      textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)
     )
   );
 
@@ -20,12 +21,12 @@ class TElevatedButtonTheme {
       style: ElevatedButton.styleFrom(
           elevation: 0,
           foregroundColor: Colors.white,
-          backgroundColor: Colors.blue,
+          backgroundColor: TColor.primary,
           disabledForegroundColor: Colors.grey,
           disabledBackgroundColor: Colors.grey,
-          side: BorderSide(color: Colors.blue),
+          side: BorderSide(color: TColor.primary),
           padding: EdgeInsets.symmetric(vertical: 18),
-          textStyle: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600)
+          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)
       )
   );
 }

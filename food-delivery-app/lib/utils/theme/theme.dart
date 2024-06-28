@@ -5,7 +5,7 @@ import 'package:food_delivery_app/utils/theme/custom_themes/checkbox_theme.dart'
 import 'package:food_delivery_app/utils/theme/custom_themes/chip_theme.dart';
 import 'package:food_delivery_app/utils/theme/custom_themes/elevated_button_theme.dart';
 import 'package:food_delivery_app/utils/theme/custom_themes/floating_action_button.dart';
-import 'package:food_delivery_app/utils/theme/custom_themes/floating_action_button.dart';
+import 'package:food_delivery_app/utils/theme/custom_themes/text_button_theme.dart';
 import 'package:food_delivery_app/utils/theme/custom_themes/text_form_field_theme.dart';
 import 'package:food_delivery_app/utils/theme/custom_themes/text_theme.dart';
 
@@ -24,6 +24,7 @@ class TAppTheme {
     checkboxTheme: TCheckboxTheme.lightCheckboxTheme,
     bottomSheetTheme: TBottomSheetTheme.lightBottomSheetTheme,
     elevatedButtonTheme: TElevatedButtonTheme.lightElevatedButtonTheme,
+    textButtonTheme: TTextButtonTheme.lightTextButtonTheme,
     inputDecorationTheme: TTextFormFieldTheme.lightInputDecorationTheme,
     floatingActionButtonTheme: TFloatingActionButton.lightFloatingActionButton
   );
@@ -40,6 +41,7 @@ class TAppTheme {
       checkboxTheme: TCheckboxTheme.darkCheckboxTheme,
       bottomSheetTheme: TBottomSheetTheme.darkBottomSheetTheme,
       elevatedButtonTheme: TElevatedButtonTheme.darkElevatedButtonTheme,
+      textButtonTheme: TTextButtonTheme.darkTextButtonTheme,
       inputDecorationTheme: TTextFormFieldTheme.darkInputDecorationTheme,
       floatingActionButtonTheme: TFloatingActionButton.darkFloatingActionButton
   );

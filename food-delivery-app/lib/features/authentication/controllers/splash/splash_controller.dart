@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/features/authentication/views/onboarding/onboarding.dart';
 import 'package:get/get.dart';
 
 class SplashController extends GetxController {
@@ -23,7 +24,7 @@ class SplashController extends GetxController {
     _timer = Timer.periodic(Duration(milliseconds: delayed), (timer) {
       progress.value += 0.05 / (totalDuration / delayed);
       if (progress.value >= 1 + 3 / 4) {
-        Get.offAll(() => Placeholder());
+        Get.offAll(() => OnBoardingView());
         _timer.cancel();
       } else {
         _updateCurrentIndex();

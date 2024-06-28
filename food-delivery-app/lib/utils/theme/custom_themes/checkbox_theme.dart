@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/colors.dart';
 
 class TCheckboxTheme {
   TCheckboxTheme._();
@@ -15,7 +17,7 @@ class TCheckboxTheme {
     }),
     fillColor: MaterialStateProperty.resolveWith((states) {
       if(states.contains(MaterialState.selected)) {
-        return Colors.blue;
+        return TColor.primary;
       }
       else {
         return Colors.transparent;
@@ -35,7 +37,7 @@ class TCheckboxTheme {
       }),
       fillColor: MaterialStateProperty.resolveWith((states) {
         if(states.contains(MaterialState.selected)) {
-          return Colors.blue;
+          return TColor.primary;
         }
         else {
           return Colors.transparent;
