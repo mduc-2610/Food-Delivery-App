@@ -25,7 +25,7 @@ class TAppTheme {
     bottomSheetTheme: TBottomSheetTheme.lightBottomSheetTheme,
     elevatedButtonTheme: TElevatedButtonTheme.lightElevatedButtonTheme,
     inputDecorationTheme: TTextFormFieldTheme.lightInputDecorationTheme,
-      floatingActionButtonTheme: TFloatingActionButton.lightFloatingActionButton
+    floatingActionButtonTheme: TFloatingActionButton.lightFloatingActionButton
   );
 
   static ThemeData darkTheme = ThemeData(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TSizes {
-  TSizes._();
+class TSize {
+  TSize._();
 
   // Padding and margin sizes
   static const double xs = 4.0;
@@ -24,6 +24,7 @@ class TSizes {
   // Button sizes
   static const double buttonHeight = 18.0;
   static const double buttonRadius = 12.0;
+  static const double buttonLgRadius = 20.0;
   static const double buttonWidth = 120.0;
   static const double buttonElevation = 4.0;
 

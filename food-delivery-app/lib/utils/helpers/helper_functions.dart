@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class THelperFunctions {
+class THelperFunction {
   static Color? getColor(String value) {
 
     /// Define product and it will map the color from that product
