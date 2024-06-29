@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/main_button.dart';
 import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/sliver_app_bar.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
@@ -22,39 +23,9 @@ class _VerificationViewState extends State<VerificationView> {
       body: CustomScrollView(
         physics: NeverScrollableScrollPhysics(),
         slivers: [
-          SliverAppBar(
-            pinned: true,
-            backgroundColor: Colors.transparent,
-            title: Text(
-              "Verification",
-              style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.primary),
-            ),
-            expandedHeight: TDeviceUtil.getAppBarHeight(),
-            centerTitle: true,
-            flexibleSpace: Stack(
-              children: [
-                Positioned(
-                  top: TDeviceUtil.getAppBarHeight() / 2,
-                  right: 16,
-                  child: IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () {},
-                  ),
-                ),
-              ],
-            ),
-            leading: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back, color: Colors.black),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-            ),
+          CustomSliverAppBar(
+            title: "Verification",
+            isBigTitle: true,
           ),
           SliverToBoxAdapter(
             child: Stack(
