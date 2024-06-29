@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/widgets/main_button.dart';
+import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
 import 'package:food_delivery_app/features/authentication/controllers/onboarding/onboarding_controller.dart';
 import 'package:food_delivery_app/features/authentication/views/onboarding/widgets/onboarding.dart';
 import 'package:food_delivery_app/features/authentication/views/onboarding/widgets/onboarding_dot_navigation.dart';
@@ -47,35 +49,25 @@ class OnBoardingView extends StatelessWidget {
             bottom: TDeviceUtil.getBottomNavigationBarHeight(),
             left: 0,
             right: 0,
-            child: Column(
-              children: [
-                OnBoardingDotNavigation(),
-                SizedBox(height: TSize.spaceBetweenItems,),
-                Container(
-                  height: 55,
-                  width: TDeviceUtil.getScreenWidth() * 0.9,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(35),
-                  ),
-                  child: ElevatedButton(
+            child: MainWrapper(
+              child: Column(
+                children: [
+                  OnBoardingDotNavigation(),
+                  SizedBox(height: TSize.spaceBetweenItems,),
+
+                  MainButton(
                     onPressed: _controller.nextPage,
-                    child: Text(
-                        "Next"
-                    ),
+                    text: "Next"
                   ),
-                ),
-                SizedBox(height: TSize.spaceBetweenItems,),
-                Container(
-                  height: 55,
-                  width: TDeviceUtil.getScreenWidth() * 0.9,
-                  child: Obx(() => TextButton(
+                  SizedBox(height: TSize.spaceBetweenItems,),
+
+                  Obx(() => MainButton(
                     onPressed: _controller.skipPageOrLoginRedirect,
-                    child: Text(
-                        _controller.skipOrRedirectText.value
-                    ),
-                  )),
-                ),
-              ],
+                    text: _controller.skipOrRedirectText.value,
+                    isElevatedButton: false,
+                  ),)
+                ],
+              ),
             ),
           )
         ],

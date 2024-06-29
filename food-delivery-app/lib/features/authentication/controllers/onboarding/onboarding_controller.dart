@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/features/authentication/views/login/login.dart';
 import 'package:get/get.dart';
 
 class OnBoardingController extends GetxController {
@@ -25,7 +26,7 @@ class OnBoardingController extends GetxController {
 
   void nextPage() {
     if(currentPageIndex.value == 3) {
-      Get.to(() => Placeholder());
+      Get.to(() => LoginView());
     }
     else {
       currentPageIndex.value += 1;
@@ -35,7 +36,7 @@ class OnBoardingController extends GetxController {
 
   void skipPageOrLoginRedirect() {
     if (currentPageIndex.value == 3) {
-      Get.offAll(() => Container());
+      Get.offAll(() => LoginView());
     } else {
       currentPageIndex.value = 3;
       pageController.jumpToPage(3);

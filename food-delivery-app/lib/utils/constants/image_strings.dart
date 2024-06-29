@@ -11,4 +11,6 @@ class TImage {
   static String onBoarding3 = "assets/images/onboarding/onboarding_3.png";
   static String onBoarding4 = "assets/images/onboarding/onboarding_4.png";
 
+  // Login
+
 }

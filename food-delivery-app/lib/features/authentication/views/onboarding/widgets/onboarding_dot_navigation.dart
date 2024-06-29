@@ -5,7 +5,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:get/get.dart';
 
 class OnBoardingDotNavigation extends StatelessWidget {
-  final OnBoardingController _controller = Get.put(OnBoardingController());
+  final OnBoardingController _controller = OnBoardingController.instance;
 
   @override
   Widget build(BuildContext context) {
