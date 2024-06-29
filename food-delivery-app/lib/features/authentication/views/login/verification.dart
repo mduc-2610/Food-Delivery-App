@@ -105,30 +105,29 @@ class _VerificationViewState extends State<VerificationView> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         MainButton(
-                          onPressed: () {},
+                          onPressed: _controller.handleVerify,
                           text: "Verify",
                         ),
                         SizedBox(height: TSize.spaceBetweenItems),
-                        GestureDetector(
-                          onTap: () {
-                            // Navigate to sign-in page
-                          },
-                          child: Text.rich(
-                            TextSpan(
-                              text: 'Back to ',
-                              style: TextStyle(color: Colors.black54),
-                              children: [
-                                TextSpan(
-                                  text: 'Sign In',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Back to ",
+                              style: Theme.of(context).textTheme.bodySmall,
                             ),
-                          ),
-                        ),
+                            GestureDetector(
+                              onTap: _controller.loginRedirect,
+                              child: Text(
+                                "Sign In",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(color: TColor.primary),
+                              ),
+                            )
+                          ],
+                        )
                       ],
                     ),
                   ),

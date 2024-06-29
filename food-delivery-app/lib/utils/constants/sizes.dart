@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class TSize {
@@ -43,6 +45,8 @@ class TSize {
   static const double borderRadiusSm = 4.0;
   static const double borderRadiusMd = 8.0;
   static const double borderRadiusLg = 12.0;
+  static const double borderRadiusCircle = 100000000;
+
 
   // Divider height
   static const double dividerHeight = 1.0;

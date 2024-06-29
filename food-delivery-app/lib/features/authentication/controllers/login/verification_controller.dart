@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/features/authentication/views/login/verification.dart';
+import 'package:food_delivery_app/features/authentication/views/profile/profile.dart';
 import 'package:get/get.dart';
 
 class VerificationController extends GetxController {
@@ -49,6 +51,14 @@ class VerificationController extends GetxController {
         focusNodes[index].unfocus();
       }
     }
+  }
+
+  void handleVerify() {
+    Get.to(() => ProfileView());
+  }
+
+  void loginRedirect() {
+    Get.back();
   }
 
   @override
