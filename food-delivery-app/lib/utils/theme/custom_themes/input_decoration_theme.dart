@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 
-class TTextFormFieldTheme {
-  TTextFormFieldTheme._();
+class TInputDecorationTheme {
+  TInputDecorationTheme._();
 
   static InputDecorationTheme lightInputDecorationTheme = InputDecorationTheme(
     errorMaxLines: 3,

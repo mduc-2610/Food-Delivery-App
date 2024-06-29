@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:food_delivery_app/features/authentication/views/login/verification.dart';
 import 'package:food_delivery_app/features/authentication/views/login/widgets/register.dart';
 import 'package:get/get.dart';
 import 'package:food_delivery_app/features/authentication/views/login/widgets/login.dart';
@@ -17,9 +18,11 @@ class LoginController extends GetxController {
 
   void handleLogin() {
     print("HANDLE LOGIN");
+    Get.to(() => VerificationView());
   }
 
   void handleRegister() {
+    Get.to(() => VerificationView());
     print("HANDLE REGISTER");
   }
 }
