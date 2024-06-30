@@ -39,7 +39,6 @@ class _VerificationViewState extends State<VerificationView> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            SizedBox(height: TSize.spaceBetweenSections),
                             Text(
                               'Code has been sent to (+44) 20 **** 678',
                               textAlign: TextAlign.center,

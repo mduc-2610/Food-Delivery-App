@@ -13,4 +13,9 @@ class TImage {
 
   // Login
 
+  // Home
+  static String hcFood1 = "assets/images/home/hc_food_1.png";
+  static String eventBanner1 = "assets/images/home/event_banner_1.png";
+  static String eventBanner2 = "assets/images/home/event_banner_2.png";
+
 }

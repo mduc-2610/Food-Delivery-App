@@ -55,7 +55,7 @@ class TDeviceUtil {
   }
 
   static double getAppBarHeight() {
-    return kToolbarHeight;
+    return kToolbarHeight + 32;
   }
 
   static double getKeyboardHeight() {

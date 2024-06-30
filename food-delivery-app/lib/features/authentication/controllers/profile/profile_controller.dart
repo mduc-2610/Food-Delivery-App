@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/features/food/views/home/home.dart';
 import 'package:get/get.dart';
 
 class ProfileController extends GetxController {
   static ProfileController get instance => Get.find();
 
   void homeRedirect() {
-    Get.to(() => Placeholder());
+    Get.offAll(() => HomeView());
   }
 
   void skip() {
-    Get.to(() => Placeholder());
+    Get.offAll(() => HomeView());
   }
 
   void handleAddImage() {}

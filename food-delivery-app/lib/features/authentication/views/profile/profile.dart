@@ -23,7 +23,6 @@ class ProfileView extends StatelessWidget {
             child: Stack(
               children: [
                 MainWrapper(
-                  topMargin: TSize.spaceBetweenSections,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
