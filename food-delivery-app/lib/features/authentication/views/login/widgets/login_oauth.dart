@@ -70,14 +70,14 @@ class _LoginOauthState extends State<LoginOauth> {
                   ),
                 ),
                 SizedBox(
-                  width: TSize.spaceBetweenItems,
+                  width: TSize.spaceBetweenItemsVertical,
                 ),
                 Text(
                   "Or Sign In with",
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 SizedBox(
-                  width: TSize.spaceBetweenItems,
+                  width: TSize.spaceBetweenItemsVertical,
                 ),
                 Expanded(
                   child: Divider(
@@ -87,7 +87,7 @@ class _LoginOauthState extends State<LoginOauth> {
               ],
             ),
             SizedBox(
-              height: TSize.spaceBetweenItems,
+              height: TSize.spaceBetweenItemsVertical,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -98,7 +98,7 @@ class _LoginOauthState extends State<LoginOauth> {
                     child: Container(
                       margin: EdgeInsets.only(
                           right: (i < iconPaths.length - 1)
-                              ? TSize.spaceBetweenItems
+                              ? TSize.spaceBetweenItemsVertical
                               : 0),
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
@@ -117,7 +117,7 @@ class _LoginOauthState extends State<LoginOauth> {
               ],
             ),
             SizedBox(
-              height: TSize.spaceBetweenItems,
+              height: TSize.spaceBetweenItemsVertical,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

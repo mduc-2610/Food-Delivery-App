@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_delivery_app/common/widgets/circle_icon_card.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
@@ -15,9 +16,9 @@ class HomeSliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      // pinned: true,
+      pinned: true,
       toolbarHeight: TDeviceUtil.getAppBarHeight(),
-      backgroundColor: Colors.transparent,
+      // backgroundColor: Theme,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -46,7 +47,10 @@ class HomeSliverAppBar extends StatelessWidget {
           Positioned(
             top: TDeviceUtil.getAppBarHeight() / 2 + 12,
             right: 16,
-            child: SvgPicture.asset(TIcon.cart),
+            child: CircleIconCard(
+              elevation: TSize.iconCardElevation,
+              iconStr: TIcon.cart,
+            ),
           ),
         ],
       ),

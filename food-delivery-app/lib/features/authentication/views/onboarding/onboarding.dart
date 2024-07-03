@@ -53,13 +53,13 @@ class OnBoardingView extends StatelessWidget {
               child: Column(
                 children: [
                   OnBoardingDotNavigation(),
-                  SizedBox(height: TSize.spaceBetweenItems,),
+                  SizedBox(height: TSize.spaceBetweenItemsVertical,),
 
                   MainButton(
                     onPressed: _controller.nextPage,
                     text: "Next"
                   ),
-                  SizedBox(height: TSize.spaceBetweenItems,),
+                  SizedBox(height: TSize.spaceBetweenItemsVertical,),
 
                   Obx(() => MainButton(
                     onPressed: _controller.skipPageOrLoginRedirect,

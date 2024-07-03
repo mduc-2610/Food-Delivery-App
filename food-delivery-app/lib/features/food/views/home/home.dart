@@ -3,9 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 import 'package:get/get.dart';
 import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/search_bar.dart';
 import 'package:food_delivery_app/features/food/controllers/home/home_controller.dart';
 import 'package:food_delivery_app/features/food/views/home/widgets/category_card.dart';
-import 'package:food_delivery_app/features/food/views/home/widgets/food_card.dart';
+import 'package:food_delivery_app/features/food/views/common/widgets/food_card.dart';
 import 'package:food_delivery_app/features/food/views/home/widgets/home_sliver_app_bar.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
@@ -48,12 +49,7 @@ class HomeView extends StatelessWidget {
                 MainWrapper(
                   child: Column(
                     children: [
-                      TextField(
-                        decoration: InputDecoration(
-                            hintText: 'Search',
-                            prefixIcon: Icon(TIcon.search)
-                        ),
-                      ),
+                      CSearchBar(),
 
                       GridView.count(
                         crossAxisCount: 4,
@@ -62,18 +58,18 @@ class HomeView extends StatelessWidget {
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         children: [
-                          CategoryCard(label: 'Burger', icon: TIcon.burger, onTap: (){}),
-                          CategoryCard(label: 'Taco', icon: TIcon.taco, onTap: (){}),
-                          CategoryCard(label: 'Burrito', icon: TIcon.burrito, onTap: (){}),
-                          CategoryCard(label: 'Drink', icon: TIcon.drink, onTap: (){}),
-                          CategoryCard(label: 'Pizza', icon: TIcon.pizza, onTap: (){}),
-                          CategoryCard(label: 'Donut', icon: TIcon.donut, onTap: (){}),
-                          CategoryCard(label: 'Salad', icon: TIcon.salad, onTap: (){}),
-                          CategoryCard(label: 'Noodles', icon: TIcon.noodles, onTap: (){}),
-                          CategoryCard(label: 'Sandwich', icon: TIcon.sandwich, onTap: (){}),
-                          CategoryCard(label: 'Pasta', icon: TIcon.pasta, onTap: (){}),
-                          CategoryCard(label: 'Ice Cream', icon: TIcon.iceCream, onTap: (){}),
-                          CategoryCard(label: 'More', icon: TIcon.moreHoriz, onTap: (){}),
+                          CategoryCard(label: 'Burger', icon: TIcon.burger, onTap: () {_controller.getToFoodCategory("Burger");}),
+                          CategoryCard(label: 'Taco', icon: TIcon.taco, onTap: () {_controller.getToFoodCategory("Taco");}),
+                          CategoryCard(label: 'Burrito', icon: TIcon.burrito, onTap: () {_controller.getToFoodCategory("Burrito");}),
+                          CategoryCard(label: 'Drink', icon: TIcon.drink, onTap: () {_controller.getToFoodCategory("Drink");}),
+                          CategoryCard(label: 'Pizza', icon: TIcon.pizza, onTap: () {_controller.getToFoodCategory("Pizza");}),
+                          CategoryCard(label: 'Donut', icon: TIcon.donut, onTap: () {_controller.getToFoodCategory("Donut");}),
+                          CategoryCard(label: 'Salad', icon: TIcon.salad, onTap: () {_controller.getToFoodCategory("Salad");}),
+                          CategoryCard(label: 'Noodles', icon: TIcon.noodles, onTap: () {_controller.getToFoodCategory("Noodles");}),
+                          CategoryCard(label: 'Sandwich', icon: TIcon.sandwich, onTap: () {_controller.getToFoodCategory("Sandwich");}),
+                          CategoryCard(label: 'Pasta', icon: TIcon.pasta, onTap: () {_controller.getToFoodCategory("Pasta");}),
+                          CategoryCard(label: 'Ice Cream', icon: TIcon.iceCream, onTap: () {_controller.getToFoodCategory("Ice Cream");}),
+                          CategoryCard(label: 'More', icon: TIcon.moreHoriz, onTap: () {_controller.getToFoodCategory("Other");}),
                         ],
                       ),
                       SizedBox(height: TSize.spaceBetweenSections,),
@@ -83,7 +79,7 @@ class HomeView extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Special Offers', style: Theme.of(context).textTheme.headlineSmall),
+                              Text('Special Offers', style: Theme.of(context).textTheme.headlineMedium),
                               GestureDetector(
                                 onTap: () {},
                                 child: Row(
@@ -113,7 +109,7 @@ class HomeView extends StatelessWidget {
                             physics: NeverScrollableScrollPhysics(),
                             children: [
                               FoodCard(
-                                onTap: () {},
+                                onTap: () {_controller.getToFoodDetail("");},
                                 image: TImage.hcFood1,
                                 name: "Chicken Burger",
                                 stars: 4.9,
@@ -121,7 +117,7 @@ class HomeView extends StatelessWidget {
                                 salePrice: 6.00,
                               ),
                               FoodCard(
-                                onTap: () {},
+                                onTap: () {_controller.getToFoodDetail("");},
                                 image: TImage.hcFood1,
                                 name: "Chicken Burger",
                                 stars: 4.9,
@@ -129,7 +125,7 @@ class HomeView extends StatelessWidget {
                                 salePrice: 6.00,
                               ),
                               FoodCard(
-                                onTap: () {},
+                                onTap: () {_controller.getToFoodDetail("");},
                                 image: TImage.hcFood1,
                                 name: "Chicken Burger",
                                 stars: 4.9,
@@ -137,7 +133,7 @@ class HomeView extends StatelessWidget {
                                 salePrice: 6.00,
                               ),
                               FoodCard(
-                                onTap: () {},
+                                onTap: () {_controller.getToFoodDetail("");},
                                 image: TImage.hcFood1,
                                 name: "Chicken Burger",
                                 stars: 4.9,

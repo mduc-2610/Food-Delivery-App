@@ -14,8 +14,8 @@ class TColor {
   static const Color textDesc = Color(0xFF7f7e7c);
 
   // Background Colors
-  static const Color light = Color(0xFF4b68ff);
-  static const Color dark = Color(0xFF4b68ff);
+  static const Color light = Color(0xffffffff);
+  static const Color dark = Color(0xff000000);
   static const Color primaryBackground = Color(0xFF4b68ff);
 
   // Input Background Colors

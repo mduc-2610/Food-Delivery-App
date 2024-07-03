@@ -4,7 +4,7 @@ class TIcon {
   // IconData
   static IconData arrowRight = Icons.arrow_forward_ios_rounded;
   static IconData search = Icons.search;
-
+  static IconData filter = Icons.filter_list_rounded;
   // Login
   static String googleIcon = "assets/icons/login/google_icon.svg";
   static String facebookIcon = "assets/icons/login/facebook_icon.svg";
@@ -24,6 +24,7 @@ class TIcon {
   static String taco = "assets/icons/home/taco.png";
   static String moreHoriz = "assets/icons/home/more_horiz.png";
   static String cart = "assets/icons/home/cart.svg";
+  static String fillCart = "assets/icons/home/fill_cart.svg";
   static String heart = "assets/icons/home/heart.svg";
   static String fillHeart = "assets/icons/home/fill_heart.svg";
   static String star = "assets/icons/home/star.svg.svg";

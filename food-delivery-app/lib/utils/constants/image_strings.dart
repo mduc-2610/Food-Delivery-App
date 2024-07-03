@@ -18,4 +18,6 @@ class TImage {
   static String eventBanner1 = "assets/images/home/event_banner_1.png";
   static String eventBanner2 = "assets/images/home/event_banner_2.png";
 
+  // Food Detail
+  static String hcBurger1 = "assets/images/food_detail/hc_burger_1.png";
 }

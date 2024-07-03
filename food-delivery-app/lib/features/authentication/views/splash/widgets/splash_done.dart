@@ -32,7 +32,7 @@ class SplashDone extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineLarge,
                 ),
-                SizedBox(height: TSize.spaceBetweenItems,),
+                SizedBox(height: TSize.spaceBetweenItemsVertical,),
                 Text(
                   'Version 2.1.0',
                   textAlign: TextAlign.center,

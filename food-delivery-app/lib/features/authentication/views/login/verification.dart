@@ -23,7 +23,7 @@ class _VerificationViewState extends State<VerificationView> {
       body: CustomScrollView(
         physics: NeverScrollableScrollPhysics(),
         slivers: [
-          CustomSliverAppBar(
+          CSliverAppBar(
             title: "Verification",
             isBigTitle: true,
           ),
@@ -63,7 +63,7 @@ class _VerificationViewState extends State<VerificationView> {
                                   "Didn’t receive code?",
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
-                                SizedBox(height: TSize.spaceBetweenItems),
+                                SizedBox(height: TSize.spaceBetweenItemsVertical),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -75,7 +75,7 @@ class _VerificationViewState extends State<VerificationView> {
                                     )),
                                   ],
                                 ),
-                                SizedBox(height: TSize.spaceBetweenItems),
+                                SizedBox(height: TSize.spaceBetweenItemsVertical),
                                 Center(
                                   child: Obx(() => GestureDetector(
                                     onTap: _controller.isCodeSent.value ? null : _controller.startTimer,
@@ -107,7 +107,7 @@ class _VerificationViewState extends State<VerificationView> {
                           onPressed: _controller.handleVerify,
                           text: "Verify",
                         ),
-                        SizedBox(height: TSize.spaceBetweenItems),
+                        SizedBox(height: TSize.spaceBetweenItemsVertical),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

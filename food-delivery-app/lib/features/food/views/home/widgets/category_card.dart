@@ -28,7 +28,7 @@ class CategoryCard extends StatelessWidget {
               width: 30,
               height: 30,
             ),
-            SizedBox(height: TSize.spaceBetweenItems - 6),
+            SizedBox(height: TSize.spaceBetweenItemsVertical - 6),
             Text(label, style: Theme.of(context).textTheme.labelSmall),
           ],
         ),

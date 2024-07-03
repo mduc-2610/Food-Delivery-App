@@ -31,6 +31,7 @@ class TAppTheme {
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: TColor.primary,
     ),
+
   );
 
   static ThemeData darkTheme = ThemeData(

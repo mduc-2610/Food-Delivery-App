@@ -41,6 +41,7 @@ dependencies:
   logger: ^2.0.1
   url_launcher: ^6.1.12
   dropdown_button2: ^2.1.0
+  flutter_rating_bar: ^4.0.1
 
   # Icons
   iconsax: ^0.0.8
@@ -79,6 +80,7 @@ flutter:
     - assets/images/onboarding/
     - assets/images/login/
     - assets/images/home/
+    - assets/images/food_detail/
     - assets/icons/login/
     - assets/icons/home/
     - assets/icons/tmp/

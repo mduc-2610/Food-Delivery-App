@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/utils/constants/colors.dart';
 
 class TAppBarTheme {
   TAppBarTheme._();
@@ -7,7 +8,7 @@ class TAppBarTheme {
     elevation: 0,
     centerTitle: false,
     scrolledUnderElevation: 0,
-    backgroundColor: Colors.transparent,
+    backgroundColor: TColor.light,
     surfaceTintColor: Colors.transparent,
     iconTheme:  IconThemeData(color: Colors.black, size: 24),
     actionsIconTheme: IconThemeData(color: Colors.black, size: 24),
@@ -18,7 +19,7 @@ class TAppBarTheme {
       elevation: 0,
       centerTitle: false,
       scrolledUnderElevation: 0,
-      backgroundColor: Colors.transparent,
+      backgroundColor: TColor.dark,
       surfaceTintColor: Colors.transparent,
       iconTheme:  IconThemeData(color: Colors.black, size: 24),
       actionsIconTheme: IconThemeData(color: Colors.white, size: 24),

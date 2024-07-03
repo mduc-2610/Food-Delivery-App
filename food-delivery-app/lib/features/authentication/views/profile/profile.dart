@@ -16,7 +16,7 @@ class ProfileView extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          CustomSliverAppBar(
+          CSliverAppBar(
             title: "Your Profile",
           ),
           SliverToBoxAdapter(
@@ -105,7 +105,7 @@ class ProfileView extends StatelessWidget {
                     onPressed: _controller.homeRedirect,
                     text: "Continue",
                   ),
-                  SizedBox(height: TSize.spaceBetweenItems),
+                  SizedBox(height: TSize.spaceBetweenItemsVertical),
                   MainButton(
                     onPressed: _controller.skip,
                     text: "Skip",

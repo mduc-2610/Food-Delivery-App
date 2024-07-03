@@ -3,14 +3,14 @@ import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 
 
-class CustomSliverAppBar extends StatelessWidget {
+class CSliverAppBar extends StatelessWidget {
   final String title;
   final VoidCallback? backButtonOnPressed;
   final List<Map<String, dynamic>> iconList;
   final bool isBigTitle;
   final bool centerTitle;
 
-  const CustomSliverAppBar({
+  const CSliverAppBar({
     required this.title,
     this.iconList = const [],
     this.backButtonOnPressed,
@@ -23,7 +23,6 @@ class CustomSliverAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       pinned: true,
-      backgroundColor: Colors.transparent,
       title: Text(
         title,
         style: (isBigTitle)

@@ -23,6 +23,9 @@ class TSize {
   static const double fontSizeMd = 16.0;
   static const double fontSizeLg = 18.0;
 
+  // AppBar
+  static const double verticalCenterAppBar = 28.0;
+
   // Button sizes
   static const double buttonHeight = 18.0;
   static const double buttonRadius = 12.0;
@@ -38,7 +41,8 @@ class TSize {
 
   // Default spacing between sections
   static const double defaultSpace = 24.0;
-  static const double spaceBetweenItems = 16.0;
+  static const double spaceBetweenItemsHorizontal = 8.0;
+  static const double spaceBetweenItemsVertical = 16.0;
   static const double spaceBetweenSections = 32.0;
 
   // Border radius
@@ -63,6 +67,7 @@ class TSize {
 
   // Card size
   static const double cardElevation = 8.0;
+  static const double iconCardElevation = 2.0;
   static const double cardRadiusXs = 6.0;
   static const double cardRadiusSm = 10.0;
   static const double cardRadiusMd = 12.0;
