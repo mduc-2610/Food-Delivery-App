@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/features/food/views/category/food_category.dart';
 import 'package:food_delivery_app/features/food/views/detail/food_detail.dart';
+import 'package:food_delivery_app/features/food/views/more/food_more.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -35,5 +36,9 @@ class HomeController extends GetxController {
         "id": id
       }
     );
+  }
+
+  void getToFoodMore() {
+    Get.to(() => FoodMoreView());
   }
 }

@@ -11,23 +11,35 @@ class TIcon {
   static String appleIcon = "assets/icons/login/apple_icon.svg";
 
   // Home
-  static String burger = "assets/icons/home/burger.png";
-  static String burrito = "assets/icons/home/burrito.png";
-  static String donut = "assets/icons/home/donut.png";
-  static String drink = "assets/icons/home/drink.png";
-  static String iceCream = "assets/icons/home/ice_cream.png";
-  static String noodles = "assets/icons/home/noodles.png";
-  static String pasta = "assets/icons/home/pasta.png";
-  static String pizza = "assets/icons/home/pizza.png";
-  static String salad = "assets/icons/home/salad.png";
-  static String sandwich = "assets/icons/home/sandwich.png";
-  static String taco = "assets/icons/home/taco.png";
   static String moreHoriz = "assets/icons/home/more_horiz.png";
   static String cart = "assets/icons/home/cart.svg";
   static String fillCart = "assets/icons/home/fill_cart.svg";
   static String heart = "assets/icons/home/heart.svg";
   static String fillHeart = "assets/icons/home/fill_heart.svg";
   static String star = "assets/icons/home/star.svg.svg";
+  static String unearnedStar = "assets/icons/home/unearned_star.svg";
   static String fillStar = "assets/icons/home/fill_star.svg";
+  static String fillStarWhite = "assets/icons/home/fill_star_white.svg";
 
+  // Food type
+  static String burger = "assets/icons/food_type/burger.png";
+  static String burrito = "assets/icons/food_type/burrito.png";
+  static String donut = "assets/icons/food_type/donut.png";
+  static String drink = "assets/icons/food_type/drink.png";
+  static String iceCream = "assets/icons/food_type/ice_cream.png";
+  static String noodles = "assets/icons/food_type/noodles.png";
+  static String pasta = "assets/icons/food_type/pasta.png";
+  static String pizza = "assets/icons/food_type/pizza.png";
+  static String salad = "assets/icons/food_type/salad.png";
+  static String sandwich = "assets/icons/food_type/sandwich.png";
+  static String taco = "assets/icons/food_type/taco.png";
+  static String banhMi = "assets/icons/food_type/banh_mi.png";
+  static String cookie = "assets/icons/food_type/cookie.png";
+  static String dumpling = "assets/icons/food_type/dumpling.png";
+  static String goiCuon = "assets/icons/food_type/goi_cuon.png";
+  static String pudding = "assets/icons/food_type/pudding.png";
+  static String sausage = "assets/icons/food_type/sausage.png";
+  static String takoyaki = "assets/icons/food_type/takoyaki.png";
+  static String fruit = "assets/icons/food_type/fruit.png";
+  static String rice = "assets/icons/food_type/rice.png";
 }

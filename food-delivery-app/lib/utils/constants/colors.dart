@@ -8,6 +8,8 @@ class TColor {
   static const Color secondary = Color(0xFF4b68ff);
   static const Color accent = Color(0xFF4b68ff);
 
+  static const Color star = Colors.amber;
+
   // Text Colors
   static const Color textPrimary = Color(0xFF4b68ff);
   static const Color textSecondary = Color(0xFF4b68ff);

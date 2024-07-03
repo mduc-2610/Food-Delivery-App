@@ -25,8 +25,8 @@ class CategoryCard extends StatelessWidget {
           children: [
             Image.asset(
               icon,
-              width: 30,
-              height: 30,
+              width: TSize.iconLg,
+              height: TSize.iconLg,
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical - 6),
             Text(label, style: Theme.of(context).textTheme.labelSmall),

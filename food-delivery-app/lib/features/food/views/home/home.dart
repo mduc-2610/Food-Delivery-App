@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/search_bar.dart';
 import 'package:food_delivery_app/features/food/controllers/home/home_controller.dart';
-import 'package:food_delivery_app/features/food/views/home/widgets/category_card.dart';
+import 'package:food_delivery_app/features/food/views/common/widgets/category_card.dart';
 import 'package:food_delivery_app/features/food/views/common/widgets/food_card.dart';
 import 'package:food_delivery_app/features/food/views/home/widgets/home_sliver_app_bar.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
@@ -69,7 +69,7 @@ class HomeView extends StatelessWidget {
                           CategoryCard(label: 'Sandwich', icon: TIcon.sandwich, onTap: () {_controller.getToFoodCategory("Sandwich");}),
                           CategoryCard(label: 'Pasta', icon: TIcon.pasta, onTap: () {_controller.getToFoodCategory("Pasta");}),
                           CategoryCard(label: 'Ice Cream', icon: TIcon.iceCream, onTap: () {_controller.getToFoodCategory("Ice Cream");}),
-                          CategoryCard(label: 'More', icon: TIcon.moreHoriz, onTap: () {_controller.getToFoodCategory("Other");}),
+                          CategoryCard(label: 'More', icon: TIcon.moreHoriz, onTap: _controller.getToFoodMore),
                         ],
                       ),
                       SizedBox(height: TSize.spaceBetweenSections,),

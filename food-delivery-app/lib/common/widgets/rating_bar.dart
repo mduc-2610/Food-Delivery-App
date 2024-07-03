@@ -26,7 +26,7 @@ class CRatingBar extends StatelessWidget {
               height: TSize.sm,
               child: LinearProgressIndicator(
                 value: value,
-                color: TColor.primary,
+                color: TColor.star,
                 backgroundColor: Colors.grey[300],
               ),
             ),
