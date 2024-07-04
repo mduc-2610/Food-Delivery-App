@@ -84,6 +84,7 @@ flutter:
     - assets/icons/login/
     - assets/icons/home/
     - assets/icons/food_type/
+    - assets/icons/notification/
     - assets/icons/tmp/
 
   # An image asset can refer to one or more resolution-specific "variants", see

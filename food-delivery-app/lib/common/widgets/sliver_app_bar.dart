@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/widgets/circle_icon_card.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 
 
@@ -9,6 +11,7 @@ class CSliverAppBar extends StatelessWidget {
   final List<Map<String, dynamic>> iconList;
   final bool isBigTitle;
   final bool centerTitle;
+  final bool noLeading;
 
   const CSliverAppBar({
     required this.title,
@@ -16,6 +19,7 @@ class CSliverAppBar extends StatelessWidget {
     this.backButtonOnPressed,
     this.isBigTitle = false,
     this.centerTitle = true,
+    this.noLeading = false,
     super.key,
   });
 
@@ -34,21 +38,22 @@ class CSliverAppBar extends StatelessWidget {
       flexibleSpace: Stack(
         children: [
           Positioned(
-            top: TDeviceUtil.getAppBarHeight() / 2,
+            top: TDeviceUtil.getAppBarHeight() / 3,
             right: 16,
             child: Row(
               children: List.generate(
                 iconList.length,
-                    (index) => IconButton(
-                  icon: Icon(iconList[index]["icon"]),
-                  onPressed: iconList[index]["onPressed"],
-                ),
+                    (index) => CircleIconCard(
+                      elevation: TSize.iconCardElevation,
+                      icon: iconList[index]["icon"],
+                      onTap: iconList[index]["onPressed"],
+                    )
               ),
             ),
           ),
         ],
       ),
-      leading: Padding(
+      leading: (noLeading == false ) ? Padding(
         padding: const EdgeInsets.all(8.0),
         child: CircleAvatar(
           backgroundColor: Colors.white,
@@ -60,7 +65,7 @@ class CSliverAppBar extends StatelessWidget {
             },
           ),
         ),
-      ),
+      ) : null,
     );
   }
 }

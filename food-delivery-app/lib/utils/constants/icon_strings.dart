@@ -42,4 +42,16 @@ class TIcon {
   static String takoyaki = "assets/icons/food_type/takoyaki.png";
   static String fruit = "assets/icons/food_type/fruit.png";
   static String rice = "assets/icons/food_type/rice.png";
+
+  // Notification
+  static String cancelledOrder = "assets/icons/notification/cancelled_order.svg";
+  static String confirmedOrder = "assets/icons/notification/confirmed_order.svg";
+  static String successfulOrder = "assets/icons/notification/successful_order.svg";
+  static String onTheWayOrder = "assets/icons/notification/on_the_way_order.svg";
+  static String receivedOrder = "assets/icons/notification/received_order.svg";
+  static String discount = "assets/icons/notification/discount.svg";
+  static String connectedCreditCard = "assets/icons/notification/connected_credit_card.svg";
+  static String successfulAccountSetup = "assets/icons/notification/successful_account_setup.svg";
+  static String notifyDot = "assets/icons/notification/notify_dot.svg";
+
 }

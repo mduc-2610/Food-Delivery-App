@@ -58,6 +58,11 @@ class TColor {
   static const Color warning = Color(0xFF4b68ff);
   static const Color info = Color(0xFF4b68ff);
 
+  // Icon Bg Color
+  static const Color iconBgSuccess = Color(0xFFe7f9f5);
+  static const Color iconBgInfo = Color(0xFFfff9e6);
+  static const Color iconBgCancel = Color(0xFFffefed);
+
   //Neutral Shades
   static const Color black = Color(0xFF4b68ff);
   static const Color darkerGrey = Color(0xFF4b68ff);

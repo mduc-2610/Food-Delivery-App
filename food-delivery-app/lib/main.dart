@@ -5,6 +5,7 @@ import 'package:food_delivery_app/features/authentication/views/splash/splash.da
 import 'package:food_delivery_app/features/food/views/category/food_category.dart';
 import 'package:food_delivery_app/features/food/views/detail/food_detail.dart';
 import 'package:food_delivery_app/features/food/views/home/home.dart';
+import 'package:food_delivery_app/features/notification/views/notification.dart';
 import 'package:food_delivery_app/utils/theme/theme.dart';
 import 'package:get/get.dart';
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
-      home: HomeView(),
+      home: NotificationView(),
     );
   }
 }
