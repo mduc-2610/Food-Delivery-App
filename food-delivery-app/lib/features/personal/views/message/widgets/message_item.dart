@@ -5,18 +5,20 @@ import 'package:food_delivery_app/common/widgets/text_with_size.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
-class NotificationItem extends StatelessWidget {
+class MessageItem extends StatelessWidget {
   final String title;
   final String description;
   final IconData? icon;
   final String? iconStr;
   final String time;
+  final String avatar;
   final Color? iconBgColor;
 
-  NotificationItem({
+  MessageItem({
     required this.title,
     required this.description,
     required this.time,
+    required this.avatar,
     this.icon,
     this.iconStr,
     this.iconBgColor,
@@ -34,13 +36,12 @@ class NotificationItem extends StatelessWidget {
           children: [
             Row(
               children: [
-                CircleIconCard(
-                  icon: icon,
-                  iconStr: iconStr,
-                  backgroundColor: iconBgColor,
-                  padding: TSize.md,
+                CircleAvatar(
+                  child: Image.asset(
+                    avatar
+                  )
                 ),
-                SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                SizedBox(width: TSize.spaceBetweenItemsHorizontal * 2),
 
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +53,7 @@ class NotificationItem extends StatelessWidget {
                     SizedBox(height: TSize.spaceBetweenItemsHorizontal / 2),
 
                     TextWithSize(
-                      aspectScreenWidth: 0.65,
+                      aspectScreenWidth: 0.75,
                       text: description,
                       style: Theme.of(context).textTheme.bodyMedium,
                     )
@@ -60,11 +61,6 @@ class NotificationItem extends StatelessWidget {
                 ),
               ],
             ),
-            if(true)...[
-              SvgPicture.asset(
-                TIcon.notifyDot,
-              )
-            ]
           ],
         ),
         Text(

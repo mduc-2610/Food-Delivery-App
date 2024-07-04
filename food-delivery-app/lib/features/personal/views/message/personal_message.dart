@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/search_bar.dart';
 import 'package:food_delivery_app/common/widgets/sliver_app_bar.dart';
-import 'package:food_delivery_app/features/notification/views/notification/widgets/notification_item.dart';
+import 'package:food_delivery_app/features/personal/views/message/widgets/message_item.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
-class NotificationView extends StatelessWidget {
-  List<Map<String, dynamic>> notificationList = [
+class PersonalMessageView extends StatelessWidget {
+  List<Map<String, dynamic>> messageList = [
     {
       "title": "Get 20% Discount Code",
       "description": "Get discount codes from sharing with friends.",
@@ -89,14 +90,13 @@ class NotificationView extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           CSliverAppBar(
-            title: "Notification",
+            title: "Messages",
             iconList: [
               {
                 "icon": Icons.more_horiz
 
               }
             ],
-            noLeading: true,
           ),
           SliverToBoxAdapter(
             child: MainWrapper(
@@ -117,24 +117,20 @@ class NotificationView extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Today',
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                      SizedBox(height: TSize.spaceBetweenItemsVertical),
                       Column(
                         children: List.generate(
-                          notificationList.length,
+                          messageList.length,
                               (index) => Container(
                             margin: EdgeInsets.only(
                               bottom: TSize.spaceBetweenItemsVertical,
                             ),
-                            child: NotificationItem(
-                              title: notificationList[index]["title"],
-                              description: notificationList[index]["description"],
-                              iconStr: notificationList[index]["iconStr"],
-                              iconBgColor: notificationList[index]["iconBgColor"],
-                              time: notificationList[index]["time"],
+                            child: MessageItem(
+                              title: messageList[index]["title"],
+                              description: messageList[index]["description"],
+                              iconStr: messageList[index]["iconStr"],
+                              iconBgColor: messageList[index]["iconBgColor"],
+                              time: messageList[index]["time"],
+                              avatar: TIcon.burger,
                             ),
                           ),
                         ),

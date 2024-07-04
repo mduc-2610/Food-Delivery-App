@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class TIcon {
   // IconData
-  static IconData arrowRight = Icons.arrow_forward_ios_rounded;
+  static IconData arrowFoward = Icons.arrow_forward_ios_rounded;
   static IconData search = Icons.search;
   static IconData filter = Icons.filter_list_rounded;
   // Login

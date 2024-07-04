@@ -81,6 +81,8 @@ flutter:
     - assets/images/login/
     - assets/images/home/
     - assets/images/food_detail/
+    - assets/images/logo/
+
     - assets/icons/login/
     - assets/icons/home/
     - assets/icons/food_type/

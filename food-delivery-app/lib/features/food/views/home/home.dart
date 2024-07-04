@@ -91,7 +91,7 @@ class HomeView extends StatelessWidget {
                                         // fontWeight: FontWeight.w600
                                     )),
                                     Icon(
-                                      TIcon.arrowRight,
+                                      TIcon.arrowFoward,
                                       size: TSize.iconSm,
                                       color: TColor.primary,
                                     )

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 
 class MainButton extends StatelessWidget {
   final double? width;
+  final double? height;
   final VoidCallback onPressed;
   final String text;
+  final Color? textColor;
   final IconData? suffixIcon;
   final Color? suffixIconColor;
   final IconData? prefixIcon;
@@ -16,11 +19,15 @@ class MainButton extends StatelessWidget {
   final String? suffixIconStr;
   final double? paddingHorizontal;
   final double? paddingVertical;
+  final Color? backgroundColor;
+  final Color? borderColor;
 
   const MainButton({
     this.width,
+    this.height,
     required this.onPressed,
     required this.text,
+    this.textColor,
     this.suffixIcon,
     this.suffixIconColor,
     this.prefixIcon,
@@ -30,6 +37,8 @@ class MainButton extends StatelessWidget {
     this.isElevatedButton = true,
     this.paddingHorizontal,
     this.paddingVertical,
+    this.backgroundColor,
+    this.borderColor,
     super.key
   });
 
@@ -42,9 +51,10 @@ class MainButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(35),
         ),
+        backgroundColor: backgroundColor,
       ),
       child: Container(
-        // height: 55,
+          height: height,
           padding: EdgeInsets.symmetric(
               vertical: paddingVertical ?? 0,
               horizontal: paddingHorizontal ?? 0
@@ -65,7 +75,7 @@ class MainButton extends StatelessWidget {
         ),
       ),
       child: Container(
-        // height: 55,
+        height: height,
           padding: EdgeInsets.symmetric(
               vertical: paddingVertical ?? 0,
               horizontal: paddingHorizontal ?? 0
@@ -79,28 +89,38 @@ class MainButton extends StatelessWidget {
     );
   }
 
-  Row _buildButtonContent() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (prefixIcon != null || prefixIconStr != null) ...[
-          (prefixIcon != null)
-            ? Icon(prefixIcon, color: prefixIconColor)
-            : SvgPicture.asset(
-              prefixIconStr!
-            ),
-          const SizedBox(width: 5),
-        ],
-        Text(text),
-        if (suffixIcon != null || suffixIconStr != null) ...[
-          const SizedBox(width: 5),
-          (suffixIcon != null)
-              ? Icon(suffixIcon, color: suffixIconColor)
-              : SvgPicture.asset(
-              suffixIconStr!
+  Center _buildButtonContent() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (prefixIcon != null || prefixIconStr != null) ...[
+                (prefixIcon != null)
+                  ? Icon(prefixIcon, color: prefixIconColor)
+                  : SvgPicture.asset(
+                    prefixIconStr!
+                  ),
+                SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+              ],
+              Text(
+                text,
+                style: TextStyle().copyWith(color: textColor)
+              ),
+              if (suffixIcon != null || suffixIconStr != null) ...[
+                SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                (suffixIcon != null)
+                    ? Icon(suffixIcon, color: suffixIconColor)
+                    : SvgPicture.asset(
+                    suffixIconStr!
+                ),
+              ],
+            ],
           ),
         ],
-      ],
+      ),
     );
   }
 }

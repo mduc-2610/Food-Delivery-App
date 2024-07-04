@@ -2,8 +2,19 @@ import 'package:flutter/material.dart';
 
 class TImage {
   // Splash
-  static String logo = "assets/images/splash/logo.png";
+  static String logo = "assets/images/logo/app_logo.png";
+  static String toggleLogo = "assets/images/logo/toggle_app_logo.png";
   static String welcomeBg = "assets/images/splash/welcome_bg.png";
+
+  // Logo
+  static String discordLogo = "assets/images/logo/discord_logo.svg";
+  static String facebookLogo = "assets/images/logo/facebook_logo.svg";
+  static String messengerLogo = "assets/images/logo/messenger_logo.svg";
+  static String skypeLogo = "assets/images/logo/skype_logo.svg";
+  static String telegramLogo = "assets/images/logo/telegram_logo.svg";
+  static String twitterLogo = "assets/images/logo/twitter_logo.svg";
+  static String wechatLogo = "assets/images/logo/wechat_logo.svg";
+  static String whatsappLogo = "assets/images/logo/whatsapp_logo.svg";
 
   // Onboarding
   static String onBoarding1 = "assets/images/onboarding/onboarding_1.png";

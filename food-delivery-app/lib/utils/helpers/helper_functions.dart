@@ -18,6 +18,14 @@ class THelperFunction {
     );
   }
 
+  static bool checkInArray(dynamic x, List<dynamic> ls) {
+    return ls.contains(x);
+  }
+
+  static bool checkIfExistsNull(List<dynamic> ls) {
+    return ls.contains(null);
+  }
+
   static void showAlert(String title, String message) {
     showDialog(
       context: Get.context!,
