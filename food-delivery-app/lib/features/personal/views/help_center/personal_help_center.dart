@@ -36,6 +36,7 @@ class PersonalHelpCenterView extends StatelessWidget {
                     filters: ["General", "Account", "Ordering", "Payment"],
                   ),
                 ),
+                SizedBox(height: TSize.spaceBetweenItemsVertical,),
 
                 MainWrapper(
                   child: PersonalHelpCenterList(

@@ -33,6 +33,7 @@ class PersonalHelpCenterList extends StatelessWidget {
     // }).toList();
 
     return ListView.builder(
+      padding: EdgeInsets.zero,
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       itemCount: reviews.length,

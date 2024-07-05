@@ -34,6 +34,7 @@ class PersonalProfileView extends StatelessWidget {
             ],
             noLeading: true,
           ),
+
           SliverToBoxAdapter(
             child: MainWrapper(
               child: Column(

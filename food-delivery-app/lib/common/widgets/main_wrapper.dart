@@ -8,6 +8,7 @@ class MainWrapper extends StatelessWidget {
   final double? topMargin;
   final double? rightMargin;
   final double? bottomMargin;
+  final bool noMargin;
 
   const MainWrapper({
     Key? key,
@@ -16,17 +17,18 @@ class MainWrapper extends StatelessWidget {
     this.topMargin,
     this.rightMargin,
     this.bottomMargin,
+    this.noMargin = false
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(
+      margin: (!noMargin) ?  EdgeInsets.fromLTRB(
           leftMargin ?? TDeviceUtil.getScreenWidth() * 0.05,
           topMargin ?? 0,
           rightMargin ?? TDeviceUtil.getScreenWidth() * 0.05,
           bottomMargin ?? 0
-      ),
+      ) : EdgeInsets.zero,
       child: child,
     );
   }

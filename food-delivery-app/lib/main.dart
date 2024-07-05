@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/features/food/views/category/food_category.dart';
 import 'package:food_delivery_app/features/food/views/detail/food_detail_review.dart';
 import 'package:food_delivery_app/features/notification/views/notification/notification.dart';
+import 'package:food_delivery_app/features/order/views/history/order_history.dart';
+import 'package:food_delivery_app/features/order/views/history/order_history_detail.dart';
 import 'package:food_delivery_app/features/personal/views/about_app/personal_about_app.dart';
 import 'package:food_delivery_app/features/personal/views/help_center/personal_help_center.dart';
 import 'package:food_delivery_app/features/personal/views/help_center/personal_help_detail.dart';
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
       themeMode: ThemeMode.light,
-      home: PersonalHelpCenterView(),
+      home: OrderHistoryView(),
     );
   }
 }

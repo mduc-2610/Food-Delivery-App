@@ -53,10 +53,10 @@ class TColor {
   static const Color borderSecondary = Color(0xFF4b68ff);
 
   // Error and Validation Colors
-  static const Color error = Color(0xFF4b68ff);
-  static const Color success = Color(0xFF4b68ff);
-  static const Color warning = Color(0xFF4b68ff);
-  static const Color info = Color(0xFF4b68ff);
+  static const Color error = Color(0xFFD32F2F);
+  static const Color success = Color(0xFF13c296);
+  static const Color info = Color(0xFF1976D2);
+  static const Color warning = Color(0xFFFFA000);
 
   // Icon Bg Color
   static const Color iconBgSuccess = Color(0xFFe7f9f5);

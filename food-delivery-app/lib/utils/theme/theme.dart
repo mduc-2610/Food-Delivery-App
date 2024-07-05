@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/theme/custom_themes/appbar_theme.dart';
 import 'package:food_delivery_app/utils/theme/custom_themes/bottom_sheet_theme.dart';
+import 'package:food_delivery_app/utils/theme/custom_themes/card_theme.dart';
 import 'package:food_delivery_app/utils/theme/custom_themes/checkbox_theme.dart';
 import 'package:food_delivery_app/utils/theme/custom_themes/chip_theme.dart';
 import 'package:food_delivery_app/utils/theme/custom_themes/elevated_button_theme.dart';
@@ -32,7 +33,8 @@ class TAppTheme {
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: TColor.primary,
     ),
-    switchTheme: TSwitchTheme.switchTheme
+    switchTheme: TSwitchTheme.switchTheme,
+    cardTheme: TCardTheme.lightCardTheme,
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -53,7 +55,7 @@ class TAppTheme {
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: TColor.primary,
     ),
-    switchTheme: TSwitchTheme.switchTheme
-
+    switchTheme: TSwitchTheme.switchTheme,
+    cardTheme: TCardTheme.darkCardTheme,
   );
 }

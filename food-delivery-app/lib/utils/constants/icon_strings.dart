@@ -5,6 +5,11 @@ class TIcon {
   static IconData arrowFoward = Icons.arrow_forward_ios_rounded;
   static IconData search = Icons.search;
   static IconData filter = Icons.filter_list_rounded;
+  static IconData location = Icons.location_on;
+  static IconData payment = Icons.payment;
+  static IconData promotion = Icons.discount;
+  static IconData edit = Icons.edit;
+
   // Login
   static String googleIcon = "assets/icons/login/google_icon.svg";
   static String facebookIcon = "assets/icons/login/facebook_icon.svg";
