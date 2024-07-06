@@ -4,7 +4,7 @@ import 'package:food_delivery_app/common/widgets/filter_bar.dart';
 import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/search_bar.dart';
 import 'package:food_delivery_app/common/widgets/sliver_app_bar.dart';
-import 'package:food_delivery_app/features/personal/controllers/personal_help_center_controller.dart';
+import 'package:food_delivery_app/features/personal/controllers/help_center/personal_help_center_controller.dart';
 import 'package:food_delivery_app/features/personal/views/help_center/widgets/personal_help_center_list.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:get/get.dart';

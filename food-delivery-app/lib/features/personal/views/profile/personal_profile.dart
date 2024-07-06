@@ -4,7 +4,7 @@ import 'package:food_delivery_app/common/widgets/main_button.dart';
 import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/sliver_app_bar.dart';
 import 'package:food_delivery_app/common/widgets/sliver_sized_box.dart';
-import 'package:food_delivery_app/features/personal/controllers/theme_controller.dart';
+import 'package:food_delivery_app/features/personal/controllers/profile/theme_controller.dart';
 import 'package:food_delivery_app/features/personal/views/about_app/personal_about_app.dart';
 import 'package:food_delivery_app/features/personal/views/help_center/personal_help_center.dart';
 import 'package:food_delivery_app/features/personal/views/invite/personal_invite.dart';
