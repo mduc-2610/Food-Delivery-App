@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/widgets/container_card.dart';
+import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/sliver_app_bar.dart';
+import 'package:food_delivery_app/utils/constants/sizes.dart';
 
-class OrderPromotionList extends StatelessWidget {
+class OrderPromotionListView extends StatelessWidget {
   final List<Map<String, dynamic>> promotionActions = [
     {'icon': Icons.share, 'title': 'Share App'},
     {'icon': Icons.person_add, 'title': 'Invite Friends'},
@@ -11,27 +15,39 @@ class OrderPromotionList extends StatelessWidget {
     {'icon': Icons.follow_the_signs, 'title': 'Follow Social Media'},
     {'icon': Icons.question_answer, 'title': 'Take Surveys'},
     {'icon': Icons.emoji_events, 'title': 'Achieve Levels'},
+    {'icon': Icons.devices_other_rounded, 'title': 'Daily Logins'},
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Get More Promotions'),
-      ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: promotionActions.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: Icon(promotionActions[index]['icon'], color: Colors.orange),
-            title: Text(promotionActions[index]['title']),
-            trailing: Icon(Icons.chevron_right),
-            onTap: () {
-              // Handle the tap
-            },
-          );
-        },
+      body: CustomScrollView(
+        slivers: [
+          CSliverAppBar(
+              title: "Get More Promotions"
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                return MainWrapper(
+                  bottomMargin: TSize.spaceBetweenItemsVertical,
+                  child: ContainerCard(
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(promotionActions[index]['icon'], color: Colors.orange),
+                      title: Text(promotionActions[index]['title']),
+                      trailing: Icon(Icons.chevron_right),
+                      onTap: () {
+                        // Handle the tap
+                      },
+                    ),
+                  ),
+                );
+              },
+              childCount: promotionActions.length,
+            ),
+          ),
+        ],
       ),
     );
   }

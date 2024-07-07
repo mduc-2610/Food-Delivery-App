@@ -49,7 +49,7 @@ class TColor {
   static const Color buttonDisabled = Color(0xFF4b68ff);
 
   // Border Colors
-  static const Color borderPrimary = Color(0xFF4b68ff);
+  static const Color borderPrimary = Color(0xFFe9eaeb);
   static const Color borderSecondary = Color(0xFF4b68ff);
 
   // Error and Validation Colors
@@ -57,6 +57,7 @@ class TColor {
   static const Color success = Color(0xFF13c296);
   static const Color info = Color(0xFF1976D2);
   static const Color warning = Color(0xFFFFA000);
+  static const Color disable = Color(0xFFb7b8ba);
 
   // Icon Bg Color
   static const Color iconBgSuccess = Color(0xFFe7f9f5);

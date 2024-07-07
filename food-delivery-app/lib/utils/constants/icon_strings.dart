@@ -9,6 +9,8 @@ class TIcon {
   static IconData payment = Icons.payment;
   static IconData promotion = Icons.discount;
   static IconData edit = Icons.edit;
+  static IconData check = Icons.check;
+  static IconData add = Icons.add;
 
   // Login
   static String googleIcon = "assets/icons/login/google_icon.svg";

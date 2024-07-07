@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/widgets/radio_tick.dart';
 import 'package:food_delivery_app/features/order/models/location.dart';
 import 'package:food_delivery_app/features/order/views/location/order_location_add.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
@@ -13,7 +14,7 @@ class LocationList extends StatefulWidget {
 }
 
 class _LocationListState extends State<LocationList> {
-  int? _selectedIndex;
+  int _selectedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +27,13 @@ class _LocationListState extends State<LocationList> {
             title: Text(location.name, style: TextStyle(color: Colors.white)),
             subtitle: Text(location.address, style: TextStyle(color: Colors.grey)),
             trailing: Transform.scale(
-              scale: 1.2,
-              child: Radio<int>(
+              scale: 1,
+              child: RadioTick(
                 value: index,
                 groupValue: _selectedIndex,
                 onChanged: (int? value) {
                   setState(() {
-                    _selectedIndex = value;
+                    _selectedIndex = value!;
                   });
                 },
               ),
