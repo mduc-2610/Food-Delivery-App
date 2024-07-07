@@ -1,115 +1,147 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/widgets/container_card.dart';
+import 'package:food_delivery_app/common/widgets/main_button.dart';
+import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/radio_tick.dart';
+import 'package:food_delivery_app/common/widgets/show_success_dialog.dart';
+import 'package:food_delivery_app/common/widgets/sliver_app_bar.dart';
+import 'package:food_delivery_app/common/widgets/sliver_sized_box.dart';
+import 'package:food_delivery_app/features/payment/views/payment/widgets/payment_card.dart';
+import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/emoji.dart';
+import 'package:food_delivery_app/utils/constants/icon_strings.dart';
+import 'package:food_delivery_app/utils/constants/image_strings.dart';
+import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:food_delivery_app/utils/device/device_utility.dart';
 
 class OrderCancelView extends StatefulWidget {
   @override
-  _OrderCancelViewState createState() => _OrderCancelViewState();
+  OrderCancelViewState createState() => OrderCancelViewState();
 }
 
-class _OrderCancelViewState extends State<OrderCancelView> {
-  String? _selectedReason;
-  final TextEditingController _otherReasonController = TextEditingController();
+class OrderCancelViewState extends State<OrderCancelView> {
+  int _selectedMethod = -1;
+  bool displayOtherReason = false;
+  String text = "";
+  TextEditingController controller = TextEditingController();
 
-  void _submit() {
-    if (_selectedReason == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select a reason')),
-      );
-      return;
-    }
-
-    if (_selectedReason == 'Other reasons' && _otherReasonController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please specify the other reason')),
-      );
-      return;
-    }
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.cancel, size: 60, color: Colors.red),
-              SizedBox(height: 16),
-              Text('Your Order Canceled',
-                  style: TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold)),
-              SizedBox(height: 16),
-              Text(
-                  "We're sorry to see your order go. We're always striving to improve, and we hope to serve you better next time!"),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('Ok'),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  final List<Map<String, dynamic>> cancelList = [
+    {'type': 'Change of mind'},
+    {'type': 'Found better price elsewhere'},
+    {'type': 'Delivery delay'},
+    {'type': 'Incorrect item selected'},
+    {'type': 'Duplicate order'},
+    {'type': 'Unable to fulfill order'},
+    {'type': 'Other reasons'},
+  ];
 
   @override
   Widget build(BuildContext context) {
+    print(controller.text);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Cancel Order'),
+      body: CustomScrollView(
+        slivers: [
+          CSliverAppBar(
+            title: "Cancel Order",
+          ),
+
+          SliverSizedBox(height: TSize.spaceBetweenItemsVertical,),
+
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                  return MainWrapper(
+                      bottomMargin: TSize.spaceBetweenItemsVertical,
+                      child: _buildCancelItem(
+                          cancelList[index]["type"],
+                          index, _selectedMethod,
+                              (value) {
+                            setState(() {
+                              if(_selectedMethod == value) {
+                                _selectedMethod = -1;
+                              }
+                              else {
+                                _selectedMethod = value!;
+                              }
+                              if(_selectedMethod == cancelList.length - 1) {
+                                displayOtherReason = !displayOtherReason;
+                              }
+                              else {
+                                displayOtherReason = false;
+                              }
+                            });
+                          },
+                      )
+
+                  );
+                },
+                childCount: cancelList.length
+            ),
+          ),
+
+          SliverToBoxAdapter(
+            child: Visibility(
+              visible: displayOtherReason,
+              child: MainWrapper(
+                child: TextFormField(
+                  onChanged: (_) {
+                    setState(() {
+                      controller.text = _;
+                    });
+                  },
+                  controller: controller,
+                  decoration: InputDecoration(
+                    hintText: "Other reason ... "
+                  ),
+                  maxLines: TSize.smMaxLines,
+                ),
+              ),
+            ),
+          )
+        ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                children: [
-                  _buildRadioOption('Change of mind'),
-                  _buildRadioOption('Found better price elsewhere'),
-                  _buildRadioOption('Delivery delay'),
-                  _buildRadioOption('Incorrect item selected'),
-                  _buildRadioOption('Duplicate order'),
-                  _buildRadioOption('Unable to fulfill order'),
-                  _buildRadioOption('Other reasons'),
-                  if (_selectedReason == 'Other reasons')
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: TextField(
-                        controller: _otherReasonController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Other reason',
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            ElevatedButton(
-              onPressed: _submit,
-              child: Text('Submit'),
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 48),
-              ),
-            ),
-          ],
+      bottomNavigationBar: MainWrapper(
+        bottomMargin: TSize.spaceBetweenSections,
+        child: Container(
+          height: TDeviceUtil.getBottomNavigationBarHeight(),
+          child: MainButton(
+            onPressed: (_selectedMethod == -1  || ( _selectedMethod == cancelList.length - 1 && controller.text == "" ))
+                ? null : () {
+              showSuccessDialog(
+                context,
+                image: TImage.diaHeart,
+                head: "Your Order Canceled ${TEmoji.pleadingFace}",
+                title: "We're sorry to see your order go.",
+                description: "We're always striving to improve, and we hope to serve you better next time!",
+              );
+              print("SUBMIT");
+              print(controller.text);
+            },
+            text: "Submit",
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildRadioOption(String reason) {
-    return RadioListTile<String>(
-      title: Text(reason),
-      value: reason,
-      groupValue: _selectedReason,
-      onChanged: (String? value) {
-        setState(() {
-          _selectedReason = value;
-        });
+  Widget _buildCancelItem(String name, int value, int groupValue, Function(int?) onChanged, { VoidCallback? other }) {
+    return InkWell(
+      onTap: () {
+        onChanged(value);
+        other?.call();
       },
+      child: ContainerCard(
+        borderColor: !(value == groupValue) ? TColor.borderPrimary : TColor.disable,
+        child: ListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(name),
+          trailing: RadioTick(
+            value: value,
+            groupValue: groupValue,
+            onChanged: onChanged,
+          ),
+        ),
+      ),
     );
   }
 }
