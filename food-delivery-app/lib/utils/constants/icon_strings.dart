@@ -23,7 +23,7 @@ class TIcon {
   static String fillCart = "assets/icons/home/fill_cart.svg";
   static String heart = "assets/icons/home/heart.svg";
   static String fillHeart = "assets/icons/home/fill_heart.svg";
-  static String star = "assets/icons/home/star.svg.svg";
+  static String star = "assets/icons/home/star.svg";
   static String unearnedStar = "assets/icons/home/unearned_star.svg";
   static String fillStar = "assets/icons/home/fill_star.svg";
   static String fillStarWhite = "assets/icons/home/fill_star_white.svg";

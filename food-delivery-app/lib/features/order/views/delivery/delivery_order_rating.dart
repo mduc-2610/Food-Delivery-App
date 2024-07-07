@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_delivery_app/common/widgets/app_bar.dart';
+import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/skip_button.dart';
 import 'package:food_delivery_app/features/order/views/delivery/delivery_driver_rating.dart';
+import 'package:food_delivery_app/utils/constants/icon_strings.dart';
+import 'package:food_delivery_app/utils/constants/image_strings.dart';
+import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:food_delivery_app/utils/device/device_utility.dart';
 
 class DeliveryOrderRatingView extends StatefulWidget {
   @override
@@ -19,58 +28,73 @@ class _DeliveryOrderRatingViewState extends State<DeliveryOrderRatingView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Order Rating'),
-      ),
-      body: Column(
-        children: [
-          SizedBox(height: 20),
-          Text(
-            'Rate your Experience',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 20),
-          Icon(Icons.diamond, size: 60, color: Colors.blue),
-          SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(5, (index) {
-              return IconButton(
-                icon: Icon(
-                  index < _rating ? Icons.star : Icons.star_border,
-                  color: Colors.amber,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _rating = index + 1;
-                  });
-                },
-              );
-            }),
-          ),
-          SizedBox(height: 20),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Type your review...',
-            ),
-          ),
-          Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      appBar: CAppBar(title: 'Order Rating'),
+      body: MainWrapper(
+        child: Center(
+          child: Column(
+            // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextButton(
-                onPressed: _submitRating,
-                child: Text('Skip'),
+              SizedBox(height: TSize.spaceBetweenSections),
+              Text(
+                'Rate your Experience',
+                style: Theme.of(context).textTheme.headlineLarge,
+                textAlign: TextAlign.center,
               ),
-              ElevatedButton(
-                onPressed: _submitRating,
-                child: Text('Submit'),
+              SizedBox(height: TSize.spaceBetweenSections),
+
+              Image.asset(
+                TImage.deDiamond,
+                width: TDeviceUtil.getScreenWidth() ,
+                height: TDeviceUtil.getScreenHeight() * 0.2,
               ),
+              SizedBox(height: TSize.spaceBetweenSections),
+
+              RatingBarIndicator(
+                itemPadding: EdgeInsets.only(right: TSize.spaceBetweenItemsHorizontal),
+                rating: _rating.toDouble(),
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _rating = index + 1;
+                    });
+                  },
+                  child: SvgPicture.asset(
+                    TIcon.fillStar,
+                  ),
+                ),
+                itemCount: 5,
+                itemSize: 65,
+              ),
+              SizedBox(height: TSize.spaceBetweenSections),
+
+              if(_rating != 0)...[
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Type your review...',
+                    hintStyle: TextStyle()
+                  ),
+                  maxLines: TSize.inputMaxLines,
+                ),
+              ],
             ],
           ),
-          SizedBox(height: 20),
-        ],
+        ),
+      ),
+      bottomNavigationBar: MainWrapper(
+        bottomMargin: TSize.spaceBetweenSections,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: SkipButton(onPressed: () {},),
+            ),
+            SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
+            Expanded(child: ElevatedButton(
+              onPressed: _submitRating,
+              child: Text('Submit'),
+            ),)
+          ],
+        ),
       ),
     );
   }

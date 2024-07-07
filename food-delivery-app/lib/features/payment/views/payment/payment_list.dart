@@ -51,20 +51,25 @@ class PaymentListViewState extends State<PaymentListView> {
                           index, _selectedMethod,
                               (value) {
                             setState(() {
-                              _selectedMethod = value!;
+                              if(_selectedMethod == value) {
+                                _selectedMethod = -1;
+                              }
+                              else {
+                                _selectedMethod = value!;
+                              }
                             });
-                              })
-                       : ContainerCard(
+                          })
+                          : ContainerCard(
                         bgColor: TColor.iconBgCancel,
                         borderColor: Colors.transparent,
                         child: ListTile(
                           onTap: () {
                             showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              builder: (context) {
-                                return PaymentCard();
-                              }
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (context) {
+                                  return PaymentCard();
+                                }
                             );
                           },
                           contentPadding: EdgeInsets.zero,

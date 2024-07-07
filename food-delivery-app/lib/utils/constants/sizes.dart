@@ -82,4 +82,7 @@ class TSize {
 
     // Grid view spacing
   static const double gridViewSpacing = 16.0;
+
+  // Line
+  static const int inputMaxLines = 8;
 }

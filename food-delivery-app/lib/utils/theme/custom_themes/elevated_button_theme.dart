@@ -5,28 +5,44 @@ class TElevatedButtonTheme {
   TElevatedButtonTheme._();
 
   static ElevatedButtonThemeData lightElevatedButtonTheme = ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(
-      elevation: 0,
-      foregroundColor: Colors.white,
-      backgroundColor: TColor.primary,
-      disabledForegroundColor: Colors.white,
-      disabledBackgroundColor: TColor.buttonDisabled,
-      side: BorderSide(color: TColor.primary),
-      padding: EdgeInsets.symmetric(vertical: 18),
-      textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-    )
+    style: ButtonStyle(
+      elevation: MaterialStateProperty.all(0),
+      foregroundColor: MaterialStateProperty.all(Colors.white),
+      backgroundColor: MaterialStateProperty.resolveWith((states) {
+        if (states.contains(MaterialState.disabled)) {
+          return TColor.buttonDisabled;
+        }
+        return TColor.primary;
+      }),
+      side: MaterialStateProperty.resolveWith((states) {
+        if (states.contains(MaterialState.disabled)) {
+          return BorderSide(color: TColor.buttonDisabled);
+        }
+        return BorderSide(color: TColor.primary);
+      }),
+      padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 18)),
+      textStyle: MaterialStateProperty.all(TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+    ),
   );
 
   static ElevatedButtonThemeData darkElevatedButtonTheme = ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-          elevation: 0,
-          foregroundColor: Colors.white,
-          backgroundColor: TColor.primary,
-          disabledForegroundColor: Colors.grey,
-          disabledBackgroundColor: TColor.buttonDisabled,
-          side: BorderSide(color: TColor.primary),
-          padding: EdgeInsets.symmetric(vertical: 18),
-          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-      )
+    style: ButtonStyle(
+      elevation: MaterialStateProperty.all(0),
+      foregroundColor: MaterialStateProperty.all(Colors.white),
+      backgroundColor: MaterialStateProperty.resolveWith((states) {
+        if (states.contains(MaterialState.disabled)) {
+          return TColor.buttonDisabled;
+        }
+        return TColor.primary;
+      }),
+      side: MaterialStateProperty.resolveWith((states) {
+        if (states.contains(MaterialState.disabled)) {
+          return BorderSide(color: TColor.buttonDisabled);
+        }
+        return BorderSide(color: TColor.primary);
+      }),
+      padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 18)),
+      textStyle: MaterialStateProperty.all(TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+    ),
   );
 }

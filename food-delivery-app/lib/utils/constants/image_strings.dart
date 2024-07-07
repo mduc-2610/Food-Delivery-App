@@ -31,4 +31,9 @@ class TImage {
 
   // Food Detail
   static String hcBurger1 = "assets/images/food_detail/hc_burger_1.png";
+
+  // Delivery
+  static String deDiamond = "assets/images/delivery/diamond.png";
+  static String deClover = "assets/images/delivery/clover.png";
+  static String deHeart = "assets/images/delivery/heart.png";
 }

@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_delivery_app/common/widgets/app_bar.dart';
+import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/skip_button.dart';
+import 'package:food_delivery_app/features/order/views/delivery/delivery_driver_rating.dart';
 import 'package:food_delivery_app/features/order/views/delivery/delivery_driver_tip.dart';
-import 'package:food_delivery_app/features/order/views/delivery/delivery_driver_tip.dart';
+import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
-import 'package:get/get.dart';
+import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:food_delivery_app/utils/device/device_utility.dart';
 import 'package:get/get.dart';
 
 class DeliveryDriverRatingView extends StatefulWidget {
@@ -13,75 +21,97 @@ class DeliveryDriverRatingView extends StatefulWidget {
 class _DeliveryDriverRatingViewState extends State<DeliveryDriverRatingView> {
   int _rating = 0;
 
+  void _submitRating() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => DeliveryDriverRatingView()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Driver Rating'),
-      ),
-      body: Column(
-        children: [
-          SizedBox(height: 20),
-          Text(
-            'Rate your driver\'s delivery service',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 20),
-          CircleAvatar(
-            radius: 40,
-            backgroundImage: AssetImage(TImage.hcBurger1), // Add a driver image in assets
-          ),
-          SizedBox(height: 10),
-          Text(
-            'David Wayne',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          Text('Driver'),
-          SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(5, (index) {
-              return IconButton(
-                icon: Icon(
-                  index < _rating ? Icons.star : Icons.star_border,
-                  color: Colors.amber,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _rating = index + 1;
-                  });
-                },
-              );
-            }),
-          ),
-          SizedBox(height: 20),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Type your review...',
-            ),
-          ),
-          Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      appBar: CAppBar(title: 'Driver Rating'),
+      body: MainWrapper(
+        child: Center(
+          child: Column(
+            // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextButton(
-                onPressed: () {
-                  Get.to(DeliveryDriverTipView());
-                },
-                child: Text('Skip'),
+              SizedBox(height: TSize.spaceBetweenSections),
+              Text(
+                'Rate your driver\'s delivery service.',
+                style: Theme.of(context).textTheme.headlineMedium,
+                textAlign: TextAlign.center,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Get.to(DeliveryDriverTipView());
-                },
-                child: Text('Submit'),
+              SizedBox(height: TSize.spaceBetweenSections),
+
+              CircleAvatar(
+                radius: TSize.imageThumbSize,
+                backgroundImage: AssetImage(TImage.hcBurger1),
               ),
+              SizedBox(height: TSize.spaceBetweenItemsVertical),
+              Text(
+                'David Wayne',
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.primary),
+              ),
+              Text(
+                'Driver',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              SizedBox(height: TSize.spaceBetweenSections),
+
+              RatingBarIndicator(
+                itemPadding: EdgeInsets.only(right: TSize.spaceBetweenItemsHorizontal),
+                rating: _rating.toDouble(),
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _rating = index + 1;
+                    });
+                  },
+                  child: SvgPicture.asset(
+                    TIcon.fillStar,
+                  ),
+                ),
+                itemCount: 5,
+                itemSize: 65,
+              ),
+              SizedBox(height: TSize.spaceBetweenSections),
+
+              if(_rating != 0)...[
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Type your review...',
+                    hintStyle: TextStyle(
+
+                    )
+                  ),
+                  maxLines: TSize.inputMaxLines,
+                ),
+              ],
             ],
           ),
-          SizedBox(height: 20),
-        ],
+        ),
+      ),
+      bottomNavigationBar: MainWrapper(
+        bottomMargin: TSize.spaceBetweenSections,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: SkipButton(onPressed: () {
+                Get.to(DeliveryDriverTipView());
+              },),
+            ),
+            SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
+            Expanded(child: ElevatedButton(
+              onPressed: () {
+                Get.to(DeliveryDriverTipView());
+              },
+              child: Text('Submit'),
+            ),)
+          ],
+        ),
       ),
     );
   }

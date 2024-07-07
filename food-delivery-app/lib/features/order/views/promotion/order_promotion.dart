@@ -78,13 +78,13 @@ class _OrderPromotionViewState extends State<OrderPromotionView> {
                     SizedBox(height: TSize.spaceBetweenItemsVertical),
                     _buildPromotionItem('FREE SHIPPING', 1, selected, (value) {
                       setState(() {
-                        selected = value!;
+                        selected = (selected == value) ? -1 : value!;
                       });
                     }),
                     SizedBox(height: TSize.spaceBetweenItemsVertical),
                     _buildPromotionItem('20% OFF', 2, selected, (value) {
                       setState(() {
-                        selected = value!;
+                        selected = (selected == value) ? -1 : value!;
                       });
                     }),
                     SizedBox(height: TSize.spaceBetweenSections),
@@ -92,13 +92,13 @@ class _OrderPromotionViewState extends State<OrderPromotionView> {
                     SizedBox(height: TSize.spaceBetweenItemsVertical),
                     _buildPromotionItem('20% OFF', 1, selected2, (value) {
                       setState(() {
-                        selected2 = value!;
+                        selected2 = (selected2 == value) ? -1 : value!;
                       });
                     }),
                     SizedBox(height: TSize.spaceBetweenItemsVertical),
                     _buildPromotionItem('10% OFF', 2, selected2, (value) {
                       setState(() {
-                        selected2 = value!;
+                        selected2 = (selected2 == value) ? -1 : value!;
                       });
                     }),
                     SizedBox(height: TSize.spaceBetweenSections),

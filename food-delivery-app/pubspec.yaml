@@ -85,6 +85,7 @@ flutter:
     - assets/images/home/
     - assets/images/food_detail/
     - assets/images/logo/
+    - assets/images/delivery/
 
     - assets/icons/login/
     - assets/icons/home/
