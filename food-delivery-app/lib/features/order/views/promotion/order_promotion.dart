@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/common/widgets/container_card.dart';
-import 'package:food_delivery_app/common/widgets/main_button.dart';
-import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
-import 'package:food_delivery_app/common/widgets/radio_tick.dart';
-import 'package:food_delivery_app/common/widgets/sliver_app_bar.dart';
+import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
+import 'package:food_delivery_app/common/widgets/cards/container_card.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/misc/radio_tick.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
 import 'package:food_delivery_app/features/order/views/promotion/order_promotion_detail.dart';
 import 'package:food_delivery_app/features/order/views/promotion/order_promotion_list.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';

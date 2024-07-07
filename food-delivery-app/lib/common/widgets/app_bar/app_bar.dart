@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/common/widgets/circle_icon_card.dart';
-import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 

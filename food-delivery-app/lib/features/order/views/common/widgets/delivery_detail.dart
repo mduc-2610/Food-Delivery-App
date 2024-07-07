@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:food_delivery_app/common/widgets/circle_icon_card.dart';
-import 'package:food_delivery_app/common/widgets/main_button.dart';
-import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
+import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';

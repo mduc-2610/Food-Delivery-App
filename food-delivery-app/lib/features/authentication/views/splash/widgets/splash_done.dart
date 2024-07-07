@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/common/widgets/text_with_size.dart';
+import 'package:food_delivery_app/common/widgets/misc/text_with_size.dart';
 import 'package:food_delivery_app/features/authentication/controllers/splash/splash_controller.dart';
 import 'package:food_delivery_app/features/authentication/views/splash/widgets/splash_welcome.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';

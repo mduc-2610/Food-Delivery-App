@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/common/widgets/sliver_app_bar.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
 import 'package:food_delivery_app/features/food/controllers/home/home_controller.dart';
 import 'package:food_delivery_app/features/food/views/common/widgets/category_card.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';

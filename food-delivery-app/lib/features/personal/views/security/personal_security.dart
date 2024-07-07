@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
-import 'package:food_delivery_app/common/widgets/sliver_app_bar.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
 
 class PersonalSecurityView extends StatelessWidget {
   const PersonalSecurityView({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/common/widgets/rating_bar.dart';
+import 'package:food_delivery_app/common/widgets/bars/rating_bar.dart';
 
 
 class FoodDetailReviewRatingDistribution extends StatelessWidget {

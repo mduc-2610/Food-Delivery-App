@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
-import 'package:food_delivery_app/common/widgets/skip_button.dart';
+import 'package:food_delivery_app/common/widgets/buttons/skip_button.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 class RatingBottom extends StatelessWidget {

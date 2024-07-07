@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:food_delivery_app/common/widgets/app_bar_scroll_behavior.dart';
 import 'package:food_delivery_app/features/food/controllers/detail/food_detail_controller.dart';
 import 'package:food_delivery_app/features/food/views/detail/widgets/food_detail_bottom_app_bar.dart';
 import 'package:food_delivery_app/features/food/views/detail/widgets/food_detail_flexible_app_bar.dart';

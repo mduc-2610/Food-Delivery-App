@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:food_delivery_app/common/widgets/app_bar.dart';
-import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
-import 'package:food_delivery_app/common/widgets/show_success_dialog.dart';
-import 'package:food_delivery_app/common/widgets/skip_button.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/dialogs/show_success_dialog.dart';
 import 'package:food_delivery_app/features/order/views/rating/widgets/meal_rating_card.dart';
 import 'package:food_delivery_app/features/order/views/rating/widgets/rating_bottom.dart';
 import 'package:food_delivery_app/utils/constants/emoji.dart';
@@ -15,7 +14,7 @@ import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 
-class RatingMealView extends StatelessWidget {
+class OrderRatingMealView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

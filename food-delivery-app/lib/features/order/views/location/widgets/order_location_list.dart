@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/common/widgets/radio_tick.dart';
+import 'package:food_delivery_app/common/widgets/misc/radio_tick.dart';
 import 'package:food_delivery_app/features/order/models/location.dart';
 import 'package:food_delivery_app/features/order/views/location/order_location_add.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';

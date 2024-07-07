@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/common/widgets/main_button.dart';
-import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/features/authentication/controllers/onboarding/onboarding_controller.dart';
 import 'package:food_delivery_app/features/authentication/views/onboarding/widgets/onboarding.dart';
 import 'package:food_delivery_app/features/authentication/views/onboarding/widgets/onboarding_dot_navigation.dart';

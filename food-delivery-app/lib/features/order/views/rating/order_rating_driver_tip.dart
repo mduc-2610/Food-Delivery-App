@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/common/widgets/app_bar.dart';
-import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
-import 'package:food_delivery_app/common/widgets/skip_button.dart';
-import 'package:food_delivery_app/features/order/views/rating/rating_meal.dart';
-import 'package:food_delivery_app/features/order/views/rating/rating_meal.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/features/order/views/rating/order_rating_meal.dart';
+import 'package:food_delivery_app/features/order/views/rating/order_rating_meal.dart';
 import 'package:food_delivery_app/features/order/views/rating/widgets/rating_bottom.dart';
 import 'package:food_delivery_app/features/order/views/rating/widgets/driver_information.dart';
 import 'package:food_delivery_app/features/order/views/rating/widgets/driver_tip.dart';
@@ -13,12 +12,12 @@ import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:get/get.dart';
 import 'package:get/get.dart';
 
-class RatingDriverTipView extends StatefulWidget {
+class OrderRatingDriverTipView extends StatefulWidget {
   @override
-  _RatingDriverTipViewState createState() => _RatingDriverTipViewState();
+  _OrderRatingDriverTipViewState createState() => _OrderRatingDriverTipViewState();
 }
 
-class _RatingDriverTipViewState extends State<RatingDriverTipView> {
+class _OrderRatingDriverTipViewState extends State<OrderRatingDriverTipView> {
   int selectedAmount = -1;
   TextEditingController customAmountController = TextEditingController();
 
@@ -43,10 +42,10 @@ class _RatingDriverTipViewState extends State<RatingDriverTipView> {
       ),
       bottomNavigationBar: RatingBottom(
         skipOnPressed: () {
-          Get.to(RatingMealView());
+          Get.to(OrderRatingMealView());
         },
         submitOnPressed: () {
-          Get.to(RatingMealView());
+          Get.to(OrderRatingMealView());
         },
         text1: "No, thanks!",
       )

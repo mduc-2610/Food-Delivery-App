@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:food_delivery_app/common/widgets/app_bar.dart';
-import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
-import 'package:food_delivery_app/common/widgets/skip_button.dart';
-import 'package:food_delivery_app/features/order/views/rating/rating_driver.dart';
-import 'package:food_delivery_app/features/order/views/rating/rating_driver_tip.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/features/order/views/rating/order_rating_driver.dart';
+import 'package:food_delivery_app/features/order/views/rating/order_rating_driver_tip.dart';
 import 'package:food_delivery_app/features/order/views/rating/widgets/rating_bottom.dart';
 import 'package:food_delivery_app/features/order/views/rating/widgets/driver_information.dart';
 import 'package:food_delivery_app/features/order/views/rating/widgets/rating_review.dart';
@@ -16,18 +15,18 @@ import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 import 'package:get/get.dart';
 
-class RatingDriverView extends StatefulWidget {
+class OrderRatingDriverView extends StatefulWidget {
   @override
-  _RatingDriverViewState createState() => _RatingDriverViewState();
+  _OrderRatingDriverViewState createState() => _OrderRatingDriverViewState();
 }
 
-class _RatingDriverViewState extends State<RatingDriverView> {
+class _OrderRatingDriverViewState extends State<OrderRatingDriverView> {
   int _rating = 0;
 
   void _submitRating() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => RatingDriverView()),
+      MaterialPageRoute(builder: (context) => OrderRatingDriverView()),
     );
   }
 
@@ -50,10 +49,10 @@ class _RatingDriverViewState extends State<RatingDriverView> {
       ),
       bottomNavigationBar: RatingBottom(
         skipOnPressed: () {
-          Get.to(() => RatingDriverTipView());
+          Get.to(() => OrderRatingDriverTipView());
         },
         submitOnPressed: () {
-          Get.to(() => RatingDriverTipView());
+          Get.to(() => OrderRatingDriverTipView());
         },
       ),
     );

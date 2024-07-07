@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/controllers/filter_bar_controller.dart';
-import 'package:food_delivery_app/common/widgets/filter_bar.dart';
-import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
-import 'package:food_delivery_app/common/widgets/search_bar.dart';
-import 'package:food_delivery_app/common/widgets/sliver_app_bar.dart';
+import 'package:food_delivery_app/common/widgets/bars/filter_bar.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/bars/search_bar.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
 import 'package:food_delivery_app/features/personal/controllers/help_center/personal_help_center_controller.dart';
 import 'package:food_delivery_app/features/personal/views/help_center/widgets/personal_help_center_list.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';

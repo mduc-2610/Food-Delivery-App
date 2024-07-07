@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
-import 'package:food_delivery_app/common/widgets/search_bar.dart';
-import 'package:food_delivery_app/common/widgets/sliver_app_bar.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/bars/search_bar.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
 import 'package:food_delivery_app/features/food/controllers/category/food_category_controller.dart';
 import 'package:food_delivery_app/features/food/views/common/widgets/food_card.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';

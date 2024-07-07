@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/common/widgets/app_bar_scroll_behavior.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/app_bar_scroll_behavior.dart';
 import 'package:food_delivery_app/features/food/views/detail/widgets/food_detail_flexible_app_bar.dart';
 
 class FoodDetailSliverAppBar extends StatelessWidget {

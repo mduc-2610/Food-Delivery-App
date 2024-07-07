@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:food_delivery_app/common/widgets/app_bar.dart';
-import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
-import 'package:food_delivery_app/common/widgets/skip_button.dart';
-import 'package:food_delivery_app/features/order/views/rating/rating_driver.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/features/order/views/rating/order_rating_driver.dart';
 import 'package:food_delivery_app/features/order/views/rating/widgets/rating_bottom.dart';
 import 'package:food_delivery_app/features/order/views/rating/widgets/rating_review.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
@@ -12,18 +11,18 @@ import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 
-class RatingOrderView extends StatefulWidget {
+class OrderRatingOrderView extends StatefulWidget {
   @override
-  _RatingOrderViewState createState() => _RatingOrderViewState();
+  _OrderRatingOrderViewState createState() => _OrderRatingOrderViewState();
 }
 
-class _RatingOrderViewState extends State<RatingOrderView> {
+class _OrderRatingOrderViewState extends State<OrderRatingOrderView> {
   int _rating = 0;
 
   void _submitRating() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => RatingDriverView()),
+      MaterialPageRoute(builder: (context) => OrderRatingDriverView()),
     );
   }
 
