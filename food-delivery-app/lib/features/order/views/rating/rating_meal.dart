@@ -55,7 +55,37 @@ class DeliveryMealRatingView extends StatelessWidget {
             ),
             SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
             Expanded(child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.favorite, size: 60, color: Colors.red),
+                          SizedBox(height: 16),
+                          Text(
+                            'Thank you!',
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 16),
+                          Text('Your feedback has been submitted.'),
+                          SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('Ok'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
               child: Text('Submit'),
             ),)
           ],
@@ -115,10 +145,11 @@ class _MealRatingWidgetState extends State<MealRatingWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(widget.imageUrl, width: 80, height: 80)
+                  borderRadius: BorderRadius.circular(TSize.borderRadiusLg),
+                  child: Image.asset(widget.imageUrl, fit: BoxFit.cover, width: TSize.imageThumbSize, height: TSize.imageThumbSize)
                 ),
                 SizedBox(width: TSize.spaceBetweenItemsVertical),
                 Expanded(
@@ -146,18 +177,19 @@ class _MealRatingWidgetState extends State<MealRatingWidget> {
                         itemCount: 5,
                         itemSize: TSize.iconXl,
                       ),
-                      SizedBox(height: TSize.spaceBetweenItemsVertical),
 
                     ],
                   ),
                 ),
               ],
             ),
-            if (widget.review != null) Text(widget.review!),
+            SizedBox(height: TSize.spaceBetweenItemsVertical),
+
             TextField(
               decoration: InputDecoration(
                 hintText: 'Type your review ...',
               ),
+              maxLines: TSize.smMaxLines,
             ),
           ],
         ),

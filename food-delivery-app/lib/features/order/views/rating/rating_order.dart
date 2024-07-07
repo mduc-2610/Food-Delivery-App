@@ -5,20 +5,17 @@ import 'package:food_delivery_app/common/widgets/app_bar.dart';
 import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skip_button.dart';
 import 'package:food_delivery_app/features/order/views/delivery/delivery_driver_rating.dart';
-import 'package:food_delivery_app/features/order/views/delivery/delivery_driver_tip.dart';
-import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
-import 'package:get/get.dart';
 
-class DeliveryDriverRatingView extends StatefulWidget {
+class DeliveryOrderRatingView extends StatefulWidget {
   @override
-  _DeliveryDriverRatingViewState createState() => _DeliveryDriverRatingViewState();
+  _DeliveryOrderRatingViewState createState() => _DeliveryOrderRatingViewState();
 }
 
-class _DeliveryDriverRatingViewState extends State<DeliveryDriverRatingView> {
+class _DeliveryOrderRatingViewState extends State<DeliveryOrderRatingView> {
   int _rating = 0;
 
   void _submitRating() {
@@ -31,7 +28,7 @@ class _DeliveryDriverRatingViewState extends State<DeliveryDriverRatingView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CAppBar(title: 'Driver Rating'),
+      appBar: CAppBar(title: 'Order Rating'),
       body: MainWrapper(
         child: Center(
           child: Column(
@@ -39,24 +36,16 @@ class _DeliveryDriverRatingViewState extends State<DeliveryDriverRatingView> {
             children: [
               SizedBox(height: TSize.spaceBetweenSections),
               Text(
-                'Rate your driver\'s delivery service.',
-                style: Theme.of(context).textTheme.headlineMedium,
+                'Rate your Experience',
+                style: Theme.of(context).textTheme.headlineLarge,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: TSize.spaceBetweenSections),
 
-              CircleAvatar(
-                radius: TSize.imageThumbSize,
-                backgroundImage: AssetImage(TImage.hcBurger1),
-              ),
-              SizedBox(height: TSize.spaceBetweenItemsVertical),
-              Text(
-                'David Wayne',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.primary),
-              ),
-              Text(
-                'Driver',
-                style: Theme.of(context).textTheme.headlineSmall,
+              Image.asset(
+                TImage.deDiamond,
+                width: TDeviceUtil.getScreenWidth() ,
+                height: TDeviceUtil.getScreenHeight() * 0.2,
               ),
               SizedBox(height: TSize.spaceBetweenSections),
 
@@ -82,11 +71,9 @@ class _DeliveryDriverRatingViewState extends State<DeliveryDriverRatingView> {
                 TextField(
                   decoration: InputDecoration(
                     hintText: 'Type your review...',
-                    hintStyle: TextStyle(
-
-                    )
+                    hintStyle: TextStyle()
                   ),
-                  maxLines: TSize.inputMaxLines,
+                  maxLines: TSize.lgMaxLines,
                 ),
               ],
             ],
@@ -99,15 +86,11 @@ class _DeliveryDriverRatingViewState extends State<DeliveryDriverRatingView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: SkipButton(onPressed: () {
-                Get.to(DeliveryDriverTipView());
-              },),
+              child: SkipButton(onPressed: () {},),
             ),
             SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
             Expanded(child: ElevatedButton(
-              onPressed: () {
-                Get.to(DeliveryDriverTipView());
-              },
+              onPressed: _submitRating,
               child: Text('Submit'),
             ),)
           ],

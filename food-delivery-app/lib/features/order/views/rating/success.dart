@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/features/order/views/delivery/delivery_order_rating.dart';
+import 'package:food_delivery_app/features/order/views/rating/rating_order.dart';
+import 'package:food_delivery_app/features/order/views/rating/rating_driver_tip.dart';
 
 class DeliverySuccessView extends StatelessWidget {
   @override
@@ -32,7 +33,7 @@ class DeliverySuccessView extends StatelessWidget {
                           Navigator.of(context).pop();
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => DeliveryOrderRatingView()),
+                            MaterialPageRoute(builder: (context) => RatingDriverTipView()),
                           );
                         },
                         child: Text('Ok'),

@@ -5,17 +5,20 @@ import 'package:food_delivery_app/common/widgets/app_bar.dart';
 import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skip_button.dart';
 import 'package:food_delivery_app/features/order/views/delivery/delivery_driver_rating.dart';
+import 'package:food_delivery_app/features/order/views/delivery/delivery_driver_tip.dart';
+import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:get/get.dart';
 
-class DeliveryOrderRatingView extends StatefulWidget {
+class DeliveryDriverRatingView extends StatefulWidget {
   @override
-  _DeliveryOrderRatingViewState createState() => _DeliveryOrderRatingViewState();
+  _DeliveryDriverRatingViewState createState() => _DeliveryDriverRatingViewState();
 }
 
-class _DeliveryOrderRatingViewState extends State<DeliveryOrderRatingView> {
+class _DeliveryDriverRatingViewState extends State<DeliveryDriverRatingView> {
   int _rating = 0;
 
   void _submitRating() {
@@ -28,7 +31,7 @@ class _DeliveryOrderRatingViewState extends State<DeliveryOrderRatingView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CAppBar(title: 'Order Rating'),
+      appBar: CAppBar(title: 'Driver Rating'),
       body: MainWrapper(
         child: Center(
           child: Column(
@@ -36,16 +39,24 @@ class _DeliveryOrderRatingViewState extends State<DeliveryOrderRatingView> {
             children: [
               SizedBox(height: TSize.spaceBetweenSections),
               Text(
-                'Rate your Experience',
-                style: Theme.of(context).textTheme.headlineLarge,
+                'Rate your driver\'s delivery service.',
+                style: Theme.of(context).textTheme.headlineMedium,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: TSize.spaceBetweenSections),
 
-              Image.asset(
-                TImage.deDiamond,
-                width: TDeviceUtil.getScreenWidth() ,
-                height: TDeviceUtil.getScreenHeight() * 0.2,
+              CircleAvatar(
+                radius: TSize.imageThumbSize,
+                backgroundImage: AssetImage(TImage.hcBurger1),
+              ),
+              SizedBox(height: TSize.spaceBetweenItemsVertical),
+              Text(
+                'David Wayne',
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.primary),
+              ),
+              Text(
+                'Driver',
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
               SizedBox(height: TSize.spaceBetweenSections),
 
@@ -71,9 +82,11 @@ class _DeliveryOrderRatingViewState extends State<DeliveryOrderRatingView> {
                 TextField(
                   decoration: InputDecoration(
                     hintText: 'Type your review...',
-                    hintStyle: TextStyle()
+                    hintStyle: TextStyle(
+
+                    )
                   ),
-                  maxLines: TSize.inputMaxLines,
+                  maxLines: TSize.lgMaxLines,
                 ),
               ],
             ],
@@ -86,11 +99,15 @@ class _DeliveryOrderRatingViewState extends State<DeliveryOrderRatingView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: SkipButton(onPressed: () {},),
+              child: SkipButton(onPressed: () {
+                Get.to(DeliveryDriverTipView());
+              },),
             ),
             SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
             Expanded(child: ElevatedButton(
-              onPressed: _submitRating,
+              onPressed: () {
+                Get.to(DeliveryDriverTipView());
+              },
               child: Text('Submit'),
             ),)
           ],
