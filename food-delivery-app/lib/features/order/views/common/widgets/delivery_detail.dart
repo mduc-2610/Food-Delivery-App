@@ -16,6 +16,7 @@ class DeliveryDetail extends StatelessWidget {
   final double subtotal;
   final double discount;
   final double total;
+  final String fromView;
 
   DeliveryDetail({
     required this.address,
@@ -23,6 +24,7 @@ class DeliveryDetail extends StatelessWidget {
     required this.subtotal,
     required this.discount,
     required this.total,
+    this.fromView = "Cancel",
   });
 
   @override
@@ -114,7 +116,7 @@ class DeliveryDetail extends StatelessWidget {
         ),
         Text(
           value,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(color: valueColor ?? Theme.of(context).colorScheme.primary),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(color: TColor.primary),
         ),
       ],
     );
@@ -188,13 +190,16 @@ class DeliveryDetail extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             InkWell(
-              onTap: () {},
+              onTap: (fromView == "Basket") ? null :  () {},
               child: Text(
-                "Cancel Order",
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.textDesc),
+                (fromView == "Basket") ? "£ $total" : "Cancel Order",
+                style:
+                (fromView == "Basket")
+                    ? Theme.of(context).textTheme.headlineSmall
+                    : Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.textDesc),
               ),
             ),
-            SizedBox(width: TSize.spaceBetweenSections),
+            SizedBox(width: TSize.spaceBetweenSections * ((fromView == "Basket") ? 2 : 1)),
             SizedBox(
               width: TDeviceUtil.getScreenWidth() * 0.45,
               child: MainButton(

@@ -9,6 +9,7 @@ class TIcon {
   static IconData payment = Icons.payment;
   static IconData promotion = Icons.discount;
   static IconData edit = Icons.edit;
+  static IconData delete = Icons.delete;
   static IconData check = Icons.check;
   static IconData add = Icons.add;
 

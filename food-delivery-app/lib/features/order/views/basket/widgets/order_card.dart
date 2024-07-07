@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/buttons/small_button.dart';
+import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/features/order/views/history/widgets/order_history_card.dart';
 import 'package:food_delivery_app/features/order/views/history/widgets/order_history_card.dart';
@@ -13,7 +14,7 @@ import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 
 
-class OrderHistoryDetailCard extends StatelessWidget {
+class OrderCard extends StatelessWidget {
   final String imageUrl;
   final String name;
   final double originalPrice;
@@ -24,7 +25,7 @@ class OrderHistoryDetailCard extends StatelessWidget {
   final bool noMargin;
   final bool isCompletedOrder;
 
-  OrderHistoryDetailCard({
+  OrderCard({
     required this.imageUrl,
     required this.name,
     required this.originalPrice,
@@ -43,15 +44,15 @@ class OrderHistoryDetailCard extends StatelessWidget {
       child: Card(
         child: Padding(
           padding: EdgeInsets.symmetric(
-            vertical: TSize.md,
-            horizontal: TSize.md
+              vertical: TSize.md,
+              horizontal: TSize.md
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,9 +66,9 @@ class OrderHistoryDetailCard extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      SizedBox(width: 10),
+                      SizedBox(width: TSize.spaceBetweenItemsHorizontal),
                       SizedBox(
-                        width: TDeviceUtil.getScreenWidth() * 0.3,
+                        width: TDeviceUtil.getScreenWidth() * 0.33,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -91,29 +92,69 @@ class OrderHistoryDetailCard extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+
+                            Row(
+                              children: [
+                                CircleIconCard(
+                                  icon: Icons.remove,
+                                  iconColor: TColor.primary,
+                                  borderSideWidth: 1,
+                                  borderSideColor: TColor.primary,
+                                  iconSize: TSize.iconXs,
+                                ),
+                                SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
+
+                                Text(
+                                  '1',
+                                  style: Theme.of(context).textTheme.headlineSmall,
+                                ),
+                                SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
+
+                                CircleIconCard(
+                                  icon: Icons.add,
+                                  iconColor: TColor.primary,
+                                  borderSideWidth: 1,
+                                  borderSideColor: TColor.primary,
+                                  iconSize: TSize.iconXs,
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
                     ],
                   ),
 
-                  (isCompletedOrder) ? SmallButton(
-                    onPressed: () {},
-                    text: "Reorder",
-                    prefixIconStr: TIcon.fillCart,
-                  ) : StatusChip(status: 'Active')
+                  Row(
+                    children: [
+                      GestureDetector(
+                        child: Icon(
+                          TIcon.edit
+                        ),
+                      ),
+                      SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
+
+                      GestureDetector(
+                        child: Icon(
+                            TIcon.delete
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
-              SizedBox(height: TSize.spaceBetweenItemsVertical,),
-
-              Divider(
-                thickness: 1,
-              ),
-              SizedBox(height: TSize.spaceBetweenItemsVertical,),
 
               if (options != null) ...[
                 Column(
                   children: [
+                    SizedBox(height: TSize.spaceBetweenItemsVertical,),
+
+                    Divider(
+                      thickness: 1,
+                    ),
+                    SizedBox(height: TSize.spaceBetweenItemsVertical,),
+
                     ...options!.map((extra) => Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -130,28 +171,6 @@ class OrderHistoryDetailCard extends StatelessWidget {
                     )),
                   ],
                 )
-              ],
-              SizedBox(height: TSize.spaceBetweenItemsVertical,),
-
-              RatingBarIndicator(
-                itemBuilder: (context, c) => SvgPicture.asset(
-                  TIcon.fillStar
-                ),
-                rating: rating.toDouble(),
-                itemCount: 5,
-                itemSize: TSize.iconSm,
-              ),
-
-              if (review != null) ...[
-                SizedBox(height: TSize.spaceBetweenItemsVertical,),
-                TextFormField(
-                  decoration: InputDecoration(
-                    hintText: 'Type your review ... ',
-                    hintStyle: Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(fontSize: TSize.md)
-                  ),
-                  style: Theme.of(context).textTheme.titleMedium,
-                  maxLines: 5,
-                ),
               ],
             ],
           ),
