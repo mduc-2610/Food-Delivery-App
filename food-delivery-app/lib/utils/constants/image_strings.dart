@@ -34,6 +34,7 @@ class TImage {
 
   // Delivery
   static String deDiamond = "assets/images/delivery/diamond.png";
-  static String deClover = "assets/images/delivery/clover.png";
-  static String deHeart = "assets/images/delivery/heart.png";
+  static String diaClover = "assets/images/dialog/clover.png";
+  static String diaHeart = "assets/images/dialog/heart.png";
+  static String diaConfetti = "assets/images/dialog/confetti.png";
 }

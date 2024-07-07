@@ -3,7 +3,11 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/app_bar.dart';
 import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/show_success_dialog.dart';
 import 'package:food_delivery_app/common/widgets/skip_button.dart';
+import 'package:food_delivery_app/features/order/views/rating/widgets/meal_rating_card.dart';
+import 'package:food_delivery_app/features/order/views/rating/widgets/rating_bottom.dart';
+import 'package:food_delivery_app/utils/constants/emoji.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
@@ -11,7 +15,7 @@ import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 
-class DeliveryMealRatingView extends StatelessWidget {
+class RatingMealView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,18 +27,19 @@ class DeliveryMealRatingView extends StatelessWidget {
               child: ListView(
                 children: [
                   OrderIdWidget(),
-                  MealRatingWidget(
+                  SizedBox(height: TSize.spaceBetweenItemsVertical,),
+                  MealRatingCard(
                     mealName: 'Chicken Burger',
                     imageUrl: TImage.hcBurger1,
                     rating: 4,
                     review: 'Chicken burger is delicious! I will save it for next order.',
                   ),
-                  MealRatingWidget(
+                  MealRatingCard(
                     mealName: 'Ramen Noodles',
                     imageUrl: TImage.hcBurger1,
                     rating: 5,
                   ),
-                  MealRatingWidget(
+                  MealRatingCard(
                     mealName: 'Cherry Tomato Salad',
                     imageUrl: TImage.hcBurger1,
                     rating: 1,
@@ -45,52 +50,32 @@ class DeliveryMealRatingView extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: MainWrapper(
-        bottomMargin: TSize.spaceBetweenSections,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: SkipButton(onPressed: () {},),
-            ),
-            SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
-            Expanded(child: ElevatedButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.favorite, size: 60, color: Colors.red),
-                          SizedBox(height: 16),
-                          Text(
-                            'Thank you!',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 16),
-                          Text('Your feedback has been submitted.'),
-                          SizedBox(height: 16),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                            },
-                            child: Text('Ok'),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-              child: Text('Submit'),
-            ),)
-          ],
-        ),
-      ),
+      bottomNavigationBar: RatingBottom(
+        skipOnPressed: () {},
+        submitOnPressed: () {
+          showSuccessDialog(
+            context,
+            image: TImage.diaHeart,
+            head: "Big Thanks ${TEmoji.smilingFaceWithHeart}",
+            title: "Thanks for rating our meal",
+            description: "We appreciate your time and hope to serve you again soon!",
+          );
+          showSuccessDialog(
+            context,
+            image: TImage.diaClover,
+            head: "Delivery Successful ${TEmoji.faceSavoringFood}",
+            title: "Enjoy Your Meal!",
+            description: "See you in the next order!",
+          );
+          showSuccessDialog(
+            context,
+            image: TImage.diaConfetti,
+            head: "Payment Successful ${TEmoji.starStruck}",
+            title: "Thank you for your order!",
+            description: "Your payment has been successfully processed.",
+          );
+        },
+      )
     );
   }
 }
@@ -105,94 +90,13 @@ class OrderIdWidget extends StatelessWidget {
         children: [
           Text(
             'Order ID',
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
           Text(
             'SP 0023900',
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
         ],
-      ),
-    );
-  }
-}
-
-class MealRatingWidget extends StatefulWidget {
-  final String mealName;
-  final String imageUrl;
-  final int rating;
-  final String? review;
-
-  MealRatingWidget({
-    required this.mealName,
-    required this.imageUrl,
-    required this.rating,
-    this.review,
-  });
-
-  @override
-  State<MealRatingWidget> createState() => _MealRatingWidgetState();
-}
-
-class _MealRatingWidgetState extends State<MealRatingWidget> {
-  int _rating = 0;
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(TSize.borderRadiusLg),
-                  child: Image.asset(widget.imageUrl, fit: BoxFit.cover, width: TSize.imageThumbSize, height: TSize.imageThumbSize)
-                ),
-                SizedBox(width: TSize.spaceBetweenItemsVertical),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.mealName,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      SizedBox(height: TSize.spaceBetweenItemsHorizontal,),
-                      RatingBarIndicator(
-                        itemPadding: EdgeInsets.only(right: TSize.spaceBetweenItemsHorizontal),
-                        rating: _rating.toDouble(),
-                        itemBuilder: (context, index) => GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _rating = index + 1;
-                            });
-                          },
-                          child: SvgPicture.asset(
-                            TIcon.fillStar,
-                          ),
-                        ),
-                        itemCount: 5,
-                        itemSize: TSize.iconXl,
-                      ),
-
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: TSize.spaceBetweenItemsVertical),
-
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Type your review ...',
-              ),
-              maxLines: TSize.smMaxLines,
-            ),
-          ],
-        ),
       ),
     );
   }

@@ -4,24 +4,26 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/app_bar.dart';
 import 'package:food_delivery_app/common/widgets/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skip_button.dart';
-import 'package:food_delivery_app/features/order/views/delivery/delivery_driver_rating.dart';
+import 'package:food_delivery_app/features/order/views/rating/rating_driver.dart';
+import 'package:food_delivery_app/features/order/views/rating/widgets/rating_bottom.dart';
+import 'package:food_delivery_app/features/order/views/rating/widgets/rating_review.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 
-class DeliveryOrderRatingView extends StatefulWidget {
+class RatingOrderView extends StatefulWidget {
   @override
-  _DeliveryOrderRatingViewState createState() => _DeliveryOrderRatingViewState();
+  _RatingOrderViewState createState() => _RatingOrderViewState();
 }
 
-class _DeliveryOrderRatingViewState extends State<DeliveryOrderRatingView> {
+class _RatingOrderViewState extends State<RatingOrderView> {
   int _rating = 0;
 
   void _submitRating() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => DeliveryDriverRatingView()),
+      MaterialPageRoute(builder: (context) => RatingDriverView()),
     );
   }
 
@@ -49,52 +51,14 @@ class _DeliveryOrderRatingViewState extends State<DeliveryOrderRatingView> {
               ),
               SizedBox(height: TSize.spaceBetweenSections),
 
-              RatingBarIndicator(
-                itemPadding: EdgeInsets.only(right: TSize.spaceBetweenItemsHorizontal),
-                rating: _rating.toDouble(),
-                itemBuilder: (context, index) => GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _rating = index + 1;
-                    });
-                  },
-                  child: SvgPicture.asset(
-                    TIcon.fillStar,
-                  ),
-                ),
-                itemCount: 5,
-                itemSize: 65,
-              ),
-              SizedBox(height: TSize.spaceBetweenSections),
-
-              if(_rating != 0)...[
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Type your review...',
-                    hintStyle: TextStyle()
-                  ),
-                  maxLines: TSize.lgMaxLines,
-                ),
-              ],
+              RatingReview(),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: MainWrapper(
-        bottomMargin: TSize.spaceBetweenSections,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: SkipButton(onPressed: () {},),
-            ),
-            SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
-            Expanded(child: ElevatedButton(
-              onPressed: _submitRating,
-              child: Text('Submit'),
-            ),)
-          ],
-        ),
+      bottomNavigationBar: RatingBottom(
+        skipOnPressed: _submitRating,
+        submitOnPressed: _submitRating,
       ),
     );
   }

@@ -9,8 +9,7 @@ import 'package:food_delivery_app/features/food/views/detail/food_detail_review.
 import 'package:food_delivery_app/features/notification/views/notification/notification.dart';
 import 'package:food_delivery_app/features/order/models/location.dart';
 import 'package:food_delivery_app/features/order/views/contact/order_driver_information.dart';
-import 'package:food_delivery_app/features/order/views/delivery/delivery_order_rating.dart';
-import 'package:food_delivery_app/features/order/views/delivery/delivery_success.dart';
+import 'package:food_delivery_app/features/order/views/rating/rating_order.dart';
 import 'package:food_delivery_app/features/order/views/history/order_history.dart';
 import 'package:food_delivery_app/features/order/views/history/order_history_detail.dart';
 import 'package:food_delivery_app/features/order/views/location/order_location.dart';
@@ -49,10 +48,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
-      theme: TAppTheme.lightTheme,
-      darkTheme: TAppTheme.darkTheme,
+      theme: TAppTheme.darkTheme,
       themeMode: ThemeMode.light,
-      home: DeliveryOrderRatingView(),
+      home: RatingOrderView(),
     );
   }
 }
