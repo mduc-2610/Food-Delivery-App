@@ -44,9 +44,9 @@ class TColor {
   static const Color darkContainer = Color(0xFF4b68ff);
 
   // Button Colors
-  static const Color buttonPrimary = Color(0xFF4b68ff);
+  static const Color buttonPrimary = Color(0xffff6347);
   static const Color buttonSecondary = Color(0xFF4b68ff);
-  static const Color buttonDisabled = Color(0xFF4b68ff);
+  static const Color buttonDisabled = Color(0xFFffcfc6);
 
   // Border Colors
   static const Color borderPrimary = Color(0xFFe9eaeb);
@@ -63,12 +63,6 @@ class TColor {
   static const Color iconBgSuccess = Color(0xFFe7f9f5);
   static const Color iconBgInfo = Color(0xFFfff9e6);
   static const Color iconBgCancel = Color(0xFFffefed);
-
-  //Neutral Shades
-  static const Color black = Color(0xFF4b68ff);
-  static const Color darkerGrey = Color(0xFF4b68ff);
-  static const Color c = Color(0xFF4b68ff);
-  static const Color x = Color(0xFF4b68ff);
 
   //Gradient
   static  Gradient linearGradient = LinearGradient(

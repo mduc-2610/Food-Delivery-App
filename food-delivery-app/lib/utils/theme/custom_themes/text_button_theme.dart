@@ -13,6 +13,7 @@ class TTextButtonTheme {
       disabledForegroundColor: Colors.grey,
       padding: EdgeInsets.symmetric(vertical: 18),
       textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      disabledBackgroundColor: TColor.buttonDisabled,
     ),
   );
 
@@ -24,6 +25,7 @@ class TTextButtonTheme {
       disabledForegroundColor: Colors.grey,
       padding: EdgeInsets.symmetric(vertical: 18),
       textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      disabledBackgroundColor: TColor.buttonDisabled,
     ),
   );
 }

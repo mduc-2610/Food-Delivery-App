@@ -7,7 +7,7 @@ import 'package:food_delivery_app/utils/device/device_utility.dart';
 class MainButton extends StatelessWidget {
   final double? width;
   final double? height;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String text;
   final Color? textColor;
   final IconData? suffixIcon;

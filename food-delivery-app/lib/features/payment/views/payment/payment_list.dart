@@ -17,7 +17,7 @@ class PaymentListView extends StatefulWidget {
 }
 
 class PaymentListViewState extends State<PaymentListView> {
-  int _selectedMethod = 0;
+  int _selectedMethod = -1;
 
   final List<Map<String, dynamic>> paymentMethods = [
     {'icon': Icons.money, 'name': 'Cash'},
@@ -90,7 +90,7 @@ class PaymentListViewState extends State<PaymentListView> {
         child: Container(
           height: TDeviceUtil.getBottomNavigationBarHeight(),
           child: MainButton(
-            onPressed: () {},
+            onPressed: (_selectedMethod == -1) ? null : () {},
             text: "Apply",
           ),
         ),

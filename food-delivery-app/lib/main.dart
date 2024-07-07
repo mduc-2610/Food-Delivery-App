@@ -15,7 +15,7 @@ import 'package:food_delivery_app/features/order/views/history/order_history_det
 import 'package:food_delivery_app/features/order/views/location/order_location.dart';
 import 'package:food_delivery_app/features/order/views/promotion/order_promotion.dart';
 import 'package:food_delivery_app/features/order/views/promotion/order_promotion_list.dart';
-import 'package:food_delivery_app/features/payment/views/payment/payment_card.dart';
+import 'package:food_delivery_app/features/payment/views/payment/widgets/payment_card.dart';
 import 'package:food_delivery_app/features/payment/views/payment/payment_list.dart';
 import 'package:food_delivery_app/features/personal/views/about_app/personal_about_app.dart';
 import 'package:food_delivery_app/features/personal/views/help_center/personal_help_center.dart';
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
       themeMode: ThemeMode.light,
-      home: OrderPromotionView(),
+      home: PaymentListView(),
     );
   }
 }

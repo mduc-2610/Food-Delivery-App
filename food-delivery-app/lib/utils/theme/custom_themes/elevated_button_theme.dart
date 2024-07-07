@@ -9,11 +9,11 @@ class TElevatedButtonTheme {
       elevation: 0,
       foregroundColor: Colors.white,
       backgroundColor: TColor.primary,
-      disabledForegroundColor: Colors.grey,
-      disabledBackgroundColor: Colors.grey,
+      disabledForegroundColor: Colors.white,
+      disabledBackgroundColor: TColor.buttonDisabled,
       side: BorderSide(color: TColor.primary),
       padding: EdgeInsets.symmetric(vertical: 18),
-      textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)
+      textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
     )
   );
 
@@ -23,10 +23,10 @@ class TElevatedButtonTheme {
           foregroundColor: Colors.white,
           backgroundColor: TColor.primary,
           disabledForegroundColor: Colors.grey,
-          disabledBackgroundColor: Colors.grey,
+          disabledBackgroundColor: TColor.buttonDisabled,
           side: BorderSide(color: TColor.primary),
           padding: EdgeInsets.symmetric(vertical: 18),
-          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)
+          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
       )
   );
 }
