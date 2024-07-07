@@ -12,6 +12,9 @@ class TIcon {
   static IconData delete = Icons.delete;
   static IconData check = Icons.check;
   static IconData add = Icons.add;
+  static IconData call = Icons.call;
+  static IconData message = Icons.message;
+  static IconData send = Icons.send;
 
   // Login
   static String googleIcon = "assets/icons/login/google_icon.svg";

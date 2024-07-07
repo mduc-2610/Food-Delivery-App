@@ -1,41 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/utils/constants/icon_strings.dart';
+import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 class OrderMessageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Message'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              children: [
-                MessageBubble(
-                  text: 'Hello! Thanks for bringing my order.',
-                  isMe: false,
-                ),
-                MessageBubble(
-                  text: 'No problem at all! I will be there in 5 minutes.',
-                  isMe: true,
-                ),
-                MessageBubble(
-                  text: 'Great! See you soon.',
-                  isMe: false,
-                ),
-              ],
+      appBar: CAppBar(title: "Message",),
+      body: MainWrapper(
+        child: Column(
+          children: [
+            SizedBox(height: TSize.spaceBetweenItemsVertical,),
+
+            Expanded(
+              child: ListView(
+                children: [
+                  MessageBubble(
+                    text: 'Hello! Thanks for bringing my order.',
+                    isMe: false,
+                  ),
+                  MessageBubble(
+                    text: 'No problem at all! I will be there in 5 minutes.',
+                    isMe: true,
+                  ),
+                  MessageBubble(
+                    text: 'Great! See you soon.',
+                    isMe: false,
+                  ),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
+            Row(
               children: [
                 Expanded(
                   child: TextField(
@@ -48,15 +45,15 @@ class OrderMessageView extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon: Icon(TIcon.send),
                   onPressed: () {
                     // Handle send action
                   },
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

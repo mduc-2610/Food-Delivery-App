@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/image_strings.dart';
+import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 class OrderCallingView extends StatelessWidget {
   @override
@@ -11,32 +14,34 @@ class OrderCallingView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircleAvatar(
-                  radius: 50,
-                  backgroundImage: AssetImage('assets/driver_image.jpg'),
+                  radius: TSize.imageThumbSize,
+                  backgroundImage: AssetImage(TImage.hcBurger1),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: TSize.spaceBetweenItemsVertical),
                 Text(
                   'Calling...',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
-                SizedBox(height: 5),
+                SizedBox(height: TSize.spaceBetweenItemsVertical),
+
                 Text(
                   'David Wayne',
-                  style: TextStyle(fontSize: 18),
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.primary),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: TSize.spaceBetweenItemsVertical),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.call_end, color: Colors.red, size: 30),
+                      icon: Icon(Icons.call_end, color: Colors.red, size: TSize.iconLg),
                       onPressed: () {
                         Navigator.pop(context);
                       },
                     ),
                     SizedBox(width: 20),
                     IconButton(
-                      icon: Icon(Icons.call, color: Colors.green, size: 30),
+                      icon: Icon(Icons.call, color: Colors.green, size: TSize.iconLg),
                       onPressed: () {
                         // Handle call action
                       },

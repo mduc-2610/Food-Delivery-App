@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
       themeMode: ThemeMode.light,
-      home: OrderBasketView(),
+      home: OrderDriverInformationView(),
     );
   }
 }

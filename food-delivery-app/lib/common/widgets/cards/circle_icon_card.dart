@@ -36,35 +36,38 @@ class CircleIconCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: backgroundColor ?? Theme.of(context).appBarTheme.backgroundColor,
-      elevation: elevation,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(TSize.borderRadiusCircle),
-        side: BorderSide(
-          color: borderSideColor ?? Theme.of(context).appBarTheme.backgroundColor!,
-          width: borderSideWidth ?? 0,
+    return InkWell(
+      onTap: onTap,
+      child: Card(
+        color: backgroundColor ?? Theme.of(context).appBarTheme.backgroundColor,
+        elevation: elevation,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(TSize.borderRadiusCircle),
+          side: BorderSide(
+            color: borderSideColor ?? Theme.of(context).appBarTheme.backgroundColor!,
+            width: borderSideWidth ?? 0,
+          )
+        ),
+        shadowColor: shadowColor ?? Theme.of(context).appBarTheme.backgroundColor,
+        surfaceTintColor: surfaceTintColor ?? Theme.of(context).appBarTheme.backgroundColor,
+        child: Container(
+          padding: EdgeInsets.all(padding ?? TSize.sm),
+          decoration: BoxDecoration(
+              // color: Colors.white,
+          ),
+          child: (iconStr != null)
+              ? SvgPicture.asset(
+                iconStr!,
+                width: iconSize ?? TSize.iconSm + 5,
+                height: iconSize ?? TSize.iconSm + 5,
+              )
+              : Icon(
+                icon,
+                color: iconColor,
+                size: iconSize ?? TSize.iconSm + 5,
+              ),
         )
       ),
-      shadowColor: shadowColor ?? Theme.of(context).appBarTheme.backgroundColor,
-      surfaceTintColor: surfaceTintColor ?? Theme.of(context).appBarTheme.backgroundColor,
-      child: Container(
-        padding: EdgeInsets.all(padding ?? TSize.sm),
-        decoration: BoxDecoration(
-            // color: Colors.white,
-        ),
-        child: (iconStr != null)
-            ? SvgPicture.asset(
-              iconStr!,
-              width: iconSize ?? TSize.iconSm + 5,
-              height: iconSize ?? TSize.iconSm + 5,
-            )
-            : Icon(
-              icon,
-              color: iconColor,
-              size: iconSize ?? TSize.iconSm + 5,
-            ),
-      )
     );
   }
 }
