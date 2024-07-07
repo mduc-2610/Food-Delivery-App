@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
+import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/features/order/models/location.dart';
+import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:geocoding/geocoding.dart';
 
-class AddLocationScreen extends StatefulWidget {
+class OrderLocationAddView extends StatefulWidget {
   @override
-  _AddLocationScreenState createState() => _AddLocationScreenState();
+  _OrderLocationAddViewState createState() => _OrderLocationAddViewState();
 }
 
-class _AddLocationScreenState extends State<AddLocationScreen> {
+class _OrderLocationAddViewState extends State<OrderLocationAddView> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _locationNameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
@@ -25,13 +29,15 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Add New Location'),
+      appBar: CAppBar(
+          title: 'Add New Location'
       ),
       body: Form(
         key: _formKey,
         child: Column(
           children: [
+            SizedBox(height: TSize.spaceBetweenItemsVertical,),
+
             Expanded(
               child: GoogleMap(
                 initialCameraPosition: CameraPosition(
@@ -52,28 +58,33 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                controller: _locationNameController,
-                decoration: InputDecoration(labelText: 'Location Name'),
-                onSaved: (value) => _locationNameController.text = value ?? '',
-                validator: (value) => value?.isEmpty ?? true ? 'Please enter a name' : null,
+            MainWrapper(
+              topMargin: TSize.spaceBetweenSections,
+              bottomMargin: TSize.spaceBetweenSections,
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _locationNameController,
+                    decoration: InputDecoration(labelText: 'Location Name'),
+                    onSaved: (value) => _locationNameController.text = value ?? '',
+                    validator: (value) => value?.isEmpty ?? true ? 'Please enter a name' : null,
+                  ),
+                  SizedBox(height: TSize.spaceBetweenInputFields,),
+
+                  TextFormField(
+                    controller: _addressController,
+                    decoration: InputDecoration(labelText: 'Address'),
+                    onSaved: (value) => _addressController.text = value ?? '',
+                    validator: (value) => value?.isEmpty ?? true ? 'Please enter an address' : null,
+                  ),
+                  SizedBox(height: TSize.spaceBetweenInputFields,),
+
+                  MainButton(
+                    text: 'Save',
+                    onPressed: _saveLocation,
+                  ),],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                controller: _addressController,
-                decoration: InputDecoration(labelText: 'Address'),
-                onSaved: (value) => _addressController.text = value ?? '',
-                validator: (value) => value?.isEmpty ?? true ? 'Please enter an address' : null,
-              ),
-            ),
-            ElevatedButton(
-              child: Text('Save'),
-              onPressed: _saveLocation,
-            ),
+            )
           ],
         ),
       ),

@@ -10,6 +10,7 @@ import 'package:food_delivery_app/features/notification/views/notification/notif
 import 'package:food_delivery_app/features/order/models/location.dart';
 import 'package:food_delivery_app/features/order/views/cancel/order_cancel.dart';
 import 'package:food_delivery_app/features/order/views/contact/order_driver_information.dart';
+import 'package:food_delivery_app/features/order/views/location/order_location_add.dart';
 import 'package:food_delivery_app/features/order/views/rating/order_rating_meal.dart';
 import 'package:food_delivery_app/features/order/views/rating/order_rating_order.dart';
 import 'package:food_delivery_app/features/order/views/history/order_history.dart';
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
       themeMode: ThemeMode.light,
-      home: OrderRatingMealView(),
+      home: OrderLocationSelectView(),
     );
   }
 }
