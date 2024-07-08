@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_delivery_app/common/controllers/menu_bar_controller.dart';
+import 'package:food_delivery_app/common/widgets/bars/menu_bar.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 import 'package:get/get.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
@@ -15,6 +17,7 @@ import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 class HomeView extends StatelessWidget {
   final HomeController _controller = Get.put(HomeController());
+  final MenuBarController _menuBarController = Get.put(MenuBarController(0));
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +84,9 @@ class HomeView extends StatelessWidget {
                             children: [
                               Text('Special Offers', style: Theme.of(context).textTheme.headlineMedium),
                               GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  _controller.getToFoodCategory("Special Offers");
+                                },
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
@@ -91,7 +96,7 @@ class HomeView extends StatelessWidget {
                                         // fontWeight: FontWeight.w600
                                     )),
                                     Icon(
-                                      TIcon.arrowFoward,
+                                      TIcon.arrowForward,
                                       size: TSize.iconSm,
                                       color: TColor.primary,
                                     )
@@ -153,6 +158,9 @@ class HomeView extends StatelessWidget {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar:  CMenuBar(
+        index: 0,
       ),
     );
   }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class TIcon {
   // IconData
-  static IconData arrowFoward = Icons.arrow_forward_ios_rounded;
+  static IconData arrowForward = Icons.arrow_forward_ios_rounded;
   static IconData search = Icons.search;
   static IconData filter = Icons.filter_list_rounded;
   static IconData location = Icons.location_on;
@@ -15,6 +15,11 @@ class TIcon {
   static IconData call = Icons.call;
   static IconData message = Icons.message;
   static IconData send = Icons.send;
+  static IconData home = Icons.home_rounded;
+  static IconData list = Icons.list_rounded;
+  static IconData favorite = Icons.favorite_rounded;
+  static IconData notification = Icons.notifications_rounded;
+  static IconData person = Icons.person;
 
   // Login
   static String googleIcon = "assets/icons/login/google_icon.svg";

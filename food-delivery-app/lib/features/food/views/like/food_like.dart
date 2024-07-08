@@ -6,22 +6,24 @@ import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
 import 'package:food_delivery_app/features/food/controllers/category/food_category_controller.dart';
 import 'package:food_delivery_app/features/food/views/common/widgets/food_card.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/icon_strings.dart';
+import 'package:food_delivery_app/utils/constants/icon_strings.dart';
+import 'package:food_delivery_app/utils/constants/icon_strings.dart';
+import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:get/get.dart';
 
-class FoodCategoryView extends StatelessWidget {
+class FoodLikeView extends StatelessWidget {
   final FoodCategoryController _controller = Get.put(FoodCategoryController());
 
   @override
   Widget build(BuildContext context) {
-    String category = _controller.category.value;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           CSliverAppBar(
-            title: category,
-            noLeading: (category == "Liked") ? true : false,
+              title: "Liked",
           ),
           SliverToBoxAdapter(
             child: Stack(
@@ -55,6 +57,7 @@ class FoodCategoryView extends StatelessWidget {
                             stars: 4.9,
                             originalPrice: 10.00,
                             salePrice: 6.00,
+                            heart: TIcon.fillHeart,
                           ),
                           FoodCard(
                             onTap: _controller.getToFoodDetail,
@@ -63,6 +66,7 @@ class FoodCategoryView extends StatelessWidget {
                             stars: 4.9,
                             originalPrice: 10.00,
                             salePrice: 6.00,
+                            heart: TIcon.fillHeart,
                           ),
                           FoodCard(
                             onTap: _controller.getToFoodDetail,
@@ -71,6 +75,7 @@ class FoodCategoryView extends StatelessWidget {
                             stars: 4.9,
                             originalPrice: 10.00,
                             salePrice: 6.00,
+                            heart: TIcon.fillHeart,
                           ),
                           FoodCard(
                             onTap: _controller.getToFoodDetail,
@@ -79,6 +84,7 @@ class FoodCategoryView extends StatelessWidget {
                             stars: 4.9,
                             originalPrice: 10.00,
                             salePrice: 6.00,
+                            heart: TIcon.fillHeart,
                           ),
 
                         ],
@@ -91,9 +97,7 @@ class FoodCategoryView extends StatelessWidget {
           )
         ],
       ),
-      bottomNavigationBar: category == "Liked"
-          ? CMenuBar(index: 2)
-          : null,
+      bottomNavigationBar: CMenuBar(index: 2,),
     );
   }
 }

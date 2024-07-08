@@ -3,6 +3,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/controllers/filter_bar_controller.dart';
 import 'package:food_delivery_app/common/widgets/bars/filter_bar.dart';
+import 'package:food_delivery_app/common/widgets/bars/menu_bar.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/bars/search_bar.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
@@ -84,7 +85,8 @@ class _OrderHistoryViewState extends State<OrderHistoryView> {
       body: CustomScrollView(
         slivers: [
           CSliverAppBar(
-            title: "Orders"
+            title: "Orders",
+            noLeading: true,
           ),
 
           SliverToBoxAdapter(
@@ -119,6 +121,7 @@ class _OrderHistoryViewState extends State<OrderHistoryView> {
           )
         ],
       ),
+      bottomNavigationBar: CMenuBar(index: 1),
     );
   }
 

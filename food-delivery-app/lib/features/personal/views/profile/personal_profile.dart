@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/controllers/menu_bar_controller.dart';
+import 'package:food_delivery_app/common/widgets/bars/menu_bar.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
@@ -19,6 +21,7 @@ import 'package:get/get.dart';
 
 class PersonalProfileView extends StatelessWidget {
   final ThemeController _themeController = Get.put(ThemeController());
+  final MenuBarController _menuBarController = Get.put(MenuBarController(4));
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +99,7 @@ class PersonalProfileView extends StatelessWidget {
                     contentPadding: EdgeInsets.zero,
                     leading: Icon(Icons.location_on),
                     title: Text('My Locations'),
-                    trailing: Icon(TIcon.arrowFoward),
+                    trailing: Icon(TIcon.arrowForward),
                     onTap: () {
                       Get.to(PersonalMessageView());
                     },
@@ -105,7 +108,7 @@ class PersonalProfileView extends StatelessWidget {
                     contentPadding: EdgeInsets.zero,
                     leading: Icon(Icons.local_offer),
                     title: Text('My Promotions'),
-                    trailing: Icon(TIcon.arrowFoward),
+                    trailing: Icon(TIcon.arrowForward),
                     onTap: () {
                       Get.to(PersonalMessageView());
                     },
@@ -114,7 +117,7 @@ class PersonalProfileView extends StatelessWidget {
                     contentPadding: EdgeInsets.zero,
                     leading: Icon(Icons.payment),
                     title: Text('Payment Methods'),
-                    trailing: Icon(TIcon.arrowFoward),
+                    trailing: Icon(TIcon.arrowForward),
                     onTap: () {
                       Get.to(PersonalMessageView());
                     },
@@ -123,7 +126,7 @@ class PersonalProfileView extends StatelessWidget {
                     contentPadding: EdgeInsets.zero,
                     leading: Icon(Icons.message),
                     title: Text('Messages'),
-                    trailing: Icon(TIcon.arrowFoward),
+                    trailing: Icon(TIcon.arrowForward),
                     onTap: () {
                       Get.to(PersonalMessageView());
                     },
@@ -132,7 +135,7 @@ class PersonalProfileView extends StatelessWidget {
                     contentPadding: EdgeInsets.zero,
                     leading: Icon(Icons.group),
                     title: Text('Invite Friends'),
-                    trailing: Icon(TIcon.arrowFoward),
+                    trailing: Icon(TIcon.arrowForward),
                     onTap: () {
                       Get.to(PersonalInviteView());
                     },
@@ -141,7 +144,7 @@ class PersonalProfileView extends StatelessWidget {
                     contentPadding: EdgeInsets.zero,
                     leading: Icon(Icons.security),
                     title: Text('Security'),
-                    trailing: Icon(TIcon.arrowFoward),
+                    trailing: Icon(TIcon.arrowForward),
                     onTap: () {
                       Get.to(PersonalSecurityView());
                     },
@@ -150,7 +153,7 @@ class PersonalProfileView extends StatelessWidget {
                     contentPadding: EdgeInsets.zero,
                     leading: Icon(Icons.help),
                     title: Text('Help Center'),
-                    trailing: Icon(TIcon.arrowFoward),
+                    trailing: Icon(TIcon.arrowForward),
                     onTap: () {
                       Get.to(PersonalHelpCenterView());
                     },
@@ -207,7 +210,7 @@ class PersonalProfileView extends StatelessWidget {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text('Term of Service'),
-                    trailing: Icon(TIcon.arrowFoward),
+                    trailing: Icon(TIcon.arrowForward),
                     onTap: () {
                       Get.to(PersonalTermOfServiceView());
                     },
@@ -215,7 +218,7 @@ class PersonalProfileView extends StatelessWidget {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text('Privacy Policy'),
-                    trailing: Icon(TIcon.arrowFoward),
+                    trailing: Icon(TIcon.arrowForward),
                     onTap: () {
                       Get.to(PersonalPrivacyPolicyView());
                     },
@@ -223,7 +226,7 @@ class PersonalProfileView extends StatelessWidget {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text('About App'),
-                    trailing: Icon(TIcon.arrowFoward),
+                    trailing: Icon(TIcon.arrowForward),
                     onTap: () {
                       Get.to(PersonalAboutAppView());
                     },
@@ -234,18 +237,8 @@ class PersonalProfileView extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 4,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.article), label: 'Orders'),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favorites'),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: 'Notifications'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-        onTap: (int index) {
-          // Handle bottom navigation tap
-        },
+      bottomNavigationBar: CMenuBar(
+        index: 4,
       ),
     );
   }

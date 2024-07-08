@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_delivery_app/common/widgets/bars/menu_bar.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/bars/search_bar.dart';
@@ -145,9 +146,9 @@ class NotificationView extends StatelessWidget {
               ),
             ),
           ),
-
         ],
       ),
+      bottomNavigationBar: CMenuBar(index: 3),
     );
   }
 }

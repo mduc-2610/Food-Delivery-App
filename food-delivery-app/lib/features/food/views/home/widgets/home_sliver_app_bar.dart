@@ -35,7 +35,7 @@ class HomeSliverAppBar extends StatelessWidget {
                   "Select your location  ",
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.primary),
                 ),
-                Icon(TIcon.arrowFoward, size: TSize.iconSm, color: TColor.primary,),
+                Icon(TIcon.arrowForward, size: TSize.iconSm, color: TColor.primary,),
               ],
             ),
           ),

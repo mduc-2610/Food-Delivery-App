@@ -20,14 +20,20 @@ class HomeController extends GetxController {
     carouselController.jumpToPage(index);
   }
 
-  void getToFoodCategory(String category) {
-    Get.to(
-      () => FoodCategoryView(),
-      arguments: {
-        "category": category
-      }
-    );
+  void getToFoodCategory(String category, {bool getOff = false}) {
+    if (getOff) {
+      Get.off(
+            () => FoodCategoryView(),
+        arguments: {"category": category},
+      );
+    } else {
+      Get.to(
+            () => FoodCategoryView(),
+        arguments: {"category": category},
+      );
+    }
   }
+
 
   void getToFoodDetail(String id) {
     Get.to(

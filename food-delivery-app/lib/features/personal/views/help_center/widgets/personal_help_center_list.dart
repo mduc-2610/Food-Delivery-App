@@ -45,7 +45,7 @@ class PersonalHelpCenterList extends StatelessWidget {
             review["text"],
             style: Theme.of(context).textTheme.titleSmall,
           ),
-          trailing: Icon(TIcon.arrowFoward),
+          trailing: Icon(TIcon.arrowForward),
           onTap: () {
             Get.to(() => PersonalHelpDetailView(title: review["text"], content: review["text"]));
           },

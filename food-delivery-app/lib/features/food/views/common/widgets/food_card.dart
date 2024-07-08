@@ -11,6 +11,7 @@ class FoodCard extends StatelessWidget {
   final double originalPrice;
   final double salePrice;
   final VoidCallback onTap;
+  final String? heart;
 
   const FoodCard({
     required this.name,
@@ -19,6 +20,7 @@ class FoodCard extends StatelessWidget {
     required this.originalPrice,
     required this.salePrice,
     required this.onTap,
+    this.heart,
     super.key
   });
 
@@ -53,7 +55,7 @@ class FoodCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(TSize.borderRadiusCircle)
                       ),
                       child: SvgPicture.asset(
-                        TIcon.heart,
+                        heart ?? TIcon.heart ,
                       ),
                     ),
                   )

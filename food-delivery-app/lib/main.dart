@@ -6,6 +6,7 @@ import 'package:food_delivery_app/features/authentication/views/splash/splash.da
 import 'package:food_delivery_app/features/authentication/views/touch_id/touch_id.dart';
 import 'package:food_delivery_app/features/food/views/category/food_category.dart';
 import 'package:food_delivery_app/features/food/views/detail/food_detail_review.dart';
+import 'package:food_delivery_app/features/food/views/home/home.dart';
 import 'package:food_delivery_app/features/notification/views/notification/notification.dart';
 import 'package:food_delivery_app/features/order/models/location.dart';
 import 'package:food_delivery_app/features/order/views/basket/order_basket.dart';
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
       themeMode: ThemeMode.light,
-      home: OrderDriverInformationView(),
+      home: HomeView(),
     );
   }
 }
