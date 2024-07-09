@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/controllers/menu_bar_controller.dart';
-import 'package:food_delivery_app/features/food/controllers/home/home_controller.dart';
-import 'package:food_delivery_app/features/food/views/home/home.dart';
-import 'package:food_delivery_app/features/food/views/like/food_like.dart';
-import 'package:food_delivery_app/features/notification/views/notification/notification.dart';
-import 'package:food_delivery_app/features/order/views/basket/order_basket.dart';
-import 'package:food_delivery_app/features/order/views/history/order_history.dart';
-import 'package:food_delivery_app/features/personal/views/profile/personal_profile.dart';
+import 'package:food_delivery_app/features/user/food/controllers/home/home_controller.dart';
+import 'package:food_delivery_app/features/user/food/views/home/home.dart';
+import 'package:food_delivery_app/features/user/notification/views/notification/notification.dart';
+import 'package:food_delivery_app/features/user/order/views/history/order_history.dart';
+import 'package:food_delivery_app/features/user/personal/views/profile/personal_profile.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
