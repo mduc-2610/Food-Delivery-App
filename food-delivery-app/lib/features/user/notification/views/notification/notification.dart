@@ -148,7 +148,6 @@ class NotificationView extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: CMenuBar(index: 3),
     );
   }
 }

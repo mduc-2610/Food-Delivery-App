@@ -17,7 +17,6 @@ import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 class HomeView extends StatelessWidget {
   final HomeController _controller = Get.put(HomeController());
-  final MenuBarController _menuBarController = Get.put(MenuBarController(0));
 
   @override
   Widget build(BuildContext context) {
@@ -158,9 +157,6 @@ class HomeView extends StatelessWidget {
             ),
           ),
         ],
-      ),
-      bottomNavigationBar:  CMenuBar(
-        index: 0,
       ),
     );
   }

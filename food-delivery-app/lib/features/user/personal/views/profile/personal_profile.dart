@@ -21,7 +21,6 @@ import 'package:get/get.dart';
 
 class PersonalProfileView extends StatelessWidget {
   final ThemeController _themeController = Get.put(ThemeController());
-  final MenuBarController _menuBarController = Get.put(MenuBarController(4));
 
   @override
   Widget build(BuildContext context) {
@@ -236,9 +235,6 @@ class PersonalProfileView extends StatelessWidget {
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: CMenuBar(
-        index: 4,
       ),
     );
   }

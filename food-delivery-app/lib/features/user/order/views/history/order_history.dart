@@ -120,7 +120,6 @@ class _OrderHistoryViewState extends State<OrderHistoryView> {
           )
         ],
       ),
-      bottomNavigationBar: CMenuBar(index: 1),
     );
   }
 

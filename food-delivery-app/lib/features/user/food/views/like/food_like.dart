@@ -23,7 +23,8 @@ class FoodLikeView extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           CSliverAppBar(
-              title: "Liked",
+            title: "Liked",
+            noLeading: true,
           ),
           SliverToBoxAdapter(
             child: Stack(
@@ -97,7 +98,6 @@ class FoodLikeView extends StatelessWidget {
           )
         ],
       ),
-      bottomNavigationBar: CMenuBar(index: 2,),
     );
   }
 }

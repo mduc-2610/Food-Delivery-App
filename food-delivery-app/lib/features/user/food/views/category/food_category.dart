@@ -99,9 +99,6 @@ class FoodCategoryView extends StatelessWidget {
           )
         ],
       ),
-      bottomNavigationBar: category == "Liked"
-          ? CMenuBar(index: 2)
-          : null,
     );
   }
 }
