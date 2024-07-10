@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
+import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/features/restaurant/personal/views/profile/widgets/profile_flexible_space_bar.dart';
+import 'package:food_delivery_app/features/user/personal/controllers/profile/theme_controller.dart';
+import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/icon_strings.dart';
+import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:get/get.dart';
 
 class ProfileView extends StatelessWidget {
+  final ThemeController _themeController = ThemeController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,52 +24,163 @@ class ProfileView extends StatelessWidget {
           ),
 
           SliverToBoxAdapter(
-            child: Column(
-              children: [
-                _buildMenuItems()
-              ],
+            child: MainWrapper(
+              child: Column(
+                children: [
+                  ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(Icons.location_on),
+                  title: Text('My Locations'),
+                  trailing: Icon(TIcon.arrowForward),
+                  onTap: () {
+              
+                  },
+                ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Icon(Icons.local_offer),
+                    title: Text('My Promotions'),
+                    trailing: Icon(TIcon.arrowForward),
+                    onTap: () {
+              
+                    },
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Icon(Icons.payment),
+                    title: Text('Payment Methods'),
+                    trailing: Icon(TIcon.arrowForward),
+                    onTap: () {
+              
+                    },
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Icon(Icons.message),
+                    title: Text('Messages'),
+                    trailing: Icon(TIcon.arrowForward),
+                    onTap: () {
+              
+                    },
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Icon(Icons.group),
+                    title: Text('Invite Friends'),
+                    trailing: Icon(TIcon.arrowForward),
+                    onTap: () {
+              
+                    },
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Icon(Icons.security),
+                    title: Text('Security'),
+                    trailing: Icon(TIcon.arrowForward),
+                    onTap: () {
+              
+                    },
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Icon(Icons.help),
+                    title: Text('Help Center'),
+                    trailing: Icon(TIcon.arrowForward),
+                    onTap: () {
+              
+                    },
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('Language'),
+                    trailing: DropdownButton<String>(
+                      value: 'English',
+                      items: <String>['English', 'Spanish', 'French', 'German']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+              
+                      },
+                    ),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('Push Notification'),
+                    value: true,
+                    onChanged: (bool value) {
+              
+                    },
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('Dark Mode'),
+                    trailing: Obx(() => Switch(
+                      value: _themeController.isDarkMode.value,
+                      onChanged: _themeController.toggleTheme,
+                    )),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('Sound'),
+                    value: false,
+                    onChanged: (bool value) {
+              
+                    },
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('Automatically Updated'),
+                    value: true,
+                    onChanged: (bool value) {
+              
+                    },
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('Term of Service'),
+                    trailing: Icon(TIcon.arrowForward),
+                    onTap: () {
+              
+                    },
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('Privacy Policy'),
+                    trailing: Icon(TIcon.arrowForward),
+                    onTap: () {
+              
+                    },
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('About App'),
+                    trailing: Icon(TIcon.arrowForward),
+                    onTap: () {
+              
+                    },
+                  ),
+                  SizedBox(height: TSize.spaceBetweenItemsVertical,),
+                  MainButton(
+                    onPressed: () {},
+                    text: "Logout",
+                    textColor: TColor.primary,
+                    height: TSize.buttonHeight + 6,
+                    paddingHorizontal: 0,
+                    prefixIcon: Icons.logout,
+                    prefixIconColor: TColor.primary,
+                    backgroundColor: TColor.iconBgCancel,
+                  ),
+                  SizedBox(height: TSize.spaceBetweenItemsVertical,),
+
+                ],
+              ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildMenuItems() {
-    return Padding(
-      padding: EdgeInsets.all(20),
-      child: Column(
-        children: [
-          _buildMenuItem(Icons.person_outline, 'Personal Info'),
-          _buildMenuItem(Icons.settings_outlined, 'Settings'),
-          _buildMenuItem(Icons.history, 'Withdrawal History'),
-          _buildMenuItem(Icons.shopping_bag_outlined, 'Number of Orders', trailing: '29K'),
-          _buildMenuItem(Icons.star_outline, 'User Reviews'),
-          _buildMenuItem(Icons.logout, 'Log Out', color: Colors.red),
-          _buildMenuItem(Icons.logout, 'Log Out', color: Colors.red),
-          _buildMenuItem(Icons.logout, 'Log Out', color: Colors.red),
-          _buildMenuItem(Icons.logout, 'Log Out', color: Colors.red),
-          _buildMenuItem(Icons.logout, 'Log Out', color: Colors.red),
-          _buildMenuItem(Icons.logout, 'Log Out', color: Colors.red),
-          _buildMenuItem(Icons.logout, 'Log Out', color: Colors.red),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMenuItem(IconData icon, String title, {String? trailing, Color? color}) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 15),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: ListTile(
-        leading: Icon(icon, color: color ?? Colors.grey),
-        title: Text(title, style: TextStyle(color: color)),
-        trailing: trailing != null
-            ? Text(trailing, style: TextStyle(fontWeight: FontWeight.bold))
-            : Icon(Icons.arrow_forward_ios, size: 16),
       ),
     );
   }

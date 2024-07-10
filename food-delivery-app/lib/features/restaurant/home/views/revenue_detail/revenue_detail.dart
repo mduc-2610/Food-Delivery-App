@@ -16,7 +16,6 @@ class RevenueDetailView extends StatelessWidget {
         appBar: CAppBar(
           title: 'Revenue Details',
           bottom: TabBar(
-            isScrollable: true,
             tabs: [
               Tab(text: 'Statistics'),
               Tab(text: 'History'),

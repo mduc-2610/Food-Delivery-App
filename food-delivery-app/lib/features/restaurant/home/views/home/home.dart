@@ -9,12 +9,12 @@ import 'package:food_delivery_app/features/restaurant/home/views/home/widgets/me
 import 'package:food_delivery_app/features/restaurant/home/views/home/widgets/process_order.dart';
 import 'package:food_delivery_app/features/restaurant/home/views/common/widgets/revenue_chart.dart';
 import 'package:food_delivery_app/features/restaurant/home/views/home/widgets/review_summary.dart';
-import 'package:food_delivery_app/features/user/food/views/common/widgets/food_card.dart';
+import 'package:food_delivery_app/common/widgets/cards/food_card_gr.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/hardcode/hardcode.dart';
 
-class DashboardHome extends StatelessWidget {
+class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +78,7 @@ class DashboardHome extends StatelessWidget {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   childCount: 8,
-                  (context, index) => FoodCard(
+                  (context, index) => FoodCardGr(
                     name: "Burger",
                     image: TImage.hcBurger1,
                     stars: 4.7,

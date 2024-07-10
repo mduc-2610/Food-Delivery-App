@@ -4,7 +4,7 @@ import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
-class FoodCard extends StatelessWidget {
+class FoodCardGr extends StatelessWidget {
   final String image;
   final double? imageWidth, imageHeight;
   final BoxFit fit;
@@ -15,7 +15,7 @@ class FoodCard extends StatelessWidget {
   final VoidCallback onTap;
   final String? heart;
 
-  const FoodCard({
+  const FoodCardGr({
     required this.name,
     required this.image,
     this.imageWidth,

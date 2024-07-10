@@ -4,7 +4,7 @@ import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/bars/search_bar.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
 import 'package:food_delivery_app/features/user/food/controllers/category/food_category_controller.dart';
-import 'package:food_delivery_app/features/user/food/views/common/widgets/food_card.dart';
+import 'package:food_delivery_app/common/widgets/cards/food_card_gr.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
@@ -52,7 +52,7 @@ class FoodCategoryView extends StatelessWidget {
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         children: [
-                          FoodCard(
+                          FoodCardGr(
                             onTap: _controller.getToFoodDetail,
                             image: TImage.hcFood1,
                             name: "Chicken Burger",
@@ -61,7 +61,7 @@ class FoodCategoryView extends StatelessWidget {
                             salePrice: 6.00,
                             heart: (category == "Liked") ? TIcon.fillHeart : TIcon.heart,
                           ),
-                          FoodCard(
+                          FoodCardGr(
                             onTap: _controller.getToFoodDetail,
                             image: TImage.hcFood1,
                             name: "Chicken Burger",
@@ -70,7 +70,7 @@ class FoodCategoryView extends StatelessWidget {
                             salePrice: 6.00,
                             heart: (category == "Liked") ? TIcon.fillHeart : TIcon.heart,
                           ),
-                          FoodCard(
+                          FoodCardGr(
                             onTap: _controller.getToFoodDetail,
                             image: TImage.hcFood1,
                             name: "Chicken Burger",
@@ -79,7 +79,7 @@ class FoodCategoryView extends StatelessWidget {
                             salePrice: 6.00,
                             heart: (category == "Liked") ? TIcon.fillHeart : TIcon.heart,
                           ),
-                          FoodCard(
+                          FoodCardGr(
                             onTap: _controller.getToFoodDetail,
                             image: TImage.hcFood1,
                             name: "Chicken Burger",

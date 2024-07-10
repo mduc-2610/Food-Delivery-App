@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/features/user/order/views/history/widgets/order_history_card.dart';
+import 'package:food_delivery_app/common/widgets/cards/order_history_card.dart';
 import 'package:get/get.dart';
 
 

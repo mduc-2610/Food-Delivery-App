@@ -50,6 +50,7 @@ class TSize {
   static const double defaultSpace = 24.0;
   static const double spaceBetweenItemsHorizontal = 8.0;
   static const double spaceBetweenItemsVertical = 16.0;
+  static const double spaceBetweenItemsSm = 4.0;
   static const double spaceBetweenSections = 32.0;
 
   // Border radius

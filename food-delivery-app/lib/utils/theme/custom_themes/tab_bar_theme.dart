@@ -7,6 +7,6 @@ class TTabBarTheme {
     indicatorColor: TColor.primary,
     labelStyle: TextStyle(color: TColor.primary),
     indicatorSize: TabBarIndicatorSize.tab,
-    tabAlignment: TabAlignment.start
+    // tabAlignment: TabAlignment.start,
   );
 }

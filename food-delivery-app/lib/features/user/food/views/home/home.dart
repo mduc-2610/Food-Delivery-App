@@ -4,7 +4,7 @@ import 'package:food_delivery_app/common/controllers/menu_bar_controller.dart';
 import 'package:food_delivery_app/common/widgets/bars/menu_bar.dart';
 import 'package:food_delivery_app/features/user/food/controllers/home/home_controller.dart';
 import 'package:food_delivery_app/features/user/food/views/common/widgets/category_card.dart';
-import 'package:food_delivery_app/features/user/food/views/common/widgets/food_card.dart';
+import 'package:food_delivery_app/common/widgets/cards/food_card_gr.dart';
 import 'package:food_delivery_app/features/user/food/views/home/widgets/home_sliver_app_bar.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 import 'package:get/get.dart';
@@ -112,7 +112,7 @@ class HomeView extends StatelessWidget {
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             children: [
-                              FoodCard(
+                              FoodCardGr(
                                 onTap: () {_controller.getToFoodDetail("");},
                                 image: TImage.hcFood1,
                                 name: "Chicken Burger",
@@ -120,7 +120,7 @@ class HomeView extends StatelessWidget {
                                 originalPrice: 10.00,
                                 salePrice: 6.00,
                               ),
-                              FoodCard(
+                              FoodCardGr(
                                 onTap: () {_controller.getToFoodDetail("");},
                                 image: TImage.hcFood1,
                                 name: "Chicken Burger",
@@ -128,7 +128,7 @@ class HomeView extends StatelessWidget {
                                 originalPrice: 10.00,
                                 salePrice: 6.00,
                               ),
-                              FoodCard(
+                              FoodCardGr(
                                 onTap: () {_controller.getToFoodDetail("");},
                                 image: TImage.hcFood1,
                                 name: "Chicken Burger",
@@ -136,7 +136,7 @@ class HomeView extends StatelessWidget {
                                 originalPrice: 10.00,
                                 salePrice: 6.00,
                               ),
-                              FoodCard(
+                              FoodCardGr(
                                 onTap: () {_controller.getToFoodDetail("");},
                                 image: TImage.hcFood1,
                                 name: "Chicken Burger",
