@@ -13,6 +13,10 @@ class CSliverAppBar extends StatelessWidget {
   final bool centerTitle;
   final bool noLeading;
   final bool isExpandedHeight;
+  final PreferredSizeWidget? bottom;
+  final Widget? flexibleSpace;
+  final double? expandedHeight;
+  final Color? titleColor;
 
   const CSliverAppBar({
     required this.title,
@@ -22,6 +26,10 @@ class CSliverAppBar extends StatelessWidget {
     this.centerTitle = true,
     this.noLeading = false,
     this.isExpandedHeight = false,
+    this.bottom,
+    this.flexibleSpace,
+    this.expandedHeight,
+    this.titleColor,
     super.key,
   });
 
@@ -32,12 +40,12 @@ class CSliverAppBar extends StatelessWidget {
       title: Text(
         title,
         style: (isBigTitle)
-            ? Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.primary)
-            : Theme.of(context).textTheme.headlineMedium,
+            ? Theme.of(context).textTheme.headlineLarge?.copyWith(color: titleColor ?? TColor.primary)
+            : Theme.of(context).textTheme.headlineMedium?.copyWith(color: titleColor),
       ),
-      expandedHeight: (isExpandedHeight) ? TDeviceUtil.getAppBarHeight() : 0,
+      expandedHeight: expandedHeight ?? ((isExpandedHeight) ? TDeviceUtil.getAppBarHeight() : 0),
       centerTitle: centerTitle,
-      flexibleSpace: Stack(
+      flexibleSpace: (flexibleSpace) ?? Stack(
         children: [
           Positioned(
             top: TDeviceUtil.getAppBarHeight() / 3,
@@ -68,6 +76,7 @@ class CSliverAppBar extends StatelessWidget {
           ),
         ),
       ) : null,
+      bottom: bottom,
     );
   }
 }

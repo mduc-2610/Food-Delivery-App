@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/utils/device/device_utility.dart';
 
 class TSize {
   TSize._();
@@ -11,6 +12,11 @@ class TSize {
   static const double md = 16.0;
   static const double lg = 24.0;
   static const double xl = 32.0;
+
+  // Position center horizontal
+  static double getPosCenterHorizontal() {
+    return TDeviceUtil.getScreenWidth() / 2 - 56;
+  }
 
   // Icon sizes
   static const double iconXs = 12.0;
@@ -68,6 +74,10 @@ class TSize {
 
   // Card size
   static const double cardElevation = 8.0;
+  static const double cardElevationSm = 2.0;
+  static const double cardElevationMd = 4.0;
+  static const double cardElevationLg = 6.0;
+
   static const double iconCardElevation = 2.0;
   static const double cardRadiusXs = 6.0;
   static const double cardRadiusSm = 10.0;

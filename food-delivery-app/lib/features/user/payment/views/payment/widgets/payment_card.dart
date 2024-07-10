@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
+import 'package:food_delivery_app/common/widgets/fields/date_picker.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
@@ -75,35 +76,10 @@ class _PaymentCardState extends State<PaymentCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Expanded(
-                          child: TextFormField(
+                          child: CDatePicker(
                             controller: _expiryDateController,
-                            decoration: InputDecoration(
-                              labelText: 'Expiry Date',
-                              border: OutlineInputBorder(),
-                              suffixIcon: Icon(Icons.calendar_today),
-                            ),
-                            readOnly: true,
-                            onTap: () async {
-                              DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2101),
-                              );
-                              if (pickedDate != null) {
-                                String formattedDate = DateFormat('MM/yy').format(pickedDate);
-                                setState(() {
-                                  _expiryDateController.text = formattedDate;
-                                });
-                              }
-                            },
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter expiry date';
-                              }
-                              return null;
-                            },
-                          ),
+                            labelText: 'Expiry Date',
+                          )
                         ),
                         SizedBox(width: TSize.spaceBetweenItemsVertical),
                         Expanded(

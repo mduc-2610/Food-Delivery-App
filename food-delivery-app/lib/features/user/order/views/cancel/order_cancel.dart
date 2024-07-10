@@ -12,6 +12,7 @@ import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/hardcode/hardcode.dart';
 
 class OrderCancelView extends StatefulWidget {
   @override
@@ -24,15 +25,7 @@ class OrderCancelViewState extends State<OrderCancelView> {
   String text = "";
   TextEditingController controller = TextEditingController();
 
-  final List<Map<String, dynamic>> cancelList = [
-    {'type': 'Change of mind'},
-    {'type': 'Found better price elsewhere'},
-    {'type': 'Delivery delay'},
-    {'type': 'Incorrect item selected'},
-    {'type': 'Duplicate order'},
-    {'type': 'Unable to fulfill order'},
-    {'type': 'Other reasons'},
-  ];
+  final List<Map<String, dynamic>> cancelList = THardCode.getCancelList();
 
   @override
   Widget build(BuildContext context) {

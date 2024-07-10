@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
-import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
@@ -11,6 +10,7 @@ class CAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isBigTitle;
   final bool centerTitle;
   final bool noLeading;
+  final PreferredSizeWidget? bottom;
 
   const CAppBar({
     required this.title,
@@ -19,6 +19,7 @@ class CAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.isBigTitle = false,
     this.centerTitle = true,
     this.noLeading = false,
+    this.bottom,
     super.key,
   });
 
@@ -48,9 +49,11 @@ class CAppBar extends StatelessWidget implements PreferredSizeWidget {
           onTap: iconData['onPressed'],
         );
       }).toList(),
+      bottom: bottom,
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(TSize.appBarHeight);
+  Size get preferredSize => Size.fromHeight(
+      TSize.appBarHeight + (bottom?.preferredSize.height ?? 0.0));
 }

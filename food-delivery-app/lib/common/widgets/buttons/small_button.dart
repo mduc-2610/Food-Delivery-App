@@ -21,6 +21,7 @@ class SmallButton extends StatelessWidget {
   final double? paddingVertical;
   final Color? backgroundColor;
   final Color? borderColor;
+  final double? borderWidth;
 
   const SmallButton({
     this.width,
@@ -39,6 +40,7 @@ class SmallButton extends StatelessWidget {
     this.paddingVertical,
     this.backgroundColor,
     this.borderColor,
+    this.borderWidth,
     super.key
   });
 
@@ -54,6 +56,7 @@ class SmallButton extends StatelessWidget {
           vertical: paddingVertical ?? 0,
           horizontal: paddingHorizontal ?? TSize.md
         ),
+        side: BorderSide(color: borderColor ?? Colors.transparent, width: borderWidth ?? 0),
         backgroundColor: backgroundColor,
       ),
       child: Container(

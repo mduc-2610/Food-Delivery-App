@@ -11,6 +11,7 @@ import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/hardcode/hardcode.dart';
 import 'package:get/get.dart';
 
 class FoodDetailReviewView extends StatefulWidget {
@@ -21,80 +22,6 @@ class FoodDetailReviewView extends StatefulWidget {
 class _FoodDetailReviewViewState extends State<FoodDetailReviewView> {
     final FilterBarController _filterController = Get.put(FilterBarController("All"));
 
-    final List<Map<String, dynamic>> reviews = [
-    {
-      'name': 'John Doe',
-      'date': '29/03/2024',
-      'review':
-      'Delicious chicken burger! Loved the crispy chicken and the bun was perfectly toasted. Definitely a new favorite!',
-      'rating': 5,
-      'type': 'positive'
-    },
-    {
-      'name': 'David',
-      'date': '10/04/2024',
-      'review':
-      'Absolutely delicious! The chicken burger was juicy and flavorful, with just the right amount of seasoning. Highly recommend!',
-      'rating': 5,
-      'type': 'positive'
-    },
-    {
-      'name': 'Tom',
-      'date': '05/04/2024',
-      'review':
-      'One of the best chicken burgers I’ve ever had! The chicken was tender and the bun was soft. Loved every bite!',
-      'rating': 5,
-      'type': 'positive'
-    },
-    {
-      'name': 'James',
-      'date': '29/03/2024',
-      'review':
-      'The chicken burger was okay, but it was a bit overcooked for my liking. The toppings were fresh, though.',
-      'rating': 3,
-      'type': 'negative'
-    },
-      {
-        'name': 'David',
-        'date': '10/04/2024',
-        'review':
-        'Absolutely delicious! The chicken burger was juicy and flavorful, with just the right amount of seasoning. Highly recommend!',
-        'rating': 5,
-        'type': 'positive'
-      },
-      {
-        'name': 'Tom',
-        'date': '05/04/2024',
-        'review':
-        'One of the best chicken burgers I’ve ever had! The chicken was tender and the bun was soft. Loved every bite!',
-        'rating': 5,
-        'type': 'positive'
-      },
-      {
-        'name': 'James',
-        'date': '29/03/2024',
-        'review':
-        'The chicken burger was okay, but it was a bit overcooked for my liking. The toppings were fresh, though.',
-        'rating': 3,
-        'type': 'negative'
-      },
-      {
-        'name': 'James',
-        'date': '29/03/2024',
-        'review':
-        'The chicken burger was okay, but it was a bit overcooked for my liking. The toppings were fresh, though.',
-        'rating': 1,
-        'type': 'negative'
-      },
-      {
-        'name': 'James',
-        'date': '29/03/2024',
-        'review':
-        'The chicken burger was okay, but it was a bit overcooked for my liking. The toppings were fresh, though.',
-        'rating': 2,
-        'type': 'negative'
-      },
-    ];
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +94,7 @@ class _FoodDetailReviewViewState extends State<FoodDetailReviewView> {
                       
                       MainWrapper(
                         child: Obx(() => FoodDetailReviewList(
-                          reviews: reviews,
+                          reviews: THardCode.getReviewList(),
                           filter: _filterController.selectedFilter.value,
                         )),
                       ),

@@ -6,6 +6,8 @@ import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 class FoodCard extends StatelessWidget {
   final String image;
+  final double? imageWidth, imageHeight;
+  final BoxFit fit;
   final String name;
   final double stars;
   final double originalPrice;
@@ -16,6 +18,9 @@ class FoodCard extends StatelessWidget {
   const FoodCard({
     required this.name,
     required this.image,
+    this.imageWidth,
+    this.imageHeight,
+    this.fit = BoxFit.cover,
     required this.stars,
     required this.originalPrice,
     required this.salePrice,
@@ -43,6 +48,9 @@ class FoodCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(TSize.sm),
                     child: Image.asset(
                       image,
+                      width: imageWidth,
+                      height: imageHeight,
+                      fit: fit,
                     ),
                   ),
                   Positioned(
@@ -63,7 +71,7 @@ class FoodCard extends StatelessWidget {
               ),
               SizedBox(height: TSize.xs,),
 
-              Text(name, style: Theme.of(context).textTheme.bodyMedium),
+              Text(name, style: Theme.of(context).textTheme.titleLarge, maxLines: 1, overflow: TextOverflow.ellipsis,),
               SizedBox(height: TSize.xs,),
 
               Row(
@@ -80,25 +88,11 @@ class FoodCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Stack(
-                    children: [
-                      Text(
-                        "£$originalPrice",
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      Positioned(
-                        bottom: 2,
-                        child: SizedBox(
-                          width: 100,
-                          child: Divider(
-                            thickness: 2,
-                            color: Theme.of(context).textTheme.bodySmall?.color
-                          )
-                        )
-                      )
-                    ],
+                  Text(
+                    "£$originalPrice",
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(decoration: TextDecoration.lineThrough),
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
 
                   Text(
                     "£$salePrice",

@@ -26,68 +26,19 @@ class ProfileView extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        padding: EdgeInsets.all(TSize.md),
-                        decoration: BoxDecoration(
-                          color: TColor.inputLightBackgroundColor,
-                          borderRadius: BorderRadius.circular(TSize.borderRadiusCircle),
-                        ),
-                        child: Stack(
-                          alignment: Alignment.topRight,
-                          children: [
-                            Icon(
-                              Icons.person_rounded,
-                              size: 125,
-                              color: TColor.textDesc,
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.camera_alt_rounded, color: Colors.redAccent, size: TSize.xl,),
-                              onPressed: _controller.handleAddImage,
-                            ),
-                          ],
-                        ),
-                      ),
+                      ProfilePictureSection(controller: _controller),
                       SizedBox(height: TSize.spaceBetweenSections),
-
-                      InternationalPhoneNumberInput(onInputChanged: (s) {}),
+                      PhoneNumberInput(),
                       SizedBox(height: TSize.spaceBetweenInputFields),
-
-                      TextFormField(
-                        initialValue: 'thomas.abc.inc@gmail.com',
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.email),
-                          labelText: 'Email',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
+                      EmailInput(),
                       SizedBox(height: TSize.spaceBetweenInputFields),
-
-                      TextFormField(
-                        initialValue: 'Thomas K. Wilson',
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.person),
-                          labelText: 'Name',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
+                      NameInput(),
                       SizedBox(height: TSize.spaceBetweenInputFields),
-
                       DateOfBirthInput(),
                       SizedBox(height: TSize.spaceBetweenInputFields),
-
                       GenderDropdown(),
                       SizedBox(height: TSize.spaceBetweenInputFields),
-
-                      TextFormField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.location_on),
-                          labelText: 'Your Location',
-                        ),
-                      ),
+                      LocationInput(),
                     ],
                   ),
                 ),
@@ -110,7 +61,7 @@ class ProfileView extends StatelessWidget {
                     onPressed: _controller.skip,
                     text: "Skip",
                     isElevatedButton: false,
-                  )
+                  ),
                 ],
               ),
             ),
@@ -121,6 +72,77 @@ class ProfileView extends StatelessWidget {
   }
 }
 
+class ProfilePictureSection extends StatelessWidget {
+  final ProfileController controller;
+  ProfilePictureSection({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(TSize.md),
+      decoration: BoxDecoration(
+        color: TColor.inputLightBackgroundColor,
+        borderRadius: BorderRadius.circular(TSize.borderRadiusCircle),
+      ),
+      child: Stack(
+        alignment: Alignment.topRight,
+        children: [
+          Icon(
+            Icons.person_rounded,
+            size: 125,
+            color: TColor.textDesc,
+          ),
+          IconButton(
+            icon: Icon(Icons.camera_alt_rounded, color: Colors.redAccent, size: TSize.xl),
+            onPressed: controller.handleAddImage,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PhoneNumberInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return InternationalPhoneNumberInput(
+      onInputChanged: (s) {},
+
+    );
+  }
+}
+
+class EmailInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      initialValue: 'thomas.abc.inc@gmail.com',
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.email),
+        labelText: 'Email',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+    );
+  }
+}
+
+class NameInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      initialValue: 'Thomas K. Wilson',
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.person),
+        labelText: 'Name',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+    );
+  }
+}
 
 class DateOfBirthInput extends StatelessWidget {
   @override
@@ -130,6 +152,9 @@ class DateOfBirthInput extends StatelessWidget {
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.calendar_today),
         labelText: 'Date of Birth',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
       ),
     );
   }
@@ -144,12 +169,11 @@ class GenderDropdown extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        
       ),
       dropdownStyleData: DropdownStyleData(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(TSize.borderRadiusMd)
-        )
+          borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
+        ),
       ),
       items: [
         DropdownMenuItem(
@@ -167,6 +191,21 @@ class GenderDropdown extends StatelessWidget {
       ],
       onChanged: (value) {},
       hint: Text("Gender"),
+    );
+  }
+}
+
+class LocationInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.location_on),
+        labelText: 'Your Location',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
     );
   }
 }

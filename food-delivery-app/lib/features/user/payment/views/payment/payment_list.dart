@@ -10,6 +10,7 @@ import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/hardcode/hardcode.dart';
 
 class PaymentListView extends StatefulWidget {
   @override
@@ -19,14 +20,7 @@ class PaymentListView extends StatefulWidget {
 class PaymentListViewState extends State<PaymentListView> {
   int _selectedMethod = -1;
 
-  final List<Map<String, dynamic>> paymentMethods = [
-    {'icon': Icons.money, 'name': 'Cash'},
-    {'icon': Icons.account_balance_wallet, 'name': 'PayPal'},
-    {'icon': Icons.account_balance_wallet, 'name': 'Google Pay'},
-    {'icon': Icons.account_balance_wallet, 'name': 'Apple Pay'},
-    {'icon': Icons.credit_card, 'name': '**** **** **** 0895'},
-    {'icon': Icons.credit_card, 'name': '**** **** **** 2259'},
-  ];
+  final List<Map<String, dynamic>> paymentMethods = THardCode.getPaymentList();
 
   @override
   Widget build(BuildContext context) {

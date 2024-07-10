@@ -46,6 +46,7 @@ dependencies:
   provider: ^6.1.2
   google_maps_flutter: ^2.5.0
   geocoding: ^2.0.0
+  fl_chart: ^0.68.0
 
   # Icons
   iconsax: ^0.0.8

@@ -9,83 +9,15 @@ import 'package:food_delivery_app/features/user/notification/views/notification/
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:food_delivery_app/utils/hardcode/hardcode.dart';
 
 class NotificationView extends StatelessWidget {
-  List<Map<String, dynamic>> notificationList = [
-    {
-      "title": "Get 20% Discount Code",
-      "description": "Get discount codes from sharing with friends.",
-      "iconStr": TIcon.discount,
-      "iconBgColor": TColor.iconBgInfo,
-      "time": "12:20 19/05/2024"
-    },
-    {
-      "title": "Get 10% Discount Code",
-      "description": "Holiday discount code.",
-      "iconStr": TIcon.discount,
-      "iconBgColor": TColor.iconBgInfo,
-      "time": "10:15 19/05/2024"
-    },
-    {
-      "title": "Order Received",
-      "description": "Order #SP_0023900 has been delivered successfully.",
-      "iconStr": TIcon.receivedOrder,
-      "iconBgColor": TColor.iconBgSuccess,
-      "time": "10:15 19/05/2024"
-    },
-    {
-      "title": "Order on the Way",
-      "description": "Your delivery driver is on the way with your order.",
-      "iconStr": TIcon.onTheWayOrder,
-      "iconBgColor": TColor.iconBgSuccess,
-      "time": "10:10 19/05/2024"
-    },
-    {
-      "title": "Your Order is Confirmed",
-      "description": "Your order #SP_0023900 has been confirmed.",
-      "iconStr": TIcon.confirmedOrder,
-      "iconBgColor": TColor.iconBgSuccess,
-      "time": "09:59 19/05/2024"
-    },
-    {
-      "title": "Order Successful",
-      "description": "Order #SP_0023900 has been placed successfully.",
-      "iconStr": TIcon.successfulOrder,
-      "iconBgColor": TColor.iconBgSuccess,
-      "time": "09:56 19/05/2024"
-    },
-    {
-      "title": "Order Cancelled",
-      "description": "Order #SP_0023450 has been cancelled.",
-      "iconStr": TIcon.cancelledOrder,
-      "iconBgColor": TColor.iconBgCancel,
-      "time": "22:40 19/05/2024"
-    },
-    {
-      "title": "Account Setup Successful",
-      "description": "Congratulations! Your account setup was successful.",
-      "iconStr": TIcon.successfulAccountSetup,
-      "iconBgColor": TColor.iconBgSuccess,
-      "time": "20:15 19/05/2024"
-    },
-    {
-      "title": "Credit Card Connected",
-      "description": "Congratulations! Your credit card has been successfully added.",
-      "iconStr": TIcon.connectedCreditCard,
-      "iconBgColor": TColor.iconBgSuccess,
-      "time": "20:00 19/05/2024"
-    },
-    {
-      "title": "Get 5% Discount Code",
-      "description": "Discount code for new users.",
-      "iconStr": TIcon.discount,
-      "iconBgColor": TColor.iconBgInfo,
-      "time": "11:10 19/05/2024"
-    },
-  ];
+
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, dynamic>> notificationList = THardCode.getNotificationList();
+    
     return Scaffold(
       body: CustomScrollView(
         slivers: [

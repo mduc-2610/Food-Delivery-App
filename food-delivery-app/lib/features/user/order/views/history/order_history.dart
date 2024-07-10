@@ -13,6 +13,7 @@ import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/hardcode/hardcode.dart';
 import 'package:get/get.dart';
 
 class OrderHistoryView extends StatefulWidget {
@@ -22,61 +23,6 @@ class OrderHistoryView extends StatefulWidget {
 
 class _OrderHistoryViewState extends State<OrderHistoryView> {
   final FilterBarController _filterBarController = Get.put(FilterBarController("All"));
-
-  final List<Map<String, dynamic>> orders = [
-    {
-      'id': 'SP 0023900',
-      'image': TImage.hcBurger1,
-      'price': 25.20,
-      'rating': 4,
-      'status': 'Active',
-    },
-    {
-      'id': 'SP 0023512',
-      'image': TImage.hcBurger1,
-      'price': 40.00,
-      'rating': 5,
-      'status': 'Completed',
-    },
-    {
-      'id': 'SP 0023502',
-      'image': TImage.hcBurger1,
-      'price': 85.00,
-      'rating': 4,
-      'status': 'Completed',
-    },
-    {
-      'id': 'SP 0023450',
-      'image': TImage.hcBurger1,
-      'price': 20.50,
-      'rating': 3,
-      'status': 'Cancelled',
-    },
-
-    {
-      'id': 'SP 0023450',
-      'image': TImage.hcBurger1,
-      'price': 20.50,
-      'rating': 2,
-      'status': 'Cancelled',
-    },
-
-    {
-      'id': 'SP 0023450',
-      'image': TImage.hcBurger1,
-      'price': 20.50,
-      'rating': 2,
-      'status': 'Cancelled',
-    },
-
-    {
-      'id': 'SP 0023450',
-      'image': TImage.hcBurger1,
-      'price': 20.50,
-      'rating': 1,
-      'status': 'Cancelled',
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +55,7 @@ class _OrderHistoryViewState extends State<OrderHistoryView> {
                   child: Container(
                     height: 1000,
                     child: Obx(() => OrderHistoryList(
-                      orders: orders,
+                      orders: THardCode.getOrderList(),
                       selectedFilter: _filterBarController.selectedFilter.value,
                     )
                     ))

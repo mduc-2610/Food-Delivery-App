@@ -4,7 +4,8 @@ class TColor {
   TColor._();
 
   // App Basic Colors
-  static const Color primary = Color(0xffff6347);
+  // static const Color primary = Color(0xffff6347);
+  static const Color primary = Colors.green;
   static const Color secondary = Color(0xFF4b68ff);
   static const Color accent = Color(0xFF4b68ff);
 
@@ -58,6 +59,8 @@ class TColor {
   static const Color info = Color(0xFF1976D2);
   static const Color warning = Color(0xFFFFA000);
   static const Color disable = Color(0xFFb7b8ba);
+  static const Color active = Color(0xFFff6347);
+  static const Color cancel = Color(0xFF7f7e7c);
 
   // Icon Bg Color
   static const Color iconBgSuccess = Color(0xFFe7f9f5);
