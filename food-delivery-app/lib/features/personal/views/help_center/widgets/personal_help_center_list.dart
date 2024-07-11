@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/features/user/personal/views/help_center/personal_help_detail.dart';
+import 'package:food_delivery_app/features/personal/views/help_center/personal_help_detail.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:get/get.dart';
 

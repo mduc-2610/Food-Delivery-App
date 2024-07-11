@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/bars/search_bar.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
-import 'package:food_delivery_app/features/user/personal/views/message/widgets/message_item.dart';
+import 'package:food_delivery_app/features/personal/views/message/widgets/message_item.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
