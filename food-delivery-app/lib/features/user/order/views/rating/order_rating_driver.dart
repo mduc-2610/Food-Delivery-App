@@ -32,7 +32,7 @@ class _OrderRatingDriverViewState extends State<OrderRatingDriverView> {
             // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               DriverInformation(
-                head: "Rate your driver\'s delivery service.",
+                head: "Rate your driver\'s delivery service.dart.",
               ),
               RatingReview(),
             ],

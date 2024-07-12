@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
-import 'package:food_delivery_app/features/restaurant/notifications/views/widgets/message_tab.dart';
-import 'package:food_delivery_app/features/restaurant/notifications/views/widgets/notification_tab.dart';
-
+import 'package:food_delivery_app/features/notification/views/widgets/message_tab.dart';
+import 'package:food_delivery_app/features/notification/views/widgets/notification_tab.dart';
 
 class NotificationView extends StatelessWidget {
   @override
