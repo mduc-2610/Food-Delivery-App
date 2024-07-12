@@ -49,7 +49,7 @@ class NotificationItem extends StatelessWidget {
                       title,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    SizedBox(height: TSize.spaceBetweenItemsHorizontal / 2),
+                    SizedBox(height: TSize.spaceBetweenItemsSm),
 
                     TextWithSize(
                       aspectScreenWidth: 0.65,

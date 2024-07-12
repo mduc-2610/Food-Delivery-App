@@ -66,6 +66,7 @@ class TColor {
   static const Color iconBgSuccess = Color(0xFFe7f9f5);
   static const Color iconBgInfo = Color(0xFFfff9e6);
   static const Color iconBgCancel = Color(0xFFffefed);
+  static const Color iconColor = Color(0xFFb7b8ba);
 
   //Gradient
   static  Gradient linearGradient = LinearGradient(

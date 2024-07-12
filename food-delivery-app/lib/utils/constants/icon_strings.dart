@@ -20,7 +20,8 @@ class TIcon {
   static IconData favorite = Icons.favorite_rounded;
   static IconData notification = Icons.notifications_rounded;
   static IconData person = Icons.person;
-
+  static IconData shipping = Icons.local_shipping_rounded;
+  static IconData delivery = Icons.delivery_dining_rounded;
   // Login
   static String googleIcon = "assets/icons/login/google_icon.svg";
   static String facebookIcon = "assets/icons/login/facebook_icon.svg";

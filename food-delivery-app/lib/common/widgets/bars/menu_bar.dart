@@ -8,10 +8,12 @@ import 'package:food_delivery_app/utils/device/device_utility.dart';
 class CMenuBar extends StatelessWidget {
   final List<Map<String, dynamic>> iconList;
   final List<Widget> viewList;
+  final double? iconSize;
 
   CMenuBar({
     required this.iconList,
     required this.viewList,
+    this.iconSize
   });
 
   @override
@@ -23,7 +25,7 @@ class CMenuBar extends StatelessWidget {
       bottomNavigationBar: SizedBox(
         height: TDeviceUtil.getBottomNavigationBarHeight() * 1.5,
         child: Obx(() => BottomNavigationBar(
-          iconSize: TSize.iconXl,
+          iconSize: iconSize ?? TSize.iconXl,
           items: List.generate(iconList.length, (index) {
             return BottomNavigationBarItem(
               icon: _buildIcon(index, controller.currentIndex.value),

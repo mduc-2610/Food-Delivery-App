@@ -50,11 +50,8 @@ class CircleIconCard extends StatelessWidget {
         ),
         shadowColor: shadowColor ?? Theme.of(context).appBarTheme.backgroundColor,
         surfaceTintColor: surfaceTintColor ?? Theme.of(context).appBarTheme.backgroundColor,
-        child: Container(
-          padding: EdgeInsets.all(padding ?? TSize.sm),
-          decoration: BoxDecoration(
-              // color: Colors.white,
-          ),
+        child: CircleAvatar(
+          backgroundColor: Colors.transparent,
           child: (iconStr != null)
               ? SvgPicture.asset(
                 iconStr!,
@@ -63,7 +60,7 @@ class CircleIconCard extends StatelessWidget {
               )
               : Icon(
                 icon,
-                color: iconColor,
+                color: iconColor ?? TColor.iconColor,
                 size: iconSize ?? TSize.iconSm + 5,
               ),
         )

@@ -17,8 +17,8 @@ class RevenueHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainWrapper(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
+        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: TSize.spaceBetweenItemsVertical,),
           HeadWithAction(
