@@ -1,22 +1,22 @@
 import "package:flutter/material.dart";
 import "package:food_delivery_app/common/widgets/bars/menu_bar.dart";
 import "package:food_delivery_app/common/widgets/cards/circle_icon_card.dart";
+import "package:food_delivery_app/features/deliverer/delivery/views/delivery/delivery.dart";
 import "package:food_delivery_app/features/notification/views/notification.dart";
+import "package:food_delivery_app/features/restaurant/home/views/home/home.dart";
 import "package:food_delivery_app/features/restaurant/personal/views/profile/profile.dart";
-import "package:food_delivery_app/features/shipper/home/views/home/home.dart";
-import "package:food_delivery_app/features/shipper/shipping/views/delivery/delivery.dart";
 import "package:food_delivery_app/utils/constants/icon_strings.dart";
 import "package:food_delivery_app/utils/constants/sizes.dart";
 import "package:get/get.dart";
 
-class ShipperMenuRedirection extends StatefulWidget {
-  const ShipperMenuRedirection({super.key});
+class DelivererMenuRedirection extends StatefulWidget {
+  const DelivererMenuRedirection({super.key});
 
   @override
-  State<ShipperMenuRedirection> createState() => _ShipperMenuRedirectionState();
+  State<DelivererMenuRedirection> createState() => _DelivererMenuRedirectionState();
 }
 
-class _ShipperMenuRedirectionState extends State<ShipperMenuRedirection> {
+class _DelivererMenuRedirectionState extends State<DelivererMenuRedirection> {
   @override
   Widget build(BuildContext context) {
     return CMenuBar(

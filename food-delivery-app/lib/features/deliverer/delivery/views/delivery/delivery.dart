@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
-import 'package:food_delivery_app/features/shipper/shipping/views/delivery/widgets/nearest_order_card.dart';
+import 'package:food_delivery_app/features/deliverer/delivery/views/delivery/widgets/nearest_order_card.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
