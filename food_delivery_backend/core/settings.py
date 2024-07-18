@@ -39,6 +39,13 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_extensions",
     "account.apps.AccountConfig",
+    "deliverer.apps.DelivererConfig",
+    "food.apps.FoodConfig",
+    "notification.apps.NotificationConfig",
+    "order.apps.OrderConfig",
+    "restaurant.apps.RestaurantConfig",
+    "review.apps.ReviewConfig",
+    "social.apps.SocialConfig",
     "utils.apps.UtilsConfig",
 ]
 
@@ -136,6 +143,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+STATICFILES_DIR = [
+    BASE_DIR / "static/"
+]
+MEDIA_URL = "images/"
+MEDIA_ROOT = BASE_DIR / "static/images/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

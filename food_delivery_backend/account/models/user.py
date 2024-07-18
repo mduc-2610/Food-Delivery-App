@@ -53,6 +53,13 @@ class User(AbstractBaseUser):
 
     objects = UserManager()
 
+    liked_dishes = models.ManyToManyField("food.Dish", through="food.DishLike", related_name="liked_dishes")
+    notifications = models.ManyToManyField("notification.Notification", through="notification.UserNotification")
+    promotions = models.ManyToManyField("order.Promotion", through="order.UserPromotion")
+    rated_dishes = models.ManyToManyField("food.Dish", through="review.DishReview")
+    rated_deliverers = models.ManyToManyField("deliverer.Deliverer", through="review.DelivererReview", related_name="rated_by_users")
+    # orders = models.ManyToManyField("order.Order", through="OrderItem", related_name="ordered_by_users")
+
     def __str__(self):
         return f"{self.phone_number}"
 

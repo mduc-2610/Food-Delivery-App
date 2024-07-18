@@ -1,6 +1,7 @@
 from django.db import models
 
 class Setting(models.Model):
+    user = models.OneToOneField("account.User", on_delete=models.CASCADE, related_name="setting")
     notification = models.BooleanField(default=True)
     dark_mode = models.BooleanField(default=False)
     sound = models.BooleanField(default=False)
