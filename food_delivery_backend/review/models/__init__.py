@@ -4,3 +4,9 @@ from .review import (
     RestaurantReview,
     OrderReview
 )
+from .review_like import (
+    DishReviewLike, 
+    DelivererReviewLike,
+    RestaurantReviewLike,
+    OrderReviewLike
+)

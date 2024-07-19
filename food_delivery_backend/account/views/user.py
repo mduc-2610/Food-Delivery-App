@@ -32,7 +32,7 @@ class UserViewSet(viewsets.ModelViewSet):
             return RegisterSerializer
         return super().get_serializer_class()
 
-    @action(detail=False, methods=["POST"], url_path="send_otp")
+    @action(detail=False, methods=["POST"], url_path="send-otp")
     def send_otp(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -48,7 +48,7 @@ class UserViewSet(viewsets.ModelViewSet):
             status=status.HTTP_200_OK
         )
     
-    @action(detail=False, methods=["POST"], url_path="verify_otp")
+    @action(detail=False, methods=["POST"], url_path="verify-otp")
     def verify_otp(self, request):
         user = request.data.get("user")
         otp_exists = OTP.objects.filter(user=user).exists()

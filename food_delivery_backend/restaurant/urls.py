@@ -1,0 +1,23 @@
+# basicinfo/urls.py
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import (
+    BasicInfoViewSet, 
+    DetailInformationViewSet, 
+    MenuDeliveryViewSet, 
+    OperatingHourViewSet, 
+    RepresentativeViewSet, 
+    RestaurantViewSet
+)
+
+router = DefaultRouter()
+router.register(r'basic-info', BasicInfoViewSet)
+router.register(r'menu-delivery', MenuDeliveryViewSet)
+router.register(r'operating-hours', OperatingHourViewSet)
+router.register(r'restaurants', RestaurantViewSet)
+router.register(r'representatives', RepresentativeViewSet)
+router.register(r'detail-information', DetailInformationViewSet)
+
+urlpatterns = [
+    path('', include(router.urls)),
+]
