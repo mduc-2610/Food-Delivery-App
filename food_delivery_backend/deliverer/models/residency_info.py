@@ -10,12 +10,12 @@ class ResidencyInfo(models.Model):
     email = models.EmailField()
 
     def save(self, *args, **kwargs):
-        if self.is_same_as_ci:
-            self.city = self.residency_info.basic_info.city
-            self.district = self.residency_info.basic_info.district
-            self.ward = self.residency_info.basic_info.ward
-            self.address = self.residency_info.basic_info.address
+        # if self.is_same_as_ci:
+            # self.city = self.residency_info.basic_info.city
+            # self.district = self.residency_info.basic_info.district
+            # self.ward = self.residency_info.basic_info.ward
+            # self.address = self.residency_info.basic_info.address
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.representative.full_name} - Residency Info"
+        return f" Residency Info"

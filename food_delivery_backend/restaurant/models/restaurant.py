@@ -18,4 +18,4 @@ class Restaurant(models.Model):
         return self.detail_information.description
 
     def __str__(self):
-        return self.name
+        return f"{self.name()}"

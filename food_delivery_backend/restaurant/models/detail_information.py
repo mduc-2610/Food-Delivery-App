@@ -16,4 +16,4 @@ class DetailInformation(models.Model):
     purpose = models.CharField(max_length=255)  
     
     def __str__(self):
-        return f"{self.restaurant.name} - Details"
+        return f" - Details"

@@ -13,4 +13,4 @@ class Deliverer(models.Model):
     emergency_contact = models.OneToOneField("deliverer.EmergencyContact", on_delete=models.CASCADE, related_name="emergency_contact")
 
     def __str__(self):
-        return self.basic_info.email
+        return f"{self.basic_info}"
