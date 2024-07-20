@@ -1,6 +1,6 @@
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-class DetailInformation {
+class DetailInfo {
   final Map<String, dynamic>? openingHours;
   final String? keywords;
   final String? description;
@@ -15,7 +15,7 @@ class DetailInformation {
   final String? restaurantCategory;
   final String? purpose;
 
-  DetailInformation({
+  DetailInfo({
     required this.openingHours,
     required this.keywords,
     required this.description,
@@ -31,7 +31,7 @@ class DetailInformation {
     required this.purpose,
   });
 
-  DetailInformation.fromJson(Map<String, dynamic> json)
+  DetailInfo.fromJson(Map<String, dynamic> json)
       : openingHours = json['opening_hours'],
         keywords = json['keywords'],
         description = json['description'],
@@ -66,7 +66,7 @@ class DetailInformation {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('DetailInformation', {
+    return THelperFunction.formatToString('DetailInfo', {
       'openingHours': openingHours,
       'keywords': keywords,
       'description': description,

@@ -1,10 +1,10 @@
 # detailinformation/serializers.py
 from rest_framework import serializers
-from restaurant.models import DetailInformation
+from restaurant.models import DetailInfo
 
-class DetailInformationSerializer(serializers.ModelSerializer):
+class DetailInfoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DetailInformation
+        model = DetailInfo
         fields = [
             'id', 'opening_hours', 'keywords', 'description', 'avatar_image', 
             'cover_image', 'facade_image', 'restaurant_type', 'cuisine', 

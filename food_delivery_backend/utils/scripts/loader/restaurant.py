@@ -3,7 +3,7 @@ from faker import Faker
 from datetime import datetime, timedelta
 
 from restaurant.models import (
-    BasicInfo, DetailInformation, MenuDelivery,
+    BasicInfo, DetailInfo, MenuDelivery,
     Representative, OperatingHour, Restaurant
 )
 
@@ -14,7 +14,7 @@ def generate_phone_number():
 
 def load_restaurant(MAX_NUMBER_RESTAURANTS, user_list):
     model_list = [
-        BasicInfo, DetailInformation, MenuDelivery,
+        BasicInfo, DetailInfo, MenuDelivery,
         Representative, OperatingHour, Restaurant
     ]
     
@@ -38,7 +38,7 @@ def load_restaurant(MAX_NUMBER_RESTAURANTS, user_list):
         basic_info = BasicInfo.objects.create(**basic_info_data)
         print(f"\tSuccessfully created Basic Info: {basic_info}")
 
-        detail_information_data = {
+        detail_info_data = {
             "opening_hours": {"Monday": "9:00-22:00", "Tuesday": "9:00-22:00", "Wednesday": "9:00-22:00", "Thursday": "9:00-22:00", "Friday": "9:00-23:00", "Saturday": "9:00-23:00", "Sunday": "9:00-22:00"},
             "keywords": ", ".join(fake.words(nb=5, unique=True)),
             "description": fake.text(max_nb_chars=200),
@@ -53,8 +53,8 @@ def load_restaurant(MAX_NUMBER_RESTAURANTS, user_list):
             "restaurant_category": fake.word(),
             "purpose": fake.word()
         }
-        detail_information = DetailInformation.objects.create(**detail_information_data)
-        print(f"\tSuccessfully created Detail Information: {detail_information}")
+        detail_info = DetailInfo.objects.create(**detail_info_data)
+        print(f"\tSuccessfully created Detail Info: {detail_info}")
 
         menu_delivery_data = {
             "menu_image": fake.image_url()
@@ -78,18 +78,18 @@ def load_restaurant(MAX_NUMBER_RESTAURANTS, user_list):
         days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         for day in days_of_week:
             operating_hour_data = {
-                "detail_information": detail_information,
+                "detail_info": detail_info,
                 "day_of_week": day,
                 "open_time": fake.time_object(),
                 "close_time": fake.time_object()
             }
             OperatingHour.objects.create(**operating_hour_data)
-            print(f"\tSuccessfully created Operating Hour for {detail_information} on {day}")
+            print(f"\tSuccessfully created Operating Hour for {detail_info} on {day}")
 
         restaurant_data = {
             "user": user,
             "basic_info": basic_info,
-            "detail_information": detail_information,
+            "detail_info": detail_info,
             "menu_delivery": menu_delivery,
             "representative": representative,
         }
