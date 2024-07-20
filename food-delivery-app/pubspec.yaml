@@ -49,6 +49,8 @@ dependencies:
   fl_chart: ^0.68.0
   flutter_local_notifications: ^9.1.5
   timezone: ^0.8.0
+  json_annotation: ^4.9.0
+
   # Icons
   iconsax: ^0.0.8
   cupertino_icons: ^1.0.2

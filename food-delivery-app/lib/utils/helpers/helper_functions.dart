@@ -45,7 +45,7 @@ class THelperFunction {
     );
   }
 
-  static void navigatToScreen(BuildContext context, Widget screen) {
+  static void navigateToScreen(BuildContext context, Widget screen) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => screen),
@@ -90,6 +90,15 @@ class THelperFunction {
       wrappedList.add(Row(children: rowChildren));
     }
     return wrappedList;
+  }
+
+  static String formatToString(String className, Map<String, dynamic> attributes) {
+    String formattedString = '$className {\n';
+    attributes.forEach((key, value) {
+      formattedString += '\t$key: $value,\n';
+    });
+    formattedString += '}';
+    return formattedString;
   }
 
 }
