@@ -25,4 +25,4 @@ class CommentImage(BaseImage):
     comment = models.ForeignKey("social.Comment", related_name="comment_images", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Image for comment by: {self.comment.user.username}"
+        return f"Image for comment by: {self.comment.user}"

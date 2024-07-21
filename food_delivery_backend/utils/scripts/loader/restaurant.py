@@ -1,7 +1,7 @@
 import random
 from faker import Faker
-from datetime import datetime, timedelta
 
+from account.models import User
 from restaurant.models import (
     BasicInfo, DetailInfo, MenuDelivery,
     Representative, OperatingHour, Restaurant
@@ -12,7 +12,7 @@ fake = Faker()
 def generate_phone_number():
     return f"+84{random.randint(100000000, 99999999999)}"
 
-def load_restaurant(MAX_NUMBER_RESTAURANTS, user_list):
+def load_restaurant(max_restaurants=0):
     model_list = [
         BasicInfo, DetailInfo, MenuDelivery,
         Representative, OperatingHour, Restaurant
@@ -21,11 +21,13 @@ def load_restaurant(MAX_NUMBER_RESTAURANTS, user_list):
     for model in model_list:
         model.objects.all().delete()
 
+    user_list = list(User.objects.all())
+    
     print("________________________________________________________________")
     print("RESTAURANT:")
     restaurant_list = []
     for i, user in enumerate(user_list):
-        if i >= MAX_NUMBER_RESTAURANTS: break
+        if i >= max_restaurants: break
 
         basic_info_data = {
             "name": fake.company(),

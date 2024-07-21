@@ -16,7 +16,7 @@ def generate_phone_number():
     return f"+84{random.randint(100000000, 99999999999)}"
 
 
-def load_user(MAX_NUMBER_USERS):    
+def load_user(max_users=0):    
     model_list = [
         User, OTP, Setting, 
         SecuritySetting, Profile
@@ -30,7 +30,7 @@ def load_user(MAX_NUMBER_USERS):
     x = User.objects.create_superuser(phone_number="+84858189111", password="Duckkucd.123")
     print(x)
     user_list = []
-    for _ in range(MAX_NUMBER_USERS):
+    for _ in range(max_users):
         user_data = {
             "phone_number": generate_phone_number(),
             "password": make_password("Duckkucd.123"),

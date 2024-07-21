@@ -29,4 +29,4 @@ class Order(models.Model):
         self.save()
 
     def __str__(self):
-        return f"Order for {self.cart.user.username} with total {self.total}"
+        return f"Order for {self.cart} with total {self.total}"

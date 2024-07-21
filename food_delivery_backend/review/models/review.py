@@ -4,9 +4,9 @@ from django.db import models
 class Review(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
     user = models.ForeignKey("account.User", related_name='%(class)s_reviews', on_delete=models.CASCADE)
-    rating = models.PositiveSmallIntegerField()
+    rating = models.PositiveSmallIntegerField(blank=True, null=True)
     title = models.CharField(max_length=255, blank=True, null=True)
-    comment = models.TextField()
+    comment = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

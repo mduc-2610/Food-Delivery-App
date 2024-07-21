@@ -1,9 +1,9 @@
-import os
-import django
-from faker import Faker
-from django.contrib.auth.hashers import make_password
 import random
+from faker import Faker
 
+from django.contrib.auth.hashers import make_password
+
+from account.models import User
 from deliverer.models import (
     Address, BasicInfo, DriverLicense, EmergencyContact, 
     OperationInfo, OtherInfo, ResidencyInfo, Deliverer
@@ -14,7 +14,7 @@ fake = Faker()
 def generate_phone_number():
     return f"+84{random.randint(100000000, 999999999)}"
 
-def load_deliverer(MAX_NUMBER_DELIVERERS, user_list):
+def load_deliverer(max_deliverers):
     model_list = [
         BasicInfo, DriverLicense, EmergencyContact, OperationInfo, OtherInfo, ResidencyInfo, Deliverer
     ]
@@ -22,11 +22,13 @@ def load_deliverer(MAX_NUMBER_DELIVERERS, user_list):
     for model in model_list:
         model.objects.all().delete()
 
+    user_list = list(User.objects.all())
+
     print("________________________________________________________________")
     print("DELIVERER:")
     deliverer_list = []
     for i, user in enumerate(user_list):
-        if i >= MAX_NUMBER_DELIVERERS: break
+        if i >= max_deliverers: break
 
         address_data = {
             "city": fake.city(),

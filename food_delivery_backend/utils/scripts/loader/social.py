@@ -1,0 +1,98 @@
+from faker import Faker
+import random
+
+from account.models import User
+from social.models import (
+    Post, PostLike, CommentLike,
+    PostImage, CommentImage, Comment
+)
+
+from utils.function import load_intermediate_model
+
+fake = Faker()
+
+def load_social(
+        max_posts=0, 
+        max_comments=0, 
+        max_post_likes=0,
+        max_comment_likes=0,
+        max_images=0
+    ):
+    model_list = [
+        Post, CommentLike, PostLike, 
+        PostImage, CommentImage, Comment
+    ]
+    
+    for model in model_list:
+        model.objects.all().delete()
+    
+    user_list = list(User.objects.all())
+    
+    print("________________________________________________________________")
+    print("POSTS:")
+    post_list = []
+    for _ in range(max_posts):
+        post_data = {
+            "user": random.choice(user_list),
+            "title": fake.sentence(nb_words=6),
+            "content": fake.text(max_nb_chars=200)
+        }
+        post = Post.objects.create(**post_data)
+        post_list.append(post)
+        print(f"\tSuccessfully created Post: {post}")
+
+    print("________________________________________________________________")
+    print("COMMENTS:")
+    comment_list = load_intermediate_model(
+        model_class=Comment,
+        primary_field='post',
+        related_field='user',
+        primary_objects=post_list,
+        related_objects=user_list,
+        max_items=max_comments,
+        attributes={'text': lambda: fake.text(max_nb_chars=200)}
+    )
+
+    print("________________________________________________________________")
+    print("COMMENT LIKES:")
+    load_intermediate_model(
+        model_class=CommentLike,
+        primary_field='comment',
+        related_field='user',
+        primary_objects=comment_list,
+        related_objects=user_list,
+        max_items=max_comment_likes
+    )
+
+    print("________________________________________________________________")
+    print("POST LIKES:")
+    load_intermediate_model(
+        model_class=PostLike,
+        primary_field='post',
+        related_field='user',
+        primary_objects=post_list,
+        related_objects=user_list,
+        max_items=max_post_likes
+    )
+
+    print("________________________________________________________________")
+    print("POST IMAGES:")
+    for _ in range(max_images):
+        post_image_data = {
+            "post": random.choice(post_list),
+            "image": fake.image_url()
+        }
+        post_image = PostImage.objects.create(**post_image_data)
+        print(f"\tSuccessfully created Post Image: {post_image}")
+
+    print("________________________________________________________________")
+    print("COMMENT IMAGES:")
+    for _ in range(max_images):
+        comment_image_data = {
+            "comment": random.choice(comment_list),
+            "image": fake.image_url()
+        }
+        comment_image = CommentImage.objects.create(**comment_image_data)
+        print(f"\tSuccessfully created Comment Image: {comment_image}")
+
+    return post_list, comment_list
