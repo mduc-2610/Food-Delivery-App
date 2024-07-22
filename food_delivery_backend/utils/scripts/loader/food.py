@@ -6,7 +6,7 @@ from django.contrib.auth.hashers import make_password
 from account.models import User
 from food.models import (
     Dish, DishLike, 
-    DishCategory, DishAdditionalOption
+    DishCategory, DishAdditionalOption, DishSizeOption
 )
 
 from utils.function import load_intermediate_model
@@ -20,7 +20,7 @@ def load_food(
     ):
     model_list = [
         Dish, DishLike, 
-        DishCategory, DishAdditionalOption
+        DishCategory, DishAdditionalOption, DishSizeOption
     ]
     
     for model in model_list:
@@ -56,7 +56,27 @@ def load_food(
         dish, _ = Dish.objects.get_or_create(**dish_data)
         dish_list.append(dish)
         print(f"\tSuccessfully created Dish: {dish}")
-        
+
+        for _ in range(random.randint(1, 5)):
+            option_data = {
+                "dish": dish,
+                "name": fake.word(),
+                "price": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=1, max_value=20)
+            }
+            option = DishAdditionalOption.objects.create(**option_data)
+            print(f"\tSuccessfully created Dish Additional Option: {option}")
+
+        size_options = ["Small", "Medium", "Large", "XL Large with Sauces"]
+        for size in size_options:
+            size_data = {
+                "dish": dish,
+                "size": size,
+                "price": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=1, max_value=50)
+            }
+            size_option = DishSizeOption.objects.create(**size_data)
+            print(f"\tSuccessfully created Dish Size Option: {size_option}\n")
+
+         
     print("________________________________________________________________")
     print("DISH LIKES:")
     load_intermediate_model(
@@ -68,16 +88,4 @@ def load_food(
         max_items=0
     )
 
-    print("________________________________________________________________")
-    print("DISH ADDITIONAL OPTIONS:")
-    for dish in dish_list:
-        for _ in range(random.randint(1, 5)):
-            option_data = {
-                "dish": dish,
-                "name": fake.word(),
-                "price": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=1, max_value=20)
-            }
-            option = DishAdditionalOption.objects.create(**option_data)
-            print(f"\tSuccessfully created Dish Additional Option: {option}")
-    
     return dish_list

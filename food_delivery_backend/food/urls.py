@@ -2,7 +2,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
-    DishAdditionalOptionViewSet, 
+    DishAdditionalOptionViewSet, DishSizeOptionViewSet,
     DishCategoryViewSet, 
     DishLikeViewSet, 
     DishViewSet
@@ -10,6 +10,7 @@ from .views import (
 
 router = DefaultRouter()
 router.register(r'dish-option', DishAdditionalOptionViewSet)
+router.register(r'dish-size', DishSizeOptionViewSet)
 router.register(r'dish-categorie', DishCategoryViewSet)
 router.register(r'dish-like', DishLikeViewSet)
 router.register(r'dish', DishViewSet)

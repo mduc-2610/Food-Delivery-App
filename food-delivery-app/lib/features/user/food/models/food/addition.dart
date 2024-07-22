@@ -39,3 +39,42 @@ class DishAdditionalOption {
     });
   }
 }
+
+class DishSizeOption {
+  final String id;
+  final String dishId;
+  final String size;
+  final double price;
+
+  DishSizeOption({
+    required this.id,
+    required this.dishId,
+    required this.size,
+    required this.price,
+  });
+
+  DishSizeOption.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        dishId = json['dish'],
+        size = json['size'],
+        price = (json['price'] as num).toDouble();
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'dish': dishId,
+      'size': size,
+      'price': price,
+    };
+  }
+
+  @override
+  String toString() {
+    return THelperFunction.formatToString('DishSizeOption', {
+      'id': id,
+      'dishId': dishId,
+      'size': size,
+      'price': price,
+    });
+  }
+}
