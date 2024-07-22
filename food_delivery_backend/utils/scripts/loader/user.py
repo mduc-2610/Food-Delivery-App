@@ -1,4 +1,3 @@
-
 import random
 from faker import Faker
 from datetime import datetime, timedelta
@@ -7,19 +6,20 @@ from django.utils import timezone
 from django.contrib.auth.hashers import make_password
 
 from account.models import (
-    User, OTP, Setting, 
-    SecuritySetting, Profile
+    User, OTP,
+    Profile, Location, 
+    Setting, SecuritySetting 
 )
 
 fake = Faker()
+
 def generate_phone_number():
     return f"+84{random.randint(100000000, 99999999999)}"
-
 
 def load_user(max_users=0):    
     model_list = [
         User, OTP, Setting, 
-        SecuritySetting, Profile
+        SecuritySetting, Profile, Location
     ]
     
     for model in model_list:
@@ -53,11 +53,20 @@ def load_user(max_users=0):
             "user": user,
             "name": fake.name(),
             "gender": fake.random_element(elements=("MALE", "FEMALE")),
-            "location": fake.address(),
             "date_of_birth": fake.date_time_this_century(before_now=True, after_now=False, tzinfo=timezone.utc)
         }
-        Profile.objects.create(**profile_data)
+        profile = Profile.objects.create(**profile_data)
         print(f"\tSuccessfully created Profile for User: {user}")
+
+        for _ in range(random.randint(1, 5)):
+            location_data = {
+                "profile": profile,
+                "address": fake.address(),
+                "latitude": fake.latitude(),
+                "longitude": fake.longitude()
+            }
+            Location.objects.create(**location_data)
+            print(f"\tSuccessfully created Location for Profile: {profile}")
 
         setting_data = {
             "user": user,

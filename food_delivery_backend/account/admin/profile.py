@@ -1,6 +1,9 @@
 from django.contrib import admin
-from account.models import Profile
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['user', 'name', 'gender', 'location', 'date_of_birth']
-    search_fields = ['user__username', 'name', 'location']
+    list_display = ['user', 'name', 'gender', 'date_of_birth']
+    search_fields = ['name', 'user__username', 'user__email']
+
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ['profile', 'address', 'latitude', 'longitude']
+    search_fields = ['address', 'profile__name', 'profile__user__username']
