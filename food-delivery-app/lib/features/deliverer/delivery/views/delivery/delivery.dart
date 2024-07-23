@@ -145,7 +145,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
     return ElevatedButton(
       child: Text(status),
       style: ElevatedButton.styleFrom(
-        primary: isActive ? color : Colors.grey,
+        // primary: isActive ? color : Colors.grey,
       ),
       onPressed: () {
         setState(() {

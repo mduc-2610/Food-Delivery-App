@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/controllers/menu_bar_controller.dart';
 import 'package:food_delivery_app/common/widgets/bars/menu_bar.dart';
+import 'package:food_delivery_app/features/authentication/controllers/login/auth_controller.dart';
 import 'package:food_delivery_app/features/user/food/controllers/home/home_controller.dart';
 import 'package:food_delivery_app/features/user/food/views/common/widgets/category_card.dart';
 import 'package:food_delivery_app/common/widgets/cards/food_card_gr.dart';

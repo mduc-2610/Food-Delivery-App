@@ -1,3 +1,3 @@
-from .user import UserViewSet
-from .profile import ProfileViewSet, LocationViewSet
+from .user import UserViewSet, LocationViewSet
+from .profile import ProfileViewSet
 from .setting import SettingViewSet, SecuritySettingViewSet

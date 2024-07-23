@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
+import 'package:food_delivery_app/features/authentication/controllers/login/auth_controller.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 import 'package:food_delivery_app/features/authentication/controllers/login/verification_controller.dart';
 
@@ -15,10 +18,10 @@ class VerificationView extends StatefulWidget {
 
 class _VerificationViewState extends State<VerificationView> {
   final VerificationController _controller = Get.put(VerificationController());
+  final AuthController _authController = AuthController.instance;
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: CustomScrollView(
         physics: NeverScrollableScrollPhysics(),
@@ -40,7 +43,7 @@ class _VerificationViewState extends State<VerificationView> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              'Code has been sent to (+44) 20 **** 678',
+                              'Code has been sent to ${THelperFunction.hidePhoneNumber(_authController.phoneNumber.value)}',
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
@@ -70,7 +73,7 @@ class _VerificationViewState extends State<VerificationView> {
                                     Icon(Icons.timer, color: Theme.of(context).textTheme.bodySmall?.color),
                                     SizedBox(width: 5),
                                     Obx(() => Text(
-                                      '00:${_controller.timer.value.toString().padLeft(2, '0')}',
+                                      '00:${_authController.timer.value.toString().padLeft(2, '0')}',
                                       style: Theme.of(context).textTheme.bodyLarge
                                     )),
                                   ],
@@ -78,11 +81,11 @@ class _VerificationViewState extends State<VerificationView> {
                                 SizedBox(height: TSize.spaceBetweenItemsVertical),
                                 Center(
                                   child: Obx(() => GestureDetector(
-                                    onTap: _controller.isCodeSent.value ? null : _controller.startTimer,
+                                    onTap: _authController.isCodeSent.value ? null : _authController.startTimer,
                                     child: Text(
                                       'Resend Code',
                                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                          color: (_controller.isCodeSent.value)
+                                          color: (_authController.isCodeSent.value)
                                               ? null : TColor.primary),
                                     ),
                                   )),
@@ -98,7 +101,7 @@ class _VerificationViewState extends State<VerificationView> {
                 Positioned(
                   left: 0,
                   right: 0,
-                  bottom: TDeviceUtil.getBottomNavigationBarHeight() * 2.2 ,
+                  bottom: 135,
                   child: MainWrapper(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -156,7 +159,7 @@ class _VerificationViewState extends State<VerificationView> {
           focusNode: focusNode,
           controller: controller,
           textAlign: TextAlign.center,
-          maxLength: 1,
+          maxLength: 2,
           keyboardType: TextInputType.number,
           style: TextStyle(fontSize: TSize.lg),
           decoration: InputDecoration(

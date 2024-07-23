@@ -56,7 +56,7 @@ class APIService {
       headers: _getHeaders(),
       body: json.encode(data),
     );
-    return json.decode(response.body);
+    return [response.statusCode, response.headers, json.decode(response.body)];
     if (response.statusCode == 201 || response.statusCode == 200) {
       return json.decode(response.body);
     }
@@ -66,16 +66,16 @@ class APIService {
     }
   }
 
-  Future<void> update(String? id, Map<String, dynamic> data) async {
+  Future<dynamic> update(String? id, Map<String, dynamic> data) async {
     final response = await http.put(
       Uri.parse(url(id: id!)),
       headers: _getHeaders(),
       body: json.encode(data),
     );
-    return json.decode(response.body);
+    return [response.statusCode, response.headers, json.decode(response.body)];
   }
 
-  Future<void> delete(String? id) async {
+  Future<dynamic> delete(String? id) async {
     final response = await http.delete(
       Uri.parse(url(id: id!)),
       headers: _getHeaders(),
@@ -83,10 +83,11 @@ class APIService {
 
     if (response.statusCode == 204) {
       print("Successful");
-      return;
+      // return;
     } else {
       throw Exception('Failed to delete object');
     }
+    return [response.statusCode];
   }
 
 
@@ -145,27 +146,42 @@ Future<dynamic> callRetrieveAPI(
 Future<dynamic> callCreateAPI(
     String endpoint,
     modelToJson,
-    String token
+    String token,
+    {
+      bool fullResponse = false,
+    }
     ) async {
   APIService service = APIService(endpoint: endpoint, token: token);
-  return await service.create(modelToJson);
+  if(fullResponse) {
+    return await service.create(modelToJson);
+  }
+  return (await service.create(modelToJson))[2];
 }
 
 Future<dynamic> callUpdateAPI(
     String? endpoint,
     String? id,
     modelToJson,
-    String token
+    String token,
+    {
+      bool fullResponse = false
+    }
     ) async {
   APIService service = APIService(endpoint: endpoint, token: token);
-  return await service.update(id, modelToJson);
+  if(fullResponse) {
+    return await service.update(id, modelToJson);
+  }
+  return (await service.update(id, modelToJson))[2];
 }
 
-Future<void> callDestroyAPI(
+Future<dynamic> callDestroyAPI(
     String? endpoint,
     String? id,
     String token,
+    {
+      bool fullResponse = false
+    }
     ) async {
   APIService service = APIService(endpoint: endpoint, token: token);
-  await service.delete(id!);
+  return await service.delete(id!);
 }

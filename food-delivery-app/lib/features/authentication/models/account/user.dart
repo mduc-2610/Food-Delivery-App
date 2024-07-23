@@ -71,7 +71,7 @@ class User {
 
 class OTP {
   final String? id;
-  final User? user;
+  final String? user;
   final String? code;
   final DateTime? expiredAt;
 
@@ -84,14 +84,14 @@ class OTP {
 
   OTP.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        user = User.fromJson(json['user']),
+        user = json['user'],
         code = json['code'],
         expiredAt = DateTime.parse(json['expired_at']);
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'user': user?.toJson(),
+      'user': user,
       'code': code,
       'expired_at': expiredAt?.toIso8601String(),
     };
@@ -104,6 +104,44 @@ class OTP {
       'user': user,
       'code': code,
       'expiredAt': expiredAt,
+    });
+  }
+}
+
+class UserLocation {
+  final String? id;
+  final String? address;
+  final double? latitude;
+  final double? longitude;
+
+  UserLocation({
+    this.id,
+    this.address,
+    this.latitude,
+    this.longitude
+  });
+
+  UserLocation.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        address = json['address'],
+        latitude = json['latitude'],
+        longitude = json['longitude'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'address': address,
+      'latitude': latitude,
+      'longitude': longitude,
+    };
+  }
+
+  @override
+  String toString() {
+    return THelperFunction.formatToString('UserLocation', {
+      'id': id,
+      'address': address,
+      'latitude': latitude,
+      'longitude': longitude,
     });
   }
 }

@@ -74,7 +74,7 @@ def run():
         max_restaurant_promotions=MAX_RESTAURANT_PROMOTIONS,
         max_user_promotions=MAX_USER_PROMOTIONS,
         max_orders=MAX_ORDERS,
-        max_deliverers=MAX_DELIVERIES,
+        max_deliveries=MAX_DELIVERIES,
         max_carts=MAX_CARTS,
         max_dishes=MAX_DISHES
     )

@@ -1,13 +1,13 @@
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-class MenuDelivery {
+class RestaurantMenuDelivery {
   final String? menuImage;
 
-  MenuDelivery({
+  RestaurantMenuDelivery({
     required this.menuImage,
   });
 
-  MenuDelivery.fromJson(Map<String, dynamic> json)
+  RestaurantMenuDelivery.fromJson(Map<String, dynamic> json)
       : menuImage = json['menu_image'];
 
   Map<String, dynamic> toJson() {
@@ -18,7 +18,7 @@ class MenuDelivery {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('MenuDelivery', {
+    return THelperFunction.formatToString('RestaurantMenuDelivery', {
       'menuImage': menuImage,
     });
   }

@@ -7,7 +7,7 @@ import 'package:food_delivery_app/common/widgets/dialogs/show_success_dialog.dar
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
 import 'package:food_delivery_app/common/widgets/misc/sliver_sized_box.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
-import 'package:food_delivery_app/utils/constants/emoji.dart';
+import 'package:food_delivery_app/utils/constants/emojis.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';

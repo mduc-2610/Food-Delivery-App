@@ -46,8 +46,6 @@ class SplashMiddle extends StatelessWidget {
                 SizedBox(height: TSize.spaceBetweenSections,),
                 Obx(() => LinearProgressIndicator(
                   value: _controller.progress.value,
-                  backgroundColor: Colors.white,
-                  color: Colors.orange[900],
                 )),
               ],
             ),

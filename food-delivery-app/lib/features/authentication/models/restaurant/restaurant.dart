@@ -1,5 +1,5 @@
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
-import 'package:food_delivery_app/features/authentication/models/deliverer/basic_info.dart';
+import 'package:food_delivery_app/features/authentication/models/restaurant/basic_info.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/detail_info.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/menu_delivery.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/representative.dart';
@@ -8,10 +8,10 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 class Restaurant {
   final String id;
   final User? user;
-  final BasicInfo? basicInfo;
-  final Representative? representative;
-  final DetailInfo? detailInfo;
-  final MenuDelivery? menuDelivery;
+  final RestaurantBasicInfo? basicInfo;
+  final RestaurantRepresentative? representative;
+  final RestaurantDetailInfo? detailInfo;
+  final RestaurantMenuDelivery? menuDelivery;
   // final List<RestaurantPromotion>? promotions;
 
   Restaurant({
@@ -27,10 +27,10 @@ class Restaurant {
   Restaurant.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         user = json['user'] != null ? User.fromJson(json['user']) : null,
-        basicInfo = json['basic_info'] != null ? BasicInfo.fromJson(json['basic_info']) : null,
-        representative = json['representative'] != null ? Representative.fromJson(json['representative']) : null,
-        detailInfo = json['detail_info'] != null ? DetailInfo.fromJson(json['detail_info']) : null,
-        menuDelivery = json['menu_delivery'] != null ? MenuDelivery.fromJson(json['menu_delivery']) : null
+        basicInfo = json['basic_info'] != null ? RestaurantBasicInfo.fromJson(json['basic_info']) : null,
+        representative = json['representative'] != null ? RestaurantRepresentative.fromJson(json['representative']) : null,
+        detailInfo = json['detail_info'] != null ? RestaurantDetailInfo.fromJson(json['detail_info']) : null,
+        menuDelivery = json['menu_delivery'] != null ? RestaurantMenuDelivery.fromJson(json['menu_delivery']) : null
         // promotions = json['promotions'] != null
         //     ? (json['promotions'] as List).map((item) => RestaurantPromotion.fromJson(item)).toList()
         //     : null

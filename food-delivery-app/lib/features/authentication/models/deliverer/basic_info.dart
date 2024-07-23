@@ -1,6 +1,6 @@
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-class BasicInfo {
+class DelivererBasicInfo {
   final String? fullName;
   final String? givenName;
   final String? gender;
@@ -12,7 +12,7 @@ class BasicInfo {
   final String? address;
   final String? citizenIdentification;
 
-  BasicInfo({
+  DelivererBasicInfo({
     required this.fullName,
     required this.givenName,
     required this.gender,
@@ -25,7 +25,7 @@ class BasicInfo {
     required this.citizenIdentification,
   });
 
-  BasicInfo.fromJson(Map<String, dynamic> json)
+  DelivererBasicInfo.fromJson(Map<String, dynamic> json)
       : fullName = json['full_name'],
         givenName = json['given_name'],
         gender = json['gender'],

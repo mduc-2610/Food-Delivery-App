@@ -49,6 +49,16 @@ def load_user(max_users=0):
         otp.save()
         print(f"\tSuccessfully created OTP for User: {user}")
 
+        for _ in range(random.randint(1, 5)):
+            location_data = {
+                "user": user,
+                "address": fake.address(),
+                "latitude": fake.latitude(),
+                "longitude": fake.longitude()
+            }
+            Location.objects.create(**location_data)
+            print(f"\tSuccessfully created Location for User: {user}")
+
         profile_data = {
             "user": user,
             "name": fake.name(),
@@ -57,16 +67,6 @@ def load_user(max_users=0):
         }
         profile = Profile.objects.create(**profile_data)
         print(f"\tSuccessfully created Profile for User: {user}")
-
-        for _ in range(random.randint(1, 5)):
-            location_data = {
-                "profile": profile,
-                "address": fake.address(),
-                "latitude": fake.latitude(),
-                "longitude": fake.longitude()
-            }
-            Location.objects.create(**location_data)
-            print(f"\tSuccessfully created Location for Profile: {profile}")
 
         setting_data = {
             "user": user,

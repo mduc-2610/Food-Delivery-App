@@ -11,6 +11,10 @@ class TIcon {
   static IconData edit = Icons.edit;
   static IconData delete = Icons.delete;
   static IconData check = Icons.check;
+  static IconData checkCircle = Icons.check_circle;
+  static IconData error = Icons.error;
+  static IconData info = Icons.info;
+  static IconData warning = Icons.warning;
   static IconData add = Icons.add;
   static IconData call = Icons.call;
   static IconData message = Icons.message;
@@ -22,6 +26,8 @@ class TIcon {
   static IconData person = Icons.person;
   static IconData shipping = Icons.local_shipping_rounded;
   static IconData delivery = Icons.delivery_dining_rounded;
+  static IconData email = Icons.email_rounded;
+
   // Login
   static String googleIcon = "assets/icons/login/google_icon.svg";
   static String facebookIcon = "assets/icons/login/facebook_icon.svg";

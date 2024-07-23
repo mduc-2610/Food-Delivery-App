@@ -1,36 +1,74 @@
-from django.core.validators import RegexValidator
-from rest_framework import serializers
-
-from account.models import User, OTP
 import random
+from django.core.validators import RegexValidator
 from django.utils import timezone
 
+from rest_framework import serializers
+
+from account.models import User, OTP, Location
+
+from utils.regex_validators import phone_regex, password_regex
+
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = ['id', 'address', 'latitude', 'longitude']
+
 class UserSerializer(serializers.ModelSerializer):
+    locations = LocationSerializer(many=True, read_only=True)
+
     class Meta:
         model = User
         fields = "__all__"
 
+class OTPSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OTP
+        fields = "__all__"
+        extra_kwargs = {
+            "id": {"read_only": True}
+        }
+
 class SendOTPSerializer(serializers.Serializer):
-    phone_regex = RegexValidator(
-        regex=r"\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$",
-        message="Phone number must be entered in the format: +999999999. Up to 15 digits allowed."
-    )
-    phone_number = serializers.CharField(validators=[phone_regex], max_length=16)
+    phone_number = serializers.CharField(validators=[phone_regex], max_length=16, write_only=True)
+    
+    def validate(self, data):
+        phone_number = data.get("phone_number")
+        otp = OTP.objects.filter(user__phone_number=phone_number).first()
+
+        if otp and not otp.has_expired():
+            raise serializers.ValidationError("OTP is still valid.")
+        
+        return data
 
     def create(self, validated_data):
-        phone_number = validated_data["phone_number"]
+        phone_number = validated_data.get("phone_number")
         user, created = User.objects.get_or_create(phone_number=phone_number)
         code = str(random.randint(1000, 9999))
-        if created:
-            otp = OTP.objects.create(user=user, code=code)
-        else:
-            otp = OTP.objects.filter(user=user).first()
-            if otp:
-                otp.code = code
-                otp.save()
-            else:
-                otp = OTP.objects.create(user=user, code=code)
-        return otp
+        otp, created_otp = OTP.objects.get_or_create(user=user, defaults={'code': code})
+        """
+        Key Differences
+        Field Specification for Creation:
+
+        With defaults: You can specify fields that should be set when creating a new record but not required for looking up the record. This is useful when you only want to look up based on some fields but set additional fields on creation.
+        Without defaults: Both fields are used for looking up the existing record and for setting the fields of the new record if none is found.
+        Field Constraints:
+
+        With defaults: Only the fields passed as part of the lookup parameters (user in this case) are used to search for existing records. The defaults parameter is used only if a new record is created.
+        Without defaults: Both lookup fields (user and code) are used to find an existing record. The combination must be unique or suitable for the application’s needs.
+        Example Scenario
+        With defaults: You want to ensure that if a record for a user exists, you only update the code if the record doesn’t already have it. For instance, you may want to update the OTP code every time a new OTP is generated.
+
+        Without defaults: You want to ensure that the combination of user and code is unique. This approach would be used if you want to enforce a unique constraint on the combination of user and code.
+        """
+        
+        if not created_otp:
+            otp.code = code
+            otp.save()
+        
+        return {
+            'otp': OTPSerializer(otp).data,
+            'user': UserSerializer(user).data
+        }
 
 
 class VerifyOTPSerializer(serializers.Serializer):
@@ -51,8 +89,9 @@ class VerifyOTPSerializer(serializers.Serializer):
 
         if not is_login:
             self._validate_registration(user)
-        else:
-            self._validate_login(user)
+        # else:
+        #     self._validate_login(user)
+        user.save()
 
         return data
 
@@ -60,20 +99,18 @@ class VerifyOTPSerializer(serializers.Serializer):
         """Validate the user's registration status."""
         if user.is_registration_verified and user.password:
             raise serializers.ValidationError("User's phone number has already been registered.")
-        user.is_otp_verified = True
-        user.save()
-
-    def _validate_login(self, user):
-        """Validate the user's login status."""
-        if not user.is_registration_verified and not user.password:
-            raise serializers.ValidationError("User's phone number has not been registered yet.")
+        
+    # def _validate_login(self, user):
+    #     """Validate the user's login status."""
+    #     if not user.is_registration_verified and not user.password:
+    #         raise serializers.ValidationError("User's phone number has not been registered yet.")
         
 
-class RegisterSerializer(serializers.ModelSerializer):
-    password_regex = RegexValidator(
-        regex=r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$",
-        message="Password must contain at least 8 characters, including uppercase, lowercase letters, and numbers."
-    )
+class LoginPasswordSerializer(serializers.Serializer):
+    phone_number = serializers.CharField(validators=[phone_regex], max_length=16)
+    password = serializers.CharField(write_only=True)
+
+class SetPasswordSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(
         write_only=True,
         validators=[password_regex]
@@ -99,14 +136,11 @@ class RegisterSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if data["password1"] != data["password2"]:
             raise serializers.ValidationError("Passwords do not match.")
-        if not data["user"].is_otp_verified:
-            raise serializers.ValidationError("User's phone number is not verified.")
         return data
     
     def create(self, validated_data):
         user = validated_data["user"]
         user.set_password(validated_data["password1"])
         user.is_registration_verified = True
-        user.is_otp_verified = False
         user.save()
         return user

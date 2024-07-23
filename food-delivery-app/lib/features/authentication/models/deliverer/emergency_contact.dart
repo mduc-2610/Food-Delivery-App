@@ -1,17 +1,17 @@
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-class EmergencyContact {
+class DelivererEmergencyContact {
   final String? name;
   final String? relationship;
   final String? phoneNumber;
 
-  EmergencyContact({
+  DelivererEmergencyContact({
     required this.name,
     required this.relationship,
     required this.phoneNumber,
   });
 
-  EmergencyContact.fromJson(Map<String, dynamic> json)
+  DelivererEmergencyContact.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         relationship = json['relationship'],
         phoneNumber = json['phone_number'];
@@ -26,7 +26,7 @@ class EmergencyContact {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('EmergencyContact', {
+    return THelperFunction.formatToString('DelivererEmergencyContact', {
       'name': name,
       'relationship': relationship,
       'phoneNumber': phoneNumber,

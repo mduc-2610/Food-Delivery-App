@@ -4,7 +4,7 @@ import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/dialogs/show_success_dialog.dart';
 import 'package:food_delivery_app/features/user/order/views/rating/widgets/meal_rating_card.dart';
 import 'package:food_delivery_app/features/user/order/views/rating/widgets/rating_bottom.dart';
-import 'package:food_delivery_app/utils/constants/emoji.dart';
+import 'package:food_delivery_app/utils/constants/emojis.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 

@@ -20,7 +20,7 @@ def generate_phone_number():
 
 def load_order(
     max_promotions=0, max_order_promotions=0, max_restaurant_promotions=0, max_user_promotions=0,
-    max_orders=0, max_deliverers=0, 
+    max_orders=0, max_deliveries=0,
     max_carts=0, max_dishes=0
 ):
     model_list = [
@@ -112,23 +112,26 @@ def load_order(
 
     print("________________________________________________________________")
     print("DELIVERIES:")
-    for _ in range(max_deliverers):
-        delivery_data = {
-            "order": random.choice(order_list),
-            "deliverer": random.choice(deliverer_list),
-            "pickup_location": fake.address(),
-            "pickup_lat": fake.latitude(),
-            "pickup_long": fake.longitude(),
-            "dropoff_location": fake.address(),
-            "dropoff_lat": fake.latitude(),
-            "dropoff_long": fake.longitude(),
-            "status": random.choice(['FINDING_DRIVER', 'ON_THE_WAY', 'DELIVERED']),
-            "estimated_delivery_time": fake.date_time_this_year(),
-            "actual_delivery_time": fake.date_time_this_year()
+    load_intermediate_model(
+        model_class=Delivery,
+        primary_field='order',
+        related_field='deliverer',
+        primary_objects=order_list,
+        related_objects=deliverer_list,
+        max_items=max_deliveries,
+        attributes={
+            "pickup_location": fake.address,
+            "pickup_lat": fake.latitude,
+            "pickup_long": fake.longitude,
+            "dropoff_location": fake.address,
+            "dropoff_lat": fake.latitude,
+            "dropoff_long": fake.longitude,
+            "status": lambda: random.choice(['FINDING_DRIVER', 'ON_THE_WAY', 'DELIVERED']),
+            "estimated_delivery_time": fake.date_time_this_year,
+            "actual_delivery_time": fake.date_time_this_year
         }
-        delivery = Delivery.objects.create(**delivery_data)
-        print(f"\tSuccessfully created Delivery: {delivery}")
-    
+    )
+
     print("________________________________________________________________")
     print("ORDER PROMOTIONS:")
     load_intermediate_model(

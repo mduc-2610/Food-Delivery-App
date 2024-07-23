@@ -1,7 +1,7 @@
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-class Setting {
+class UserSetting {
   final User? user;
   final bool? notification;
   final bool? darkMode;
@@ -9,7 +9,7 @@ class Setting {
   final bool? automaticallyUpdated;
   final String? language;
 
-  Setting({
+  UserSetting({
     required this.user,
     required this.notification,
     required this.darkMode,
@@ -18,7 +18,7 @@ class Setting {
     required this.language,
   });
 
-  Setting.fromJson(Map<String, dynamic> json)
+  UserSetting.fromJson(Map<String, dynamic> json)
       : user = User.fromJson(json['user']),
         notification = json['notification'],
         darkMode = json['dark_mode'],
@@ -39,7 +39,7 @@ class Setting {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('Setting', {
+    return THelperFunction.formatToString('UserSetting', {
       'user': user,
       'notification': notification,
       'darkMode': darkMode,
@@ -50,21 +50,21 @@ class Setting {
   }
 }
 
-class SecuritySetting {
-  final Setting? setting;
+class UserSecuritySetting {
+  final UserSetting? setting;
   final bool? faceId;
   final bool? touchId;
   final bool? pinSecurity;
 
-  SecuritySetting({
+  UserSecuritySetting({
     required this.setting,
     required this.faceId,
     required this.touchId,
     required this.pinSecurity,
   });
 
-  SecuritySetting.fromJson(Map<String, dynamic> json)
-      : setting = Setting.fromJson(json['setting']),
+  UserSecuritySetting.fromJson(Map<String, dynamic> json)
+      : setting = UserSetting.fromJson(json['setting']),
         faceId = json['face_id'],
         touchId = json['touch_id'],
         pinSecurity = json['pin_security'];
@@ -80,7 +80,7 @@ class SecuritySetting {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('SecuritySetting', {
+    return THelperFunction.formatToString('UserSecuritySetting', {
       'setting': setting,
       'faceId': faceId,
       'touchId': touchId,

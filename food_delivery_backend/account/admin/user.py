@@ -5,3 +5,8 @@ class UserAdmin(admin.ModelAdmin):
     
 class OTPAdmin(admin.ModelAdmin):
     list_display = ['user', 'code', 'expired_at']
+
+    
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ['user', 'address', 'latitude', 'longitude']
+    search_fields = ['address', 'user__name', 'user__phone_number']

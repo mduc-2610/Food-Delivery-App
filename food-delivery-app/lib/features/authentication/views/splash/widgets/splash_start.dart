@@ -20,8 +20,6 @@ class SplashStart extends StatelessWidget {
               right: 0,
               child: Obx(() => LinearProgressIndicator(
                 value: _controller.progress.value,
-                backgroundColor: Colors.white,
-                color: Colors.orange[900],
               )),
             ),
           ],

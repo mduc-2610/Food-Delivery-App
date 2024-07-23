@@ -47,7 +47,8 @@ class TColor {
   // Button Colors
   static const Color buttonPrimary = Color(0xffff6347);
   static const Color buttonSecondary = Color(0xFF4b68ff);
-  static const Color buttonDisabled = Color(0xFFffcfc6);
+  // static const Color buttonDisabled = Color(0xFFffcfc6);
+  static  Color buttonDisabled = Colors.green.withOpacity(0.3);
 
   // Border Colors
   static const Color borderPrimary = Color(0xFFe9eaeb);

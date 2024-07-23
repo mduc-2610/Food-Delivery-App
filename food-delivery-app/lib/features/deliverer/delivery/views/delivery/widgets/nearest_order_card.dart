@@ -38,7 +38,7 @@ class NearestOrderCard extends StatelessWidget {
               onPressed: onPressed,
               child: Text('Accept'),
               style: ElevatedButton.styleFrom(
-                primary: Colors.green,
+                // primary: Colors.green,
                 minimumSize: Size(double.infinity, 36),
               ),
             ),

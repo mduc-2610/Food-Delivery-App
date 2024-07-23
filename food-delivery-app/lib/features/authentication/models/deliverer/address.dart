@@ -1,19 +1,19 @@
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-class Address {
+class DelivererAddress {
   final String? city;
   final String? district;
   final String? ward;
   final String? detailAddress;
 
-  Address({
+  DelivererAddress({
     required this.city,
     required this.district,
     required this.ward,
     required this.detailAddress,
   });
 
-  Address.fromJson(Map<String, dynamic> json)
+  DelivererAddress.fromJson(Map<String, dynamic> json)
       : city = json['city'],
         district = json['district'],
         ward = json['ward'],
@@ -30,7 +30,7 @@ class Address {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('Address', {
+    return THelperFunction.formatToString('DelivererAddress', {
       'city': city,
       'district': district,
       'ward': ward,

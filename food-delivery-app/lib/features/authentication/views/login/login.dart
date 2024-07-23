@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:food_delivery_app/features/authentication/controllers/login/login_controller.dart';
+import 'package:food_delivery_app/features/authentication/controllers/login/auth_controller.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -10,7 +10,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  final LoginController _controller = Get.put(LoginController());
+  final AuthController _controller = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {

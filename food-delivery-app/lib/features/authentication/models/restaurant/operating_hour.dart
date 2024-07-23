@@ -1,19 +1,19 @@
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-class OperatingHour {
+class RestaurantOperatingHour {
   final String? detailInformationId;
   final String? dayOfWeek;
   final String? openTime;
   final String? closeTime;
 
-  OperatingHour({
+  RestaurantOperatingHour({
     required this.detailInformationId,
     required this.dayOfWeek,
     required this.openTime,
     required this.closeTime,
   });
 
-  OperatingHour.fromJson(Map<String, dynamic> json)
+  RestaurantOperatingHour.fromJson(Map<String, dynamic> json)
       : detailInformationId = json['detail_information'],
         dayOfWeek = json['day_of_week'],
         openTime = json['open_time'],
@@ -30,7 +30,7 @@ class OperatingHour {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('OperatingHour', {
+    return THelperFunction.formatToString('RestaurantOperatingHour', {
       'detailInformationId': detailInformationId,
       'dayOfWeek': dayOfWeek,
       'openTime': openTime,

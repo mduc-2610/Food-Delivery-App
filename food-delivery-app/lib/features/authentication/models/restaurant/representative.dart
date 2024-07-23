@@ -1,6 +1,6 @@
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-class Representative {
+class RestaurantRepresentative {
   final String? registrationType;
   final String? fullName;
   final String? email;
@@ -10,7 +10,7 @@ class Representative {
   final String? idBackImage;
   final String? businessRegistrationImage;
 
-  Representative({
+  RestaurantRepresentative({
     required this.registrationType,
     required this.fullName,
     required this.email,
@@ -21,7 +21,7 @@ class Representative {
     required this.businessRegistrationImage,
   });
 
-  Representative.fromJson(Map<String, dynamic> json)
+  RestaurantRepresentative.fromJson(Map<String, dynamic> json)
       : registrationType = json['registration_type'],
         fullName = json['full_name'],
         email = json['email'],
@@ -46,7 +46,7 @@ class Representative {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('Representative', {
+    return THelperFunction.formatToString('RestaurantRepresentative', {
       'registrationType': registrationType,
       'fullName': fullName,
       'email': email,

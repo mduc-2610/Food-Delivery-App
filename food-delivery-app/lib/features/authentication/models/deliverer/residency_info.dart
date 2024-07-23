@@ -1,6 +1,6 @@
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-class ResidencyInfo {
+class DelivererResidencyInfo {
   final bool? isSameAsCi;
   final String? city;
   final String? district;
@@ -9,7 +9,7 @@ class ResidencyInfo {
   final String? taxCode;
   final String? email;
 
-  ResidencyInfo({
+  DelivererResidencyInfo({
     required this.isSameAsCi,
     required this.city,
     required this.district,
@@ -19,7 +19,7 @@ class ResidencyInfo {
     required this.email,
   });
 
-  ResidencyInfo.fromJson(Map<String, dynamic> json)
+  DelivererResidencyInfo.fromJson(Map<String, dynamic> json)
       : isSameAsCi = json['is_same_as_ci'],
         city = json['city'],
         district = json['district'],
@@ -42,7 +42,7 @@ class ResidencyInfo {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('ResidencyInfo', {
+    return THelperFunction.formatToString('DelivererResidencyInfo', {
       'isSameAsCi': isSameAsCi,
       'city': city,
       'district': district,

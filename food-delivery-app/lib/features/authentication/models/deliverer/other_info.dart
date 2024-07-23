@@ -1,17 +1,17 @@
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-class OtherInfo {
+class DelivererOtherInfo {
   final String? occupation;
   final String? details;
   final String? judicialRecord;
 
-  OtherInfo({
+  DelivererOtherInfo({
     required this.occupation,
     required this.details,
     required this.judicialRecord,
   });
 
-  OtherInfo.fromJson(Map<String, dynamic> json)
+  DelivererOtherInfo.fromJson(Map<String, dynamic> json)
       : occupation = json['occupation'],
         details = json['details'],
         judicialRecord = json['judicial_record'];
@@ -26,7 +26,7 @@ class OtherInfo {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('OtherInfo', {
+    return THelperFunction.formatToString('DelivererOtherInfo', {
       'occupation': occupation,
       'details': details,
       'judicialRecord': judicialRecord,

@@ -11,13 +11,13 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 class Deliverer {
   final String id;
   final User? user;
-  final BasicInfo? basicInfo;
-  final ResidencyInfo? residencyInfo;
-  final DriverLicense? driverLicenseAndVehicle;
-  final OtherInfo? otherInfo;
-  final Address? address;
-  final OperationInfo? operationInfo;
-  final EmergencyContact? emergencyContact;
+  final DelivererBasicInfo? basicInfo;
+  final DelivererResidencyInfo? residencyInfo;
+  final DelivererDriverLicense? driverLicenseAndVehicle;
+  final DelivererOtherInfo? otherInfo;
+  final DelivererAddress? address;
+  final DelivererOperationInfo? operationInfo;
+  final DelivererEmergencyContact? emergencyContact;
 
   Deliverer({
     required this.id,
@@ -34,13 +34,13 @@ class Deliverer {
   Deliverer.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         user = json['user'] != null ? User.fromJson(json['user']) : null,
-        basicInfo = json['basic_info'] != null ? BasicInfo.fromJson(json['basic_info']) : null,
-        residencyInfo = json['residency_info'] != null ? ResidencyInfo.fromJson(json['residency_info']) : null,
-        driverLicenseAndVehicle = json['driver_license_and_vehicle'] != null ? DriverLicense.fromJson(json['driver_license_and_vehicle']) : null,
-        otherInfo = json['other_info'] != null ? OtherInfo.fromJson(json['other_info']) : null,
-        address = json['address'] != null ? Address.fromJson(json['address']) : null,
-        operationInfo = json['operation_info'] != null ? OperationInfo.fromJson(json['operation_info']) : null,
-        emergencyContact = json['emergency_contact'] != null ? EmergencyContact.fromJson(json['emergency_contact']) : null;
+        basicInfo = json['basic_info'] != null ? DelivererBasicInfo.fromJson(json['basic_info']) : null,
+        residencyInfo = json['residency_info'] != null ? DelivererResidencyInfo.fromJson(json['residency_info']) : null,
+        driverLicenseAndVehicle = json['driver_license_and_vehicle'] != null ? DelivererDriverLicense.fromJson(json['driver_license_and_vehicle']) : null,
+        otherInfo = json['other_info'] != null ? DelivererOtherInfo.fromJson(json['other_info']) : null,
+        address = json['address'] != null ? DelivererAddress.fromJson(json['address']) : null,
+        operationInfo = json['operation_info'] != null ? DelivererOperationInfo.fromJson(json['operation_info']) : null,
+        emergencyContact = json['emergency_contact'] != null ? DelivererEmergencyContact.fromJson(json['emergency_contact']) : null;
 
   Map<String, dynamic> toJson() {
     return {

@@ -1,19 +1,19 @@
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-class OperationInfo {
+class DelivererOperationInfo {
   final String? city;
   final String? operationType;
   final String? operationalArea;
   final String? operationalTime;
 
-  OperationInfo({
+  DelivererOperationInfo({
     required this.city,
     required this.operationType,
     required this.operationalArea,
     required this.operationalTime,
   });
 
-  OperationInfo.fromJson(Map<String, dynamic> json)
+  DelivererOperationInfo.fromJson(Map<String, dynamic> json)
       : city = json['city'],
         operationType = json['operation_type'],
         operationalArea = json['operational_area'],
@@ -30,7 +30,7 @@ class OperationInfo {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('OperationInfo', {
+    return THelperFunction.formatToString('DelivererOperationInfo', {
       'city': city,
       'operationType': operationType,
       'operationalArea': operationalArea,

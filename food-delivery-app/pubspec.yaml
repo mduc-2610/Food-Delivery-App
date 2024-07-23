@@ -47,9 +47,11 @@ dependencies:
   google_maps_flutter: ^2.5.0
   geocoding: ^2.0.0
   fl_chart: ^0.68.0
-  flutter_local_notifications: ^9.1.5
-  timezone: ^0.8.0
+  timezone: ^0.9.0
   json_annotation: ^4.9.0
+  another_flushbar: ^1.10.28
+  top_snackbar: ^0.0.6
+  shared_preferences: ^2.2.3
 
   # Icons
   iconsax: ^0.0.8
@@ -69,6 +71,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  mockito: ^5.0.16
+  build_runner: ^2.1.7
 
 
 # For information on the generic Dart part of this file, see the

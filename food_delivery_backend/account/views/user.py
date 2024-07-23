@@ -1,23 +1,41 @@
 import random
+
+from django.db import transaction
+from django.utils import timezone
 from django.shortcuts import render
+from django.contrib.auth import authenticate
+
 from rest_framework import (
     views, response,
     status, viewsets
 )
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import action
-from account.throttles import OTPThrottle
-from account.models import User, OTP
-from account.serializers import (
-    UserSerializer, SendOTPSerializer,
-    VerifyOTPSerializer, RegisterSerializer
-)
+from rest_framework.permissions import IsAuthenticated
 
-from django.utils import timezone
+from account.models import (
+    User, OTP, Location,
+    Profile, Setting, SecuritySetting
+)
+from account.serializers import (
+    UserSerializer, SendOTPSerializer, OTPSerializer, LocationSerializer,
+    VerifyOTPSerializer, LoginPasswordSerializer, SetPasswordSerializer
+)
+from account.throttles import OTPThrottle
+
+from utils.pagination import CustomPagination
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = []
+    pagination_class = CustomPagination
 
+    def get_permissions(self):
+        # if self.action in ["list", "retrieve"]:
+        #     return [IsAuthenticated()]
+        return super().get_permissions()
+    
     def get_throttles(self):
         # if self.action == "send_otp":
             # return [OTPThrottle()]
@@ -28,29 +46,56 @@ class UserViewSet(viewsets.ModelViewSet):
             return SendOTPSerializer
         elif self.action == "verify_otp":
             return VerifyOTPSerializer
-        elif self.action == "register":
-            return RegisterSerializer
+        elif self.action == "set_password":
+            return SetPasswordSerializer
+        elif self.action == "login_password":
+            return LoginPasswordSerializer
         return super().get_serializer_class()
+
+    @action(detail=False, methods=["POST"], url_path="login-password")
+    def login_password(self, request):
+        phone_number = request.data.get("phone_number")
+        password = request.data.get("password")
+        user = authenticate(phone_number=phone_number, password=password)
+        
+        if not user:
+            return response.Response(
+                {
+                    "message": "Invalid phone number or password."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        refresh = RefreshToken.for_user(user)
+        return response.Response(
+            {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            },
+            status=status.HTTP_200_OK
+        )
 
     @action(detail=False, methods=["POST"], url_path="send-otp")
     def send_otp(self, request):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        otp = serializer.save()
-        
+        if serializer.is_valid():
+            instance = serializer.save()
+            return response.Response(
+                {
+                    "message": "OTP sent successfully.",
+                    "data": instance
+                },
+                status=status.HTTP_200_OK
+            )
         return response.Response(
-            {
-                "message": "OTP sent successfully.",
-                "code": otp.code,
-                "now": timezone.now().astimezone(timezone.get_current_timezone()).strftime("%Y-%m-%d %H:%M:%S %Z"),
-                "expired_at": otp.expired_at.astimezone(timezone.get_current_timezone()).strftime("%Y-%m-%d %H:%M:%S %Z")
-            },
-            status=status.HTTP_200_OK
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
         )
-    
+        
     @action(detail=False, methods=["POST"], url_path="verify-otp")
     def verify_otp(self, request):
         user = request.data.get("user")
+        user = User.objects.get(id=user)
         otp_exists = OTP.objects.filter(user=user).exists()
 
         """
@@ -67,16 +112,18 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             if user.password:
+                refresh = RefreshToken.for_user(user)
                 return response.Response(
                     {
-                        "message": "OTP verified successfully."
+                        "refresh": str(refresh),
+                        "access": str(refresh.access_token),
                     },
-                    status=status.HTTP_200_OK
+                    status=status.HTTP_201_CREATED
                 )
             else:
                 return response.Response(
                     {
-                        "message": "OTP verified successfully. Please set your password."
+                        "message": "Verification successful! Please set your password."
                     },
                     status=status.HTTP_200_OK
                 )
@@ -85,14 +132,24 @@ class UserViewSet(viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
     
-    @action(detail=False, methods=["POST"], url_path="register")
-    def register(self, request):
+    @action(detail=False, methods=["POST"], url_path="set-password")
+    def set_password(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+            with transaction.atomic():
+                profile, created_profile = Profile.objects.get_or_create(user=user)
+                
+                if created_profile or not hasattr(user, 'setting'):
+                    setting, created_setting = Setting.objects.get_or_create(user=user)
+                    if created_setting:
+                        SecuritySetting.objects.get_or_create(setting=setting)
+                
+            refresh = RefreshToken.for_user(user)
             return response.Response(
                 {
-                    "message": "User registered successfully."
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token),
                 },
                 status=status.HTTP_201_CREATED
             )
@@ -100,4 +157,7 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
-    
+
+class LocationViewSet(viewsets.ModelViewSet):
+    queryset = Location.objects.all()
+    serializer_class = LocationSerializer

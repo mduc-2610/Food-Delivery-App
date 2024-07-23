@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
+import 'package:food_delivery_app/common/widgets/fields/date_picker.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
+import 'package:food_delivery_app/common/widgets/misc/profile_picture_selection.dart';
+import 'package:food_delivery_app/features/authentication/controllers/login/auth_controller.dart';
 import 'package:food_delivery_app/features/authentication/controllers/profile/profile_controller.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
+import 'package:food_delivery_app/utils/validators/validators.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class ProfileView extends StatelessWidget {
   final ProfileController _controller = Get.put(ProfileController());
+  final AuthController _authController = AuthController.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,21 +33,79 @@ class ProfileView extends StatelessWidget {
               children: [
                 MainWrapper(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      ProfilePictureSection(controller: _controller),
+                      ProfilePictureSelection(onPressed: _controller.handleAddImage),
                       SizedBox(height: TSize.spaceBetweenSections),
-                      PhoneNumberInput(),
+
+                      InternationalPhoneNumberInput(
+                        onInputChanged: null,
+                        isEnabled: false,
+                        initialValue: _authController.phoneNumber.value,
+                        textFieldController: TextEditingController(text: THelperFunction.getPhoneNumber(_authController.phoneNumber.value, excludePrefix: true)),
+                      ),
                       SizedBox(height: TSize.spaceBetweenInputFields),
-                      EmailInput(),
-                      SizedBox(height: TSize.spaceBetweenInputFields),
-                      NameInput(),
-                      SizedBox(height: TSize.spaceBetweenInputFields),
-                      DateOfBirthInput(),
-                      SizedBox(height: TSize.spaceBetweenInputFields),
-                      GenderDropdown(),
-                      SizedBox(height: TSize.spaceBetweenInputFields),
-                      LocationInput(),
+
+                      Form(
+                        key: _controller.formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextFormField(
+                              controller: _controller.emailController,
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(TIcon.email),
+                                labelText: 'Email',
+                              ),
+                              validator: TValidator.validateEmail,
+                            ),
+                            SizedBox(height: TSize.spaceBetweenInputFields),
+
+                            TextFormField(
+                              controller: _controller.nameController,
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(TIcon.person),
+                                labelText: 'Name',
+                              ),
+                              validator: TValidator.validateTextField,
+                            ),
+                            SizedBox(height: TSize.spaceBetweenInputFields),
+
+                            CDatePicker(
+                              controller: _controller.dateController,
+                              xcontroller: _controller,
+                              labelText: 'Date of birth',
+                              hintText: "dd/MM/yyyy",
+                              datePattern: 'dd/MM/yyyy',
+                              validator: TValidator.validateTextField,
+                            ),
+                            SizedBox(height: TSize.spaceBetweenInputFields),
+
+                            DropdownButtonFormField2<String>(
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.person_outline),
+                              ),
+                              dropdownStyleData: DropdownStyleData(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
+                                ),
+                              ),
+                              items: [
+                                DropdownMenuItem(
+                                  child: Text("Male"),
+                                  value: "male",
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("Female"),
+                                  value: "female",
+                                ),
+                              ],
+                              onChanged: _controller.onGenderChange,
+                              hint: Text("Gender"),
+                              validator: TValidator.validateTextField,
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -48,17 +115,17 @@ class ProfileView extends StatelessWidget {
           SliverFillRemaining(
             hasScrollBody: false,
             child: MainWrapper(
-              bottomMargin: TSize.md,
+              bottomMargin: 30,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   MainButton(
-                    onPressed: _controller.homeRedirect,
+                    onPressed: _controller.handleContinue,
                     text: "Continue",
                   ),
                   SizedBox(height: TSize.spaceBetweenItemsVertical),
                   MainButton(
-                    onPressed: _controller.skip,
+                    onPressed: _controller.handleSkip,
                     text: "Skip",
                     isElevatedButton: false,
                   ),
@@ -67,144 +134,6 @@ class ProfileView extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class ProfilePictureSection extends StatelessWidget {
-  final ProfileController controller;
-  ProfilePictureSection({required this.controller});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(TSize.md),
-      decoration: BoxDecoration(
-        color: TColor.inputLightBackgroundColor,
-        borderRadius: BorderRadius.circular(TSize.borderRadiusCircle),
-      ),
-      child: Stack(
-        alignment: Alignment.topRight,
-        children: [
-          Icon(
-            Icons.person_rounded,
-            size: 125,
-            color: TColor.textDesc,
-          ),
-          IconButton(
-            icon: Icon(Icons.camera_alt_rounded, color: Colors.redAccent, size: TSize.xl),
-            onPressed: controller.handleAddImage,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class PhoneNumberInput extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return InternationalPhoneNumberInput(
-      onInputChanged: (s) {},
-
-    );
-  }
-}
-
-class EmailInput extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      initialValue: 'thomas.abc.inc@gmail.com',
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.email),
-        labelText: 'Email',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-    );
-  }
-}
-
-class NameInput extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      initialValue: 'Thomas K. Wilson',
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.person),
-        labelText: 'Name',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-    );
-  }
-}
-
-class DateOfBirthInput extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      keyboardType: TextInputType.datetime,
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.calendar_today),
-        labelText: 'Date of Birth',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-    );
-  }
-}
-
-class GenderDropdown extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButtonFormField2<String>(
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.person_outline),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-      dropdownStyleData: DropdownStyleData(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
-        ),
-      ),
-      items: [
-        DropdownMenuItem(
-          child: Text("Male"),
-          value: "male",
-        ),
-        DropdownMenuItem(
-          child: Text("Female"),
-          value: "female",
-        ),
-        DropdownMenuItem(
-          child: Text("Other"),
-          value: "other",
-        ),
-      ],
-      onChanged: (value) {},
-      hint: Text("Gender"),
-    );
-  }
-}
-
-class LocationInput extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.location_on),
-        labelText: 'Your Location',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
       ),
     );
   }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
-import 'package:food_delivery_app/features/authentication/controllers/login/login_controller.dart';
+import 'package:food_delivery_app/features/authentication/controllers/login/auth_controller.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
@@ -21,10 +21,10 @@ class LoginOauth extends StatefulWidget {
 }
 
 class _LoginOauthState extends State<LoginOauth> {
-  final LoginController _controller = LoginController.instance;
+  final AuthController _controller = AuthController.instance;
 
   late String buttonText;
-  late VoidCallback onPressed;
+  late VoidCallback? onPressed;
   late VoidCallback onTap;
   late String text1, text2;
 
@@ -32,7 +32,6 @@ class _LoginOauthState extends State<LoginOauth> {
   void initState() {
     bool isLogin = widget.isLogin;
     buttonText = (isLogin) ? "Sign in" : "Register";
-    onPressed = (isLogin) ? _controller.handleLogin : _controller.handleRegister;
     onTap = (isLogin) ? _controller.showRegisterPage : _controller.showLoginPage;
     text1 = (isLogin) ? "Don't have an account? " : "Already have an account? ";
     text2 = (isLogin) ? "Register" : "Login";
@@ -41,6 +40,7 @@ class _LoginOauthState extends State<LoginOauth> {
 
   @override
   Widget build(BuildContext context) {
+    print(_controller.isRegisterButtonEnabled);
     final List<Map<String, dynamic>> iconPaths = [
       {"icon": TIcon.googleIcon, "onPressed": () {}},
       {"icon": TIcon.facebookIcon, "onPressed": () {}},
@@ -55,10 +55,16 @@ class _LoginOauthState extends State<LoginOauth> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            MainButton(
-              onPressed: onPressed,
+            Obx(() => MainButton(
+              onPressed: (widget.isLogin)
+                  ? (_controller.isLoginButtonEnabled)
+                  ? _controller.handleLogin
+                  : null
+                  : (_controller.isRegisterButtonEnabled)
+                  ? _controller.handleRegister
+                  : null,
               text: buttonText,
-            ),
+            )),
             SizedBox(
               height: TSize.spaceBetweenSections,
             ),
@@ -73,7 +79,7 @@ class _LoginOauthState extends State<LoginOauth> {
                   width: TSize.spaceBetweenItemsVertical,
                 ),
                 Text(
-                  "Or Sign In with",
+                  "Or Login with",
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 SizedBox(
@@ -94,7 +100,7 @@ class _LoginOauthState extends State<LoginOauth> {
               children: [
                 for (int i = 0; i < iconPaths.length; i++) ...[
                   GestureDetector(
-                    onTap: iconPaths[i]["onPressed"], // Ensure to call the correct function
+                    onTap: iconPaths[i]["onPressed"],
                     child: Container(
                       margin: EdgeInsets.only(
                           right: (i < iconPaths.length - 1)
@@ -119,25 +125,25 @@ class _LoginOauthState extends State<LoginOauth> {
             SizedBox(
               height: TSize.spaceBetweenItemsVertical,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  text1,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                GestureDetector(
-                  onTap: onTap,
-                  child: Text(
-                    text2,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(color: TColor.primary),
-                  ),
-                )
-              ],
-            )
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Text(
+            //       text1,
+            //       style: Theme.of(context).textTheme.bodySmall,
+            //     ),
+            //     GestureDetector(
+            //       onTap: onTap,
+            //       child: Text(
+            //         text2,
+            //         style: Theme.of(context)
+            //             .textTheme
+            //             .bodySmall
+            //             ?.copyWith(color: TColor.primary),
+            //       ),
+            //     )
+            //   ],
+            // )
           ],
         ),
       ),

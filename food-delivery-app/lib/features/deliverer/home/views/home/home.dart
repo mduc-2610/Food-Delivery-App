@@ -11,7 +11,7 @@ import 'package:food_delivery_app/features/restaurant/home/views/common/widgets/
 import 'package:food_delivery_app/features/restaurant/home/views/home/widgets/review_summary.dart';
 import 'package:food_delivery_app/common/widgets/cards/food_card_gr.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
-import 'package:food_delivery_app/utils/constants/emoji.dart';
+import 'package:food_delivery_app/utils/constants/emojis.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';

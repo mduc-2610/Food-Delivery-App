@@ -6,6 +6,8 @@ import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
 import 'package:food_delivery_app/common/widgets/misc/sliver_sized_box.dart';
+import 'package:food_delivery_app/data/services/token_service.dart';
+import 'package:food_delivery_app/features/authentication/views/login/login.dart';
 import 'package:food_delivery_app/features/personal/controllers/profile/theme_controller.dart';
 import 'package:food_delivery_app/features/personal/views/profile/widgets/personal_setting.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
@@ -69,7 +71,10 @@ class PersonalProfileView extends StatelessWidget {
                   SizedBox(height: TSize.spaceBetweenItemsVertical,),
 
                   MainButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await TokenService.deleteToken();
+                      Get.offAll(() => LoginView());
+                    },
                     text: "Logout",
                     textColor: TColor.primary,
                     height: TSize.buttonHeight + 6,

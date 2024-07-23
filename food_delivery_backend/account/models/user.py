@@ -1,11 +1,14 @@
+import uuid
 from datetime import timedelta
+
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser, BaseUserManager
 from django.core.validators import RegexValidator, validate_email
 from django.db import models
 from django.utils import timezone
-import uuid
 
 from rest_framework.settings import api_settings
+
+from utils.regex_validators import phone_regex
 
 class UserManager(BaseUserManager):
     def create_user(self, phone_number, password=None):
@@ -26,10 +29,6 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     id = models.UUIDField(db_index=True, primary_key=True, default=uuid.uuid4, editable=False)
-    phone_regex = RegexValidator(
-        regex=r'\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$',
-        message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
-    )
     phone_number = models.CharField(
         max_length=15,
         unique=True,
@@ -47,7 +46,6 @@ class User(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True)
-    is_otp_verified = models.BooleanField(default=False)
     is_registration_verified = models.BooleanField(default=False)
     USERNAME_FIELD = 'phone_number'
 
@@ -81,5 +79,18 @@ class OTP(models.Model):
         self.expired_at = timezone.now() + timedelta(seconds=int(interval))
         super().save(*args, **kwargs)
 
+    def has_expired(self):
+        return timezone.now() > self.expired_at
+
     def __str__(self):
         return f"{self.user} - {self.code}"
+    
+class Location(models.Model):
+    id = models.UUIDField(db_index=True, primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey("account.User", on_delete=models.CASCADE, related_name="locations")
+    address = models.CharField(max_length=300, blank=True, null=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.address} ({self.latitude}, {self.longitude})"

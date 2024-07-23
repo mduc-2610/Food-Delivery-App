@@ -1,6 +1,6 @@
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-class BasicInfo {
+class RestaurantBasicInfo {
   final String? name;
   final String? phoneNumber;
   final String? city;
@@ -8,7 +8,7 @@ class BasicInfo {
   final String? streetAddress;
   final String? mapLocation;
 
-  BasicInfo({
+  RestaurantBasicInfo({
     required this.name,
     required this.phoneNumber,
     required this.city,
@@ -17,7 +17,7 @@ class BasicInfo {
     required this.mapLocation,
   });
 
-  BasicInfo.fromJson(Map<String, dynamic> json)
+  RestaurantBasicInfo.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         phoneNumber = json['phone_number'],
         city = json['city'],
@@ -38,7 +38,7 @@ class BasicInfo {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('BasicInfo', {
+    return THelperFunction.formatToString('RestaurantBasicInfo', {
       'name': name,
       'phoneNumber': phoneNumber,
       'city': city,

@@ -85,7 +85,7 @@ def load_food(
         related_field='user',
         primary_objects=dish_list,
         related_objects=user_list,
-        max_items=0
+        max_items=max_dish_likes,
     )
 
     return dish_list

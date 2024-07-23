@@ -1,50 +1,39 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/data/services/api_service.dart';
+import 'package:food_delivery_app/data/services/token_service.dart';
+import 'package:food_delivery_app/features/authentication/controllers/login/auth_controller.dart';
+import 'package:food_delivery_app/features/authentication/models/auth/token.dart';
+import 'package:food_delivery_app/features/authentication/models/auth/verify_otp.dart';
+import 'package:food_delivery_app/features/authentication/models/message.dart';
+import 'package:food_delivery_app/features/authentication/views/login/password_set.dart';
 import 'package:food_delivery_app/features/authentication/views/login/verification.dart';
 import 'package:food_delivery_app/features/authentication/views/profile/profile.dart';
+import 'package:food_delivery_app/features/user/menu_redirection.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class VerificationController extends GetxController {
-  VerificationController get instance => Get.find();
+  static VerificationController get instance => Get.find();
 
-  var timer = 45.obs;
-  var isCodeSent = false.obs;
-  final int timerDuration;
-  late Timer _countdownTimer;
+  final AuthController _authController = AuthController.instance;
+
   late List<FocusNode> focusNodes;
   late List<TextEditingController> controllers;
 
-  @override
-  void onInit() {
-    startTimer();
-    super.onInit();
-  }
-
-  VerificationController({this.timerDuration = 45}) {
+  VerificationController() {
     focusNodes = List.generate(4, (index) => FocusNode());
     controllers = List.generate(4, (index) => TextEditingController());
   }
 
-  void startTimer() {
-    timer.value = timerDuration;
-    isCodeSent.value = true;
-
-    _countdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (this.timer.value == 0) {
-        stopTimer();
-        isCodeSent.value = false;
-      } else {
-        this.timer.value--;
-      }
-    });
-  }
-
-  void stopTimer() {
-    _countdownTimer.cancel();
-  }
-
   void handleInputChange(String value, int index) {
+    int caretOffSet = controllers[index].selection.baseOffset;
     if (value.isNotEmpty) {
+      $print("$value: ${controllers[index].text}: ${caretOffSet}");
+      controllers[index].text = caretOffSet == 1
+          ? value[0] : value[value.length - 1];
       if (index < 3) {
         focusNodes[index + 1].requestFocus();
       } else {
@@ -53,8 +42,48 @@ class VerificationController extends GetxController {
     }
   }
 
-  void handleVerify() {
-    Get.to(() => ProfileView());
+  void handleVerify() async {
+    final verifyOTPData = VerifyOTP(
+      code: controllers.map((controller) => controller.text).join(''),
+      user: _authController.user.id!,
+      isLogin: true,
+    );
+    final [statusCode, headers, body] = await callCreateAPI(
+        "account/user/verify-otp",
+        verifyOTPData.toJson(),
+        "",
+        fullResponse: true,
+    );
+
+    if(statusCode == 400) {
+      THelperFunction.showCSnackBar(Get.context!, body["non_field_errors"][0], SnackBarType.error);
+    }
+    else {
+      if(!_authController.isForgotPassword.value) {
+        if(statusCode == 201) {
+          await TokenService.saveToken(Token.fromJson(body));
+          Get.offAll(() => UserMenuRedirection());
+        }
+        else if(statusCode == 200){
+          final message = RMessage(message: body["message"] ?? "");
+          Get.to(() => PasswordSetView());
+          THelperFunction.showCSnackBar(
+              Get.context!,
+              message.message,
+              SnackBarType.success
+          );
+        }
+      } else {
+        Get.to(() => PasswordSetView());
+        THelperFunction.showCSnackBar(
+            Get.context!,
+            "Verification successful! You can now reset your password.",
+            SnackBarType.success,
+            duration: 5
+        );
+      }
+      $print(body);
+    }
   }
 
   void loginRedirect() {

@@ -1,13 +1,13 @@
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-class DriverLicense {
+class DelivererDriverLicense {
   final String? licenseFront;
   final String? licenseBack;
   final String? vehicleType;
   final String? licensePlate;
   final String? registrationCertificate;
 
-  DriverLicense({
+  DelivererDriverLicense({
     required this.licenseFront,
     required this.licenseBack,
     required this.vehicleType,
@@ -15,7 +15,7 @@ class DriverLicense {
     required this.registrationCertificate,
   });
 
-  DriverLicense.fromJson(Map<String, dynamic> json)
+  DelivererDriverLicense.fromJson(Map<String, dynamic> json)
       : licenseFront = json['license_front'],
         licenseBack = json['license_back'],
         vehicleType = json['vehicle_type'],
@@ -34,7 +34,7 @@ class DriverLicense {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('DriverLicense', {
+    return THelperFunction.formatToString('DelivererDriverLicense', {
       'licenseFront': licenseFront,
       'licenseBack': licenseBack,
       'vehicleType': vehicleType,
