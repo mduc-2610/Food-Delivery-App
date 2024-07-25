@@ -21,6 +21,11 @@ from account.serializers import (
     UserSerializer, SendOTPSerializer, OTPSerializer, LocationSerializer,
     VerifyOTPSerializer, LoginPasswordSerializer, SetPasswordSerializer
 )
+from food.serializers import DishSerializer
+from notification.serializers import NotificationSerializer
+from order.serializers import PromotionSerializer
+from deliverer.serializers import DelivererSerializer
+
 from account.throttles import OTPThrottle
 
 from utils.pagination import CustomPagination
@@ -30,6 +35,20 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = []
     pagination_class = CustomPagination
+    action_serializer_classes = {
+        'send_otp': SendOTPSerializer,
+        'verify_otp': VerifyOTPSerializer,
+        'set_password': SetPasswordSerializer,
+        'login_password': LoginPasswordSerializer,
+        'rated_dishes': DishSerializer,
+        'liked_dishes': DishSerializer,
+        'rated_deliverers': DelivererSerializer,
+        'promotions': PromotionSerializer,
+        'notifications': NotificationSerializer
+    }
+
+    def get_serializer_class(self):
+        return self.action_serializer_classes.get(self.action, super().get_serializer_class())
 
     def get_permissions(self):
         # if self.action in ["list", "retrieve"]:
@@ -40,17 +59,28 @@ class UserViewSet(viewsets.ModelViewSet):
         # if self.action == "send_otp":
             # return [OTPThrottle()]
         return []
-   
-    def get_serializer_class(self):
-        if self.action == "send_otp":
-            return SendOTPSerializer
-        elif self.action == "verify_otp":
-            return VerifyOTPSerializer
-        elif self.action == "set_password":
-            return SetPasswordSerializer
-        elif self.action == "login_password":
-            return LoginPasswordSerializer
-        return super().get_serializer_class()
+    
+    def get_object(self):
+        pk = self.kwargs.get('pk', None)
+        many_related_queryset = {
+            "liked_dishes": lambda instance: instance.liked_dishes.all(),
+            "notifications": lambda instance: instance.notifications.all(),
+            "promotions": lambda instance: instance.promotions.all(),
+            "rated_dishes": lambda instance: instance.rated_dishes.all(),
+            "rated_deliverers": lambda instance: instance.rated_deliverers.all()
+        }
+        if self.action in many_related_queryset.keys():
+            try:
+                user = User.objects.get(pk=pk)
+            except User.DoesNotExist:
+                return response.Response(
+                    {
+                        "message": "User not found."
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            return many_related_queryset.get(self.action)(user)
+        return super().get_object()
 
     @action(detail=False, methods=["POST"], url_path="login-password")
     def login_password(self, request):
@@ -157,6 +187,36 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    def paginate_and_response(self, request):
+        queryset = self.get_object()
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        serializer = self.get_serializer(queryset, many=True)
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["GET"], url_path="rated-dishes")
+    def rated_dishes(self, request, *args, **kwargs):
+        return self.paginate_and_response(request)
+
+    @action(detail=True, methods=["GET"], url_path="liked-dishes")
+    def liked_dishes(self, request, *args, **kwargs):
+        return self.paginate_and_response(request)
+
+    @action(detail=True, methods=["GET"], url_path="rated-deliverers")
+    def rated_deliverers(self, request, *args, **kwargs):
+        return self.paginate_and_response(request)
+    
+    @action(detail=True, methods=["GET"], url_path="notifications")
+    def notifications(self, request, *args, **kwargs):
+        return self.paginate_and_response(request)
+
+    @action(detail=True, methods=["GET"], url_path="promotions")
+    def promotions(self, request, *args, **kwargs):
+        return self.paginate_and_response(request)
 
 class LocationViewSet(viewsets.ModelViewSet):
     queryset = Location.objects.all()

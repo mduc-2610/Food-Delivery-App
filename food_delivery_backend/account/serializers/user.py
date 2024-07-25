@@ -14,11 +14,42 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = ['id', 'address', 'latitude', 'longitude']
 
 class UserSerializer(serializers.ModelSerializer):
-    locations = LocationSerializer(many=True, read_only=True)
+    liked_dishes = serializers.SerializerMethodField()
+    notifications = serializers.SerializerMethodField()
+    promotions = serializers.SerializerMethodField()
+    rated_dishes = serializers.SerializerMethodField()
+    rated_deliverers = serializers.SerializerMethodField()
+    # orders = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = "__all__"
+        exclude = ("password", )
+
+    def get_liked_dishes(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(f'{obj.pk}/liked-dishes')
+
+    def get_rated_dishes(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(f'{obj.pk}/rated-dishes')
+
+    def get_rated_deliverers(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(f'{obj.pk}/rated-deliverers')
+    
+    def get_notifications(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(f'{obj.pk}/notifications')
+
+    def get_promotions(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(f'{obj.pk}/promotions')
+
+    # def get_orders(self, obj):
+    #     request = self.context.get('request')
+    #     return request.build_absolute_uri(f'/account/user/{obj.pk}/orders')
+
+
 
 class OTPSerializer(serializers.ModelSerializer):
     class Meta:
