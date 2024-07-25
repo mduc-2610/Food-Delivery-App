@@ -3,6 +3,7 @@ from django.core.validators import RegexValidator
 from django.utils import timezone
 
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from account.models import User, OTP, Location
 
@@ -25,31 +26,30 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         exclude = ("password", )
 
-    def get_liked_dishes(self, obj):
+    def get_related_url(self, obj, view_name):
         request = self.context.get('request')
-        return request.build_absolute_uri(f'{obj.pk}/liked-dishes')
+        if request:
+            return request.build_absolute_uri(f'{obj.pk}/{view_name}')
+        return None
+
+    def get_liked_dishes(self, obj):
+        return self.get_related_url(obj, 'liked-dishes')
 
     def get_rated_dishes(self, obj):
-        request = self.context.get('request')
-        return request.build_absolute_uri(f'{obj.pk}/rated-dishes')
+        return self.get_related_url(obj, 'rated-dishes')
 
     def get_rated_deliverers(self, obj):
-        request = self.context.get('request')
-        return request.build_absolute_uri(f'{obj.pk}/rated-deliverers')
-    
+        return self.get_related_url(obj, 'rated-deliverers')
+
     def get_notifications(self, obj):
-        request = self.context.get('request')
-        return request.build_absolute_uri(f'{obj.pk}/notifications')
+        return self.get_related_url(obj, 'notifications')
 
     def get_promotions(self, obj):
-        request = self.context.get('request')
-        return request.build_absolute_uri(f'{obj.pk}/promotions')
+        return self.get_related_url(obj, 'promotions')
 
     # def get_orders(self, obj):
     #     request = self.context.get('request')
     #     return request.build_absolute_uri(f'/account/user/{obj.pk}/orders')
-
-
 
 class OTPSerializer(serializers.ModelSerializer):
     class Meta:
@@ -61,11 +61,19 @@ class OTPSerializer(serializers.ModelSerializer):
 
 class SendOTPSerializer(serializers.Serializer):
     phone_number = serializers.CharField(validators=[phone_regex], max_length=16, write_only=True)
-    
+    is_forgot_password = serializers.BooleanField(write_only=True)
+
     def validate(self, data):
         phone_number = data.get("phone_number")
+        is_forgot_password = data.get("is_forgot_password", False)
+        user = User.objects.filter(phone_number=phone_number).first()
+        print(f"Is Forgot Password: {is_forgot_password}")
+        print(f"Phone Number: {phone_number}")
+        print(f"User: {user}")
         otp = OTP.objects.filter(user__phone_number=phone_number).first()
 
+        if is_forgot_password and not user:
+            raise serializers.ValidationError("This phone number has not been registered yet.")
         if otp and not otp.has_expired():
             raise serializers.ValidationError("OTP is still valid.")
         
@@ -98,7 +106,9 @@ class SendOTPSerializer(serializers.Serializer):
         
         return {
             'otp': OTPSerializer(otp).data,
-            'user': UserSerializer(user).data
+            'user': UserSerializer(user, context={
+                'many_related': False
+            }).data
         }
 
 

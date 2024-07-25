@@ -2,7 +2,7 @@ import 'package:food_delivery_app/features/authentication/models/account/user.da
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 class UserProfile {
-  final User? user;
+  final String? user;
   final String? name;
   final String? gender;
   final DateTime? dateOfBirth;
@@ -15,7 +15,7 @@ class UserProfile {
   });
 
   UserProfile.fromJson(Map<String, dynamic> json)
-      : user = User.fromJson(json['user']),
+      : user = json['user'],
         name = json['name'],
         gender = json['gender'],
         dateOfBirth = json['date_of_birth'] != null ? DateTime.parse(json['date_of_birth']) : null;

@@ -2,7 +2,7 @@ import 'package:food_delivery_app/features/authentication/models/account/user.da
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 class UserSetting {
-  final User? user;
+  final String? user;
   final bool? notification;
   final bool? darkMode;
   final bool? sound;
@@ -10,16 +10,16 @@ class UserSetting {
   final String? language;
 
   UserSetting({
-    required this.user,
-    required this.notification,
-    required this.darkMode,
-    required this.sound,
-    required this.automaticallyUpdated,
-    required this.language,
+    this.user,
+    this.notification,
+    this.darkMode,
+    this.sound,
+    this.automaticallyUpdated,
+    this.language,
   });
 
   UserSetting.fromJson(Map<String, dynamic> json)
-      : user = User.fromJson(json['user']),
+      : user = json['user'],
         notification = json['notification'],
         darkMode = json['dark_mode'],
         sound = json['sound'],
@@ -28,7 +28,6 @@ class UserSetting {
 
   Map<String, dynamic> toJson() {
     return {
-      'user': user?.toJson(),
       'notification': notification,
       'dark_mode': darkMode,
       'sound': sound,

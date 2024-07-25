@@ -13,16 +13,16 @@ class User {
   final bool? isRegistrationVerified;
 
   User({
-    required this.id,
-    required this.phoneNumber,
+    this.id,
+    this.phoneNumber,
     this.email,
-    required this.isActive,
-    required this.isStaff,
-    required this.isSuperuser,
-    required this.dateJoined,
-    required this.lastLogin,
-    required this.isOtpVerified,
-    required this.isRegistrationVerified,
+    this.isActive,
+    this.isStaff,
+    this.isSuperuser,
+    this.dateJoined,
+    this.lastLogin,
+    this.isOtpVerified,
+    this.isRegistrationVerified,
   });
 
   User.fromJson(Map<String, dynamic> json)

@@ -109,7 +109,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def send_otp(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            instance = serializer.save()
+            instance = serializer.save()            
             return response.Response(
                 {
                     "message": "OTP sent successfully.",

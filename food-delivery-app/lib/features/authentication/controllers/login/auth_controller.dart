@@ -88,7 +88,8 @@ class AuthController extends GetxController {
 
   Future<List<dynamic>> getOTPByPhoneNumber() async {
     final sendOTPData = SendOTP(
-        phoneNumber: phoneNumber.value
+        phoneNumber: phoneNumber.value,
+        isForgotPassword: isForgotPassword.value,
     );
     $print(sendOTPData);
     final [statusCode, headers, body] = await callCreateAPI(
@@ -97,7 +98,7 @@ class AuthController extends GetxController {
         "",
         fullResponse: true
     );
-    if(body["message"] == "OTP sent successfully.") {
+    if(statusCode == 200) {
       user = User.fromJson(body["data"]["user"]);
       otp = OTP.fromJson(body["data"]["otp"]);
     }
@@ -118,13 +119,11 @@ class AuthController extends GetxController {
         fullResponse: true
       );
       if(statusCode == 200) {
-        $print("SUCCESS___");
         token = Token.fromJson(body);
         await TokenService.saveToken(token);
         Get.offAll(() => UserMenuRedirection());
       }
       else {
-        $print("FAIL");
         final message = RMessage.fromJson(body ?? "");
         THelperFunction.showCSnackBar(
           Get.context!,
@@ -135,12 +134,19 @@ class AuthController extends GetxController {
     }
     else if(loginType.value == "Login with Password"){
       startTimer();
-      Get.to(() => VerificationView());
     }
   }
 
   void startTimer() async {
     final [statusCode, headers, body] = await getOTPByPhoneNumber();
+    if(body["non_field_errors"][0] == "This phone number has not been registered yet.") {
+      THelperFunction.showCSnackBar(
+          Get.context!,
+          body["non_field_errors"][0],
+          SnackBarType.error
+      );
+      return;
+    }
     if(statusCode == 400) {
       timer.value = THelperFunction.secondsUntilExpiration(otp.expiredAt!);
     }
@@ -158,6 +164,7 @@ class AuthController extends GetxController {
           this.timer.value--;
         }
       });
+      Get.to(() => VerificationView());
     }
   }
 
