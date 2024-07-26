@@ -1,6 +1,6 @@
 # reviews/admin.py
 from django.contrib import admin
-from review.models import DishReview, DelivererReview, RestaurantReview, OrderReview
+from review.models import DishReview, DelivererReview, RestaurantReview, DeliveryReview
 
 class DishReviewAdmin(admin.ModelAdmin):
     list_display = ['user', 'dish', 'rating', 'created_at']
@@ -14,6 +14,6 @@ class RestaurantReviewAdmin(admin.ModelAdmin):
     list_display = ['user', 'restaurant', 'rating', 'created_at']
     search_fields = ['user__username', 'restaurant__name']
 
-class OrderReviewAdmin(admin.ModelAdmin):
-    list_display = ['user', 'order', 'rating', 'created_at']
+class DeliveryReviewAdmin(admin.ModelAdmin):
+    list_display = ['user', 'delivery', 'rating', 'created_at']
     search_fields = ['user__username', 'order__id']

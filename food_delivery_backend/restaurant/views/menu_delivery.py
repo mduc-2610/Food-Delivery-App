@@ -1,8 +1,11 @@
-# menudelivery/views.py
 from rest_framework import viewsets
+
 from restaurant.models import MenuDelivery
+
 from restaurant.serializers import MenuDeliverySerializer
 
-class MenuDeliveryViewSet(viewsets.ModelViewSet):
+from utils.views import OneToOneViewSet
+
+class MenuDeliveryViewSet(OneToOneViewSet):
     queryset = MenuDelivery.objects.all()
     serializer_class = MenuDeliverySerializer

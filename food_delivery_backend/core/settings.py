@@ -98,6 +98,9 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    # 'DEFAULT_PAGINATION_CLASS': {
+    #     'food_delivery_backend.utils.pagination.CustomPagination'
+    # }
 }
 
 SIMPLE_JWT = {

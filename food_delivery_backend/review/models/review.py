@@ -3,7 +3,6 @@ from django.db import models
 
 class Review(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
-    user = models.ForeignKey("account.User", related_name='%(class)s_reviews', on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField(blank=True, null=True)
     title = models.CharField(max_length=255, blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
@@ -15,9 +14,10 @@ class Review(models.Model):
         ordering = ('-created_at')
 
     def __str__(self):
-        return f"{self.user.username}'s review"
+        return f"{self.title}'s review"
 
 class DishReview(Review):
+    user = models.ForeignKey("account.User", related_name="dish_reviews", on_delete=models.CASCADE)
     dish = models.ForeignKey("food.Dish", related_name='user_reviews', on_delete=models.CASCADE)
 
     class Meta:
@@ -27,6 +27,7 @@ class DishReview(Review):
         return f"{self.user}'s review of {self.dish}"
 
 class DelivererReview(Review):
+    user = models.ForeignKey("account.User", related_name="deliverer_reviews", on_delete=models.CASCADE)
     deliverer = models.ForeignKey("deliverer.Deliverer", related_name='user_reviews', on_delete=models.CASCADE)
 
     class Meta:
@@ -36,6 +37,7 @@ class DelivererReview(Review):
         return f"{self.user}'s review of {self.deliverer}"
 
 class RestaurantReview(Review):
+    user = models.ForeignKey("account.User", related_name="restaurant_reviews", on_delete=models.CASCADE)
     restaurant = models.ForeignKey("restaurant.Restaurant", related_name='user_reviews', on_delete=models.CASCADE)
 
     class Meta:
@@ -44,11 +46,12 @@ class RestaurantReview(Review):
     def __str__(self):
         return f"{self.user}'s review of {self.restaurant}"
 
-class OrderReview(Review):
-    order = models.ForeignKey("order.Order", related_name='user_reviews', on_delete=models.CASCADE)
+class DeliveryReview(Review):
+    user = models.ForeignKey("account.User", related_name="delivery_reviews", on_delete=models.CASCADE)
+    delivery = models.ForeignKey("order.Delivery", related_name='delivery_reviews', on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('user', 'order')
+        unique_together = ('user', 'delivery')
 
     def __str__(self):
-        return f"{self.user}'s review of {self.order}"
+        return f"{self.user}'s review of {self.delivery}"

@@ -5,48 +5,97 @@ from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from account.models import User, OTP, Location
+from account.models import (
+    User, OTP, Location,
+    Profile, Setting
+)
+
+from account.serializers.profile import ProfileSerializer
+from account.serializers.setting import SettingSerializer
 
 from utils.regex_validators import phone_regex, password_regex
+from utils.function import get_many_related_url 
 
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
+
         fields = ['id', 'address', 'latitude', 'longitude']
 
-class UserSerializer(serializers.ModelSerializer):
-    liked_dishes = serializers.SerializerMethodField()
-    notifications = serializers.SerializerMethodField()
-    promotions = serializers.SerializerMethodField()
-    rated_dishes = serializers.SerializerMethodField()
-    rated_deliverers = serializers.SerializerMethodField()
-    # orders = serializers.SerializerMethodField()
+from utils.serializers import CustomRelatedModelSerializer
+class UserSerializer(CustomRelatedModelSerializer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
+        self.one_related_serializer_class = {
+            'profile': ProfileSerializer,
+            'setting': SettingSerializer
+        }
     class Meta:
         model = User
-        exclude = ("password", )
+        fields = ['id', 'phone_number', 'email', 'is_registration_verified', 'is_active', 'is_staff', 'is_superuser', 'date_joined', 'last_login',]
 
-    def get_related_url(self, obj, view_name):
-        request = self.context.get('request')
-        if request:
-            return request.build_absolute_uri(f'{obj.pk}/{view_name}')
-        return None
+# class UserSerializer(serializers.ModelSerializer):
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.many = self.context.get('many', False)
+#         self.request = self.context.get('request')
+#         self.query_params = self.request.query_params
+#         self.related_field = [field.strip() for field in self.query_params.get('related_field', 'profile, setting').split(',')]
 
-    def get_liked_dishes(self, obj):
-        return self.get_related_url(obj, 'liked-dishes')
+#     liked_dishes = serializers.SerializerMethodField()
+#     notifications = serializers.SerializerMethodField()
+#     promotions = serializers.SerializerMethodField()
+#     rated_dishes = serializers.SerializerMethodField()
+#     rated_deliverers = serializers.SerializerMethodField()
+#     rated_deliveries = serializers.SerializerMethodField()
+#     # orders = serializers.SerializerMethodField()
+#     profile = serializers.SerializerMethodField()
+#     setting = serializers.SerializerMethodField()
 
-    def get_rated_dishes(self, obj):
-        return self.get_related_url(obj, 'rated-dishes')
+#     class Meta:
+#         model = User
+#         exclude = ("password", )
 
-    def get_rated_deliverers(self, obj):
-        return self.get_related_url(obj, 'rated-deliverers')
+#     def serialize_related_object(self, related_serializer, obj, related):
+#         if self.request and not self.many:
+#             if related in self.related_field:
+#                 return related_serializer(obj[related]).data
+#             return None
+#         return None
 
-    def get_notifications(self, obj):
-        return self.get_related_url(obj, 'notifications')
+#     def get_profile(self, obj):
+#         return self.serialize_related_object(ProfileSerializer, obj, 'profile')
 
-    def get_promotions(self, obj):
-        return self.get_related_url(obj, 'promotions')
+#     def get_setting(self, obj):
+#         return self.serialize_related_object(SettingSerializer, obj, 'setting')
 
+#     def get_liked_dishes(self, obj):
+#         return get_many_related_url(self.request, self.many, obj, 'liked-dishes')
+
+#     def get_rated_dishes(self, obj):
+#         return get_many_related_url(self.request, self.many, obj, 'rated-dishes')
+
+#     def get_rated_deliverers(self, obj):
+#         return get_many_related_url(self.request, self.many, obj, 'rated-deliverers')
+
+#     def get_rated_deliveries(self, obj):
+#         return get_many_related_url(self.request, self.many, obj, 'rated-deliveries')
+
+#     def get_notifications(self, obj):
+#         return get_many_related_url(self.request, self.many, obj, 'notifications')
+
+#     def get_promotions(self, obj):
+#         return get_many_related_url(self.request, self.many, obj, 'promotions')
+
+#     def to_representation(self, instance):
+#         data = super().to_representation(instance)
+#         if not data.get('profile'):
+#             data.pop('profile')
+#         if not data.get('setting'):
+#             data.pop('setting')
+#         return data
+    
     # def get_orders(self, obj):
     #     request = self.context.get('request')
     #     return request.build_absolute_uri(f'/account/user/{obj.pk}/orders')
@@ -67,9 +116,6 @@ class SendOTPSerializer(serializers.Serializer):
         phone_number = data.get("phone_number")
         is_forgot_password = data.get("is_forgot_password", False)
         user = User.objects.filter(phone_number=phone_number).first()
-        print(f"Is Forgot Password: {is_forgot_password}")
-        print(f"Phone Number: {phone_number}")
-        print(f"User: {user}")
         otp = OTP.objects.filter(user__phone_number=phone_number).first()
 
         if is_forgot_password and not user:

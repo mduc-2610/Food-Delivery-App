@@ -1,2 +1,8 @@
-from .review import DelivererReviewSerializer, DishReviewSerializer, OrderReviewSerializer, RestaurantReviewSerializer
-from .review_like import DelivererReviewLikeSerializer, DishReviewLikeSerializer, OrderReviewLikeSerializer, RestaurantReviewLikeSerializer
+from .review import (
+    DelivererReviewSerializer, DishReviewSerializer, 
+    DeliveryReviewSerializer, RestaurantReviewSerializer
+)
+from .review_like import (
+    DelivererReviewLikeSerializer, DishReviewLikeSerializer, 
+    DeliveryReviewLikeSerializer, RestaurantReviewLikeSerializer
+)

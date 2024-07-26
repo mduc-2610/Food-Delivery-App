@@ -2,11 +2,11 @@
 from rest_framework import viewsets
 from review.models import (
     DishReview, DelivererReview, 
-    RestaurantReview, OrderReview
+    RestaurantReview, DeliveryReview
 )
 from review.serializers import (
     DishReviewSerializer, DelivererReviewSerializer, 
-    RestaurantReviewSerializer, OrderReviewSerializer
+    RestaurantReviewSerializer, DeliveryReviewSerializer
 )
 
 from utils.pagination import CustomPagination
@@ -24,6 +24,6 @@ class RestaurantReviewViewSet(viewsets.ModelViewSet):
     queryset = RestaurantReview.objects.all()
     serializer_class = RestaurantReviewSerializer
 
-class OrderReviewViewSet(viewsets.ModelViewSet):
-    queryset = OrderReview.objects.all()
-    serializer_class = OrderReviewSerializer
+class DeliveryReviewViewSet(viewsets.ModelViewSet):
+    queryset = DeliveryReview.objects.all()
+    serializer_class = DeliveryReviewSerializer

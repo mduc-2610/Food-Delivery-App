@@ -3,7 +3,7 @@ from review.models import (
     DishReviewLike,
     RestaurantReviewLike,
     DelivererReviewLike,
-    OrderReviewLike
+    DeliveryReviewLike
 )
 
 class DishReviewLikeSerializer(serializers.ModelSerializer):
@@ -21,7 +21,7 @@ class DelivererReviewLikeSerializer(serializers.ModelSerializer):
         model = DelivererReviewLike
         fields = ['id', 'user', 'review', 'created_at']
 
-class OrderReviewLikeSerializer(serializers.ModelSerializer):
+class DeliveryReviewLikeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OrderReviewLike
+        model = DeliveryReviewLike
         fields = ['id', 'user', 'review', 'created_at']

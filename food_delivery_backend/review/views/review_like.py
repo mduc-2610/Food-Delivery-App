@@ -3,13 +3,13 @@ from review.models import (
     DishReviewLike,
     RestaurantReviewLike,
     DelivererReviewLike,
-    OrderReviewLike
+    DeliveryReviewLike
 )
 from review.serializers import (
     DishReviewLikeSerializer,
     RestaurantReviewLikeSerializer,
     DelivererReviewLikeSerializer,
-    OrderReviewLikeSerializer
+    DeliveryReviewLikeSerializer
 )
 
 from utils.pagination import CustomPagination
@@ -29,7 +29,7 @@ class DelivererReviewLikeViewSet(viewsets.ModelViewSet):
     serializer_class = DelivererReviewLikeSerializer
     pagination_class = CustomPagination
 
-class OrderReviewLikeViewSet(viewsets.ModelViewSet):
-    queryset = OrderReviewLike.objects.all()
-    serializer_class = OrderReviewLikeSerializer
+class DeliveryReviewLikeViewSet(viewsets.ModelViewSet):
+    queryset = DeliveryReviewLike.objects.all()
+    serializer_class = DeliveryReviewLikeSerializer
     pagination_class = CustomPagination

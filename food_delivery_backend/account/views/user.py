@@ -23,7 +23,7 @@ from account.serializers import (
 )
 from food.serializers import DishSerializer
 from notification.serializers import NotificationSerializer
-from order.serializers import PromotionSerializer
+from order.serializers import PromotionSerializer, DeliverySerializer
 from deliverer.serializers import DelivererSerializer
 
 from account.throttles import OTPThrottle
@@ -43,6 +43,7 @@ class UserViewSet(viewsets.ModelViewSet):
         'rated_dishes': DishSerializer,
         'liked_dishes': DishSerializer,
         'rated_deliverers': DelivererSerializer,
+        'rated_deliveries': DeliverySerializer,
         'promotions': PromotionSerializer,
         'notifications': NotificationSerializer
     }
@@ -67,7 +68,8 @@ class UserViewSet(viewsets.ModelViewSet):
             "notifications": lambda instance: instance.notifications.all(),
             "promotions": lambda instance: instance.promotions.all(),
             "rated_dishes": lambda instance: instance.rated_dishes.all(),
-            "rated_deliverers": lambda instance: instance.rated_deliverers.all()
+            "rated_deliverers": lambda instance: instance.rated_deliverers.all(),
+            'rated_deliveries': lambda instance: instance.rated_deliveries.all(),
         }
         if self.action in many_related_queryset.keys():
             try:
@@ -81,6 +83,17 @@ class UserViewSet(viewsets.ModelViewSet):
                 )
             return many_related_queryset.get(self.action)(user)
         return super().get_object()
+    
+    def get_queryset(self):
+        if self.action == "list":
+            return User.objects.filter(is_registration_verified=True)            
+        return super().get_queryset()
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        if self.action == "list":
+            context.update({"many": True})
+        return context
 
     @action(detail=False, methods=["POST"], url_path="login-password")
     def login_password(self, request):
@@ -208,6 +221,10 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["GET"], url_path="rated-deliverers")
     def rated_deliverers(self, request, *args, **kwargs):
+        return self.paginate_and_response(request)
+    
+    @action(detail=True, methods=["GET"], url_path="rated-deliveries")
+    def rated_deliveries(self, request, *args, **kwargs):
         return self.paginate_and_response(request)
     
     @action(detail=True, methods=["GET"], url_path="notifications")

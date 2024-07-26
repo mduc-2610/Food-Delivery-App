@@ -34,7 +34,8 @@ def load_user(max_users=0):
         user_data = {
             "phone_number": generate_phone_number(),
             "password": make_password("Duckkucd.123"),
-            "email": fake.name() + fake.email()
+            "email": fake.name() + fake.email(),
+            "is_registration_verified": True,
         }
         user = User.objects.create(**user_data)
         user_list.append(user)

@@ -41,7 +41,6 @@ def load_restaurant(max_restaurants=0):
         print(f"\tSuccessfully created Basic Info: {basic_info}")
 
         detail_info_data = {
-            "opening_hours": {"Monday": "9:00-22:00", "Tuesday": "9:00-22:00", "Wednesday": "9:00-22:00", "Thursday": "9:00-22:00", "Friday": "9:00-23:00", "Saturday": "9:00-23:00", "Sunday": "9:00-22:00"},
             "keywords": ", ".join(fake.words(nb=5, unique=True)),
             "description": fake.text(max_nb_chars=200),
             "avatar_image": fake.image_url(),

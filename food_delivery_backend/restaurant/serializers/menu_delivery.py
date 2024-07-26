@@ -5,4 +5,4 @@ from restaurant.models import MenuDelivery
 class MenuDeliverySerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuDelivery
-        fields = ['id', 'menu_image']
+        fields = ['id', 'restaurant', 'menu_image']

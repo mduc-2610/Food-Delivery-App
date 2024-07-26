@@ -4,9 +4,9 @@ from food.models import Dish, DishAdditionalOption, DishSizeOption
 class DishSizeOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = DishSizeOption
-        fields = ['size', 'price']
+        fields = "__all__"
 
 class DishAdditionalOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = DishAdditionalOption
-        fields = ['name', 'price']
+        fields = "__all__"

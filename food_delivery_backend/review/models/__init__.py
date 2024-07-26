@@ -2,11 +2,11 @@ from .review import (
     DishReview, 
     DelivererReview,
     RestaurantReview,
-    OrderReview
+    DeliveryReview
 )
 from .review_like import (
     DishReviewLike, 
     DelivererReviewLike,
     RestaurantReviewLike,
-    OrderReviewLike
+    DeliveryReviewLike
 )

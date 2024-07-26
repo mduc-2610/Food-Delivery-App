@@ -5,4 +5,4 @@ from deliverer.models import OtherInfo
 class OtherInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = OtherInfo
-        fields = ['id', 'occupation', 'details', 'judicial_record']
+        fields = ['id', 'deliverer', 'occupation', 'details', 'judicial_record']

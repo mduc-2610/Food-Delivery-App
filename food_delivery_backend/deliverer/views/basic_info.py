@@ -1,8 +1,11 @@
-# basicinfo/views.py
 from rest_framework import viewsets
+
 from deliverer.models import BasicInfo
+
 from deliverer.serializers import BasicInfoSerializer
 
-class BasicInfoViewSet(viewsets.ModelViewSet):
+from utils.views import OneToOneViewSet
+
+class BasicInfoViewSet(OneToOneViewSet):
     queryset = BasicInfo.objects.all()
     serializer_class = BasicInfoSerializer

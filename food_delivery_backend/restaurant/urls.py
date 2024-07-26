@@ -14,9 +14,9 @@ router = DefaultRouter()
 router.register(r'basic-info', BasicInfoViewSet)
 router.register(r'detail-info', DetailInfoViewSet)
 router.register(r'menu-delivery', MenuDeliveryViewSet)
-router.register(r'operating-hours', OperatingHourViewSet)
-router.register(r'restaurants', RestaurantViewSet)
-router.register(r'representatives', RepresentativeViewSet)
+router.register(r'operating-hour', OperatingHourViewSet)
+router.register(r'restaurant', RestaurantViewSet)
+router.register(r'representative', RepresentativeViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

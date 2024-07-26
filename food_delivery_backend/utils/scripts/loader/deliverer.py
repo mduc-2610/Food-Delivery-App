@@ -16,7 +16,9 @@ def generate_phone_number():
 
 def load_deliverer(max_deliverers):
     model_list = [
-        BasicInfo, DriverLicense, EmergencyContact, OperationInfo, OtherInfo, ResidencyInfo, Deliverer
+        Address, BasicInfo, DriverLicense, 
+        EmergencyContact, OperationInfo, OtherInfo, 
+        ResidencyInfo, Deliverer
     ]
     
     for model in model_list:

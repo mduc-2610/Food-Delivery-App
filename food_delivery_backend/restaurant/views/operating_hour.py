@@ -1,6 +1,7 @@
-# operating_hours/views.py
 from rest_framework import viewsets
+
 from restaurant.models import OperatingHour
+
 from restaurant.serializers import OperatingHourSerializer
 
 class OperatingHourViewSet(viewsets.ModelViewSet):

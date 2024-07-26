@@ -1,11 +1,16 @@
 from rest_framework import viewsets
+from rest_framework.exceptions import NotFound
+
 from account.models import Setting, SecuritySetting
+
 from account.serializers import SettingSerializer, SecuritySettingSerializer
 
-class SettingViewSet(viewsets.ModelViewSet):
+from utils.views import OneToOneViewSet
+
+class SettingViewSet(OneToOneViewSet):
     queryset = Setting.objects.all()
     serializer_class = SettingSerializer
-
+        
 class SecuritySettingViewSet(viewsets.ModelViewSet):
     queryset = SecuritySetting.objects.all()
     serializer_class = SecuritySettingSerializer

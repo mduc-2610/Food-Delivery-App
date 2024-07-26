@@ -1,6 +1,6 @@
 # reviews/serializers.py
 from rest_framework import serializers
-from review.models import DishReview, DelivererReview, RestaurantReview, OrderReview
+from review.models import DishReview, DelivererReview, RestaurantReview, DeliveryReview
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,7 +21,7 @@ class RestaurantReviewSerializer(ReviewSerializer):
         model = RestaurantReview
         fields = ReviewSerializer.Meta.fields + ['restaurant']
 
-class OrderReviewSerializer(ReviewSerializer):
+class DeliveryReviewSerializer(ReviewSerializer):
     class Meta(ReviewSerializer.Meta):
-        model = OrderReview
-        fields = ReviewSerializer.Meta.fields + ['order']
+        model = DeliveryReview
+        fields = ReviewSerializer.Meta.fields + ['delivery']

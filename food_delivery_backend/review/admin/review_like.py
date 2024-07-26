@@ -15,7 +15,7 @@ class DelivererReviewLikeAdmin(admin.ModelAdmin):
     search_fields = ['user__username', 'review__id']
     list_filter = ['created_at']
 
-class OrderReviewLikeAdmin(admin.ModelAdmin):
+class DeliveryReviewLikeAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'review', 'created_at']
     search_fields = ['user__username', 'review__id']
     list_filter = ['created_at']

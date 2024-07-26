@@ -30,3 +30,16 @@ def load_intermediate_model(
             print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
     return created_objects
 
+def get_many_related_url(request, many, obj, view_name):
+    if request:
+        uri = '/'.join(request.build_absolute_uri(f"{obj.pk}").split('/')[0: (-1 if many else -2)])
+        uri += f"/{obj.pk}/{view_name}"
+        return uri
+    return None
+
+def get_one_related_url(request, many, obj, view_name):
+    if request:
+        uri = '/'.join(request.build_absolute_uri(f"{obj.pk}").split('/')[0: (-3 if not many else -2)])
+        uri += f"/{view_name}/{obj.pk}"
+        return uri
+    return None

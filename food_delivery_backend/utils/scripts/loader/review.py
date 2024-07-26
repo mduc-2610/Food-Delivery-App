@@ -6,11 +6,11 @@ from django.utils import timezone
 from food.models import Dish
 from deliverer.models import Deliverer
 from restaurant.models import Restaurant
-from order.models import Order
+from order.models import Delivery
 from account.models import User
 from review.models import (
-    DishReview, DelivererReview, RestaurantReview, OrderReview,
-    DishReviewLike, RestaurantReviewLike, DelivererReviewLike, OrderReviewLike
+    DishReview, DelivererReview, RestaurantReview, DeliveryReview,
+    DishReviewLike, RestaurantReviewLike, DelivererReviewLike, DeliveryReviewLike
 )
 
 from utils.function import load_intermediate_model
@@ -25,7 +25,7 @@ def load_review(
         # DishReview: ('user', 'dish', list(User.objects.all()), list(Dish.objects.all())),
         DelivererReview: ('user', 'deliverer', list(User.objects.all()), list(Deliverer.objects.all())),
         RestaurantReview: ('user', 'restaurant', list(User.objects.all()), list(Restaurant.objects.all())),
-        OrderReview: ('user', 'order', list(User.objects.all()), list(Order.objects.all()))
+        DeliveryReview: ('user', 'delivery', list(User.objects.all()), list(Delivery.objects.all()))
     }
     
     for review_model in review_model_map.keys():
@@ -40,7 +40,7 @@ def load_review(
         # DishReview: DishReviewLike,
         DelivererReview: DelivererReviewLike,
         RestaurantReview: RestaurantReviewLike,
-        OrderReview: OrderReviewLike
+        DeliveryReview: DeliveryReviewLike
     }
 
     review_attributes = {

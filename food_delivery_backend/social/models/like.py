@@ -3,7 +3,6 @@ from django.db import models
 
 class BaseLike(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
-    user = models.ForeignKey("account.User", related_name="%(class)s_likes", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -14,6 +13,7 @@ class BaseLike(models.Model):
         return f"Like by {self.user}"
 
 class PostLike(BaseLike):
+    user = models.ForeignKey("account.User", related_name="post_likes", on_delete=models.CASCADE)
     post = models.ForeignKey("social.Post", related_name="likes", on_delete=models.CASCADE)
 
     class Meta:
@@ -23,6 +23,7 @@ class PostLike(BaseLike):
         return f"PostLike by {self.user} on {self.post.title}"
 
 class CommentLike(BaseLike):
+    user = models.ForeignKey("account.User", related_name="comment_likes", on_delete=models.CASCADE)
     comment = models.ForeignKey("social.Comment", related_name="likes", on_delete=models.CASCADE)
 
     class Meta:

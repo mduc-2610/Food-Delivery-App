@@ -5,4 +5,4 @@ from deliverer.models import EmergencyContact
 class EmergencyContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmergencyContact
-        fields = ['id', 'name', 'relationship', 'phone_number']
+        fields = ['id', 'deliverer', 'name', 'relationship', 'phone_number']

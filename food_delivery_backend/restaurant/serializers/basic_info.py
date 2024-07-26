@@ -5,4 +5,4 @@ from restaurant.models import BasicInfo
 class BasicInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = BasicInfo
-        fields = ['id', 'name', 'phone_number', 'city', 'district', 'street_address', 'map_location']
+        fields = ['id', 'restaurant', 'name', 'phone_number', 'city', 'district', 'street_address', 'map_location']

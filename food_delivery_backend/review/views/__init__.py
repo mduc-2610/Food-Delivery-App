@@ -1,2 +1,2 @@
-from .review import DelivererReviewViewSet, DishReviewViewSet, OrderReviewViewSet, RestaurantReviewViewSet
-from .review_like import DelivererReviewLikeViewSet, DishReviewLikeViewSet, OrderReviewLikeViewSet, RestaurantReviewLikeViewSet
+from .review import DelivererReviewViewSet, DishReviewViewSet, DeliveryReviewViewSet, RestaurantReviewViewSet
+from .review_like import DelivererReviewLikeViewSet, DishReviewLikeViewSet, RestaurantReviewLikeViewSet, DeliveryReviewLikeViewSet

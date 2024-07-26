@@ -51,12 +51,30 @@ class User(AbstractBaseUser):
 
     objects = UserManager()
 
-    liked_dishes = models.ManyToManyField("food.Dish", through="food.DishLike", related_name="liked_dishes")
-    notifications = models.ManyToManyField("notification.Notification", through="notification.UserNotification")
-    promotions = models.ManyToManyField("order.Promotion", through="order.UserPromotion")
-    rated_dishes = models.ManyToManyField("food.Dish", through="review.DishReview")
-    rated_deliverers = models.ManyToManyField("deliverer.Deliverer", through="review.DelivererReview", related_name="rated_by_users")
-    # orders = models.ManyToManyField("order.Order", through="OrderItem", related_name="ordered_by_users")
+    OWN_RELATED_NAME = "owned_by_users"
+    notifications = models.ManyToManyField("notification.Notification", through="notification.UserNotification", related_name=OWN_RELATED_NAME)
+    promotions = models.ManyToManyField("order.Promotion", through="order.UserPromotion", related_name=OWN_RELATED_NAME)
+    
+    RATE_RELATED_NAME = "rated_by_users"
+    rated_dishes = models.ManyToManyField("food.Dish", through="review.DishReview", related_name=RATE_RELATED_NAME)
+    rated_deliverers = models.ManyToManyField("deliverer.Deliverer", through="review.DelivererReview", related_name=RATE_RELATED_NAME)
+    rated_deliveries = models.ManyToManyField("order.Delivery", through="review.DeliveryReview", related_name=RATE_RELATED_NAME)
+    rated_restaurants = models.ManyToManyField("restaurant.Restaurant", through="review.RestaurantReview", related_name=RATE_RELATED_NAME)
+    
+    LIKE_RELATED_NAME = "liked_by_users"
+    liked_posts = models.ManyToManyField("social.Post", through="social.PostLike", related_name=LIKE_RELATED_NAME)
+    liked_comments = models.ManyToManyField("social.Comment", through="social.CommentLike", related_name=LIKE_RELATED_NAME)
+    liked_dishes = models.ManyToManyField("food.Dish", through="food.DishLike", related_name=LIKE_RELATED_NAME)
+    liked_delivery_reviews = models.ManyToManyField("review.DeliveryReview", through="review.DeliveryReviewLike", related_name=LIKE_RELATED_NAME)
+    liked_deliverer_reviews = models.ManyToManyField("review.DelivererReview", through="review.DelivererReviewLike", related_name=LIKE_RELATED_NAME)
+    liked_restaurant_reviews = models.ManyToManyField("review.RestaurantReview", through="review.RestaurantReviewLike", related_name=LIKE_RELATED_NAME)
+    liked_dish_reviews = models.ManyToManyField("review.DishReview", through="review.DishReviewLike", related_name=LIKE_RELATED_NAME)
+
+    def __getitem__(self, attr):
+        if hasattr(self, attr):
+            return getattr(self, attr)
+        else:
+            raise AttributeError(f"{attr} is not a valid attribute")
 
     def __str__(self):
         return f"{self.phone_number}"
