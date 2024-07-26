@@ -22,7 +22,7 @@ def load_review(
         max_review_likes=100,
     ):
     review_model_map = {
-        DishReview: ('user', 'dish', list(User.objects.all()), list(Dish.objects.all())),
+        # DishReview: ('user', 'dish', list(User.objects.all()), list(Dish.objects.all())),
         DelivererReview: ('user', 'deliverer', list(User.objects.all()), list(Deliverer.objects.all())),
         RestaurantReview: ('user', 'restaurant', list(User.objects.all()), list(Restaurant.objects.all())),
         OrderReview: ('user', 'order', list(User.objects.all()), list(Order.objects.all()))
@@ -37,7 +37,7 @@ def load_review(
     print("REVIEWS:")
     review_map = {}
     like_model_map = {
-        DishReview: DishReviewLike,
+        # DishReview: DishReviewLike,
         DelivererReview: DelivererReviewLike,
         RestaurantReview: RestaurantReviewLike,
         OrderReview: OrderReviewLike

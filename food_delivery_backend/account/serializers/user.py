@@ -87,16 +87,15 @@ class SendOTPSerializer(serializers.Serializer):
         """
         Key Differences
         Field Specification for Creation:
-
         With defaults: You can specify fields that should be set when creating a new record but not required for looking up the record. This is useful when you only want to look up based on some fields but set additional fields on creation.
         Without defaults: Both fields are used for looking up the existing record and for setting the fields of the new record if none is found.
+        
         Field Constraints:
-
         With defaults: Only the fields passed as part of the lookup parameters (user in this case) are used to search for existing records. The defaults parameter is used only if a new record is created.
         Without defaults: Both lookup fields (user and code) are used to find an existing record. The combination must be unique or suitable for the application’s needs.
+        
         Example Scenario
         With defaults: You want to ensure that if a record for a user exists, you only update the code if the record doesn’t already have it. For instance, you may want to update the OTP code every time a new OTP is generated.
-
         Without defaults: You want to ensure that the combination of user and code is unique. This approach would be used if you want to enforce a unique constraint on the combination of user and code.
         """
         
