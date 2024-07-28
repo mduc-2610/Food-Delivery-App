@@ -1,51 +1,43 @@
 # deliverer/serializers.py
 from rest_framework import serializers
-from deliverer.models import Deliverer, BasicInfo, ResidencyInfo, DriverLicense, OtherInfo, Address, OperationInfo, EmergencyContact
 
-class BasicInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BasicInfo
-        fields = '__all__'
+from deliverer.models import Deliverer
 
-class ResidencyInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ResidencyInfo
-        fields = '__all__'
+# from deliverer.serializers import (
+#     BasicInfoSerializer, DriverLicenseSerializer, 
+#     OtherInfoSerializer, AddressSerializer, OperationInfoSerializer, EmergencyContactSerializer)
+from deliverer.serializers.basic_info import BasicInfoSerializer
+from deliverer.serializers.residency_info import ResidencyInfoSerializer
+from deliverer.serializers.driver_license import DriverLicenseSerializer
+from deliverer.serializers.other_info import OtherInfoSerializer
+from deliverer.serializers.address import AddressSerializer
+from deliverer.serializers.operation_info import OperationInfoSerializer
+from deliverer.serializers.emergency_contact import EmergencyContactSerializer
 
-class DriverLicenseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DriverLicense
-        fields = '__all__'
-
-class OtherInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OtherInfo
-        fields = '__all__'
-
-class AddressSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Address
-        fields = '__all__'
-
-class OperationInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OperationInfo
-        fields = '__all__'
-
-class EmergencyContactSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EmergencyContact
-        fields = '__all__'
+from utils.serializers import CustomRelatedModelSerializer
 
 class DelivererSerializer(serializers.ModelSerializer):
-    basic_info = BasicInfoSerializer()
-    residency_info = ResidencyInfoSerializer()
-    driver_license_and_vehicle = DriverLicenseSerializer()
-    other_info = OtherInfoSerializer()
-    address = AddressSerializer()
-    operation_info = OperationInfoSerializer()
-    emergency_contact = EmergencyContactSerializer()
-
     class Meta:
         model = Deliverer
-        fields = ['id', 'user', 'basic_info', 'residency_info', 'driver_license_and_vehicle', 'other_info', 'address', 'operation_info', 'emergency_contact']
+        fields = ['id', 'user']
+        
+class DetailDelivererSerializer(CustomRelatedModelSerializer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        self.one_related_serializer_class = {
+            'basic_info': BasicInfoSerializer,
+            'residency_info': ResidencyInfoSerializer,
+            'driver_license': DriverLicenseSerializer,
+            'other_info': OtherInfoSerializer,
+            'address': AddressSerializer,
+            'operation_info': OperationInfoSerializer,
+            'emergency_contact': EmergencyContactSerializer,
+        }
+    
+    class Meta:
+        model = Deliverer
+        fields = (
+            'id',
+        )
+        depth = 2

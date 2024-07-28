@@ -16,6 +16,6 @@ class Dish(models.Model):
     number_of_reviews = models.IntegerField(default=0)
     category = models.ForeignKey('food.DishCategory', related_name='dishes', on_delete=models.CASCADE)
     restaurant = models.ForeignKey('restaurant.Restaurant', related_name='dishes', on_delete=models.CASCADE, null=True)
-
+    
     def __str__(self):
         return self.name

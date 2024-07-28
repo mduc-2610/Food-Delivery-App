@@ -4,7 +4,7 @@ from account.models import Setting, SecuritySetting
 class SettingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Setting
-        fields = ['user', 'notification', 'dark_mode', 'sound', 'automatically_updated', 'language']
+        fields = ['id', 'user', 'notification', 'dark_mode', 'sound', 'automatically_updated', 'language']
 
 class SecuritySettingSerializer(serializers.ModelSerializer):
     class Meta:

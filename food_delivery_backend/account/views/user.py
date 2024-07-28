@@ -35,7 +35,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = []
     pagination_class = CustomPagination
-    action_serializer_classes = {
+    action_serializer_class = {
         'send_otp': SendOTPSerializer,
         'verify_otp': VerifyOTPSerializer,
         'set_password': SetPasswordSerializer,
@@ -49,7 +49,7 @@ class UserViewSet(viewsets.ModelViewSet):
     }
 
     def get_serializer_class(self):
-        return self.action_serializer_classes.get(self.action, super().get_serializer_class())
+        return self.action_serializer_class.get(self.action, super().get_serializer_class())
 
     def get_permissions(self):
         # if self.action in ["list", "retrieve"]:

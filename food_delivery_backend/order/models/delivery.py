@@ -12,7 +12,7 @@ class Delivery(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
     order = models.ForeignKey("order.Order", on_delete=models.CASCADE, related_name='deliverers')
-    deliverer = models.ForeignKey('deliverer.Deliverer', on_delete=models.CASCADE, related_name='orders', null=True, blank=True)
+    deliverer = models.ForeignKey('deliverer.Deliverer', on_delete=models.CASCADE, related_name='deliveries', null=True, blank=True)
     pickup_location = models.CharField(max_length=255)
     pickup_lat = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     pickup_long = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)

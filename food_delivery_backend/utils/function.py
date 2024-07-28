@@ -1,4 +1,7 @@
 import random
+import re
+
+from django.apps import apps
 
 def load_intermediate_model(
         model_class, 
@@ -30,16 +33,26 @@ def load_intermediate_model(
             print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
     return created_objects
 
-def get_many_related_url(request, many, obj, view_name):
-    if request:
-        uri = '/'.join(request.build_absolute_uri(f"{obj.pk}").split('/')[0: (-1 if many else -2)])
-        uri += f"/{obj.pk}/{view_name}"
-        return uri
-    return None
+def camel_to_snake(name):
+    return re.sub('([a-z0-9])([A-Z])', r'\1-\2', name).lower()
 
-def get_one_related_url(request, many, obj, view_name):
+def mapping_endpoint(model, type):
+    return f'api/{model._meta.app_label}' + (f'/{camel_to_snake(model.__name__)}' if type == "many" else '')
+
+def get_related_url(request, model, obj, view_name, type):
     if request:
-        uri = '/'.join(request.build_absolute_uri(f"{obj.pk}").split('/')[0: (-3 if not many else -2)])
-        uri += f"/{view_name}/{obj.pk}"
+        base_uri = f"{'/'.join(request.build_absolute_uri().split('/')[0: 3])}/" + mapping_endpoint(model, type)
+        
+        if type == "many":
+            uri = f"{base_uri}/{obj.pk}/{view_name}"
+        elif type == "one":
+            uri = f"{base_uri}/{view_name}/{obj.pk}"
+        else:
+            raise ValueError("Invalid relationship_type. Use 'many' or 'one'.")
+        
+        # print("________________________________")
+        # print(uri)
+        # print("________________________________")
+        
         return uri
     return None

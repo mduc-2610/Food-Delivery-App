@@ -18,16 +18,17 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.urls import get_resolver
  
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/account/", include("account.urls")),
-    path("api/deliverer/", include("deliverer.urls")),
     path("api/food/", include("food.urls")),
     path("api/notification/", include("notification.urls")),
     path("api/order/", include("order.urls")),
     path("api/restaurant/", include("restaurant.urls")),
+    path("api/deliverer/", include("deliverer.urls")),
     path("api/review/", include("review.urls")),
     path("api/social/", include("social.urls")),
 ]

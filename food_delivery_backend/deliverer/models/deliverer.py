@@ -6,7 +6,7 @@ class Deliverer(models.Model):
     user = models.OneToOneField("account.User", on_delete=models.CASCADE, related_name="deliverer")
     basic_info = models.OneToOneField("deliverer.BasicInfo", on_delete=models.CASCADE, related_name="deliverer")
     residency_info = models.OneToOneField("deliverer.ResidencyInfo", on_delete=models.CASCADE, related_name="deliverer")
-    driver_license_and_vehicle = models.OneToOneField("deliverer.DriverLicense", on_delete=models.CASCADE, related_name="deliverer")
+    driver_license = models.OneToOneField("deliverer.DriverLicense", on_delete=models.CASCADE, related_name="deliverer")
     other_info = models.OneToOneField("deliverer.OtherInfo", on_delete=models.CASCADE, related_name="deliverer")
     address = models.OneToOneField("deliverer.Address", on_delete=models.CASCADE, related_name="deliverer")
     operation_info = models.OneToOneField("deliverer.OperationInfo", on_delete=models.CASCADE, related_name="deliverer")

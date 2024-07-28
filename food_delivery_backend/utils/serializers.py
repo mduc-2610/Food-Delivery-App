@@ -1,6 +1,8 @@
 from rest_framework import serializers
-from utils.function import get_many_related_url, get_one_related_url
+from django.db.models import OneToOneField
+from utils.function import get_related_url
 from django.apps import apps
+# from core import mapping
 
 class CustomRelatedModelSerializer(serializers.ModelSerializer):
     _initialized = False
@@ -12,6 +14,7 @@ class CustomRelatedModelSerializer(serializers.ModelSerializer):
         self.query_params = self.request.query_params
         self.separator = self.query_params.get('separator', ',')
         self.model = self.Meta.model
+        self.endpoint = '-'.join([x.lower() for x in self.model.__name__.split(' ')])
 
         self.one_related_fields = []
         self.many_related_fields = []
@@ -42,7 +45,6 @@ class CustomRelatedModelSerializer(serializers.ModelSerializer):
 
         self.one_related_serializer_class = {}
         self.many_related_serializer_class = {}
-        print(self.many_related_fields)
 
 
     def get_list_param(self, param_name, default='', separator=','):
@@ -51,11 +53,11 @@ class CustomRelatedModelSerializer(serializers.ModelSerializer):
             return [field.strip() for field in param_value.split(separator) if field.strip()]
         return []
 
-    def serialize_related_object(self, related_serializer_class, obj, related, many=False):
+    def serialize_related_object(self, related_serializer_class, obj, related, many=False, context={}):
         if self.request and not self.many:
             related_obj = getattr(obj, related, None)
             if related_obj:
-                related_serializer = related_serializer_class(related_obj, many=many, context=self.context)
+                related_serializer = related_serializer_class(related_obj, many=many, context=context)
                 return related_serializer.data
         return None
 
@@ -65,17 +67,21 @@ class CustomRelatedModelSerializer(serializers.ModelSerializer):
             if not isinstance(data.get(field), dict):
                 related_serializer_class = self.one_related_serializer_class.get(field)
                 if not related_serializer_class:
-                    data[field] = get_one_related_url(self.request, self.many, instance, '-'.join(field.split('_')))
+                    data[field] = get_related_url(self.request, self.model, instance, '-'.join(field.split('_')), type='one')
                 else:
-                    data[field] = self.serialize_related_object(related_serializer_class, instance, field)
+                    data[field] = self.serialize_related_object(related_serializer_class, instance, field, context=self.context)
             
         for field in self.many_related_fields:
             if not isinstance(data.get(field), list):
                 related_serializer_class = self.many_related_serializer_class.get(field)
                 if not related_serializer_class:
-                    data[field] = get_many_related_url(self.request, self.many, instance, '-'.join(field.split('_')))
+                    data[field] = get_related_url(self.request, self.model, instance, '-'.join(field.split('_')), type='many')
                 else:
-                    data[field] = self.serialize_related_object(related_serializer_class, instance, field, many=True)
+                    if isinstance(related_serializer_class, dict):
+                        _context = {**related_serializer_class.get('context', {}), **self.context}
+                        data[field] = self.serialize_related_object(related_serializer_class.get('serializer'), instance, field, many=True, context=_context)
+                    else:
+                        data[field] = self.serialize_related_object(related_serializer_class, instance, field, many=True, context=self.context)
         
         return data
 

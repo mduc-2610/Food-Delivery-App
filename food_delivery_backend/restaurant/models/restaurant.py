@@ -9,7 +9,7 @@ class Restaurant(models.Model):
     representative = models.OneToOneField('restaurant.Representative', on_delete=models.CASCADE, related_name='restaurant')
     menu_delivery = models.OneToOneField('restaurant.MenuDelivery', on_delete=models.CASCADE, related_name='restaurant')
     
-    promotions = models.ManyToManyField('order.RestaurantPromotion', related_name='promotions')
+    promotions = models.ManyToManyField('order.Promotion', through="order.RestaurantPromotion", related_name='promotions')
     
     def name(self):
         return self.basic_info.name

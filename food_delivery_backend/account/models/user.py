@@ -96,7 +96,7 @@ class OTP(models.Model):
         interval = interval[:-1]
         self.expired_at = timezone.now() + timedelta(seconds=int(interval))
         super().save(*args, **kwargs)
-
+    
     def has_expired(self):
         return timezone.now() > self.expired_at
 

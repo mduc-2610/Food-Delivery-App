@@ -14,7 +14,7 @@ from account.serializers.profile import ProfileSerializer
 from account.serializers.setting import SettingSerializer
 
 from utils.regex_validators import phone_regex, password_regex
-from utils.function import get_many_related_url 
+from utils.function import get_related_url 
 
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,77 +28,12 @@ class UserSerializer(CustomRelatedModelSerializer):
         super().__init__(*args, **kwargs)
 
         self.one_related_serializer_class = {
-            'profile': ProfileSerializer,
-            'setting': SettingSerializer
+            # 'profile': ProfileSerializer,
+            # 'setting': SettingSerializer
         }
     class Meta:
         model = User
         fields = ['id', 'phone_number', 'email', 'is_registration_verified', 'is_active', 'is_staff', 'is_superuser', 'date_joined', 'last_login',]
-
-# class UserSerializer(serializers.ModelSerializer):
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.many = self.context.get('many', False)
-#         self.request = self.context.get('request')
-#         self.query_params = self.request.query_params
-#         self.related_field = [field.strip() for field in self.query_params.get('related_field', 'profile, setting').split(',')]
-
-#     liked_dishes = serializers.SerializerMethodField()
-#     notifications = serializers.SerializerMethodField()
-#     promotions = serializers.SerializerMethodField()
-#     rated_dishes = serializers.SerializerMethodField()
-#     rated_deliverers = serializers.SerializerMethodField()
-#     rated_deliveries = serializers.SerializerMethodField()
-#     # orders = serializers.SerializerMethodField()
-#     profile = serializers.SerializerMethodField()
-#     setting = serializers.SerializerMethodField()
-
-#     class Meta:
-#         model = User
-#         exclude = ("password", )
-
-#     def serialize_related_object(self, related_serializer, obj, related):
-#         if self.request and not self.many:
-#             if related in self.related_field:
-#                 return related_serializer(obj[related]).data
-#             return None
-#         return None
-
-#     def get_profile(self, obj):
-#         return self.serialize_related_object(ProfileSerializer, obj, 'profile')
-
-#     def get_setting(self, obj):
-#         return self.serialize_related_object(SettingSerializer, obj, 'setting')
-
-#     def get_liked_dishes(self, obj):
-#         return get_many_related_url(self.request, self.many, obj, 'liked-dishes')
-
-#     def get_rated_dishes(self, obj):
-#         return get_many_related_url(self.request, self.many, obj, 'rated-dishes')
-
-#     def get_rated_deliverers(self, obj):
-#         return get_many_related_url(self.request, self.many, obj, 'rated-deliverers')
-
-#     def get_rated_deliveries(self, obj):
-#         return get_many_related_url(self.request, self.many, obj, 'rated-deliveries')
-
-#     def get_notifications(self, obj):
-#         return get_many_related_url(self.request, self.many, obj, 'notifications')
-
-#     def get_promotions(self, obj):
-#         return get_many_related_url(self.request, self.many, obj, 'promotions')
-
-#     def to_representation(self, instance):
-#         data = super().to_representation(instance)
-#         if not data.get('profile'):
-#             data.pop('profile')
-#         if not data.get('setting'):
-#             data.pop('setting')
-#         return data
-    
-    # def get_orders(self, obj):
-    #     request = self.context.get('request')
-    #     return request.build_absolute_uri(f'/account/user/{obj.pk}/orders')
 
 class OTPSerializer(serializers.ModelSerializer):
     class Meta:
@@ -230,3 +165,69 @@ class SetPasswordSerializer(serializers.ModelSerializer):
         user.is_registration_verified = True
         user.save()
         return user
+
+
+# class UserSerializer(serializers.ModelSerializer):
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.many = self.context.get('many', False)
+#         self.request = self.context.get('request')
+#         self.query_params = self.request.query_params
+#         self.related_field = [field.strip() for field in self.query_params.get('related_field', 'profile, setting').split(',')]
+
+#     liked_dishes = serializers.SerializerMethodField()
+#     notifications = serializers.SerializerMethodField()
+#     promotions = serializers.SerializerMethodField()
+#     rated_dishes = serializers.SerializerMethodField()
+#     rated_deliverers = serializers.SerializerMethodField()
+#     rated_deliveries = serializers.SerializerMethodField()
+#     # orders = serializers.SerializerMethodField()
+#     profile = serializers.SerializerMethodField()
+#     setting = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = User
+#         exclude = ("password", )
+
+#     def serialize_related_object(self, related_serializer, obj, related):
+#         if self.request and not self.many:
+#             if related in self.related_field:
+#                 return related_serializer(obj[related]).data
+#             return None
+#         return None
+
+#     def get_profile(self, obj):
+#         return self.serialize_related_object(ProfileSerializer, obj, 'profile')
+
+#     def get_setting(self, obj):
+#         return self.serialize_related_object(SettingSerializer, obj, 'setting')
+
+#     def get_liked_dishes(self, obj):
+#         return get_many_related_url(self.request, self.many, obj, 'liked-dishes')
+
+#     def get_rated_dishes(self, obj):
+#         return get_many_related_url(self.request, self.many, obj, 'rated-dishes')
+
+#     def get_rated_deliverers(self, obj):
+#         return get_many_related_url(self.request, self.many, obj, 'rated-deliverers')
+
+#     def get_rated_deliveries(self, obj):
+#         return get_many_related_url(self.request, self.many, obj, 'rated-deliveries')
+
+#     def get_notifications(self, obj):
+#         return get_many_related_url(self.request, self.many, obj, 'notifications')
+
+#     def get_promotions(self, obj):
+#         return get_many_related_url(self.request, self.many, obj, 'promotions')
+
+#     def to_representation(self, instance):
+#         data = super().to_representation(instance)
+#         if not data.get('profile'):
+#             data.pop('profile')
+#         if not data.get('setting'):
+#             data.pop('setting')
+#         return data
+    
+    # def get_orders(self, obj):
+    #     request = self.context.get('request')
+    #     return request.build_absolute_uri(f'/account/user/{obj.pk}/orders')
