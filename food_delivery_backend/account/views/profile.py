@@ -4,8 +4,8 @@ from account.models import Profile
 
 from account.serializers import ProfileSerializer
 
-from utils.views import OneToOneViewSet
+from utils.views import OneRelatedViewSet
 
-class ProfileViewSet(OneToOneViewSet):
+class ProfileViewSet(OneRelatedViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer

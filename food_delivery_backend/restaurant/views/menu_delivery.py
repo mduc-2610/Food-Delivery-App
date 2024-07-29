@@ -4,8 +4,8 @@ from restaurant.models import MenuDelivery
 
 from restaurant.serializers import MenuDeliverySerializer
 
-from utils.views import OneToOneViewSet
+from utils.views import OneRelatedViewSet
 
-class MenuDeliveryViewSet(OneToOneViewSet):
+class MenuDeliveryViewSet(OneRelatedViewSet):
     queryset = MenuDelivery.objects.all()
     serializer_class = MenuDeliverySerializer

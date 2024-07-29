@@ -4,8 +4,8 @@ from deliverer.models import Address
 
 from deliverer.serializers import AddressSerializer
 
-from utils.views import OneToOneViewSet
+from utils.views import OneRelatedViewSet
 
-class AddressViewSet(OneToOneViewSet):
+class AddressViewSet(OneRelatedViewSet):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer

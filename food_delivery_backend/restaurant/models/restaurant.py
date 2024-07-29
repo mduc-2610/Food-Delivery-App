@@ -16,6 +16,12 @@ class Restaurant(models.Model):
 
     def description(self):
         return self.detail_info.description
+    
+    def __getitem__(self, attr):
+        if hasattr(self, attr):
+            return getattr(self, attr)
+        else:
+            raise AttributeError(f"{attr} is not a valid attribute")
 
     def __str__(self):
         return f"{self.name()}"

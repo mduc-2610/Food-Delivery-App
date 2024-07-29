@@ -4,8 +4,8 @@ from deliverer.models import EmergencyContact
 
 from deliverer.serializers import EmergencyContactSerializer
 
-from utils.views import OneToOneViewSet
+from utils.views import OneRelatedViewSet
 
-class EmergencyContactViewSet(OneToOneViewSet):
+class EmergencyContactViewSet(OneRelatedViewSet):
     queryset = EmergencyContact.objects.all()
     serializer_class = EmergencyContactSerializer

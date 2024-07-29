@@ -29,8 +29,11 @@ from deliverer.serializers import DelivererSerializer
 from account.throttles import OTPThrottle
 
 from utils.pagination import CustomPagination
+from utils.views import ManyRelatedViewSet
 
-class UserViewSet(viewsets.ModelViewSet):
+from social.serializers import CommentLikeSerializer
+
+class UserViewSet(ManyRelatedViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = []
@@ -45,8 +48,41 @@ class UserViewSet(viewsets.ModelViewSet):
         'rated_deliverers': DelivererSerializer,
         'rated_deliveries': DeliverySerializer,
         'promotions': PromotionSerializer,
-        'notifications': NotificationSerializer
+        'notifications': NotificationSerializer,
+        'comment_likes': CommentLikeSerializer,
     }
+    # many_related = {
+    #     'rated_dishes': {
+    #         'action': (['GET'], 'rated-dishes'),
+    #         'queryset': lambda instance: instance.rated_dishes.all(),
+    #         'serializer_class': DishSerializer,
+    #     },
+    #     'liked_dishes': {
+    #         'action': (['GET'], 'liked-dishes'),
+    #         'queryset': lambda instance: instance.liked_dishes.all(),
+    #         'serializer_class': DishSerializer,
+    #     },
+    #     'rated_deliverers': {
+    #         'action': (['GET'], 'rated-deliverers'),
+    #         'queryset': lambda instance: instance.rated_deliverers.all(),
+    #         'serializer_class': DelivererSerializer,
+    #     },
+    #     'rated_deliveries': {
+    #         'action': (['GET'], 'rated-deliveries'),
+    #         'queryset': lambda instance: instance.rated_deliveries.all(),
+    #         'serializer_class': DeliverySerializer,
+    #     },
+    #     'notifications': {
+    #         'action': (['GET'], 'notifications'),
+    #         'queryset': lambda instance: instance.notifications.all(),
+    #         'serializer_class': PromotionSerializer,
+    #     },
+    #     'promotions': {
+    #         'action': (['GET'], 'promotions'),
+    #         'queryset': lambda instance: instance.promotions.all(),
+    #         'serializer_class': NotificationSerializer,
+    #     }
+    # }
 
     def get_serializer_class(self):
         return self.action_serializer_class.get(self.action, super().get_serializer_class())
@@ -60,30 +96,7 @@ class UserViewSet(viewsets.ModelViewSet):
         # if self.action == "send_otp":
             # return [OTPThrottle()]
         return []
-    
-    def get_object(self):
-        pk = self.kwargs.get('pk', None)
-        many_related_queryset = {
-            "liked_dishes": lambda instance: instance.liked_dishes.all(),
-            "notifications": lambda instance: instance.notifications.all(),
-            "promotions": lambda instance: instance.promotions.all(),
-            "rated_dishes": lambda instance: instance.rated_dishes.all(),
-            "rated_deliverers": lambda instance: instance.rated_deliverers.all(),
-            'rated_deliveries': lambda instance: instance.rated_deliveries.all(),
-        }
-        if self.action in many_related_queryset.keys():
-            try:
-                user = User.objects.get(pk=pk)
-            except User.DoesNotExist:
-                return response.Response(
-                    {
-                        "message": "User not found."
-                    },
-                    status=status.HTTP_404_NOT_FOUND
-                )
-            return many_related_queryset.get(self.action)(user)
-        return super().get_object()
-    
+
     def get_queryset(self):
         if self.action == "list":
             return User.objects.filter(is_registration_verified=True)            
@@ -200,40 +213,6 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
-
-    def paginate_and_response(self, request):
-        queryset = self.get_object()
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-        
-        serializer = self.get_serializer(queryset, many=True)
-        return response.Response(serializer.data, status=status.HTTP_200_OK)
-
-    @action(detail=True, methods=["GET"], url_path="rated-dishes")
-    def rated_dishes(self, request, *args, **kwargs):
-        return self.paginate_and_response(request)
-
-    @action(detail=True, methods=["GET"], url_path="liked-dishes")
-    def liked_dishes(self, request, *args, **kwargs):
-        return self.paginate_and_response(request)
-
-    @action(detail=True, methods=["GET"], url_path="rated-deliverers")
-    def rated_deliverers(self, request, *args, **kwargs):
-        return self.paginate_and_response(request)
-    
-    @action(detail=True, methods=["GET"], url_path="rated-deliveries")
-    def rated_deliveries(self, request, *args, **kwargs):
-        return self.paginate_and_response(request)
-    
-    @action(detail=True, methods=["GET"], url_path="notifications")
-    def notifications(self, request, *args, **kwargs):
-        return self.paginate_and_response(request)
-
-    @action(detail=True, methods=["GET"], url_path="promotions")
-    def promotions(self, request, *args, **kwargs):
-        return self.paginate_and_response(request)
 
 class LocationViewSet(viewsets.ModelViewSet):
     queryset = Location.objects.all()

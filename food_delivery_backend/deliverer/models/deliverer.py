@@ -11,6 +11,12 @@ class Deliverer(models.Model):
     address = models.OneToOneField("deliverer.Address", on_delete=models.CASCADE, related_name="deliverer")
     operation_info = models.OneToOneField("deliverer.OperationInfo", on_delete=models.CASCADE, related_name="deliverer")
     emergency_contact = models.OneToOneField("deliverer.EmergencyContact", on_delete=models.CASCADE, related_name="deliverer")
+    
+    def __getitem__(self, attr):
+        if hasattr(self, attr):
+            return getattr(self, attr)
+        else:
+            raise AttributeError(f"{attr} is not a valid attribute")
 
     def __str__(self):
         return f"{self.id} {self.basic_info}"

@@ -1,5 +1,8 @@
 import random
 import re
+import builtins
+import inspect
+import sys
 
 from django.apps import apps
 
@@ -49,10 +52,23 @@ def get_related_url(request, model, obj, view_name, type):
             uri = f"{base_uri}/{view_name}/{obj.pk}"
         else:
             raise ValueError("Invalid relationship_type. Use 'many' or 'one'.")
-        
-        # print("________________________________")
-        # print(uri)
-        # print("________________________________")
-        
         return uri
     return None
+
+def custom_print(*messages, **options):
+    current_frame = inspect.currentframe()
+    caller_frame = current_frame.f_back
+    source_file = caller_frame.f_globals['__file__']
+    line_num = caller_frame.f_lineno
+    
+    pretty = options.pop('pretty', False)
+    separator = "__________________________________________________________"
+
+    prefix = f"\n{separator}\n\n" if pretty else ""
+    suffix = f"{separator}\n" if pretty else ""
+    formatted_message = f"[{source_file}:{line_num}] {prefix}" + " ".join(map(str, messages)) + f"\n{suffix}"
+    
+    sys.stdout.write(formatted_message)
+    sys.stdout.flush()
+
+builtins.print = custom_print

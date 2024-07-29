@@ -49,5 +49,5 @@ class DetailRestaurantSerializer(CustomRelatedModelSerializer):
     
     class Meta:
         model = Restaurant
-        exclude = ['user']
+        exclude = ['user', 'promotions']
     

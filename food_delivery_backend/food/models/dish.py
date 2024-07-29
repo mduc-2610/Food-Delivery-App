@@ -17,5 +17,11 @@ class Dish(models.Model):
     category = models.ForeignKey('food.DishCategory', related_name='dishes', on_delete=models.CASCADE)
     restaurant = models.ForeignKey('restaurant.Restaurant', related_name='dishes', on_delete=models.CASCADE, null=True)
     
+    def __getitem__(self, attr):
+        if hasattr(self, attr):
+            return getattr(self, attr)
+        else:
+            raise AttributeError(f"{attr} is not a valid attribute")
+        
     def __str__(self):
         return self.name
