@@ -105,7 +105,7 @@ class UserViewSet(ManyRelatedViewSet):
     def get_serializer_context(self):
         context = super().get_serializer_context()
         if self.action == "list":
-            context.update({"many": True})
+            context.update({"detail": False})
         return context
 
     @action(detail=False, methods=["POST"], url_path="login-password")

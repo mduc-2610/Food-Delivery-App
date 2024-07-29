@@ -2,14 +2,13 @@ from rest_framework import serializers
 from django.db.models import OneToOneField
 from utils.function import get_related_url
 from django.apps import apps
-# from core import mapping
 
 class CustomRelatedModelSerializer(serializers.ModelSerializer):
     _initialized = False
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.many = self.context.get('many', False)
+        self.detail = self.context.get('detail', True)
         self.request = self.context.get('request')
         self.query_params = self.request.query_params
         self.separator = self.query_params.get('separator', ',')
@@ -21,20 +20,18 @@ class CustomRelatedModelSerializer(serializers.ModelSerializer):
 
         self.one_related_exclude_fields = self.get_list_param('one_related_exclude_fields', separator=self.separator)
         self.many_related_exclude_fields = self.get_list_param('many_related_exclude_fields', separator=self.separator)
-
-        if not self.many:
+        if self.detail:
             one_related_fields = self.get_list_param('one_related_fields', default='__all__', separator=self.separator)
             many_related_fields = self.get_list_param('many_related_fields', default='__all__', separator=self.separator)
 
             if (one_related_fields and self.one_related_exclude_fields) or (many_related_fields and self.many_related_exclude_fields):
                 one_related_fields = ['__all__']
                 many_related_fields = ['__all__']
-
             if not one_related_fields or one_related_fields[0] == "__all__":
                 self.one_related_fields = [field.name for field in self.model._meta.get_fields() if field.one_to_one]
             else:
                 self.one_related_fields = one_related_fields
-
+    
             if not many_related_fields or many_related_fields[0] == "__all__":
                 self.many_related_fields = [field.name for field in self.model._meta.get_fields() if field.one_to_many or field.many_to_many]
             else:
@@ -54,7 +51,7 @@ class CustomRelatedModelSerializer(serializers.ModelSerializer):
         return []
 
     def serialize_related_object(self, related_serializer_class, obj, related, many=False, context={}):
-        if self.request and not self.many:
+        if self.request and self.detail:
             related_obj = getattr(obj, related, None)
             if related_obj:
                 related_serializer = related_serializer_class(related_obj, many=many, context=context)
@@ -70,7 +67,7 @@ class CustomRelatedModelSerializer(serializers.ModelSerializer):
                     data[field] = get_related_url(self.request, self.model, instance, '-'.join(field.split('_')), type='one')
                 else:
                     data[field] = self.serialize_related_object(related_serializer_class, instance, field, context=self.context)
-            
+        print(self.many_related_fields)
         for field in self.many_related_fields:
             if not isinstance(data.get(field), list):
                 related_serializer_class = self.many_related_serializer_class.get(field)
@@ -84,4 +81,3 @@ class CustomRelatedModelSerializer(serializers.ModelSerializer):
                         data[field] = self.serialize_related_object(related_serializer_class, instance, field, many=True, context=self.context)
         
         return data
-

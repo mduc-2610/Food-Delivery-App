@@ -9,12 +9,12 @@ from .views import (
 )
 
 router = DefaultRouter()
-router.register(r'comments', CommentViewSet)
-router.register(r'post-images', PostImageViewSet)
-router.register(r'comment-images', CommentImageViewSet)
-router.register(r'comment-likes', CommentLikeViewSet)
-router.register(r'post-likes', PostLikeViewSet)
-router.register(r'posts', PostViewSet)
+router.register(r'comment', CommentViewSet)
+router.register(r'post-image', PostImageViewSet)
+router.register(r'comment-image', CommentImageViewSet)
+router.register(r'comment-like', CommentLikeViewSet)
+router.register(r'post-like', PostLikeViewSet)
+router.register(r'post', PostViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

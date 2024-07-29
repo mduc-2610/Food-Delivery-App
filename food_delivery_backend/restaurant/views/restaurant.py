@@ -51,11 +51,5 @@ class RestaurantViewSet(ManyRelatedViewSet):
     def get_serializer_context(self):
         context = super().get_serializer_context()
         if self.action == "list":
-            context.update({'many': True})
-        return context
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        if self.action == "list":
-            context.update({'many': True})
+            context.update({'detail': False})
         return context

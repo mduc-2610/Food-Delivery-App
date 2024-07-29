@@ -14,7 +14,7 @@ class BaseLike(models.Model):
 
 class PostLike(BaseLike):
     user = models.ForeignKey("account.User", related_name="post_likes", on_delete=models.CASCADE)
-    post = models.ForeignKey("social.Post", related_name="likes", on_delete=models.CASCADE)
+    post = models.ForeignKey("social.Post", related_name="user_likes", on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('user', 'post')  
@@ -24,7 +24,7 @@ class PostLike(BaseLike):
 
 class CommentLike(BaseLike):
     user = models.ForeignKey("account.User", related_name="comment_likes", on_delete=models.CASCADE)
-    comment = models.ForeignKey("social.Comment", related_name="likes", on_delete=models.CASCADE)
+    comment = models.ForeignKey("social.Comment", related_name="user_likes", on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('user', 'comment')

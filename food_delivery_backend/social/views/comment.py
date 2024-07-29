@@ -1,7 +1,21 @@
 from rest_framework import viewsets
-from social.models import Comment
-from social.serializers import CommentSerializer
 
-class CommentViewSet(viewsets.ModelViewSet):
+from account.serializers import UserAbbrSerializer
+from social.models import Comment
+from social.serializers import (
+    CommentSerializer, CommentLikeSerializer, CommentImageSerializer
+)
+from utils.pagination import CustomPagination
+
+from utils.views import ManyRelatedViewSet
+
+
+class CommentViewSet(ManyRelatedViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    pagination_class = CustomPagination
+    action_serializer_class = {
+        'liked_by_users': UserAbbrSerializer,
+        'user_likes': CommentLikeSerializer,
+        'comment_images': CommentImageSerializer,
+    }

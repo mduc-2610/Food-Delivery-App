@@ -6,8 +6,7 @@ from social.models import (
     Post, PostLike, CommentLike,
     PostImage, CommentImage, Comment
 )
-
-from utils.function import load_intermediate_model
+from utils.function import load_intermediate_model, load_one_to_many_model
 
 fake = Faker()
 
@@ -16,7 +15,8 @@ def load_social(
         max_comments=0, 
         max_post_likes=0,
         max_comment_likes=0,
-        max_images=0
+        max_post_images=0,
+        max_comment_images=0
     ):
     model_list = [
         Post, CommentLike, PostLike, 
@@ -77,22 +77,26 @@ def load_social(
 
     print("________________________________________________________________")
     print("POST IMAGES:")
-    for _ in range(max_images):
-        post_image_data = {
-            "post": random.choice(post_list),
-            "image": fake.image_url()
+    load_one_to_many_model(
+        model_class=PostImage,
+        primary_field='post',
+        primary_objects=post_list,
+        max_related_objects=max_post_images,
+        attributes={
+            "image": lambda: fake.image_url()
         }
-        post_image = PostImage.objects.create(**post_image_data)
-        print(f"\tSuccessfully created Post Image: {post_image}")
+    )
 
     print("________________________________________________________________")
     print("COMMENT IMAGES:")
-    for _ in range(max_images):
-        comment_image_data = {
-            "comment": random.choice(comment_list),
-            "image": fake.image_url()
+    load_one_to_many_model(
+        model_class=CommentImage,
+        primary_field='comment',
+        primary_objects=comment_list,
+        max_related_objects=max_comment_images,
+        attributes={
+            "image": lambda: fake.image_url()
         }
-        comment_image = CommentImage.objects.create(**comment_image_data)
-        print(f"\tSuccessfully created Comment Image: {comment_image}")
+    )
 
     return post_list, comment_list

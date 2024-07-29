@@ -24,7 +24,7 @@ class DetailDishSerializer(CustomRelatedModelSerializer):
             'size_options': DishSizeOptionSerializer,
             'additional_options': {
                 'serializer': DishAdditionalOptionSerializer,
-                'context': {"many": True}
+                'context': {"detail": False}
             },
             # "user_reviews": DishReviewSerializer,
             # "liked_by_users": None,
