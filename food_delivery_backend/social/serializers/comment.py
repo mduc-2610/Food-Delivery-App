@@ -2,6 +2,8 @@
 from rest_framework import serializers
 
 from social.models import Comment
+
+from account.serializers import UserAbbrSerializer
 from social.serializers.image import CommentImageSerializer
 
 from utils.serializers import CustomRelatedModelSerializer
@@ -20,8 +22,10 @@ class CommentSerializer(CustomRelatedModelSerializer):
         paginator = CustomPagination(page_size_query_param="image_page_size")  
         page = paginator.paginate_queryset(
             request=self.request, queryset=queryset)
+        
         return CommentImageSerializer(page, many=True).data
 
+    user = UserAbbrSerializer()
     class Meta:
         model = Comment
         fields = '__all__'

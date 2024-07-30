@@ -19,7 +19,7 @@ class PostViewSet(ManyRelatedViewSet):
         'retrieve': DetailPostSerializer,
         'liked_by_users': UserAbbrSerializer,
         'user_comments': CommentSerializer,
-        'user_likes': PostLikeSerializer,
+        'post_likes': PostLikeSerializer,
         'post_images': PostImageSerializer,
     }
     

@@ -79,7 +79,7 @@ class ManyRelatedViewSet(viewsets.ModelViewSet):
             if hasattr(cls.model, field):
                 cls.many_related.update({
                         field: {
-                            'action': (['GET', 'Post'], field.replace('_', '-')),
+                            'action': (['GET', ], field.replace('_', '-')),
                             'queryset': lambda instance, field_name=field: getattr(instance, field_name).all(),
                             'serializer_class': _serializer_class
                         }
@@ -96,7 +96,7 @@ class ManyRelatedViewSet(viewsets.ModelViewSet):
         #                     'serializer_class': _serializer_class
         #                 }
         #             })
-
+    
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         cls.init_many_related()

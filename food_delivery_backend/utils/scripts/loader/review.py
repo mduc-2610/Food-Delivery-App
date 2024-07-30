@@ -46,7 +46,7 @@ def load_review(
     review_attributes = {
         'rating': lambda: fake.random_int(min=1, max=5),
         'title': lambda: fake.sentence(nb_words=6),
-        'comment': lambda: fake.text(max_nb_chars=200)
+        'content': lambda: fake.text(max_nb_chars=200)
     }
 
     for review_model, (user_field, target_field, users, targets) in review_model_map.items():

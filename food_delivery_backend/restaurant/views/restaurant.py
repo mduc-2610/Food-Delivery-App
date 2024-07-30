@@ -15,7 +15,7 @@ class RestaurantViewSet(ManyRelatedViewSet):
     action_serializer_class = {
         'retrieve': DetailRestaurantSerializer,
         'promotions': PromotionSerializer,
-        'rated_by_users': UserAbbrSerializer,
+        'reviewed_by_users': UserAbbrSerializer,
         'dishes': DishSerializer,
         'user_reviews': RestaurantReviewSerializer,
         'owned_promotions': RestaurantPromotionSerializer
@@ -26,9 +26,9 @@ class RestaurantViewSet(ManyRelatedViewSet):
     #         'queryset': lambda instance: instance.promotions.all(),
     #         'serializer_class': PromotionSerializer,
     #     },
-    #     "rated_by_users": {
-    #         'action': (["GET"], "rated-by-users"),
-    #         'queryset': lambda instance: instance.rated_by_users.all(),
+    #     "reviewed_by_users": {
+    #         'action': (["GET"], "reviewed-by-users"),
+    #         'queryset': lambda instance: instance.reviewed_by_users.all(),
     #         'serializer_class': UserAbbrSerializer,
     #     },
     #     "dishes": {

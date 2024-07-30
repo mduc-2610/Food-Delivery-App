@@ -7,14 +7,14 @@ from .views import (
 )
 
 router = DefaultRouter()
-router.register(r'dish-reviews', DishReviewViewSet)
-router.register(r'deliverer-reviews', DelivererReviewViewSet)
-router.register(r'restaurant-reviews', RestaurantReviewViewSet)
-router.register(r'order-reviews', DeliveryReviewViewSet)
-router.register(r'dish-review-likes', DishReviewLikeViewSet)
-router.register(r'restaurant-review-likes', RestaurantReviewLikeViewSet)
-router.register(r'deliverer-review-likes', DelivererReviewLikeViewSet)
-router.register(r'order-review-likes', DeliveryReviewLikeViewSet)
+router.register(r'dish-review', DishReviewViewSet)
+router.register(r'deliverer-review', DelivererReviewViewSet)
+router.register(r'restaurant-review', RestaurantReviewViewSet)
+router.register(r'delivery-review', DeliveryReviewViewSet)
+router.register(r'dish-review-like', DishReviewLikeViewSet)
+router.register(r'restaurant-review-like', RestaurantReviewLikeViewSet)
+router.register(r'deliverer-review-like', DelivererReviewLikeViewSet)
+router.register(r'delivery-review-like', DeliveryReviewLikeViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

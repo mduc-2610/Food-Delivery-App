@@ -16,15 +16,15 @@ class DelivererViewSet(ManyRelatedViewSet):
     serializer_class = DelivererSerializer
     action_serializer_class = {
         'retrieve': DetailDelivererSerializer,
-        'rated_by_users': UserAbbrSerializer,
+        'reviewed_by_users': UserAbbrSerializer,
         'deliveries': DeliverySerializer,
-        'user_reviews': DelivererReviewSerializer,
+        'deliverer_reviews': DelivererReviewSerializer,
     }
     
     # many_related = {
-    #     "rated_by_users": {
-    #         'action': (["GET"], "rated-by-users"),
-    #         'queryset': lambda instance: instance.rated_by_users.filter(is_registration_verified=True),
+    #     "reviewed_by_users": {
+    #         'action': (["GET"], "reviewed-by-users"),
+    #         'queryset': lambda instance: instance.reviewed_by_users.filter(is_registration_verified=True),
     #         'serializer_class': UserAbbrSerializer, 
     #     },
     #     "deliveries": {

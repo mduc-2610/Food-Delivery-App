@@ -30,16 +30,16 @@ def load_social(
     
     print("________________________________________________________________")
     print("POSTS:")
-    post_list = []
-    for _ in range(max_posts):
-        post_data = {
-            "user": random.choice(user_list),
-            "title": fake.sentence(nb_words=6),
-            "content": fake.text(max_nb_chars=200)
+    post_list = load_one_to_many_model(
+        model_class=Post,
+        primary_field='user',
+        primary_objects=user_list,
+        max_related_objects=max_posts,
+        attributes= {
+            "title": lambda: fake.sentence(nb_words=6),
+            "content": lambda: fake.text(max_nb_chars=200)
         }
-        post = Post.objects.create(**post_data)
-        post_list.append(post)
-        print(f"\tSuccessfully created Post: {post}")
+    )
 
     print("________________________________________________________________")
     print("COMMENTS:")

@@ -4,6 +4,7 @@ from food.models import Dish
 
 from account.serializers import UserSerializer
 from food.serializers import DishSizeOptionSerializer, DishAdditionalOptionSerializer
+from food.serializers.dish_like import DishLikeSerializer
 from review.serializers import DishReviewSerializer
 from utils.serializers import CustomRelatedModelSerializer
 
@@ -19,7 +20,6 @@ class DishSerializer(serializers.ModelSerializer):
 class DetailDishSerializer(CustomRelatedModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        from food.serializers.dish_like import DishLikeSerializer
         self.many_related_serializer_class = {
             'size_options': DishSizeOptionSerializer,
             'additional_options': {

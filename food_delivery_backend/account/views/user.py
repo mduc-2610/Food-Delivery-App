@@ -17,21 +17,30 @@ from account.models import (
     User, OTP, Location,
     Profile, Setting, SecuritySetting
 )
+
 from account.serializers import (
     UserSerializer, SendOTPSerializer, OTPSerializer, LocationSerializer,
     VerifyOTPSerializer, LoginPasswordSerializer, SetPasswordSerializer
 )
-from food.serializers import DishSerializer
+from food.serializers import DishSerializer, DishLikeSerializer
 from notification.serializers import NotificationSerializer
 from order.serializers import PromotionSerializer, DeliverySerializer
 from deliverer.serializers import DelivererSerializer
+from restaurant.serializers import RestaurantSerializer
+from review.serializers import (
+    DeliveryReviewSerializer, DelivererReviewSerializer,
+    DishReviewSerializer, RestaurantReviewSerializer
+)
+from social.serializers import (
+    PostSerializer, CommentSerializer,
+    CommentLikeSerializer,
+    DetailPostSerializer
+)
 
 from account.throttles import OTPThrottle
 
 from utils.pagination import CustomPagination
 from utils.views import ManyRelatedViewSet
-
-from social.serializers import CommentLikeSerializer
 
 class UserViewSet(ManyRelatedViewSet):
     queryset = User.objects.all()
@@ -43,18 +52,33 @@ class UserViewSet(ManyRelatedViewSet):
         'verify_otp': VerifyOTPSerializer,
         'set_password': SetPasswordSerializer,
         'login_password': LoginPasswordSerializer,
-        'rated_dishes': DishSerializer,
-        'liked_dishes': DishSerializer,
-        'rated_deliverers': DelivererSerializer,
-        'rated_deliveries': DeliverySerializer,
+        
         'promotions': PromotionSerializer,
         'notifications': NotificationSerializer,
+        'comments': PostSerializer,
+        'posts': PostSerializer,
+
+        'liked_posts': DetailPostSerializer,
+        'liked_comments': CommentSerializer,
+        'liked_dishes': DishSerializer,
+        'liked_delivery_reviews': DeliveryReviewSerializer,
+        'liked_deliverer_reviews': DelivererReviewSerializer,
+        'liked_restaurant_reviews': RestaurantReviewSerializer,
+        'liked_dish_reviews': DishReviewSerializer,
+        
+        'reviewed_dishes': DishSerializer,
+        'reviewed_deliverers': DelivererSerializer,
+        'reviewed_deliveries': DeliverySerializer,
+        'reviewed_restaurants': RestaurantSerializer,
+        
+        'dish_likes': DishLikeSerializer,
+        'post_comments': CommentSerializer,
         'comment_likes': CommentLikeSerializer,
     }
     # many_related = {
-    #     'rated_dishes': {
-    #         'action': (['GET'], 'rated-dishes'),
-    #         'queryset': lambda instance: instance.rated_dishes.all(),
+    #     'reviewed_dishes': {
+    #         'action': (['GET'], 'reviewed-dishes'),
+    #         'queryset': lambda instance: instance.reviewed_dishes.all(),
     #         'serializer_class': DishSerializer,
     #     },
     #     'liked_dishes': {
@@ -62,14 +86,14 @@ class UserViewSet(ManyRelatedViewSet):
     #         'queryset': lambda instance: instance.liked_dishes.all(),
     #         'serializer_class': DishSerializer,
     #     },
-    #     'rated_deliverers': {
-    #         'action': (['GET'], 'rated-deliverers'),
-    #         'queryset': lambda instance: instance.rated_deliverers.all(),
+    #     'reviewed_deliverers': {
+    #         'action': (['GET'], 'reviewed-deliverers'),
+    #         'queryset': lambda instance: instance.reviewed_deliverers.all(),
     #         'serializer_class': DelivererSerializer,
     #     },
-    #     'rated_deliveries': {
-    #         'action': (['GET'], 'rated-deliveries'),
-    #         'queryset': lambda instance: instance.rated_deliveries.all(),
+    #     'reviewed_deliveries': {
+    #         'action': (['GET'], 'reviewed-deliveries'),
+    #         'queryset': lambda instance: instance.reviewed_deliveries.all(),
     #         'serializer_class': DeliverySerializer,
     #     },
     #     'notifications': {
@@ -88,36 +112,36 @@ class UserViewSet(ManyRelatedViewSet):
         return self.action_serializer_class.get(self.action, super().get_serializer_class())
 
     def get_permissions(self):
-        # if self.action in ["list", "retrieve"]:
+        # if self.action in ['list', 'retrieve']:
         #     return [IsAuthenticated()]
         return super().get_permissions()
     
     def get_throttles(self):
-        # if self.action == "send_otp":
+        # if self.action == 'send_otp':
             # return [OTPThrottle()]
         return []
 
     def get_queryset(self):
-        if self.action == "list":
+        if self.action == 'list':
             return User.objects.filter(is_registration_verified=True)            
         return super().get_queryset()
     
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        if self.action == "list":
-            context.update({"detail": False})
+        if self.action == 'list':
+            context.update({'detail': False})
         return context
 
-    @action(detail=False, methods=["POST"], url_path="login-password")
+    @action(detail=False, methods=['POST'], url_path='login-password')
     def login_password(self, request):
-        phone_number = request.data.get("phone_number")
-        password = request.data.get("password")
+        phone_number = request.data.get('phone_number')
+        password = request.data.get('password')
         user = authenticate(phone_number=phone_number, password=password)
         
         if not user:
             return response.Response(
                 {
-                    "message": "Invalid phone number or password."
+                    'message': 'Invalid phone number or password.'
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
@@ -125,21 +149,21 @@ class UserViewSet(ManyRelatedViewSet):
         refresh = RefreshToken.for_user(user)
         return response.Response(
             {
-                "refresh": str(refresh),
-                "access": str(refresh.access_token),
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
             },
             status=status.HTTP_200_OK
         )
 
-    @action(detail=False, methods=["POST"], url_path="send-otp")
+    @action(detail=False, methods=['POST'], url_path='send-otp')
     def send_otp(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             instance = serializer.save()            
             return response.Response(
                 {
-                    "message": "OTP sent successfully.",
-                    "data": instance
+                    'message': 'OTP sent successfully.',
+                    'data': instance
                 },
                 status=status.HTTP_200_OK
             )
@@ -148,19 +172,19 @@ class UserViewSet(ManyRelatedViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
         
-    @action(detail=False, methods=["POST"], url_path="verify-otp")
+    @action(detail=False, methods=['POST'], url_path='verify-otp')
     def verify_otp(self, request):
-        user = request.data.get("user")
+        user = request.data.get('user')
         user = User.objects.get(id=user)
         otp_exists = OTP.objects.filter(user=user).exists()
 
-        """
+        '''
         Check if user has been created or not
-        """
+        '''
         if not otp_exists:
             return response.Response(
                 {
-                    "message": "You must request an OTP first."
+                    'message': 'You must request an OTP first.'
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
@@ -171,15 +195,15 @@ class UserViewSet(ManyRelatedViewSet):
                 refresh = RefreshToken.for_user(user)
                 return response.Response(
                     {
-                        "refresh": str(refresh),
-                        "access": str(refresh.access_token),
+                        'refresh': str(refresh),
+                        'access': str(refresh.access_token),
                     },
                     status=status.HTTP_201_CREATED
                 )
             else:
                 return response.Response(
                     {
-                        "message": "Verification successful! Please set your password."
+                        'message': 'Verification successful! Please set your password.'
                     },
                     status=status.HTTP_200_OK
                 )
@@ -188,7 +212,7 @@ class UserViewSet(ManyRelatedViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
     
-    @action(detail=False, methods=["POST"], url_path="set-password")
+    @action(detail=False, methods=['POST'], url_path='set-password')
     def set_password(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
@@ -204,8 +228,8 @@ class UserViewSet(ManyRelatedViewSet):
             refresh = RefreshToken.for_user(user)
             return response.Response(
                 {
-                    "refresh": str(refresh),
-                    "access": str(refresh.access_token),
+                    'refresh': str(refresh),
+                    'access': str(refresh.access_token),
                 },
                 status=status.HTTP_201_CREATED
             )

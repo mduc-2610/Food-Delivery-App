@@ -11,5 +11,5 @@ class UserAbbrSerializer(serializers.ModelSerializer):
         depth = 2
 
     def get_name(self, obj):
-        return obj.profile.name
+        return obj.profile.name if hasattr(obj, 'profile') else None
     

@@ -16,6 +16,6 @@ class CommentViewSet(ManyRelatedViewSet):
     pagination_class = CustomPagination
     action_serializer_class = {
         'liked_by_users': UserAbbrSerializer,
-        'user_likes': CommentLikeSerializer,
+        'comment_likes': CommentLikeSerializer,
         'comment_images': CommentImageSerializer,
     }

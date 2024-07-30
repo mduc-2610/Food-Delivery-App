@@ -54,12 +54,13 @@ class User(AbstractBaseUser):
     OWN_RELATED_NAME = "owned_by_users"
     notifications = models.ManyToManyField("notification.Notification", through="notification.UserNotification", related_name=OWN_RELATED_NAME)
     promotions = models.ManyToManyField("order.Promotion", through="order.UserPromotion", related_name=OWN_RELATED_NAME)
+    comments = models.ManyToManyField("social.Post", through="social.Comment", related_name="commented_by_users")
     
-    RATE_RELATED_NAME = "rated_by_users"
-    rated_dishes = models.ManyToManyField("food.Dish", through="review.DishReview", related_name=RATE_RELATED_NAME)
-    rated_deliverers = models.ManyToManyField("deliverer.Deliverer", through="review.DelivererReview", related_name=RATE_RELATED_NAME)
-    rated_deliveries = models.ManyToManyField("order.Delivery", through="review.DeliveryReview", related_name=RATE_RELATED_NAME)
-    rated_restaurants = models.ManyToManyField("restaurant.Restaurant", through="review.RestaurantReview", related_name=RATE_RELATED_NAME)
+    RATE_RELATED_NAME = "reviewed_by_users"
+    reviewed_dishes = models.ManyToManyField("food.Dish", through="review.DishReview", related_name=RATE_RELATED_NAME)
+    reviewed_deliverers = models.ManyToManyField("deliverer.Deliverer", through="review.DelivererReview", related_name=RATE_RELATED_NAME)
+    reviewed_deliveries = models.ManyToManyField("order.Delivery", through="review.DeliveryReview", related_name=RATE_RELATED_NAME)
+    reviewed_restaurants = models.ManyToManyField("restaurant.Restaurant", through="review.RestaurantReview", related_name=RATE_RELATED_NAME)
     
     LIKE_RELATED_NAME = "liked_by_users"
     liked_posts = models.ManyToManyField("social.Post", through="social.PostLike", related_name=LIKE_RELATED_NAME)
