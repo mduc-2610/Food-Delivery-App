@@ -86,9 +86,7 @@ class SendOTPSerializer(serializers.Serializer):
         
         return {
             'otp': OTPSerializer(otp).data,
-            'user': UserSerializer(user, context={
-                'many_related': False
-            }).data
+            'user': UserSerializer(user, context=self.context).data
         }
 
 

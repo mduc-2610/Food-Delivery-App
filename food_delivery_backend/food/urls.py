@@ -11,7 +11,7 @@ from .views import (
 router = DefaultRouter()
 router.register(r'dish-option', DishAdditionalOptionViewSet)
 router.register(r'dish-size', DishSizeOptionViewSet)
-router.register(r'dish-categorie', DishCategoryViewSet)
+router.register(r'dish-category', DishCategoryViewSet)
 router.register(r'dish-like', DishLikeViewSet)
 router.register(r'dish', DishViewSet)
 

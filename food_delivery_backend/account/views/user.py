@@ -47,12 +47,13 @@ class UserViewSet(ManyRelatedViewSet):
     serializer_class = UserSerializer
     permission_classes = []
     pagination_class = CustomPagination
-    action_serializer_class = {
+    mapping_serializer_class = {
         'send_otp': SendOTPSerializer,
         'verify_otp': VerifyOTPSerializer,
         'set_password': SetPasswordSerializer,
         'login_password': LoginPasswordSerializer,
-        
+    }
+    many_related_serializer_class = {
         'promotions': PromotionSerializer,
         'notifications': NotificationSerializer,
         'comments': PostSerializer,
@@ -109,7 +110,7 @@ class UserViewSet(ManyRelatedViewSet):
     # }
 
     def get_serializer_class(self):
-        return self.action_serializer_class.get(self.action, super().get_serializer_class())
+        return self.many_related_serializer_class.get(self.action, super().get_serializer_class())
 
     def get_permissions(self):
         # if self.action in ['list', 'retrieve']:

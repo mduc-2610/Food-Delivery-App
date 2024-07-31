@@ -3,11 +3,9 @@ import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/data/services/token_service.dart';
 import 'package:food_delivery_app/features/authentication/controllers/login/auth_controller.dart';
 import 'package:food_delivery_app/features/authentication/models/account/profile.dart';
-import 'package:food_delivery_app/features/user/food/views/home/home.dart';
 import 'package:food_delivery_app/features/user/menu_redirection.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class ProfileController extends GetxController {
   static ProfileController get instance => Get.find();
@@ -42,13 +40,8 @@ class ProfileController extends GetxController {
       );
       $print(profileData);
 
-      final data = await callUpdateAPI(
-          'account/profile',
-          authController.user.id,
-          profileData.toJson(),
-          "",
-      );
-      print(data);
+      final [statusCode, headers, body] = await APIService<UserProfile>().create(profileData);
+      print(body);
       await TokenService.saveToken(authController.token);
       Get.offAll(() => UserMenuRedirection());
     }

@@ -14,7 +14,7 @@ from utils.views import ManyRelatedViewSet
 class DishViewSet(ManyRelatedViewSet):
     queryset = Dish.objects.all()
     serializer_class = DishSerializer
-    action_serializer_class = {
+    many_related_serializer_class = {
         'retrieve': DetailDishSerializer,
         'liked_by_users': UserAbbrSerializer,
         'reviewed_by_users': UserAbbrSerializer,

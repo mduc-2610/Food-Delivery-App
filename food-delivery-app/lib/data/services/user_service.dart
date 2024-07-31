@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'package:food_delivery_app/data/services/api_service.dart';
-import 'package:food_delivery_app/features/authentication/models/account/profile.dart';
-import 'package:food_delivery_app/features/authentication/models/account/setting.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/features/authentication/models/auth/token.dart';
 import 'package:shared_preferences/shared_preferences.dart';

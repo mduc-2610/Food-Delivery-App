@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/controllers/menu_bar_controller.dart';
 import 'package:food_delivery_app/common/widgets/bars/menu_bar.dart';
-import 'package:food_delivery_app/data/services/generic_api_service.dart';
+import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/data/services/token_service.dart';
 import 'package:food_delivery_app/data/services/user_service.dart';
 import 'package:food_delivery_app/features/authentication/controllers/login/auth_controller.dart';

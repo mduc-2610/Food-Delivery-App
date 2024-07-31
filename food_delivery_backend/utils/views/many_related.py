@@ -5,13 +5,13 @@ from utils.pagination import CustomPagination
 
 class ManyRelatedViewSet(viewsets.ModelViewSet):
     pagination_class = CustomPagination
-    action_serializer_class = {}
+    many_related_serializer_class = {}
     many_related = {}
 
     def get_serializer_class(self):
         return self.many_related.get(self.action, {}).get(
             'serializer_class',
-            self.action_serializer_class.get(
+            self.many_related_serializer_class.get(
                 self.action,
                 super().get_serializer_class()
             )
@@ -75,7 +75,7 @@ class ManyRelatedViewSet(viewsets.ModelViewSet):
     @classmethod
     def init_many_related(cls):
         cls.model = cls.queryset.model
-        for field, _serializer_class in cls.action_serializer_class.items():
+        for field, _serializer_class in cls.many_related_serializer_class.items():
             if hasattr(cls.model, field):
                 cls.many_related.update({
                         field: {
@@ -87,7 +87,7 @@ class ManyRelatedViewSet(viewsets.ModelViewSet):
                 
         # for field in cls.model._meta.get_fields():
         #     if field.one_to_many or field.many_to_many:
-        #         _serializer_class = cls.action_serializer_class.get(field.name)
+        #         _serializer_class = cls.many_related_serializer_class.get(field.name)
         #         if _serializer_class:
         #             cls.many_related.update({
         #                 field.name: {

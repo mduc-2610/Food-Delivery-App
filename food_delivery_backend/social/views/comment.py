@@ -14,7 +14,7 @@ class CommentViewSet(ManyRelatedViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     pagination_class = CustomPagination
-    action_serializer_class = {
+    many_related_serializer_class = {
         'liked_by_users': UserAbbrSerializer,
         'comment_likes': CommentLikeSerializer,
         'comment_images': CommentImageSerializer,

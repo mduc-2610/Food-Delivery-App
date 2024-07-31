@@ -7,13 +7,10 @@ import 'package:food_delivery_app/features/authentication/models/auth/token.dart
 import 'package:food_delivery_app/features/authentication/models/auth/verify_otp.dart';
 import 'package:food_delivery_app/features/authentication/models/message.dart';
 import 'package:food_delivery_app/features/authentication/views/login/password_set.dart';
-import 'package:food_delivery_app/features/authentication/views/login/verification.dart';
-import 'package:food_delivery_app/features/authentication/views/profile/profile.dart';
 import 'package:food_delivery_app/features/user/menu_redirection.dart';
 import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 class VerificationController extends GetxController {
   static VerificationController get instance => Get.find();
@@ -48,12 +45,7 @@ class VerificationController extends GetxController {
       user: _authController.user.id!,
       isLogin: true,
     );
-    final [statusCode, headers, body] = await callCreateAPI(
-        "account/user/verify-otp",
-        verifyOTPData.toJson(),
-        "",
-        fullResponse: true,
-    );
+    final [statusCode, headers, body] = await APIService<VerifyOTP>().create(verifyOTPData);
 
     if(statusCode == 400) {
       THelperFunction.showCSnackBar(Get.context!, body["non_field_errors"][0], SnackBarType.error);

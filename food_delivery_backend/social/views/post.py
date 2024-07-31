@@ -15,7 +15,7 @@ class PostViewSet(ManyRelatedViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     pagination_class = CustomPagination
-    action_serializer_class = {
+    many_related_serializer_class = {
         'retrieve': DetailPostSerializer,
         'liked_by_users': UserAbbrSerializer,
         'user_comments': CommentSerializer,

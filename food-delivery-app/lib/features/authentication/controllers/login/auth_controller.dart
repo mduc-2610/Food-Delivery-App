@@ -2,11 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/common/widgets/bars/snack_bar.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
-import 'package:food_delivery_app/data/services/generic_api_service.dart';
 import 'package:food_delivery_app/data/services/token_service.dart';
-import 'package:food_delivery_app/features/authentication/controllers/login/verification_controller.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/features/authentication/models/auth/login_password.dart';
 import 'package:food_delivery_app/features/authentication/models/auth/send_otp.dart';
@@ -93,12 +90,8 @@ class AuthController extends GetxController {
         isForgotPassword: isForgotPassword.value,
     );
     $print(sendOTPData);
-    final [statusCode, headers, body] = await callCreateAPI(
-        "account/user/send-otp",
-        sendOTPData.toJson(),
-        "",
-        fullResponse: true
-    );
+    final [statusCode, headers, body] = await APIService<SendOTP>().create(sendOTPData);
+
     if(statusCode == 200) {
       user = User.fromJson(body["data"]["user"]);
       otp = OTP.fromJson(body["data"]["otp"]);
@@ -113,14 +106,7 @@ class AuthController extends GetxController {
           phoneNumber: phoneNumber.value,
           password: password.value
       );
-      // final [statusCode, headers, body] = await callCreateAPI(
-      //   "account/user/login-password",
-      //   loginPasswordData.toJson(),
-      //   "",
-      //   fullResponse: true
-      // );
-
-      final [statusCode, headers, body] = await GenericAPIService<LoginPassword>().create(loginPasswordData.toJson(), null);
+      final [statusCode, headers, body] = await APIService<LoginPassword>().create(loginPasswordData);
       if(statusCode == 200) {
         token = Token.fromJson(body);
         await TokenService.saveToken(token);

@@ -12,12 +12,12 @@ from utils.views import ManyRelatedViewSet
 class RestaurantViewSet(ManyRelatedViewSet):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
-    action_serializer_class = {
+    many_related_serializer_class = {
         'retrieve': DetailRestaurantSerializer,
         'promotions': PromotionSerializer,
         'reviewed_by_users': UserAbbrSerializer,
         'dishes': DishSerializer,
-        'user_reviews': RestaurantReviewSerializer,
+        'restaurant_reviews': RestaurantReviewSerializer,
         'owned_promotions': RestaurantPromotionSerializer
     }
     # many_related = {

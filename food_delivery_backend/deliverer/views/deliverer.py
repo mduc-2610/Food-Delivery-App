@@ -14,7 +14,7 @@ from utils.views import ManyRelatedViewSet
 class DelivererViewSet(ManyRelatedViewSet):
     queryset = Deliverer.objects.all()
     serializer_class = DelivererSerializer
-    action_serializer_class = {
+    many_related_serializer_class = {
         'retrieve': DetailDelivererSerializer,
         'reviewed_by_users': UserAbbrSerializer,
         'deliveries': DeliverySerializer,
