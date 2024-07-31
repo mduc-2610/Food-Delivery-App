@@ -2,6 +2,7 @@ import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class DishLike {
   final String? id;
@@ -33,11 +34,6 @@ class DishLike {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('DishLike', {
-      'id': id,
-      'user': user?.toJson(),
-      'dish': dish,
-      'createdAt': createdAt,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

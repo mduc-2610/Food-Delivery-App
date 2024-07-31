@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class RestaurantDetailInfo {
   final Map<String, dynamic>? openingHours;
@@ -68,20 +69,6 @@ class RestaurantDetailInfo {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('RestaurantDetailInfo', {
-      'openingHours': openingHours,
-      'keywords': keywords,
-      'description': description,
-      'avatarImage': avatarImage,
-      'coverImage': coverImage,
-      'facadeImage': facadeImage,
-      'restaurantType': restaurantType,
-      'cuisine': cuisine,
-      'specialtyDishes': specialtyDishes,
-      'servingTimes': servingTimes,
-      'targetAudience': targetAudience,
-      'restaurantCategory': restaurantCategory,
-      'purpose': purpose,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

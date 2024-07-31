@@ -2,6 +2,7 @@ import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 class Review {
   final String? id;
   final UserAbbr? user;
@@ -44,18 +45,11 @@ class Review {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('Review', {
-      'id': id,
-      'user': user,
-      'rating': rating,
-      'title': title,
-      'comment': comment,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
 @jsonSerializable
 class DishReview extends Review {
   final String? dish;
@@ -93,19 +87,11 @@ class DishReview extends Review {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('DishReview', {
-      'id': id,
-      'user': user,
-      'rating': rating,
-      'title': title,
-      'comment': comment,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-      'dish': dish,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
 @jsonSerializable
 class DelivererReview extends Review {
   final String? deliverer;
@@ -143,19 +129,11 @@ class DelivererReview extends Review {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('DelivererReview', {
-      'id': id,
-      'user': user,
-      'rating': rating,
-      'title': title,
-      'comment': comment,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-      'deliverer': deliverer,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
 @jsonSerializable
 class RestaurantReview extends Review {
   final String? restaurant;
@@ -201,19 +179,11 @@ class RestaurantReview extends Review {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('RestaurantReview', {
-      'id': id,
-      'user': user,
-      'rating': rating,
-      'title': title,
-      'comment': comment,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-      'restaurant': restaurant,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
 @jsonSerializable
 class DeliveryReview extends Review {
   final String? delivery;
@@ -251,15 +221,6 @@ class DeliveryReview extends Review {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('DeliveryReview', {
-      'id': id,
-      'user': user,
-      'rating': rating,
-      'title': title,
-      'comment': comment,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-      'delivery': delivery,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

@@ -10,9 +10,7 @@ import 'package:food_delivery_app/utils/device/device_utility.dart';
 import 'package:get/get.dart';
 
 class LoginOauth extends StatefulWidget {
-  final bool isLogin;
   const LoginOauth({
-    this.isLogin = true,
     super.key
   });
 
@@ -23,24 +21,8 @@ class LoginOauth extends StatefulWidget {
 class _LoginOauthState extends State<LoginOauth> {
   final AuthController _controller = AuthController.instance;
 
-  late String buttonText;
-  late VoidCallback? onPressed;
-  late VoidCallback onTap;
-  late String text1, text2;
-
-  @override
-  void initState() {
-    bool isLogin = widget.isLogin;
-    buttonText = (isLogin) ? "Sign in" : "Register";
-    onTap = (isLogin) ? _controller.showRegisterPage : _controller.showLoginPage;
-    text1 = (isLogin) ? "Don't have an account? " : "Already have an account? ";
-    text2 = (isLogin) ? "Register" : "Login";
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    print(_controller.isRegisterButtonEnabled);
     final List<Map<String, dynamic>> iconPaths = [
       {"icon": TIcon.googleIcon, "onPressed": () {}},
       {"icon": TIcon.facebookIcon, "onPressed": () {}},
@@ -56,14 +38,11 @@ class _LoginOauthState extends State<LoginOauth> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Obx(() => MainButton(
-              onPressed: (widget.isLogin)
-                  ? (_controller.isLoginButtonEnabled)
+              onPressed:
+                  (_controller.isButtonEnabled)
                   ? _controller.handleLogin
-                  : null
-                  : (_controller.isRegisterButtonEnabled)
-                  ? _controller.handleRegister
                   : null,
-              text: buttonText,
+              text: "Login",
             )),
             SizedBox(
               height: TSize.spaceBetweenSections,
@@ -125,25 +104,6 @@ class _LoginOauthState extends State<LoginOauth> {
             SizedBox(
               height: TSize.spaceBetweenItemsVertical,
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     Text(
-            //       text1,
-            //       style: Theme.of(context).textTheme.bodySmall,
-            //     ),
-            //     GestureDetector(
-            //       onTap: onTap,
-            //       child: Text(
-            //         text2,
-            //         style: Theme.of(context)
-            //             .textTheme
-            //             .bodySmall
-            //             ?.copyWith(color: TColor.primary),
-            //       ),
-            //     )
-            //   ],
-            // )
           ],
         ),
       ),

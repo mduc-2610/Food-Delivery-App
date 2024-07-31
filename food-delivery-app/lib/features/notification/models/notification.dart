@@ -2,6 +2,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class Notification {
   final String? id;
@@ -33,11 +34,6 @@ class Notification {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('Notification', {
-      'id': id,
-      'notificationType': notificationType,
-      'title': title,
-      'description': description,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

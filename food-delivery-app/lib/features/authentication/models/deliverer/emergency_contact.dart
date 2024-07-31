@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class DelivererEmergencyContact {
   final String? name;
@@ -28,10 +29,6 @@ class DelivererEmergencyContact {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('DelivererEmergencyContact', {
-      'name': name,
-      'relationship': relationship,
-      'phoneNumber': phoneNumber,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

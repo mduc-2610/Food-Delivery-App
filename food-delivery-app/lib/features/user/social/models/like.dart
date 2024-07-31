@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 class BaseLike {
   final String id;
   final String user;
@@ -27,14 +28,11 @@ class BaseLike {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('BaseLike', {
-      'id': id,
-      'user': user,
-      'createdAt': createdAt,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
 @jsonSerializable
 class PostLike extends BaseLike {
   final String post;
@@ -59,15 +57,11 @@ class PostLike extends BaseLike {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('PostLike', {
-      'id': id,
-      'user': user,
-      'createdAt': createdAt,
-      'post': post,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
 @jsonSerializable
 class CommentLike extends BaseLike {
   final String comment;
@@ -92,11 +86,6 @@ class CommentLike extends BaseLike {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('CommentLike', {
-      'id': id,
-      'user': user,
-      'createdAt': createdAt,
-      'comment': comment,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

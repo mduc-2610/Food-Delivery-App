@@ -2,6 +2,7 @@ import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class SetPassword {
   final String password1;
@@ -24,6 +25,6 @@ class SetPassword {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('SetPassword', toJson());
+    return THelperFunction.formatToString(this);
   }
 }

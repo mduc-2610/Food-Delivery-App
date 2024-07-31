@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class DelivererOtherInfo {
   final String? occupation;
@@ -28,10 +29,6 @@ class DelivererOtherInfo {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('DelivererOtherInfo', {
-      'occupation': occupation,
-      'details': details,
-      'judicialRecord': judicialRecord,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

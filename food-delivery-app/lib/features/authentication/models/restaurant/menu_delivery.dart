@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class RestaurantMenuDelivery {
   final String? menuImage;
@@ -20,8 +21,6 @@ class RestaurantMenuDelivery {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('RestaurantMenuDelivery', {
-      'menuImage': menuImage,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

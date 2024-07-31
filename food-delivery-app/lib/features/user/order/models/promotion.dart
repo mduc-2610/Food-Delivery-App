@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class Promotion {
   final String id;
@@ -65,22 +66,11 @@ class Promotion {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('Promotion', {
-      'id': id,
-      'code': code,
-      'description': description,
-      'promoType': promoType,
-      'discountPercentage': discountPercentage,
-      'discountAmount': discountAmount,
-      'startDate': startDate,
-      'endDate': endDate,
-      'applicableScope': applicableScope,
-      'termsAndConditions': termsAndConditions,
-      'active': active,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
 @jsonSerializable
 class ActivityPromotion {
   final String promotionId;
@@ -104,9 +94,6 @@ class ActivityPromotion {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('ActivityPromotion', {
-      'promotionId': promotionId,
-      'activityType': activityType,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

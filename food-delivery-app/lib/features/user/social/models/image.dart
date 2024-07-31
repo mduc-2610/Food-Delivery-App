@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 class BaseImage {
   final String? id;
   final String? imageUrl;
@@ -27,14 +28,11 @@ class BaseImage {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('BaseImage', {
-      'id': id,
-      'imageUrl': imageUrl,
-      'createdAt': createdAt,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
 @jsonSerializable
 class PostImage extends BaseImage {
   final String? post;
@@ -59,15 +57,11 @@ class PostImage extends BaseImage {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('PostImage', {
-      'id': id,
-      'imageUrl': imageUrl,
-      'createdAt': createdAt,
-      'post': post,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
 @jsonSerializable
 class CommentImage extends BaseImage {
   final String? comment;
@@ -92,11 +86,6 @@ class CommentImage extends BaseImage {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('CommentImage', {
-      'id': id,
-      'imageUrl': imageUrl,
-      'createdAt': createdAt,
-      'comment': comment,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

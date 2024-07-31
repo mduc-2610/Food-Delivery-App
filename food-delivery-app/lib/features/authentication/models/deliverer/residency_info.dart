@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class DelivererResidencyInfo {
   final bool? isSameAsCi;
@@ -44,14 +45,6 @@ class DelivererResidencyInfo {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('DelivererResidencyInfo', {
-      'isSameAsCi': isSameAsCi,
-      'city': city,
-      'district': district,
-      'ward': ward,
-      'address': address,
-      'taxCode': taxCode,
-      'email': email,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

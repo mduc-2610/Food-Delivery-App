@@ -2,6 +2,7 @@ import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
+@reflector
 @jsonSerializable
 class SendOTP {
   final PhoneNumber phoneNumber;
@@ -21,6 +22,6 @@ class SendOTP {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('SendOTP', toJson());
+    return THelperFunction.formatToString(this);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class Comment {
   final String? id;
@@ -39,12 +40,6 @@ class Comment {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('Comment', {
-      'id': id,
-      'post': post,
-      'user': user,
-      'text': text,
-      'createdAt': createdAt,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

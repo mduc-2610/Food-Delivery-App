@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class Cart {
   final String? userId;
@@ -28,14 +29,12 @@ class Cart {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('Cart', {
-      'userId': userId,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
+@jsonSerializable
 class RestaurantCart {
   final String id;
   final String cartId;
@@ -78,18 +77,12 @@ class RestaurantCart {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('RestaurantCart', {
-      'id': id,
-      'cartId': cartId,
-      'restaurantId': restaurantId,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-      'isPlacedOrder': isPlacedOrder,
-      'rawFee': rawFee,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
+@jsonSerializable
 class RestaurantCartDish {
   final String id;
   final String cartId;
@@ -124,13 +117,7 @@ class RestaurantCartDish {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('RestaurantCartDish', {
-      'id': id,
-      'cartId': cartId,
-      'dishId': dishId,
-      'quantity': quantity,
-      'price': price,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 

@@ -1,5 +1,8 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
+@jsonSerializable
 class RMessage {
   final String message;
 
@@ -18,6 +21,6 @@ class RMessage {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('RMessage', toJson());
+    return THelperFunction.formatToString(this);
   }
 }

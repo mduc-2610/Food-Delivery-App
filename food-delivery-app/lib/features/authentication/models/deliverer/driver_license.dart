@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class DelivererDriverLicense {
   final String? licenseFront;
@@ -36,12 +37,6 @@ class DelivererDriverLicense {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('DelivererDriverLicense', {
-      'licenseFront': licenseFront,
-      'licenseBack': licenseBack,
-      'vehicleType': vehicleType,
-      'licensePlate': licensePlate,
-      'registrationCertificate': registrationCertificate,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

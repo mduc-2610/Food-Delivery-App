@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class DelivererAddress {
   final String? city;
@@ -32,11 +33,6 @@ class DelivererAddress {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('DelivererAddress', {
-      'city': city,
-      'district': district,
-      'ward': ward,
-      'detailAddress': detailAddress,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

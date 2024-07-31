@@ -2,6 +2,7 @@ import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class Post {
   final String? id;
@@ -38,12 +39,6 @@ class Post {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('Post', {
-      'id': id,
-      'user': user,
-      'title': title,
-      'content': content,
-      'createdAt': createdAt,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

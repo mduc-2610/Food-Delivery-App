@@ -127,13 +127,13 @@ class APIConstant {
       case DeliveryReview:
         return 'review/delivery-review';
       case DishReviewLike:
-        return 'review-like/dish-review-like';
+        return 'review/dish-review-like';
       case RestaurantReviewLike:
-        return 'review-like/restaurant-review-like';
+        return 'review/restaurant-review-like';
       case DelivererReviewLike:
-        return 'review-like/deliverer-review-like';
+        return 'review/deliverer-review-like';
       case DeliveryReviewLike:
-        return 'review-like/delivery-review-like';
+        return 'review/delivery-review-like';
 
       ///ORDER
       case Cart:

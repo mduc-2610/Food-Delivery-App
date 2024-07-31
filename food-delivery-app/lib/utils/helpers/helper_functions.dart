@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/bars/snack_bar.dart';
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:reflectable/mirrors.dart';
 import 'package:stack_trace/stack_trace.dart';
 import 'package:flutter/material.dart';
 
@@ -101,7 +103,7 @@ class THelperFunction {
     return wrappedList;
   }
 
-  static String formatToString(String className, Map<String, dynamic> attributes) {
+  static String formatToString2(String className, Map<String, dynamic> attributes) {
     String generate(String className, Map<String, dynamic> attributes, { bool prettyPrint = false }) {
       String endLine = prettyPrint ? '\n' : '';
       String tab = prettyPrint ? '\t' : '';
@@ -164,6 +166,41 @@ class THelperFunction {
     DateTime now = DateTime.now();
     Duration difference = expiredAt.difference(now);
     return difference.inSeconds;
+  }
+
+  static String formatToString(Object instance) {
+    var instanceMirror = reflector.reflect(instance);
+    ClassMirror? classMirror = instanceMirror.type;
+    var className = classMirror.simpleName;
+    var attributes = <String, dynamic>{};
+
+    while (classMirror != null) {
+      classMirror.declarations.forEach((key, value) {
+        if (value is VariableMirror) {
+          attributes[value.simpleName] = instanceMirror.invokeGetter(value.simpleName);
+        }
+      });
+      classMirror = classMirror.superclass;
+    }
+
+    return _generate(className, attributes, prettyPrint: false) + '\n' + _generate(className, attributes, prettyPrint: true);
+  }
+
+  static String _generate(String className, Map<String, dynamic> attributes, {bool prettyPrint = false}) {
+    String endLine = prettyPrint ? '\n' : '';
+    String tab = prettyPrint ? '\t' : '';
+    String formattedString = '$className {$endLine';
+    int i = 0;
+    attributes.forEach((key, value) {
+      formattedString += '$tab"$key": "$value"';
+      if (i != attributes.length - 1) {
+        formattedString += ",";
+      }
+      formattedString += "$endLine";
+      i++;
+    });
+    formattedString += '}';
+    return formattedString;
   }
 }
 

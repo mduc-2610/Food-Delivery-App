@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class User {
   final String? id;
@@ -56,21 +57,11 @@ class User {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('User', {
-      'id': id,
-      'phoneNumber': phoneNumber,
-      'email': email,
-      'isActive': isActive,
-      'isStaff': isStaff,
-      'isSuperuser': isSuperuser,
-      'dateJoined': dateJoined,
-      'lastLogin': lastLogin,
-      'isOtpVerified': isOtpVerified,
-      'isRegistrationVerified': isRegistrationVerified,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
 @jsonSerializable
 class OTP {
   final String? id;
@@ -102,15 +93,11 @@ class OTP {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('OTP', {
-      'id': id,
-      'user': user,
-      'code': code,
-      'expiredAt': expiredAt,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
 @jsonSerializable
 class UserLocation {
   final String? id;
@@ -141,15 +128,11 @@ class UserLocation {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('UserLocation', {
-      'id': id,
-      'address': address,
-      'latitude': latitude,
-      'longitude': longitude,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
 @jsonSerializable
 class UserAbbr {
   String? id;
@@ -174,12 +157,7 @@ class UserAbbr {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('UserAbbr', {
-      'id': id,
-      'phone_number': phoneNumber,
-      'name': name,
-      'avatar': avatar,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 

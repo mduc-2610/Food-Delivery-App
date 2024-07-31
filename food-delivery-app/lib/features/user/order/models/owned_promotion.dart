@@ -1,7 +1,8 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-abstract class OwnedPromotion {
+
+class OwnedPromotion {
   final String id;
   final String promotionId;
   final DateTime timestamp;
@@ -27,14 +28,11 @@ abstract class OwnedPromotion {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('OwnedPromotion', {
-      'id': id,
-      'promotionId': promotionId,
-      'timestamp': timestamp,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
 @jsonSerializable
 class OrderPromotion extends OwnedPromotion {
   final String orderId;
@@ -59,15 +57,11 @@ class OrderPromotion extends OwnedPromotion {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('OrderPromotion', {
-      'id': id,
-      'promotionId': promotionId,
-      'timestamp': timestamp,
-      'orderId': orderId,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
 @jsonSerializable
 class RestaurantPromotion extends OwnedPromotion {
   final String restaurantId;
@@ -92,15 +86,11 @@ class RestaurantPromotion extends OwnedPromotion {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('RestaurantPromotion', {
-      'id': id,
-      'promotionId': promotionId,
-      'timestamp': timestamp,
-      'restaurantId': restaurantId,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
 @jsonSerializable
 class UserPromotion extends OwnedPromotion {
   final String userId;
@@ -125,11 +115,6 @@ class UserPromotion extends OwnedPromotion {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('UserPromotion', {
-      'id': id,
-      'promotionId': promotionId,
-      'timestamp': timestamp,
-      'userId': userId,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

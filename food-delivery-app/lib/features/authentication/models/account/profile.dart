@@ -2,6 +2,7 @@ import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class UserProfile {
   final String? user;
@@ -32,12 +33,7 @@ class UserProfile {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('UserProfile', {
-      'user': user,
-      'name': name,
-      'gender': gender,
-      'dateOfBirth': dateOfBirth,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 

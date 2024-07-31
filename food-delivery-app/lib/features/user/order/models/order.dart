@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class Order {
   final String id;
@@ -50,29 +51,8 @@ class Order {
     };
   }
 
-  // double rawFee() {
-  //
-  //
-  //
-  //   return 0.0;
-  // }
-  //
-  // void calculateTotal() {
-  //   total = rawFee() + deliveryFee - discount;
-  // }
-
   @override
   String toString() {
-    return THelperFunction.formatToString('Order', {
-      'id': id,
-      'cartId': cartId,
-      'deliveryAddress': deliveryAddress,
-      'paymentMethod': paymentMethod,
-      'promotionId': promotionId,
-      'deliveryFee': deliveryFee,
-      'discount': discount,
-      'total': total,
-      'status': status,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

@@ -11,7 +11,6 @@ import 'package:food_delivery_app/features/authentication/models/auth/token.dart
 import 'package:food_delivery_app/features/authentication/models/message.dart';
 import 'package:food_delivery_app/features/authentication/views/login/password_set.dart';
 import 'package:food_delivery_app/features/authentication/views/login/verification.dart';
-import 'package:food_delivery_app/features/authentication/views/login/widgets/register.dart';
 import 'package:food_delivery_app/features/notification/models/message.dart';
 import 'package:food_delivery_app/features/user/menu_redirection.dart';
 import 'package:food_delivery_app/main.dart';
@@ -22,7 +21,6 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 import 'package:food_delivery_app/features/authentication/views/login/widgets/login.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:top_snackbar/top_snackbar.dart';
 
 
 class AuthController extends GetxController {
@@ -49,10 +47,6 @@ class AuthController extends GetxController {
     // startTimer();
     page = Rx<Widget>(Login());
     super.onInit();
-  }
-
-  void showRegisterPage() {
-    page.value = Register();
   }
 
   void showLoginPage() {
@@ -162,14 +156,6 @@ class AuthController extends GetxController {
       _countdownTimer?.cancel();
   }
 
-
-  void handleRegister() {
-    startTimer();
-    Get.to(() => VerificationView());
-    $print("HANDLE REGISTER");
-  }
-
   bool get checkPhoneNumber => phoneNumber.value.phoneNumber != "+84" && phoneNumber.value.phoneNumber != null;
-  bool get isLoginButtonEnabled => checkPhoneNumber && (password.value.isNotEmpty || loginType.value == "Login with Password");
-  bool get isRegisterButtonEnabled => checkPhoneNumber;
+  bool get isButtonEnabled => checkPhoneNumber && (password.value.isNotEmpty || loginType.value == "Login with Password");
 }

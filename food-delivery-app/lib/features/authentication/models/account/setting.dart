@@ -2,6 +2,7 @@ import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class UserSetting {
   final String? user;
@@ -40,17 +41,12 @@ class UserSetting {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('UserSetting', {
-      'user': user,
-      'notification': notification,
-      'darkMode': darkMode,
-      'sound': sound,
-      'automaticallyUpdated': automaticallyUpdated,
-      'language': language,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
+@jsonSerializable
 class UserSecuritySetting {
   final UserSetting? setting;
   final bool? faceId;
@@ -81,11 +77,6 @@ class UserSecuritySetting {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('UserSecuritySetting', {
-      'setting': setting,
-      'faceId': faceId,
-      'touchId': touchId,
-      'pinSecurity': pinSecurity,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

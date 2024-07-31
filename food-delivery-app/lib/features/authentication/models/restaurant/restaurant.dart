@@ -1,3 +1,4 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/basic_info.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/detail_info.dart';
@@ -5,6 +6,8 @@ import 'package:food_delivery_app/features/authentication/models/restaurant/menu
 import 'package:food_delivery_app/features/authentication/models/restaurant/representative.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
+@jsonSerializable
 class Restaurant {
   final String? id;
   final User? user;
@@ -50,14 +53,6 @@ class Restaurant {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('Restaurant', {
-      'id': id,
-      'user': user,
-      'basicInfo': basicInfo,
-      'representative': representative,
-      'detailInfo': detailInfo,
-      'menuDelivery': menuDelivery,
-      // 'promotions': promotions,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

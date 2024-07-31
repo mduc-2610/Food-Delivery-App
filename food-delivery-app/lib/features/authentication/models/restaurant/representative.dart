@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class RestaurantRepresentative {
   final String? registrationType;
@@ -48,15 +49,6 @@ class RestaurantRepresentative {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('RestaurantRepresentative', {
-      'registrationType': registrationType,
-      'fullName': fullName,
-      'email': email,
-      'phoneNumber': phoneNumber,
-      'otherPhoneNumber': otherPhoneNumber,
-      'idFrontImage': idFrontImage,
-      'idBackImage': idBackImage,
-      'businessRegistrationImage': businessRegistrationImage,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

@@ -2,6 +2,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class Message {
   final String? id;
@@ -45,18 +46,12 @@ class Message {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('Message', {
-      'id': id,
-      'senderId': senderId,
-      'receiverId': receiverId,
-      'messageType': messageType,
-      'content': content,
-      'timestamp': timestamp,
-      'readStatus': readStatus,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
+@jsonSerializable
 class ImageMessage {
   final String messageId;
   final String imageUrl;
@@ -79,13 +74,12 @@ class ImageMessage {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('ImageMessage', {
-      'messageId': messageId,
-      'imageUrl': imageUrl,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
+@jsonSerializable
 class AudioMessage {
   final String messageId;
   final String audioUrl;
@@ -108,13 +102,12 @@ class AudioMessage {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('AudioMessage', {
-      'messageId': messageId,
-      'audioUrl': audioUrl,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 
+@reflector
+@jsonSerializable
 class LocationMessage {
   final String messageId;
   final double latitude;
@@ -141,10 +134,6 @@ class LocationMessage {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('LocationMessage', {
-      'messageId': messageId,
-      'latitude': latitude,
-      'longitude': longitude,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

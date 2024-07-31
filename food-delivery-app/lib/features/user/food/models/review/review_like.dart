@@ -2,6 +2,7 @@ import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 class ReviewLike {
   final String? id;
   final dynamic user;
@@ -32,12 +33,7 @@ class ReviewLike {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('ReviewLike', {
-      'id': id,
-      'user': user?.toJson(),
-      'review': review,
-      'createdAt': createdAt,
-    });
+    return THelperFunction.formatToString(this);
   }
 }
 

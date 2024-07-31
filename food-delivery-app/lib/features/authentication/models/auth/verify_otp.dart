@@ -2,6 +2,7 @@ import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class VerifyOTP {
   final String code;
@@ -24,6 +25,6 @@ class VerifyOTP {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('VerifyOTP', toJson());
+    return THelperFunction.formatToString(this);
   }
 }

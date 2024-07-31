@@ -9,6 +9,7 @@ import 'package:food_delivery_app/features/authentication/models/deliverer/other
 import 'package:food_delivery_app/features/authentication/models/deliverer/residency_info.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class Deliverer {
   final String? id;
@@ -60,16 +61,6 @@ class Deliverer {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('Deliverer', {
-      'id': id,
-      'user': user,
-      'basicInfo': basicInfo,
-      'residencyInfo': residencyInfo,
-      'driverLicenseAndVehicle': driverLicenseAndVehicle,
-      'otherInfo': otherInfo,
-      'address': address,
-      'operationInfo': operationInfo,
-      'emergencyContact': emergencyContact,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

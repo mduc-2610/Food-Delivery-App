@@ -2,6 +2,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class Delivery {
   final String id;
@@ -73,21 +74,6 @@ class Delivery {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('Delivery', {
-      'id': id,
-      'orderId': orderId,
-      'delivererId': delivererId,
-      'pickupLocation': pickupLocation,
-      'pickupLat': pickupLat,
-      'pickupLong': pickupLong,
-      'dropOffLocation': dropOffLocation,
-      'dropOffLat': dropOffLat,
-      'dropOffLong': dropOffLong,
-      'status': status,
-      'estimatedDeliveryTime': estimatedDeliveryTime,
-      'actualDeliveryTime': actualDeliveryTime,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class RestaurantOperatingHour {
   final String? detailInformationId;
@@ -32,11 +33,6 @@ class RestaurantOperatingHour {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('RestaurantOperatingHour', {
-      'detailInformationId': detailInformationId,
-      'dayOfWeek': dayOfWeek,
-      'openTime': openTime,
-      'closeTime': closeTime,
-    });
+    return THelperFunction.formatToString(this);
   }
 }

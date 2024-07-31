@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@reflector
 @jsonSerializable
 class DishCategory {
   final String? id;
@@ -36,13 +37,6 @@ class DishCategory {
 
   @override
   String toString() {
-    return THelperFunction.formatToString('DishCategory', {
-      'id': id,
-      'name': name,
-      'description': description,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-    });
+    return THelperFunction.formatToString(this);
   }
-
 }
