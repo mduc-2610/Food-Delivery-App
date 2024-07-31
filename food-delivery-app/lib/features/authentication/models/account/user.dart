@@ -1,5 +1,7 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class User {
   final String? id;
   final String? phoneNumber;
@@ -69,6 +71,7 @@ class User {
   }
 }
 
+@jsonSerializable
 class OTP {
   final String? id;
   final String? user;
@@ -108,6 +111,7 @@ class OTP {
   }
 }
 
+@jsonSerializable
 class UserLocation {
   final String? id;
   final String? address;
@@ -145,3 +149,38 @@ class UserLocation {
     });
   }
 }
+
+@jsonSerializable
+class UserAbbr {
+  String? id;
+  String? phoneNumber;
+  String? name;
+  String? avatar;
+
+  UserAbbr.fromJson(Map<String, dynamic> json)
+    : this.id = json['id'],
+      this.phoneNumber = json['phone_number'],
+      this.name = json['name'],
+      this.avatar = json['avatar'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'phone_number': phoneNumber,
+      'name': name,
+      'avatar': avatar
+    };
+  }
+
+  @override
+  String toString() {
+    return THelperFunction.formatToString('UserAbbr', {
+      'id': id,
+      'phone_number': phoneNumber,
+      'name': name,
+      'avatar': avatar,
+    });
+  }
+}
+
+

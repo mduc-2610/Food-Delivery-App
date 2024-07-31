@@ -1,37 +1,44 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
+import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-abstract class Review {
-  final String id;
-  final String userId;
-  final int rating;
+class Review {
+  final String? id;
+  final UserAbbr? user;
+  final int? rating;
   final String? title;
-  final String comment;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final String? comment;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Review({
-    required this.id,
-    required this.userId,
-    required this.rating,
+    this.id,
+    this.user,
+    this.rating,
     this.title,
-    required this.comment,
-    required this.createdAt,
-    required this.updatedAt,
+    this.comment,
+    this.createdAt,
+    this.updatedAt,
   });
 
-  factory Review.fromJson(Map<String, dynamic> json) {
-    throw UnimplementedError();
-  }
+  Review.fromJson(Map<String, dynamic> json)
+    : id = json['id'],
+      user = UserAbbr.fromJson(json['user']),
+      rating = json['rating'],
+      title = json['title'],
+      comment = json['comment'],
+      createdAt = DateTime.parse(json['created_at']),
+      updatedAt = DateTime.parse(json['updated_at']);
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'user': userId,
+      'user': user?.id,
       'rating': rating,
       'title': title,
       'comment': comment,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
+      'created_at': createdAt?.toIso8601String(),
+      'updated_at': updatedAt?.toIso8601String(),
     };
   }
 
@@ -39,7 +46,7 @@ abstract class Review {
   String toString() {
     return THelperFunction.formatToString('Review', {
       'id': id,
-      'userId': userId,
+      'user': user,
       'rating': rating,
       'title': title,
       'comment': comment,
@@ -49,21 +56,22 @@ abstract class Review {
   }
 }
 
+@jsonSerializable
 class DishReview extends Review {
-  final String dishId;
+  final String? dish;
 
   DishReview({
-    required String id,
-    required String userId,
-    required int rating,
+    String? id,
+    UserAbbr? user,
+    int? rating,
     String? title,
-    required String comment,
-    required DateTime createdAt,
-    required DateTime updatedAt,
-    required this.dishId,
+    String? comment,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    this.dish,
   }) : super(
     id: id,
-    userId: userId,
+    user: user,
     rating: rating,
     title: title,
     comment: comment,
@@ -71,23 +79,15 @@ class DishReview extends Review {
     updatedAt: updatedAt,
   );
 
-  factory DishReview.fromJson(Map<String, dynamic> json) {
-    return DishReview(
-      id: json['id'],
-      userId: json['user'],
-      rating: json['rating'],
-      title: json['title'],
-      comment: json['comment'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
-      dishId: json['dish'],
-    );
-  }
+  DishReview.fromJson(Map<String, dynamic> json)
+    : dish = json['dish'],
+      super.fromJson(json);
+
 
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()..addAll({
-      'dish': dishId,
+      'dish': dish,
     });
   }
 
@@ -95,32 +95,33 @@ class DishReview extends Review {
   String toString() {
     return THelperFunction.formatToString('DishReview', {
       'id': id,
-      'userId': userId,
+      'user': user,
       'rating': rating,
       'title': title,
       'comment': comment,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
-      'dishId': dishId,
+      'dish': dish,
     });
   }
 }
 
+@jsonSerializable
 class DelivererReview extends Review {
-  final String delivererId;
+  final String? deliverer;
 
   DelivererReview({
-    required String id,
-    required String userId,
-    required int rating,
+    String? id,
+    UserAbbr? user,
+    int? rating,
     String? title,
-    required String comment,
-    required DateTime createdAt,
-    required DateTime updatedAt,
-    required this.delivererId,
+    String? comment,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    this.deliverer,
   }) : super(
     id: id,
-    userId: userId,
+    user: user,
     rating: rating,
     title: title,
     comment: comment,
@@ -128,23 +129,15 @@ class DelivererReview extends Review {
     updatedAt: updatedAt,
   );
 
-  factory DelivererReview.fromJson(Map<String, dynamic> json) {
-    return DelivererReview(
-      id: json['id'],
-      userId: json['user'],
-      rating: json['rating'],
-      title: json['title'],
-      comment: json['comment'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
-      delivererId: json['deliverer'],
-    );
-  }
+  DelivererReview.fromJson(Map<String, dynamic> json)
+    : deliverer = json['deliverer'],
+      super.fromJson(json);
+
 
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()..addAll({
-      'deliverer': delivererId,
+      'deliverer': deliverer,
     });
   }
 
@@ -152,32 +145,33 @@ class DelivererReview extends Review {
   String toString() {
     return THelperFunction.formatToString('DelivererReview', {
       'id': id,
-      'userId': userId,
+      'user': user,
       'rating': rating,
       'title': title,
       'comment': comment,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
-      'delivererId': delivererId,
+      'deliverer': deliverer,
     });
   }
 }
 
+@jsonSerializable
 class RestaurantReview extends Review {
-  final String restaurantId;
+  final String? restaurant;
 
   RestaurantReview({
-    required String id,
-    required String userId,
-    required int rating,
+    String? id,
+    UserAbbr? user,
+    int? rating,
     String? title,
-    required String comment,
-    required DateTime createdAt,
-    required DateTime updatedAt,
-    required this.restaurantId,
+    String? comment,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    this.restaurant,
   }) : super(
     id: id,
-    userId: userId,
+    user: user,
     rating: rating,
     title: title,
     comment: comment,
@@ -188,20 +182,20 @@ class RestaurantReview extends Review {
   factory RestaurantReview.fromJson(Map<String, dynamic> json) {
     return RestaurantReview(
       id: json['id'],
-      userId: json['user'],
+      user: json['user'],
       rating: json['rating'],
       title: json['title'],
       comment: json['comment'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
-      restaurantId: json['restaurant'],
+      restaurant: json['restaurant'],
     );
   }
 
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()..addAll({
-      'restaurant': restaurantId,
+      'restaurant': restaurant,
     });
   }
 
@@ -209,32 +203,33 @@ class RestaurantReview extends Review {
   String toString() {
     return THelperFunction.formatToString('RestaurantReview', {
       'id': id,
-      'userId': userId,
+      'user': user,
       'rating': rating,
       'title': title,
       'comment': comment,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
-      'restaurantId': restaurantId,
+      'restaurant': restaurant,
     });
   }
 }
 
-class OrderReview extends Review {
-  final String orderId;
+@jsonSerializable
+class DeliveryReview extends Review {
+  final String? delivery;
 
-  OrderReview({
-    required String id,
-    required String userId,
-    required int rating,
+  DeliveryReview({
+    String? id,
+    UserAbbr? user,
+    int? rating,
     String? title,
-    required String comment,
-    required DateTime createdAt,
-    required DateTime updatedAt,
-    required this.orderId,
+    String? comment,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    this.delivery,
   }) : super(
     id: id,
-    userId: userId,
+    user: user,
     rating: rating,
     title: title,
     comment: comment,
@@ -242,37 +237,29 @@ class OrderReview extends Review {
     updatedAt: updatedAt,
   );
 
-  factory OrderReview.fromJson(Map<String, dynamic> json) {
-    return OrderReview(
-      id: json['id'],
-      userId: json['user'],
-      rating: json['rating'],
-      title: json['title'],
-      comment: json['comment'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
-      orderId: json['order'],
-    );
-  }
+  DeliveryReview.fromJson(Map<String, dynamic> json)
+    : delivery = json['order'],
+      super.fromJson(json);
+
 
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()..addAll({
-      'order': orderId,
+      'order': delivery,
     });
   }
 
   @override
   String toString() {
-    return THelperFunction.formatToString('OrderReview', {
+    return THelperFunction.formatToString('DeliveryReview', {
       'id': id,
-      'userId': userId,
+      'user': user,
       'rating': rating,
       'title': title,
       'comment': comment,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
-      'orderId': orderId,
+      'delivery': delivery,
     });
   }
 }

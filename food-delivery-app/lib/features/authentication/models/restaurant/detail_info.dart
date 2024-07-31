@@ -1,5 +1,7 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class RestaurantDetailInfo {
   final Map<String, dynamic>? openingHours;
   final String? keywords;
@@ -16,19 +18,19 @@ class RestaurantDetailInfo {
   final String? purpose;
 
   RestaurantDetailInfo({
-    required this.openingHours,
-    required this.keywords,
-    required this.description,
-    required this.avatarImage,
-    required this.coverImage,
-    required this.facadeImage,
-    required this.restaurantType,
-    required this.cuisine,
-    required this.specialtyDishes,
-    required this.servingTimes,
-    required this.targetAudience,
-    required this.restaurantCategory,
-    required this.purpose,
+    this.openingHours,
+    this.keywords,
+    this.description,
+    this.avatarImage,
+    this.coverImage,
+    this.facadeImage,
+    this.restaurantType,
+    this.cuisine,
+    this.specialtyDishes,
+    this.servingTimes,
+    this.targetAudience,
+    this.restaurantCategory,
+    this.purpose,
   });
 
   RestaurantDetailInfo.fromJson(Map<String, dynamic> json)

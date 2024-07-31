@@ -1,3 +1,4 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 abstract class OwnedPromotion {
@@ -34,6 +35,7 @@ abstract class OwnedPromotion {
   }
 }
 
+@jsonSerializable
 class OrderPromotion extends OwnedPromotion {
   final String orderId;
 
@@ -66,6 +68,7 @@ class OrderPromotion extends OwnedPromotion {
   }
 }
 
+@jsonSerializable
 class RestaurantPromotion extends OwnedPromotion {
   final String restaurantId;
 
@@ -98,6 +101,7 @@ class RestaurantPromotion extends OwnedPromotion {
   }
 }
 
+@jsonSerializable
 class UserPromotion extends OwnedPromotion {
   final String userId;
 

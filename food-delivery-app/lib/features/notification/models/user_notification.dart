@@ -1,19 +1,21 @@
 
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class UserNotification {
-  final String id;
-  final String userId;
-  final String notificationId;
-  final DateTime timestamp;
-  final bool readStatus;
+  final String? id;
+  final String? userId;
+  final String? notificationId;
+  final DateTime? timestamp;
+  final bool? readStatus;
 
   UserNotification({
-    required this.id,
-    required this.userId,
-    required this.notificationId,
-    required this.timestamp,
-    required this.readStatus,
+    this.id,
+    this.userId,
+    this.notificationId,
+    this.timestamp,
+    this.readStatus,
   });
 
   UserNotification.fromJson(Map<String, dynamic> json)
@@ -28,7 +30,7 @@ class UserNotification {
       'id': id,
       'user': userId,
       'notification': notificationId,
-      'timestamp': timestamp.toIso8601String(),
+      'timestamp': timestamp?.toIso8601String(),
       'read_status': readStatus,
     };
   }

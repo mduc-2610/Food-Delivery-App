@@ -1,6 +1,8 @@
 
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class Delivery {
   final String id;
   final String orderId;

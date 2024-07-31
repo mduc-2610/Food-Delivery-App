@@ -1,5 +1,7 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class DelivererBasicInfo {
   final String? fullName;
   final String? givenName;
@@ -13,16 +15,16 @@ class DelivererBasicInfo {
   final String? citizenIdentification;
 
   DelivererBasicInfo({
-    required this.fullName,
-    required this.givenName,
-    required this.gender,
-    required this.dateOfBirth,
-    required this.hometown,
-    required this.city,
-    required this.district,
-    required this.ward,
-    required this.address,
-    required this.citizenIdentification,
+    this.fullName,
+    this.givenName,
+    this.gender,
+    this.dateOfBirth,
+    this.hometown,
+    this.city,
+    this.district,
+    this.ward,
+    this.address,
+    this.citizenIdentification,
   });
 
   DelivererBasicInfo.fromJson(Map<String, dynamic> json)

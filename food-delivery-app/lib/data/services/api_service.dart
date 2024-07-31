@@ -7,7 +7,9 @@ class APIService {
   final String? fullUrl;
   final String token;
 
-  APIService({this.endpoint, this.fullUrl, required this.token});
+  APIService({
+    this.endpoint, this.fullUrl, required this.token
+  });
 
   String url({String id = ''}) {
     return '${APIConstant.baseUrl}/$endpoint/${id != '' ? '$id/' : ''}';
@@ -19,8 +21,9 @@ class APIService {
         bool pagination = false,
       }
       ) async {
+    final url_ = (endpoint != null ? url() + queryParams : fullUrl ?? "" );
     final response = await http.get(
-      Uri.parse(url() + queryParams ?? ""),
+      Uri.parse(url_),
       headers: _getHeaders(),
     );
 
@@ -102,46 +105,6 @@ class APIService {
   }
 }
 
-Future<List<dynamic>> callListAPI(
-    String endpoint,
-    Function modelFromJson,
-    String token,
-    {
-      String queryParams = "",
-      bool pagination = false,
-    }
-    ) async {
-  APIService service = APIService(endpoint: endpoint, token: token);
-
-  List<dynamic> querySet = await service.fetchList(
-    modelFromJson,
-    queryParams: queryParams,
-    pagination: pagination,
-  );
-  return querySet;
-}
-
-Future<dynamic> callRetrieveAPI(
-    String? endpoint,
-    String? id,
-    String? fullUrl,
-    Function modelFromJson,
-    String token,
-    { String queryParams = "" }
-    ) async {
-  APIService service = APIService(
-      endpoint: endpoint,
-      fullUrl: fullUrl,
-      token: token
-  );
-
-  final instance = await service.fetchSingle(
-      modelFromJson,
-      id,
-      queryParams: queryParams
-  );
-  return instance;
-}
 
 Future<dynamic> callCreateAPI(
     String endpoint,
@@ -172,16 +135,4 @@ Future<dynamic> callUpdateAPI(
     return await service.update(id, modelToJson);
   }
   return (await service.update(id, modelToJson))[2];
-}
-
-Future<dynamic> callDestroyAPI(
-    String? endpoint,
-    String? id,
-    String token,
-    {
-      bool fullResponse = false
-    }
-    ) async {
-  APIService service = APIService(endpoint: endpoint, token: token);
-  return await service.delete(id!);
 }

@@ -1,6 +1,8 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
+@jsonSerializable
 class LoginPassword {
   final PhoneNumber phoneNumber;
   final String password;

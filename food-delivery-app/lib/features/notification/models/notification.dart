@@ -1,17 +1,19 @@
 
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class Notification {
-  final String id;
-  final String notificationType;
-  final String title;
-  final String description;
+  final String? id;
+  final String? notificationType;
+  final String? title;
+  final String? description;
 
   Notification({
-    required this.id,
-    required this.notificationType,
-    required this.title,
-    required this.description,
+    this.id,
+    this.notificationType,
+    this.title,
+    this.description,
   });
 
   Notification.fromJson(Map<String, dynamic> json)

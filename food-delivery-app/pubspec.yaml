@@ -30,7 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  reflectable: ^4.0.9
   smooth_page_indicator: ^1.1.0
   flutter_svg: ^2.0.10+1
   intl_phone_number_input: ^0.7.4

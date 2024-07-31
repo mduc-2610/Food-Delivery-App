@@ -1,14 +1,16 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class DelivererEmergencyContact {
   final String? name;
   final String? relationship;
   final String? phoneNumber;
 
   DelivererEmergencyContact({
-    required this.name,
-    required this.relationship,
-    required this.phoneNumber,
+    this.name,
+    this.relationship,
+    this.phoneNumber,
   });
 
   DelivererEmergencyContact.fromJson(Map<String, dynamic> json)

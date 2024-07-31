@@ -1,5 +1,7 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class DelivererResidencyInfo {
   final bool? isSameAsCi;
   final String? city;
@@ -10,13 +12,13 @@ class DelivererResidencyInfo {
   final String? email;
 
   DelivererResidencyInfo({
-    required this.isSameAsCi,
-    required this.city,
-    required this.district,
-    required this.ward,
-    required this.address,
-    required this.taxCode,
-    required this.email,
+    this.isSameAsCi,
+    this.city,
+    this.district,
+    this.ward,
+    this.address,
+    this.taxCode,
+    this.email,
   });
 
   DelivererResidencyInfo.fromJson(Map<String, dynamic> json)

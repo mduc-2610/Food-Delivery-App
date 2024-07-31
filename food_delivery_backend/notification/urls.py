@@ -11,12 +11,12 @@ from .views import (
 )
 
 router = DefaultRouter()
-router.register(r'messages', MessageViewSet)
-router.register(r'image-messages', ImageMessageViewSet)
-router.register(r'audio-messages', AudioMessageViewSet)
-router.register(r'location-messages', LocationMessageViewSet)
-router.register(r'notifications', NotificationViewSet)
-router.register(r'user-notifications', UserNotificationViewSet)
+router.register(r'message', MessageViewSet)
+router.register(r'image-message', ImageMessageViewSet)
+router.register(r'audio-message', AudioMessageViewSet)
+router.register(r'location-message', LocationMessageViewSet)
+router.register(r'notification', NotificationViewSet)
+router.register(r'user-notification', UserNotificationViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

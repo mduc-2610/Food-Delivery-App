@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:food_delivery_app/data/services/reflect.dart';
 
+@jsonSerializable
 class MyLocation {
   final String name;
   final String address;

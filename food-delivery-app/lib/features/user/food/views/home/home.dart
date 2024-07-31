@@ -2,12 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/controllers/menu_bar_controller.dart';
 import 'package:food_delivery_app/common/widgets/bars/menu_bar.dart';
+import 'package:food_delivery_app/data/services/generic_api_service.dart';
+import 'package:food_delivery_app/data/services/token_service.dart';
+import 'package:food_delivery_app/data/services/user_service.dart';
 import 'package:food_delivery_app/features/authentication/controllers/login/auth_controller.dart';
+import 'package:food_delivery_app/features/authentication/models/account/user.dart';
+import 'package:food_delivery_app/features/authentication/models/auth/token.dart';
 import 'package:food_delivery_app/features/user/food/controllers/home/home_controller.dart';
+import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
+import 'package:food_delivery_app/features/user/food/models/food/dish_like.dart';
+import 'package:food_delivery_app/features/user/food/models/review/review.dart';
 import 'package:food_delivery_app/features/user/food/views/common/widgets/category_card.dart';
 import 'package:food_delivery_app/common/widgets/cards/food_card_gr.dart';
 import 'package:food_delivery_app/features/user/food/views/home/widgets/home_sliver_app_bar.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/bars/search_bar.dart';
@@ -16,8 +25,19 @@ import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
   final HomeController _controller = Get.put(HomeController());
+
+  @override
+  void didChangeDependencies() async {
+
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -161,5 +181,4 @@ class HomeView extends StatelessWidget {
       ),
     );
   }
-
 }

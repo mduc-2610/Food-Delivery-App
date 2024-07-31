@@ -1,5 +1,7 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class Promotion {
   final String id;
   final String code;
@@ -79,6 +81,7 @@ class Promotion {
   }
 }
 
+@jsonSerializable
 class ActivityPromotion {
   final String promotionId;
   final String activityType;

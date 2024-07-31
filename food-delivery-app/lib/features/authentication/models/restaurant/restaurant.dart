@@ -6,7 +6,7 @@ import 'package:food_delivery_app/features/authentication/models/restaurant/repr
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 class Restaurant {
-  final String id;
+  final String? id;
   final User? user;
   final RestaurantBasicInfo? basicInfo;
   final RestaurantRepresentative? representative;
@@ -15,12 +15,12 @@ class Restaurant {
   // final List<RestaurantPromotion>? promotions;
 
   Restaurant({
-    required this.id,
-    required this.user,
-    required this.basicInfo,
-    required this.representative,
-    required this.detailInfo,
-    required this.menuDelivery,
+    this.id,
+    this.user,
+    this.basicInfo,
+    this.representative,
+    this.detailInfo,
+    this.menuDelivery,
     // required this.promotions,
   });
 
@@ -36,25 +36,17 @@ class Restaurant {
         //     : null
       ;
 
-  // Map<String, dynamic> toJson() {
-  //   return {
-  //     'id': id,
-  //     'user': user?.toJson(),
-  //     'basic_info': basicInfo?.toJson(),
-  //     'representative': representative?.toJson(),
-  //     'detail_info': detailInfo?.toJson(),
-  //     'menu_delivery': menuDelivery?.toJson(),
-  //     // 'promotions': promotions?.map((promo) => promo.toJson()).toList(),
-  //   };
-  // }
-
-  // String name() {
-  //   return basicInfo?.name ?? '';
-  // }
-
-  // String description() {
-  //   return detailInfo?.description ?? '';
-  // }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'user': user?.toJson(),
+      'basic_info': basicInfo?.toJson(),
+      'representative': representative?.toJson(),
+      'detail_info': detailInfo?.toJson(),
+      'menu_delivery': menuDelivery?.toJson(),
+      // 'promotions': promotions?.map((promo) => promo.toJson()).toList(),
+    };
+  }
 
   @override
   String toString() {

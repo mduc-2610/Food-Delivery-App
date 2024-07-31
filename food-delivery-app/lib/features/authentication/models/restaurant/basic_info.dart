@@ -1,5 +1,7 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class RestaurantBasicInfo {
   final String? name;
   final String? phoneNumber;
@@ -9,12 +11,12 @@ class RestaurantBasicInfo {
   final String? mapLocation;
 
   RestaurantBasicInfo({
-    required this.name,
-    required this.phoneNumber,
-    required this.city,
-    required this.district,
-    required this.streetAddress,
-    required this.mapLocation,
+    this.name,
+    this.phoneNumber,
+    this.city,
+    this.district,
+    this.streetAddress,
+    this.mapLocation,
   });
 
   RestaurantBasicInfo.fromJson(Map<String, dynamic> json)

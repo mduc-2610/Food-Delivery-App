@@ -1,14 +1,16 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class DelivererOtherInfo {
   final String? occupation;
   final String? details;
   final String? judicialRecord;
 
   DelivererOtherInfo({
-    required this.occupation,
-    required this.details,
-    required this.judicialRecord,
+    this.occupation,
+    this.details,
+    this.judicialRecord,
   });
 
   DelivererOtherInfo.fromJson(Map<String, dynamic> json)

@@ -1,30 +1,33 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
+import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class DishLike {
-  final String id;
-  final String userId;
-  final String dishId;
-  final DateTime createdAt;
+  final String? id;
+  final UserAbbr? user;
+  final String? dish;
+  final DateTime? createdAt;
 
   DishLike({
-    required this.id,
-    required this.userId,
-    required this.dishId,
-    required this.createdAt,
+    this.id,
+    this.user,
+    this.dish,
+    this.createdAt,
   });
 
   DishLike.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        userId = json['user'],
-        dishId = json['dish'],
+        user = UserAbbr.fromJson(json['user']),
+        dish = json['dish'],
         createdAt = DateTime.parse(json['created_at']);
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'user': userId,
-      'dish': dishId,
-      'created_at': createdAt.toIso8601String(),
+      'user': user?.id,
+      'dish': dish,
+      'created_at': createdAt?.toIso8601String(),
     };
   }
 
@@ -32,8 +35,8 @@ class DishLike {
   String toString() {
     return THelperFunction.formatToString('DishLike', {
       'id': id,
-      'userId': userId,
-      'dishId': dishId,
+      'user': user?.toJson(),
+      'dish': dish,
       'createdAt': createdAt,
     });
   }

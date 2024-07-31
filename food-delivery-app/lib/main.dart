@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/data/services/generic_api_service.dart';
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/data/services/token_service.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/features/authentication/models/auth/token.dart';
@@ -8,8 +10,10 @@ import 'package:food_delivery_app/features/authentication/views/login/login.dart
 import 'package:food_delivery_app/features/authentication/views/splash/splash.dart';
 import 'package:food_delivery_app/features/deliverer/menu_redirection.dart';
 import 'package:food_delivery_app/features/restaurant/menu_redirection.dart';
+import 'package:food_delivery_app/features/user/food/models/review/review.dart';
 import 'package:food_delivery_app/features/user/menu_redirection.dart';
 import 'package:food_delivery_app/features/user/order/models/location.dart';
+import 'package:food_delivery_app/main.reflectable.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:food_delivery_app/utils/theme/theme.dart';
 import 'package:get/get.dart';
@@ -19,7 +23,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  initializeReflectable();
   $print(await TokenService.getToken());
+  Token? token = await TokenService.getToken();
+  final service = GenericAPIService<DishReview>(pagination: true, token: token);
+  $print(await service.list());
+
   runApp(
     ChangeNotifierProvider(
       create: (context) => LocationModel(),

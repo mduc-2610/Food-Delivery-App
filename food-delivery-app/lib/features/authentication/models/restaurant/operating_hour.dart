@@ -1,5 +1,7 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class RestaurantOperatingHour {
   final String? detailInformationId;
   final String? dayOfWeek;
@@ -7,10 +9,10 @@ class RestaurantOperatingHour {
   final String? closeTime;
 
   RestaurantOperatingHour({
-    required this.detailInformationId,
-    required this.dayOfWeek,
-    required this.openTime,
-    required this.closeTime,
+    this.detailInformationId,
+    this.dayOfWeek,
+    this.openTime,
+    this.closeTime,
   });
 
   RestaurantOperatingHour.fromJson(Map<String, dynamic> json)

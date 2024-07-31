@@ -1,5 +1,7 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class RestaurantRepresentative {
   final String? registrationType;
   final String? fullName;
@@ -11,14 +13,14 @@ class RestaurantRepresentative {
   final String? businessRegistrationImage;
 
   RestaurantRepresentative({
-    required this.registrationType,
-    required this.fullName,
-    required this.email,
-    required this.phoneNumber,
-    required this.otherPhoneNumber,
-    required this.idFrontImage,
-    required this.idBackImage,
-    required this.businessRegistrationImage,
+    this.registrationType,
+    this.fullName,
+    this.email,
+    this.phoneNumber,
+    this.otherPhoneNumber,
+    this.idFrontImage,
+    this.idBackImage,
+    this.businessRegistrationImage,
   });
 
   RestaurantRepresentative.fromJson(Map<String, dynamic> json)

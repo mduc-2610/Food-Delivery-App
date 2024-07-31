@@ -1,25 +1,27 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class Comment {
-  final String id;
-  final String postId;
-  final String userId;
-  final String text;
-  final DateTime createdAt;
+  final String? id;
+  final String? post;
+  final String? user;
+  final String? text;
+  final DateTime? createdAt;
 
   Comment({
-    required this.id,
-    required this.postId,
-    required this.userId,
-    required this.text,
-    required this.createdAt,
+    this.id,
+    this.post,
+    this.user,
+    this.text,
+    this.createdAt,
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) {
     return Comment(
       id: json['id'],
-      postId: json['post'],
-      userId: json['user'],
+      post: json['post'],
+      user: json['user'],
       text: json['text'],
       createdAt: DateTime.parse(json['created_at']),
     );
@@ -28,10 +30,10 @@ class Comment {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'post': postId,
-      'user': userId,
+      'post': post,
+      'user': user,
       'text': text,
-      'created_at': createdAt.toIso8601String(),
+      'created_at': createdAt?.toIso8601String(),
     };
   }
 
@@ -39,8 +41,8 @@ class Comment {
   String toString() {
     return THelperFunction.formatToString('Comment', {
       'id': id,
-      'postId': postId,
-      'userId': userId,
+      'post': post,
+      'user': user,
       'text': text,
       'createdAt': createdAt,
     });

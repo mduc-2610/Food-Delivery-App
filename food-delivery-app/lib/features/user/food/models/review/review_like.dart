@@ -1,25 +1,32 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
+import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-abstract class ReviewLike {
-  final String id;
-  final String userId;
-  final DateTime createdAt;
+class ReviewLike {
+  final String? id;
+  final dynamic user;
+  final String? review;
+  final DateTime? createdAt;
 
   ReviewLike({
-    required this.id,
-    required this.userId,
-    required this.createdAt,
+    this.id,
+    this.user,
+    this.review,
+    this.createdAt,
   });
 
-  factory ReviewLike.fromJson(Map<String, dynamic> json) {
-    throw UnimplementedError();
-  }
+  ReviewLike.fromJson(Map<String, dynamic> json)
+    : id = json['id'],
+      user = UserAbbr.fromJson(json['user']),
+      review = json['review'],
+      createdAt = DateTime.parse(json['created_at']);
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'user': userId,
-      'created_at': createdAt.toIso8601String(),
+      'user': user,
+      'review': review,
+      'created_at': createdAt?.toIso8601String(),
     };
   }
 
@@ -27,157 +34,64 @@ abstract class ReviewLike {
   String toString() {
     return THelperFunction.formatToString('ReviewLike', {
       'id': id,
-      'userId': userId,
+      'user': user?.toJson(),
+      'review': review,
       'createdAt': createdAt,
     });
   }
 }
 
+@jsonSerializable
 class DishReviewLike extends ReviewLike {
-  final String reviewId;
 
   DishReviewLike({
-    required String id,
-    required String userId,
-    required this.reviewId,
-    required DateTime createdAt,
-  }) : super(id: id, userId: userId, createdAt: createdAt);
+    String? id,
+    UserAbbr? user,
+    String? review,
+    DateTime? createdAt,
+  }) : super(id: id, user: user, createdAt: createdAt);
 
-  factory DishReviewLike.fromJson(Map<String, dynamic> json) {
-    return DishReviewLike(
-      id: json['id'],
-      userId: json['user'],
-      reviewId: json['review'],
-      createdAt: DateTime.parse(json['created_at']),
-    );
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return super.toJson()..addAll({
-      'review': reviewId,
-    });
-  }
-
-  @override
-  String toString() {
-    return THelperFunction.formatToString('DishReviewLike', {
-      'id': id,
-      'userId': userId,
-      'reviewId': reviewId,
-      'createdAt': createdAt,
-    });
-  }
+  DishReviewLike.fromJson(Map<String, dynamic> json)
+    : super.fromJson(json);
 }
 
+@jsonSerializable
 class RestaurantReviewLike extends ReviewLike {
-  final String reviewId;
 
   RestaurantReviewLike({
-    required String id,
-    required String userId,
-    required this.reviewId,
-    required DateTime createdAt,
-  }) : super(id: id, userId: userId, createdAt: createdAt);
+    String? id,
+    UserAbbr? user,
+    String? review,
+    DateTime? createdAt,
+  }) : super(id: id, user: user, createdAt: createdAt);
 
-  factory RestaurantReviewLike.fromJson(Map<String, dynamic> json) {
-    return RestaurantReviewLike(
-      id: json['id'],
-      userId: json['user'],
-      reviewId: json['review'],
-      createdAt: DateTime.parse(json['created_at']),
-    );
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return super.toJson()..addAll({
-      'review': reviewId,
-    });
-  }
-
-  @override
-  String toString() {
-    return THelperFunction.formatToString('RestaurantReviewLike', {
-      'id': id,
-      'userId': userId,
-      'reviewId': reviewId,
-      'createdAt': createdAt,
-    });
-  }
+  RestaurantReviewLike.fromJson(Map<String, dynamic> json)
+    : super.fromJson(json);
 }
 
+@jsonSerializable
 class DelivererReviewLike extends ReviewLike {
-  final String reviewId;
-
   DelivererReviewLike({
-    required String id,
-    required String userId,
-    required this.reviewId,
-    required DateTime createdAt,
-  }) : super(id: id, userId: userId, createdAt: createdAt);
+    String? id,
+    UserAbbr? user,
+    String? review,
+    DateTime? createdAt,
+  }) : super(id: id, user: user, createdAt: createdAt);
 
-  factory DelivererReviewLike.fromJson(Map<String, dynamic> json) {
-    return DelivererReviewLike(
-      id: json['id'],
-      userId: json['user'],
-      reviewId: json['review'],
-      createdAt: DateTime.parse(json['created_at']),
-    );
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return super.toJson()..addAll({
-      'review': reviewId,
-    });
-  }
-
-  @override
-  String toString() {
-    return THelperFunction.formatToString('DelivererReviewLike', {
-      'id': id,
-      'userId': userId,
-      'reviewId': reviewId,
-      'createdAt': createdAt,
-    });
-  }
+  DelivererReviewLike.fromJson(Map<String, dynamic> json)
+    : super.fromJson(json);
 }
 
-class OrderReviewLike extends ReviewLike {
-  final String reviewId;
+@jsonSerializable
+class DeliveryReviewLike extends ReviewLike {
+  DeliveryReviewLike({
+    String? id,
+    UserAbbr? user,
+    String? review,
+    DateTime? createdAt,
+  }) : super(id: id, user: user, createdAt: createdAt);
 
-  OrderReviewLike({
-    required String id,
-    required String userId,
-    required this.reviewId,
-    required DateTime createdAt,
-  }) : super(id: id, userId: userId, createdAt: createdAt);
-
-  factory OrderReviewLike.fromJson(Map<String, dynamic> json) {
-    return OrderReviewLike(
-      id: json['id'],
-      userId: json['user'],
-      reviewId: json['review'],
-      createdAt: DateTime.parse(json['created_at']),
-    );
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return super.toJson()..addAll({
-      'review': reviewId,
-    });
-  }
-
-  @override
-  String toString() {
-    return THelperFunction.formatToString('OrderReviewLike', {
-      'id': id,
-      'userId': userId,
-      'reviewId': reviewId,
-      'createdAt': createdAt,
-    });
-  }
+  DeliveryReviewLike.fromJson(Map<String, dynamic> json)
+      : super.fromJson(json);
 }
 

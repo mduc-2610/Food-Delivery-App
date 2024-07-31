@@ -1,25 +1,26 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 class BaseLike {
   final String id;
-  final String userId;
+  final String user;
   final DateTime createdAt;
 
   BaseLike({
     required this.id,
-    required this.userId,
+    required this.user,
     required this.createdAt,
   });
 
   BaseLike.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        userId = json['user'],
+        user = json['user'],
         createdAt = DateTime.parse(json['created_at']);
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'user': userId,
+      'user': user,
       'created_at': createdAt.toIso8601String(),
     };
   }
@@ -28,30 +29,31 @@ class BaseLike {
   String toString() {
     return THelperFunction.formatToString('BaseLike', {
       'id': id,
-      'userId': userId,
+      'user': user,
       'createdAt': createdAt,
     });
   }
 }
 
+@jsonSerializable
 class PostLike extends BaseLike {
-  final String postId;
+  final String post;
 
   PostLike({
     required String id,
-    required String userId,
+    required String user,
     required DateTime createdAt,
-    required this.postId,
-  }) : super(id: id, userId: userId, createdAt: createdAt);
+    required this.post,
+  }) : super(id: id, user: user, createdAt: createdAt);
 
   PostLike.fromJson(Map<String, dynamic> json)
-      : postId = json['post'],
+      : post = json['post'],
         super.fromJson(json);
 
   @override
   Map<String, dynamic> toJson() {
     final data = super.toJson();
-    data['post'] = postId;
+    data['post'] = post;
     return data;
   }
 
@@ -59,31 +61,32 @@ class PostLike extends BaseLike {
   String toString() {
     return THelperFunction.formatToString('PostLike', {
       'id': id,
-      'userId': userId,
+      'user': user,
       'createdAt': createdAt,
-      'postId': postId,
+      'post': post,
     });
   }
 }
 
+@jsonSerializable
 class CommentLike extends BaseLike {
-  final String commentId;
+  final String comment;
 
   CommentLike({
     required String id,
-    required String userId,
+    required String user,
     required DateTime createdAt,
-    required this.commentId,
-  }) : super(id: id, userId: userId, createdAt: createdAt);
+    required this.comment,
+  }) : super(id: id, user: user, createdAt: createdAt);
 
   CommentLike.fromJson(Map<String, dynamic> json)
-      : commentId = json['comment'],
+      : comment = json['comment'],
         super.fromJson(json);
 
   @override
   Map<String, dynamic> toJson() {
     final data = super.toJson();
-    data['comment'] = commentId;
+    data['comment'] = comment;
     return data;
   }
 
@@ -91,9 +94,9 @@ class CommentLike extends BaseLike {
   String toString() {
     return THelperFunction.formatToString('CommentLike', {
       'id': id,
-      'userId': userId,
+      'user': user,
       'createdAt': createdAt,
-      'commentId': commentId,
+      'comment': comment,
     });
   }
 }

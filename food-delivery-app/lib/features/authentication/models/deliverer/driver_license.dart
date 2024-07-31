@@ -1,5 +1,7 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class DelivererDriverLicense {
   final String? licenseFront;
   final String? licenseBack;
@@ -8,11 +10,11 @@ class DelivererDriverLicense {
   final String? registrationCertificate;
 
   DelivererDriverLicense({
-    required this.licenseFront,
-    required this.licenseBack,
-    required this.vehicleType,
-    required this.licensePlate,
-    required this.registrationCertificate,
+    this.licenseFront,
+    this.licenseBack,
+    this.vehicleType,
+    this.licensePlate,
+    this.registrationCertificate,
   });
 
   DelivererDriverLicense.fromJson(Map<String, dynamic> json)

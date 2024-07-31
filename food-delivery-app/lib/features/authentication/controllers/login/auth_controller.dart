@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/bars/snack_bar.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
+import 'package:food_delivery_app/data/services/generic_api_service.dart';
 import 'package:food_delivery_app/data/services/token_service.dart';
 import 'package:food_delivery_app/features/authentication/controllers/login/verification_controller.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
@@ -112,12 +113,14 @@ class AuthController extends GetxController {
           phoneNumber: phoneNumber.value,
           password: password.value
       );
-      final [statusCode, headers, body] = await callCreateAPI(
-        "account/user/login-password",
-        loginPasswordData.toJson(),
-        "",
-        fullResponse: true
-      );
+      // final [statusCode, headers, body] = await callCreateAPI(
+      //   "account/user/login-password",
+      //   loginPasswordData.toJson(),
+      //   "",
+      //   fullResponse: true
+      // );
+
+      final [statusCode, headers, body] = await GenericAPIService<LoginPassword>().create(loginPasswordData.toJson(), null);
       if(statusCode == 200) {
         token = Token.fromJson(body);
         await TokenService.saveToken(token);
@@ -139,7 +142,7 @@ class AuthController extends GetxController {
 
   void startTimer() async {
     final [statusCode, headers, body] = await getOTPByPhoneNumber();
-    if(body["non_field_errors"][0] == "This phone number has not been registered yet.") {
+    if(body["non_field_errors"] != null && body["non_field_errors"][0] == "This phone number has not been registered yet.") {
       THelperFunction.showCSnackBar(
           Get.context!,
           body["non_field_errors"][0],

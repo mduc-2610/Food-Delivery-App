@@ -1,17 +1,19 @@
 
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class DishAdditionalOption {
-  final String id;
-  final String dishId;
-  final String name;
-  final double price;
+  final String? id;
+  final String? dishId;
+  final String? name;
+  final double? price;
 
   DishAdditionalOption({
-    required this.id,
-    required this.dishId,
-    required this.name,
-    required this.price,
+    this.id,
+    this.dishId,
+    this.name,
+    this.price,
   });
 
   DishAdditionalOption.fromJson(Map<String, dynamic> json)
@@ -40,24 +42,25 @@ class DishAdditionalOption {
   }
 }
 
+@jsonSerializable
 class DishSizeOption {
-  final String id;
-  final String dishId;
-  final String size;
-  final double price;
+  final String? id;
+  final String? dishId;
+  final String? size;
+  final double? price;
 
   DishSizeOption({
-    required this.id,
-    required this.dishId,
-    required this.size,
-    required this.price,
+    this.id,
+    this.dishId,
+    this.size,
+    this.price,
   });
 
   DishSizeOption.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         dishId = json['dish'],
         size = json['size'],
-        price = (json['price'] as num).toDouble();
+        price = double.parse(json['price']);
 
   Map<String, dynamic> toJson() {
     return {

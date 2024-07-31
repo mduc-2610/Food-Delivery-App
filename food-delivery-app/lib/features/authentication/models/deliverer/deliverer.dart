@@ -1,3 +1,4 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/features/authentication/models/deliverer/address.dart';
 import 'package:food_delivery_app/features/authentication/models/deliverer/basic_info.dart';
@@ -8,8 +9,9 @@ import 'package:food_delivery_app/features/authentication/models/deliverer/other
 import 'package:food_delivery_app/features/authentication/models/deliverer/residency_info.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class Deliverer {
-  final String id;
+  final String? id;
   final User? user;
   final DelivererBasicInfo? basicInfo;
   final DelivererResidencyInfo? residencyInfo;
@@ -20,15 +22,15 @@ class Deliverer {
   final DelivererEmergencyContact? emergencyContact;
 
   Deliverer({
-    required this.id,
-    required this.user,
-    required this.basicInfo,
-    required this.residencyInfo,
-    required this.driverLicenseAndVehicle,
-    required this.otherInfo,
-    required this.address,
-    required this.operationInfo,
-    required this.emergencyContact,
+    this.id,
+    this.user,
+    this.basicInfo,
+    this.residencyInfo,
+    this.driverLicenseAndVehicle,
+    this.otherInfo,
+    this.address,
+    this.operationInfo,
+    this.emergencyContact,
   });
 
   Deliverer.fromJson(Map<String, dynamic> json)

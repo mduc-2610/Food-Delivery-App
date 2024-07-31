@@ -1,5 +1,7 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class DelivererOperationInfo {
   final String? city;
   final String? operationType;
@@ -7,10 +9,10 @@ class DelivererOperationInfo {
   final String? operationalTime;
 
   DelivererOperationInfo({
-    required this.city,
-    required this.operationType,
-    required this.operationalArea,
-    required this.operationalTime,
+    this.city,
+    this.operationType,
+    this.operationalArea,
+    this.operationalTime,
   });
 
   DelivererOperationInfo.fromJson(Map<String, dynamic> json)

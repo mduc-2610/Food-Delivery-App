@@ -1,38 +1,39 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
+import 'package:food_delivery_app/main.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class Dish {
-  final String id;
-  final String name;
-  final String description;
-  final double originalPrice;
+  final String? id;
+  final String? name;
+  final String? description;
+  final double? originalPrice;
   final double? discountPrice;
   final String? imageUrl;
-  final double rating;
-  final int numberOfReviews;
-  final String categoryId;
+  final double? rating;
+  final int? numberOfReviews;
+  final String? categoryId;
 
   Dish({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.originalPrice,
+    this.id,
+    this.name,
+    this.description,
+    this.originalPrice,
     this.discountPrice,
     this.imageUrl,
-    required this.rating,
-    required this.numberOfReviews,
-    required this.categoryId,
+    this.rating,
+    this.numberOfReviews,
+    this.categoryId,
   });
 
   Dish.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         name = json['name'],
         description = json['description'],
-        originalPrice = (json['original_price'] as num).toDouble(),
-        discountPrice = json['discount_price'] != null
-            ? (json['discount_price'] as num).toDouble()
-            : null,
+        originalPrice = double.parse(json['original_price']),
+        discountPrice = double.parse(json['discount_price']),
         imageUrl = json['image'],
-        rating = (json['rating'] as num).toDouble(),
+        rating = double.parse(json['rating']),
         numberOfReviews = json['number_of_reviews'],
         categoryId = json['category'];
 

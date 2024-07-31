@@ -1,18 +1,20 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
+@jsonSerializable
 class DishCategory {
-  final String id;
-  final String name;
+  final String? id;
+  final String? name;
   final String? description;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   DishCategory({
-    required this.id,
-    required this.name,
+    this.id,
+    this.name,
     this.description,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
   });
 
   DishCategory.fromJson(Map<String, dynamic> json)
@@ -27,8 +29,8 @@ class DishCategory {
       'id': id,
       'name': name,
       'description': description,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
+      'created_at': createdAt?.toIso8601String(),
+      'updated_at': updatedAt?.toIso8601String(),
     };
   }
 

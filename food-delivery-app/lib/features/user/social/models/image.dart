@@ -1,14 +1,15 @@
+import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 class BaseImage {
-  final String id;
-  final String imageUrl;
-  final DateTime createdAt;
+  final String? id;
+  final String? imageUrl;
+  final DateTime? createdAt;
 
   BaseImage({
-    required this.id,
-    required this.imageUrl,
-    required this.createdAt,
+    this.id,
+    this.imageUrl,
+    this.createdAt,
   });
 
   BaseImage.fromJson(Map<String, dynamic> json)
@@ -20,7 +21,7 @@ class BaseImage {
     return {
       'id': id,
       'image': imageUrl,
-      'created_at': createdAt.toIso8601String(),
+      'created_at': createdAt?.toIso8601String(),
     };
   }
 
@@ -34,24 +35,25 @@ class BaseImage {
   }
 }
 
+@jsonSerializable
 class PostImage extends BaseImage {
-  final String postId;
+  final String? post;
 
   PostImage({
-    required String id,
-    required String imageUrl,
-    required DateTime createdAt,
-    required this.postId,
+    String? id,
+    String? imageUrl,
+    DateTime? createdAt,
+    this.post,
   }) : super(id: id, imageUrl: imageUrl, createdAt: createdAt);
 
   PostImage.fromJson(Map<String, dynamic> json)
-    : postId = json['post'],
+    : post = json['post'],
       super.fromJson(json);
 
   @override
   Map<String, dynamic> toJson() {
     final json = super.toJson();
-    json['post'] = postId;
+    json['post'] = post;
     return json;
   }
 
@@ -61,29 +63,30 @@ class PostImage extends BaseImage {
       'id': id,
       'imageUrl': imageUrl,
       'createdAt': createdAt,
-      'postId': postId,
+      'post': post,
     });
   }
 }
 
+@jsonSerializable
 class CommentImage extends BaseImage {
-  final String commentId;
+  final String? comment;
 
   CommentImage({
-    required String id,
-    required String imageUrl,
-    required DateTime createdAt,
-    required this.commentId,
+    String? id,
+    String? imageUrl,
+    DateTime? createdAt,
+    this.comment,
   }) : super(id: id, imageUrl: imageUrl, createdAt: createdAt);
 
   CommentImage.fromJson(Map<String, dynamic> json)
-    : commentId = json['comment'],
+    : comment = json['comment'],
       super.fromJson(json);
 
   @override
   Map<String, dynamic> toJson() {
     final json = super.toJson();
-    json['comment'] = commentId;
+    json['comment'] = comment;
     return json;
   }
 
@@ -93,7 +96,7 @@ class CommentImage extends BaseImage {
       'id': id,
       'imageUrl': imageUrl,
       'createdAt': createdAt,
-      'commentId': commentId,
+      'comment': comment,
     });
   }
 }
