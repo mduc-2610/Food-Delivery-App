@@ -6,7 +6,7 @@ import 'package:food_delivery_app/utils/device/device_utility.dart';
 
 
 class CSliverAppBar extends StatelessWidget {
-  final String title;
+  final dynamic title;
   final VoidCallback? backButtonOnPressed;
   final List<Map<String, dynamic>> iconList;
   final bool isBigTitle;
@@ -39,11 +39,16 @@ class CSliverAppBar extends StatelessWidget {
       padding: EdgeInsets.only(bottom: TSize.spaceBetweenItemsVertical),
       sliver: SliverAppBar(
         pinned: true,
-        title: Text(
-          title,
-          style: (isBigTitle)
-              ? Theme.of(context).textTheme.headlineLarge?.copyWith(color: titleColor ?? TColor.primary)
-              : Theme.of(context).textTheme.headlineMedium?.copyWith(color: titleColor),
+        title: title is Widget
+            ? title
+            : Text(
+          title.toString(),
+          style: isBigTitle
+              ? Theme.of(context)
+              .textTheme
+              .headlineLarge
+              ?.copyWith(color: TColor.primary)
+              : Theme.of(context).textTheme.headlineMedium,
         ),
         expandedHeight: expandedHeight ?? ((isExpandedHeight) ? TDeviceUtil.getAppBarHeight(): 0),
         centerTitle: centerTitle,

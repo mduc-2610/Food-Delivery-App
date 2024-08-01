@@ -27,6 +27,7 @@ class TIcon {
   static IconData shipping = Icons.local_shipping_rounded;
   static IconData delivery = Icons.delivery_dining_rounded;
   static IconData email = Icons.email_rounded;
+  static IconData clock = Icons.timer_outlined;
 
   // Login
   static String googleIcon = "assets/icons/login/google_icon.svg";

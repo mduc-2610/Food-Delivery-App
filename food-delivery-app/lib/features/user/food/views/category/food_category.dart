@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/common/widgets/bars/menu_bar.dart';
+import 'package:food_delivery_app/common/widgets/misc/list_check_empty.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/bars/search_bar.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
 import 'package:food_delivery_app/features/user/food/controllers/category/food_category_controller.dart';
 import 'package:food_delivery_app/common/widgets/cards/food_card_gr.dart';
-import 'package:food_delivery_app/utils/constants/colors.dart';
-import 'package:food_delivery_app/utils/constants/icon_strings.dart';
-import 'package:food_delivery_app/utils/constants/icon_strings.dart';
-import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
@@ -35,62 +31,29 @@ class FoodCategoryView extends StatelessWidget {
                     children: [
                       CSearchBar(),
                       SizedBox(height: TSize.spaceBetweenSections,),
-                      Text(
-                        "Not Found",
-                        style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.textDesc),
-                      ),
-                      SizedBox(height: TSize.spaceBetweenSections,),
-                      Text(
-                        "Empty",
-                        style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.textDesc),
-                      ),
-                      GridView.count(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        childAspectRatio: 14 / 16,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        children: [
-                          FoodCardGr(
-                            onTap: _controller.getToFoodDetail,
-                            image: TImage.hcFood1,
-                            name: "Chicken Burger",
-                            stars: 4.9,
-                            originalPrice: 10.00,
-                            salePrice: 6.00,
-                            heart: (category == "Liked") ? TIcon.fillHeart : TIcon.heart,
-                          ),
-                          FoodCardGr(
-                            onTap: _controller.getToFoodDetail,
-                            image: TImage.hcFood1,
-                            name: "Chicken Burger",
-                            stars: 4.9,
-                            originalPrice: 10.00,
-                            salePrice: 6.00,
-                            heart: (category == "Liked") ? TIcon.fillHeart : TIcon.heart,
-                          ),
-                          FoodCardGr(
-                            onTap: _controller.getToFoodDetail,
-                            image: TImage.hcFood1,
-                            name: "Chicken Burger",
-                            stars: 4.9,
-                            originalPrice: 10.00,
-                            salePrice: 6.00,
-                            heart: (category == "Liked") ? TIcon.fillHeart : TIcon.heart,
-                          ),
-                          FoodCardGr(
-                            onTap: _controller.getToFoodDetail,
-                            image: TImage.hcFood1,
-                            name: "Chicken Burger",
-                            stars: 4.9,
-                            originalPrice: 10.00,
-                            salePrice: 6.00,
-                            heart: (category == "Liked") ? TIcon.fillHeart : TIcon.heart,
-                          ),
-
-                        ],
-                      ),
+                      ListCheckEmpty(
+                        child: GridView.count(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 14 / 16,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          children: [
+                            for(int i = 0; i < 4; i++)
+                              FoodCard(
+                                type: FoodCardType.grid,
+                                name: 'Pizza',
+                                image: TImage.hcBurger1,
+                                stars: 4.5,
+                                originalPrice: 10.0,
+                                salePrice: 7.5,
+                                onTap: () {},
+                                heart: 'assets/icons/heart.svg',
+                              ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 )

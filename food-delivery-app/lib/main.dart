@@ -9,6 +9,8 @@ import 'package:food_delivery_app/features/authentication/views/login/login.dart
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
 import 'package:food_delivery_app/features/user/food/models/review/review.dart';
 import 'package:food_delivery_app/features/user/food/models/review/review_like.dart';
+import 'package:food_delivery_app/features/user/food/restaurant/restaurant_detail.dart';
+import 'package:food_delivery_app/features/user/food/views/search/restaurant_search.dart';
 import 'package:food_delivery_app/features/user/menu_redirection.dart';
 import 'package:food_delivery_app/features/user/order/models/location.dart';
 import 'package:food_delivery_app/main.reflectable.dart';
@@ -64,7 +66,7 @@ class _MyAppState extends State<MyApp> {
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
       themeMode: ThemeMode.light,
-      home: page,
+      home: RestaurantSearchView(),
     );
   }
 }

@@ -52,20 +52,20 @@ class _HomeViewState extends State<HomeView> {
                 MainWrapper(
                   rightMargin: 0,
                   child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: SizedBox(
-                      height: TDeviceUtil.getScreenHeight() * 0.15,
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            TImage.eventBanner1,
-                          ),
-                          Image.asset(
-                            TImage.eventBanner2,
-                          )
-                      ],
-                                        ),
-                    )),
+                      scrollDirection: Axis.horizontal,
+                      child: SizedBox(
+                        height: TDeviceUtil.getScreenHeight() * 0.15,
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              TImage.eventBanner1,
+                            ),
+                            Image.asset(
+                              TImage.eventBanner2,
+                            )
+                          ],
+                        ),
+                      )),
                 ),
                 SizedBox(height: TSize.spaceBetweenSections,),
 
@@ -112,8 +112,8 @@ class _HomeViewState extends State<HomeView> {
                                   children: [
                                     Text('View All ', style:
                                     Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                        color: TColor.primary,
-                                        // fontWeight: FontWeight.w600
+                                      color: TColor.primary,
+                                      // fontWeight: FontWeight.w600
                                     )),
                                     Icon(
                                       TIcon.arrowForward,
@@ -133,38 +133,17 @@ class _HomeViewState extends State<HomeView> {
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             children: [
-                              FoodCardGr(
-                                onTap: () {_controller.getToFoodDetail("");},
-                                image: TImage.hcFood1,
-                                name: "Chicken Burger",
-                                stars: 4.9,
-                                originalPrice: 10.00,
-                                salePrice: 6.00,
-                              ),
-                              FoodCardGr(
-                                onTap: () {_controller.getToFoodDetail("");},
-                                image: TImage.hcFood1,
-                                name: "Chicken Burger",
-                                stars: 4.9,
-                                originalPrice: 10.00,
-                                salePrice: 6.00,
-                              ),
-                              FoodCardGr(
-                                onTap: () {_controller.getToFoodDetail("");},
-                                image: TImage.hcFood1,
-                                name: "Chicken Burger",
-                                stars: 4.9,
-                                originalPrice: 10.00,
-                                salePrice: 6.00,
-                              ),
-                              FoodCardGr(
-                                onTap: () {_controller.getToFoodDetail("");},
-                                image: TImage.hcFood1,
-                                name: "Chicken Burger",
-                                stars: 4.9,
-                                originalPrice: 10.00,
-                                salePrice: 6.00,
-                              ),
+                              for(int i = 0; i < 4; i++)
+                                FoodCard(
+                                  type: FoodCardType.grid,
+                                  name: 'Pizza',
+                                  image: TImage.hcBurger1,
+                                  stars: 4.5,
+                                  originalPrice: 10.0,
+                                  salePrice: 7.5,
+                                  onTap: () {},
+                                  heart: 'assets/icons/heart.svg',
+                                )
 
                             ],
                           ),

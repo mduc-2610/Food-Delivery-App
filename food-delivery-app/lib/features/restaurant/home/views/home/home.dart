@@ -78,13 +78,15 @@ class HomeView extends StatelessWidget {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   childCount: 8,
-                  (context, index) => FoodCardGr(
-                    name: "Burger",
-                    image: TImage.hcBurger1,
-                    stars: 4.7,
-                    originalPrice: 3.5,
-                    salePrice: 3,
+                  (context, index) => FoodCard(
+                    type: FoodCardType.grid,
+                    name: 'Pizza',
+                    image: 'assets/images/pizza.png',
+                    stars: 4.5,
+                    originalPrice: 10.0,
+                    salePrice: 7.5,
                     onTap: () {},
+                    heart: 'assets/icons/heart.svg',
                   ),
                 ),
               ),

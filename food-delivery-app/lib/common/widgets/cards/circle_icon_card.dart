@@ -14,13 +14,13 @@ class CircleIconCard extends StatelessWidget {
   final double? iconSize;
   final double? padding;
   final Color? borderSideColor;
-  final double? borderSideWidth;
+  final double borderSideWidth;
   final Color? shadowColor;
   final Color? surfaceTintColor;
 
   const CircleIconCard({
     this.onTap,
-    this.elevation = 0,
+    this.elevation = TSize.cardElevationSm,
     this.backgroundColor,
     this.iconStr,
     this.icon,
@@ -28,7 +28,7 @@ class CircleIconCard extends StatelessWidget {
     this.iconSize,
     this.padding,
     this.borderSideColor,
-    this.borderSideWidth,
+    this.borderSideWidth = 0,
     this.shadowColor,
     this.surfaceTintColor,
     super.key
@@ -43,10 +43,10 @@ class CircleIconCard extends StatelessWidget {
         elevation: elevation,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(TSize.borderRadiusCircle),
-          side: BorderSide(
+          side: (borderSideWidth != 0 ) ? BorderSide(
             color: borderSideColor ?? Theme.of(context).appBarTheme.backgroundColor!,
-            width: borderSideWidth ?? 0,
-          )
+            width: borderSideWidth,
+          ) : BorderSide.none,
         ),
         shadowColor: shadowColor ?? Theme.of(context).appBarTheme.backgroundColor,
         surfaceTintColor: surfaceTintColor ?? Theme.of(context).appBarTheme.backgroundColor,

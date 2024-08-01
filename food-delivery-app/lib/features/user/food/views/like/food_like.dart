@@ -51,42 +51,17 @@ class FoodLikeView extends StatelessWidget {
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         children: [
-                          FoodCardGr(
-                            onTap: _controller.getToFoodDetail,
-                            image: TImage.hcFood1,
-                            name: "Chicken Burger",
-                            stars: 4.9,
-                            originalPrice: 10.00,
-                            salePrice: 6.00,
-                            heart: TIcon.fillHeart,
-                          ),
-                          FoodCardGr(
-                            onTap: _controller.getToFoodDetail,
-                            image: TImage.hcFood1,
-                            name: "Chicken Burger",
-                            stars: 4.9,
-                            originalPrice: 10.00,
-                            salePrice: 6.00,
-                            heart: TIcon.fillHeart,
-                          ),
-                          FoodCardGr(
-                            onTap: _controller.getToFoodDetail,
-                            image: TImage.hcFood1,
-                            name: "Chicken Burger",
-                            stars: 4.9,
-                            originalPrice: 10.00,
-                            salePrice: 6.00,
-                            heart: TIcon.fillHeart,
-                          ),
-                          FoodCardGr(
-                            onTap: _controller.getToFoodDetail,
-                            image: TImage.hcFood1,
-                            name: "Chicken Burger",
-                            stars: 4.9,
-                            originalPrice: 10.00,
-                            salePrice: 6.00,
-                            heart: TIcon.fillHeart,
-                          ),
+                          for(int i = 0; i < 4; i++)
+                            FoodCard(
+                              type: FoodCardType.grid,
+                              name: 'Pizza',
+                              image: TImage.hcBurger1,
+                              stars: 4.5,
+                              originalPrice: 10.0,
+                              salePrice: 7.5,
+                              onTap: () {},
+                              heart: 'assets/icons/heart.svg',
+                            )
 
                         ],
                       ),

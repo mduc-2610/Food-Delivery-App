@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/common/widgets/cards/food_card_ls.dart';
+import 'package:food_delivery_app/common/widgets/cards/food_card_gr.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
@@ -13,119 +13,20 @@ class FoodList extends StatelessWidget {
       body: ListView(
         padding: EdgeInsets.all(8.0),
         children: [
-          FoodCardLs(
-            imageUrl: TImage.hcBurger1,
-            title: 'Chicken Thai Biriyani',
-            subtitle: 'Burger',
-            price: '60',
-            rating: '4.9',
-            reviewCount: '10',
-            tag: 'Pick UP',
-          ),
-          SizedBox(height: TSize.spaceBetweenItemsVertical,),
-          FoodCardLs(
-            imageUrl: TImage.hcBurger1,
-            title: 'Chicken Bhuna',
-            subtitle: 'Burger',
-            price: '30',
-            rating: '4.9',
-            reviewCount: '10',
-            tag: 'Pick UP',
-          ),
-          SizedBox(height: TSize.spaceBetweenItemsVertical,),
-          FoodCardLs(
-            imageUrl: TImage.hcBurger1,
-            title: 'Mazalichiken Halim',
-            subtitle: 'Burger',
-            price: '25',
-            rating: '4.9',
-            reviewCount: '10',
-            tag: 'Pick UP',
-          ),
-          SizedBox(height: TSize.spaceBetweenItemsVertical,),
-          FoodCardLs(
-            imageUrl: TImage.hcBurger1,
-            title: 'Chicken Thai Biriyani',
-            subtitle: 'Burger',
-            price: '60',
-            rating: '4.9',
-            reviewCount: '10',
-            tag: 'Pick UP',
-          ),
-          SizedBox(height: TSize.spaceBetweenItemsVertical,),
-          FoodCardLs(
-            imageUrl: TImage.hcBurger1,
-            title: 'Chicken Bhuna',
-            subtitle: 'Burger',
-            price: '30',
-            rating: '4.9',
-            reviewCount: '10',
-            tag: 'Pick UP',
-          ),
-          SizedBox(height: TSize.spaceBetweenItemsVertical,),
-          FoodCardLs(
-            imageUrl: TImage.hcBurger1,
-            title: 'Mazalichiken Halim',
-            subtitle: 'Burger',
-            price: '25',
-            rating: '4.9',
-            reviewCount: '10',
-            tag: 'Pick UP',
-          ),FoodCardLs(
-            imageUrl: TImage.hcBurger1,
-            title: 'Chicken Thai Biriyani',
-            subtitle: 'Burger',
-            price: '60',
-            rating: '4.9',
-            reviewCount: '10',
-            tag: 'Pick UP',
-          ),
-          FoodCardLs(
-            imageUrl: TImage.hcBurger1,
-            title: 'Chicken Bhuna',
-            subtitle: 'Burger',
-            price: '30',
-            rating: '4.9',
-            reviewCount: '10',
-            tag: 'Pick UP',
-          ),
-          FoodCardLs(
-            imageUrl: TImage.hcBurger1,
-            title: 'Mazalichiken Halim',
-            subtitle: 'Burger',
-            price: '25',
-            rating: '4.9',
-            reviewCount: '10',
-            tag: 'Pick UP',
-          ),FoodCardLs(
-            imageUrl: TImage.hcBurger1,
-            title: 'Chicken Thai Biriyani',
-            subtitle: 'Burger',
-            price: '60',
-            rating: '4.9',
-            reviewCount: '10',
-            tag: 'Pick UP',
-          ),
-          FoodCardLs(
-            imageUrl: TImage.hcBurger1,
-            title: 'Chicken Bhuna',
-            subtitle: 'Burger',
-            price: '30',
-            rating: '4.9',
-            reviewCount: '10',
-            tag: 'Pick UP',
-          ),
-          FoodCardLs(
-            imageUrl: TImage.hcBurger1,
-            title: 'Mazalichiken Halim',
-            subtitle: 'Burger',
-            price: '25',
-            rating: '4.9',
-            reviewCount: '10',
-            tag: 'Pick UP',
-          ),
-
-
+          for(int i = 0; i < 10; i++)...[
+            FoodCard(
+              type: FoodCardType.list,
+              name: 'Burger',
+              image: TImage.hcBurger1,
+              stars: 4.0,
+              originalPrice: 8.0,
+              salePrice: 5.0,
+              onTap: () {},
+              reviewCount: '1.2k',
+              tag: 'popular',
+            ),
+            SizedBox(height: TSize.spaceBetweenItemsVertical,),
+          ]
 
         ],
       ),

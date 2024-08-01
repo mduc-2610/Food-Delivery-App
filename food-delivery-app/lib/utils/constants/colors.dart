@@ -52,7 +52,8 @@ class TColor {
 
   // Border Colors
   static const Color borderPrimary = Color(0xFFe9eaeb);
-  static const Color borderSecondary = Color(0xFF4b68ff);
+  static const Color borderSecondary = Color(0xFF7f7e7c);
+  static const Color spaceBetweenSections = Color(0xfff5f5f5);
 
   // Error and Validation Colors
   static const Color error = Color(0xFFD32F2F);

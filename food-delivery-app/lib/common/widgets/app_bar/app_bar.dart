@@ -4,7 +4,7 @@ import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 class CAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
+  final dynamic title;
   final VoidCallback? backButtonOnPressed;
   final List<Map<String, dynamic>> iconList;
   final bool isBigTitle;
@@ -13,7 +13,7 @@ class CAppBar extends StatelessWidget implements PreferredSizeWidget {
   final PreferredSizeWidget? bottom;
 
   const CAppBar({
-    required this.title,
+    this.title,
     this.iconList = const [],
     this.backButtonOnPressed,
     this.isBigTitle = false,
@@ -26,10 +26,15 @@ class CAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(
-        title,
+      title: title is Widget
+          ? title
+          : Text(
+        title.toString(),
         style: isBigTitle
-            ? Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.primary)
+            ? Theme.of(context)
+            .textTheme
+            .headlineLarge
+            ?.copyWith(color: TColor.primary)
             : Theme.of(context).textTheme.headlineMedium,
       ),
       centerTitle: centerTitle,
