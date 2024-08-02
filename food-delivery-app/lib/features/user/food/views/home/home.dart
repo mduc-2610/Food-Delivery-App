@@ -129,7 +129,7 @@ class _HomeViewState extends State<HomeView> {
                             crossAxisCount: 2,
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
-                            childAspectRatio: 14 / 16,
+                            childAspectRatio: 13 / 16,
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             children: [

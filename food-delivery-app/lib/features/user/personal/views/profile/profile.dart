@@ -4,11 +4,19 @@ import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
 import 'package:food_delivery_app/common/widgets/misc/sliver_sized_box.dart';
+import 'package:food_delivery_app/data/services/token_service.dart';
+import 'package:food_delivery_app/features/authentication/controllers/login/auth_controller.dart';
+import 'package:food_delivery_app/features/authentication/controllers/profile/profile_controller.dart';
+import 'package:food_delivery_app/features/authentication/views/login/login.dart';
+import 'package:food_delivery_app/features/authentication/views/profile/profile.dart';
+import 'package:food_delivery_app/features/authentication/views/profile/widgets/profile_detail.dart';
 import 'package:food_delivery_app/features/personal/controllers/profile/theme_controller.dart';
 import 'package:food_delivery_app/features/personal/views/profile/widgets/personal_setting.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class PersonalProfileView extends StatelessWidget {
   final ThemeController _themeController = Get.put(ThemeController());
@@ -55,6 +63,22 @@ class PersonalProfileView extends StatelessWidget {
                       ],
                     ),
                     trailing: CircleIconCard(
+                      onTap: () {
+                        showModalBottomSheet(context: context, isScrollControlled: true, builder: (context) {
+                          return MainWrapper(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  ProfileDetail(
+                                    // controller: _profileController,
+                                    isEdit: true,
+                                  ),
+                                ],
+                              )
+                            ),
+                          );
+                        });
+                      },
                       icon: Icons.edit,
                       iconColor: TColor.light,
                       backgroundColor: TColor.primary,
@@ -66,7 +90,10 @@ class PersonalProfileView extends StatelessWidget {
                   SizedBox(height: TSize.spaceBetweenItemsVertical,),
 
                   MainButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await TokenService.deleteToken();
+                      Get.offAll(() => LoginView());
+                    },
                     text: "Logout",
                     textColor: TColor.primary,
                     height: TSize.buttonHeight + 6,

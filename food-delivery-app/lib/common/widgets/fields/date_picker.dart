@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 
 class CDatePicker extends StatefulWidget {
   final TextEditingController controller;
-  final xcontroller;
   final String labelText;
   final String hintText;
   final String datePattern;
@@ -11,7 +10,6 @@ class CDatePicker extends StatefulWidget {
 
   const CDatePicker({
     required this.controller,
-    this.xcontroller,
     required this.labelText,
     this.hintText = "",
     this.datePattern = 'MM/yy',
@@ -33,14 +31,13 @@ class _CDatePickerState extends State<CDatePicker> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.xcontroller.selectedDate);
     return TextFormField(
       controller: _controller,
       decoration: InputDecoration(
         labelText: widget.labelText,
         hintText: widget.hintText,
         border: OutlineInputBorder(),
-        suffixIcon: Icon(Icons.calendar_today),
+        prefixIcon: Icon(Icons.calendar_today),
       ),
       readOnly: true,
       onTap: () async {
@@ -53,7 +50,6 @@ class _CDatePickerState extends State<CDatePicker> {
         if (pickedDate != null) {
           String formattedDate = DateFormat(widget.datePattern).format(pickedDate);
           setState(() {
-            widget.xcontroller.selectedDate = pickedDate;
             _controller.text = formattedDate;
           });
         }

@@ -6,6 +6,7 @@ import "package:food_delivery_app/features/personal/views/profile/personal_profi
 import "package:food_delivery_app/features/user/food/views/home/home.dart";
 import "package:food_delivery_app/features/user/food/views/like/food_like.dart";
 import "package:food_delivery_app/features/user/order/views/history/order_history.dart";
+import "package:food_delivery_app/features/user/personal/views/profile/profile.dart";
 import "package:food_delivery_app/utils/constants/icon_strings.dart";
 import 'package:get/get.dart';
 

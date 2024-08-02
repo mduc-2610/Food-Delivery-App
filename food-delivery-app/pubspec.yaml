@@ -52,6 +52,8 @@ dependencies:
   another_flushbar: ^1.10.28
   top_snackbar: ^0.0.6
   shared_preferences: ^2.2.3
+  loading_indicator: ^3.1.1
+  shimmer: ^3.0.0
 
   # Icons
   iconsax: ^0.0.8

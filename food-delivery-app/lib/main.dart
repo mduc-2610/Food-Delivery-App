@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
       themeMode: ThemeMode.light,
-      home: RestaurantSearchView(),
+      home: UserMenuRedirection(),
     );
   }
 }
