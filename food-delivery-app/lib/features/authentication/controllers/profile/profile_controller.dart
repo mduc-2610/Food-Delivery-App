@@ -74,9 +74,14 @@ class ProfileController extends GetxController {
       );
 
       final [statusCode, headers, body] = await APIService<UserProfile>()
-          .update(userId ?? authController?.user.id, profileData);
-      await TokenService.saveToken(authController!.token);
-      Get.offAll(() => UserMenuRedirection());
+          .update(userId ?? authController?.user.id ?? "fad06fbd-72f0-4f05-a6e0-609296184c4d", profileData);
+      if(!isEdit) {
+        await TokenService.saveToken(authController!.token);
+        Get.offAll(() => UserMenuRedirection());
+      }
+      else {
+        Get.back();
+      }
     }
   }
 

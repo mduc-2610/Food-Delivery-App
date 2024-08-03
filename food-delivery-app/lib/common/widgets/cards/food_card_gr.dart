@@ -85,7 +85,7 @@ class FoodCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(TSize.borderRadiusCircle),
                       ),
                       child: SvgPicture.asset(
-                        heart ?? TIcon.heart,
+                        TIcon.heart,
                       ),
                     ),
                   )
