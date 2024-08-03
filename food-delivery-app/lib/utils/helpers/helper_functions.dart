@@ -152,6 +152,19 @@ class THelperFunction {
     return '(${phoneNumber.dialCode}) $prefixVisiblePart ***** $suffixVisiblePart';
   }
 
+  static DateTime? parseToDateTime(dynamic date) {
+    if (date is String) {
+      try {
+        return DateFormat('dd/MM/yyyy').parse(date).toLocal();
+      } catch (e) {
+        return null;
+      }
+    } else if (date is DateTime) {
+      return date;
+    }
+    return null;
+  }
+
   static int getTimeFromThrottleStr(String x) {
     int time = 0;
     for (int i = 0; i < x.length; i++) {

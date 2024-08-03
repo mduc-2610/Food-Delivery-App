@@ -14,30 +14,23 @@ class CDatePicker extends StatefulWidget {
     this.hintText = "",
     this.datePattern = 'MM/yy',
     this.validator,
-    super.key
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<CDatePicker> createState() => _CDatePickerState();
 }
 
 class _CDatePickerState extends State<CDatePicker> {
-  late TextEditingController _controller;
-  @override
-  void initState() {
-    _controller = widget.controller;
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: _controller,
+      controller: widget.controller,
       decoration: InputDecoration(
         labelText: widget.labelText,
         hintText: widget.hintText,
-        border: OutlineInputBorder(),
-        prefixIcon: Icon(Icons.calendar_today),
+        border: const OutlineInputBorder(),
+        prefixIcon: const Icon(Icons.calendar_today),
       ),
       readOnly: true,
       onTap: () async {
@@ -49,14 +42,12 @@ class _CDatePickerState extends State<CDatePicker> {
         );
         if (pickedDate != null) {
           String formattedDate = DateFormat(widget.datePattern).format(pickedDate);
-          setState(() {
-            _controller.text = formattedDate;
-          });
+          widget.controller.text = formattedDate;
         }
       },
       validator: widget.validator ?? (value) {
         if (value == null || value.isEmpty) {
-          return 'Please enter expiry date';
+          return 'Please enter a date';
         }
         return null;
       },

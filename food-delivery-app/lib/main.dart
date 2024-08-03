@@ -23,10 +23,8 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initializeReflectable();
-  $print(await TokenService.getToken());
   Token? token = await TokenService.getToken();
-  final service = APIService<DishReviewLike>(pagination: true,);
-  $print(await service.list());
+  final service = APIService<User>(endpoint:'account/user/me', token: token, pagination: false,);
 
   runApp(
     ChangeNotifierProvider(

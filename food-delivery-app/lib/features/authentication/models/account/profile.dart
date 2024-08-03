@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
+import 'package:intl/intl.dart';
 
 @reflector
 @jsonSerializable
@@ -14,20 +15,21 @@ class UserProfile {
     this.user,
     this.name,
     this.gender,
-    this.dateOfBirth,
-  });
+    dynamic dateOfBirth,
+  }) : dateOfBirth = THelperFunction.parseToDateTime(dateOfBirth);
 
   UserProfile.fromJson(Map<String, dynamic> json)
       : user = json['user'],
         name = json['name'],
         gender = json['gender'],
-        dateOfBirth = json['date_of_birth'] != null ? DateTime.parse(json['date_of_birth']) : null;
+        dateOfBirth = json['date_of_birth'] != null ? DateTime.parse(json['date_of_birth']).toLocal() : null;
 
   Map<String, dynamic> toJson() {
     return {
+      'user': user,
       'name': name,
       'gender': gender,
-      'date_of_birth': dateOfBirth?.toIso8601String(),
+      'date_of_birth': dateOfBirth?.toUtc().toIso8601String(),
     };
   }
 
@@ -36,4 +38,3 @@ class UserProfile {
     return THelperFunction.formatToString(this);
   }
 }
-

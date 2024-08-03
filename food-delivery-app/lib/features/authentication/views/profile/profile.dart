@@ -26,13 +26,6 @@ class ProfileView extends StatelessWidget {
               // controller: _controller,
             ),
           ),
-          // SliverFillRemaining(
-          //   hasScrollBody: false,
-          //   child: MainWrapper(
-          //     bottomMargin: 30,
-          //     child:
-          //   ),
-          // ),
         ],
       ),
     );

@@ -11,6 +11,7 @@ import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:food_delivery_app/utils/constants/times.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:food_delivery_app/utils/validators/validators.dart';
 import 'package:get/get.dart';
@@ -34,17 +35,18 @@ class _ProfileDetailState extends State<ProfileDetail> {
   @override
   void initState() {
     super.initState();
+    _initializeController();
+
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _initializeController();
   }
 
   Future<void> _initializeController() async {
     controller = Get.put(ProfileController(isEdit: widget.isEdit), tag: UniqueKey().toString());
-    await Future.delayed(Duration(seconds: 1));  // Simulate loading delay
+    await Future.delayed(Duration(milliseconds: TTime.init));
     setState(() {
       isLoading = false;
     });
@@ -54,7 +56,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
   Widget build(BuildContext context) {
     return MainWrapper(
       child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 500),
+        duration: Duration(milliseconds: TTime.animation),
         transitionBuilder: (Widget child, Animation<double> animation) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -70,12 +72,9 @@ class _ProfileDetailState extends State<ProfileDetail> {
         SizedBox(height: TSize.spaceBetweenInputFields,),
         ListFieldSkeleton(length: 5),
         SizedBox(height: TSize.spaceBetweenInputFields,),
-        if(!widget.isEdit)...[
-          ListFieldSkeleton(length: 2),
-        ]
-        else...[
-          FieldSkeleton(),
-        ],
+        (!widget.isEdit)
+        ? ListFieldSkeleton(length: 2)
+        : FieldSkeleton(),
         SizedBox(height: TSize.spaceBetweenSections,),
       ],
     );
@@ -121,8 +120,8 @@ class _ProfileDetailState extends State<ProfileDetail> {
               CDatePicker(
                 controller: controller!.dateController,
                 labelText: 'Date of birth',
-                hintText: "dd/MM/yyyy",
-                datePattern: 'dd/MM/yyyy',
+                hintText: controller!.datePattern,
+                datePattern: controller!.datePattern,
                 validator: TValidator.validateTextField,
               ),
               SizedBox(height: TSize.spaceBetweenInputFields),

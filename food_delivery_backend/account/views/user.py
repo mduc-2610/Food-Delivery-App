@@ -110,11 +110,12 @@ class UserViewSet(ManyRelatedViewSet):
     # }
 
     def get_serializer_class(self):
+        print(self.request.user, pretty=True)
         return self.many_related_serializer_class.get(self.action, super().get_serializer_class())
 
     def get_permissions(self):
-        # if self.action in ['list', 'retrieve']:
-        #     return [IsAuthenticated()]
+        if self.action in ['list', 'retrieve', 'get_user_details']:
+            return [IsAuthenticated()]
         return super().get_permissions()
     
     def get_throttles(self):
@@ -238,6 +239,11 @@ class UserViewSet(ManyRelatedViewSet):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
+    
+    @action(detail=False, methods=['GET'], url_path='me')
+    def get_user_details(self, request):
+        serializer = self.get_serializer(request.user)
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
 
 class LocationViewSet(viewsets.ModelViewSet):
     queryset = Location.objects.all()
