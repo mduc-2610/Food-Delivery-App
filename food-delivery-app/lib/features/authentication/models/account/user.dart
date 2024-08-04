@@ -1,4 +1,6 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
+import 'package:food_delivery_app/features/authentication/models/account/profile.dart';
+import 'package:food_delivery_app/features/authentication/models/account/setting.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 @reflector
@@ -14,6 +16,8 @@ class User {
   final DateTime? lastLogin;
   final bool? isOtpVerified;
   final bool? isRegistrationVerified;
+  final UserProfile? profile;
+  final UserSetting? setting;
 
   User({
     this.id,
@@ -26,6 +30,8 @@ class User {
     this.lastLogin,
     this.isOtpVerified,
     this.isRegistrationVerified,
+    this.profile,
+    this.setting,
   });
 
   User.fromJson(Map<String, dynamic> json)
@@ -38,7 +44,10 @@ class User {
         dateJoined = DateTime.parse(json['date_joined']),
         lastLogin = DateTime.parse(json['last_login']),
         isOtpVerified = json['is_otp_verified'],
-        isRegistrationVerified = json['is_registration_verified'];
+        isRegistrationVerified = json['is_registration_verified'],
+        profile = UserProfile.fromJson(json['profile']),
+        setting = UserSetting.fromJson(json['setting']);
+
 
   Map<String, dynamic> toJson() {
     return {
@@ -59,6 +68,41 @@ class User {
   String toString() {
     return THelperFunction.formatToString(this);
   }
+}
+
+
+@reflector
+@jsonSerializable
+class Me extends User {
+  Me({
+    String? id,
+    String? phoneNumber,
+    String? email,
+    bool? isActive,
+    bool? isStaff,
+    bool? isSuperuser,
+    DateTime? dateJoined,
+    DateTime? lastLogin,
+    bool? isOtpVerified,
+    bool? isRegistrationVerified,
+    UserProfile? profile,
+    UserSetting? setting,
+  }) : super(
+    id: id,
+    phoneNumber: phoneNumber,
+    email: email,
+    isActive: isActive,
+    isStaff: isStaff,
+    isSuperuser: isSuperuser,
+    dateJoined: dateJoined,
+    lastLogin: lastLogin,
+    isOtpVerified: isOtpVerified,
+    isRegistrationVerified: isRegistrationVerified,
+    profile: profile,
+    setting: setting,
+  );
+
+  Me.fromJson(Map<String, dynamic> json) : super.fromJson(json);
 }
 
 @reflector

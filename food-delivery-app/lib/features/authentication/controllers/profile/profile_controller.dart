@@ -42,7 +42,7 @@ class ProfileController extends GetxController {
     super.onInit();
     if (isEdit) {
       final token = await TokenService.getToken();
-      user = await APIService<User>(endpoint:'account/user/me', token: token, pagination: false,).list();
+      user = await APIService<Me>(token: token, pagination: false,).list();
       $print(user);
       final profile = await APIService<UserProfile>(token: token).retrieve(user?.id ?? "fad06fbd-72f0-4f05-a6e0-609296184c4d");
       phoneNumber.value = PhoneNumber(dialCode: '+84', phoneNumber: user?.phoneNumber, isoCode: "VN");

@@ -1,46 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/features/notification/views/notification.dart';
 import 'package:food_delivery_app/features/personal/controllers/profile/theme_controller.dart';
 import 'package:food_delivery_app/features/personal/views/about_app/personal_about_app.dart';
 import 'package:food_delivery_app/features/personal/views/help_center/personal_help_center.dart';
 import 'package:food_delivery_app/features/personal/views/invite/personal_invite.dart';
-import 'package:food_delivery_app/features/personal/views/message/personal_message.dart';
 import 'package:food_delivery_app/features/personal/views/privacy_policy/personal_privacy_policy.dart';
 import 'package:food_delivery_app/features/personal/views/security/personal_security.dart';
 import 'package:food_delivery_app/features/personal/views/term_of_service/personal_term_of_service.dart';
+import 'package:food_delivery_app/features/user/order/views/location/order_location.dart';
+import 'package:food_delivery_app/features/user/payment/views/payment/payment_list.dart';
+import 'package:food_delivery_app/features/user/personal/controller/personal_profile_controller.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
-class PersonalSetting extends StatelessWidget {
+class PersonalSetting extends StatefulWidget {
   final List<String> exclude;
   final List<String> include;
 
   const PersonalSetting({
     super.key,
-    required ThemeController themeController,
     this.exclude = const [],
     this.include = const [],
-  }) : _themeController = themeController;
+  });
 
-  final ThemeController _themeController;
+  @override
+  State<PersonalSetting> createState() => _PersonalSettingState();
+}
+
+class _PersonalSettingState extends State<PersonalSetting> {
+  final _themeController = Get.put(ThemeController());
+  final _personalProfileController = PersonalProfileController.instance;
+
 
   bool shouldInclude(String item) {
-    if(include.contains('__all__')) {
+    if(widget.include.contains('__all__')) {
       return true;
     }
-    else if(exclude.contains('__all__')) {
+    else if(widget.exclude.contains('__all__')) {
       return false;
     }
     else {
-      if (include.isNotEmpty) {
-        return include.contains(item);
+      if (widget.include.isNotEmpty) {
+        return widget.include.contains(item);
       }
-      return !exclude.contains(item);
+      return !widget.exclude.contains(item);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final setting = _personalProfileController.user?.setting;
     return Column(
       children: [
         if (shouldInclude('location')) ...[
@@ -50,18 +60,7 @@ class PersonalSetting extends StatelessWidget {
             title: Text('My Locations'),
             trailing: Icon(TIcon.arrowForward),
             onTap: () {
-              Get.to(PersonalMessageView());
-            },
-          ),
-        ],
-        if (shouldInclude('promotion')) ...[
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Icon(Icons.local_offer),
-            title: Text('My Promotions'),
-            trailing: Icon(TIcon.arrowForward),
-            onTap: () {
-              Get.to(PersonalMessageView());
+              Get.to(OrderLocationSelectView());
             },
           ),
         ],
@@ -72,18 +71,7 @@ class PersonalSetting extends StatelessWidget {
             title: Text('Payment Methods'),
             trailing: Icon(TIcon.arrowForward),
             onTap: () {
-              Get.to(PersonalMessageView());
-            },
-          ),
-        ],
-        if (shouldInclude('message')) ...[
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Icon(Icons.message),
-            title: Text('Messages'),
-            trailing: Icon(TIcon.arrowForward),
-            onTap: () {
-              Get.to(PersonalMessageView());
+              Get.to(PaymentListView());
             },
           ),
         ],
@@ -124,52 +112,52 @@ class PersonalSetting extends StatelessWidget {
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: Text('Language'),
-            trailing: DropdownButton<String>(
-              value: 'English',
-              items: <String>['English', 'Spanish', 'French', 'German']
+            trailing: Obx(() => DropdownButton<String>(
+              value: _personalProfileController.language.value,
+              items: ['English', 'Vietnamese']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
-                  value: value,
+                  value: value.toUpperCase(),
                   child: Text(value),
                 );
               }).toList(),
-              onChanged: (String? newValue) {},
-            ),
+              onChanged: _personalProfileController.changeLanguage,
+            ),)
           ),
         ],
         if (shouldInclude('notification')) ...[
-          SwitchListTile(
+          Obx(() => SwitchListTile(
             contentPadding: EdgeInsets.zero,
-            title: Text('Push Notification'),
-            value: true,
-            onChanged: (bool value) {},
-          ),
+            title: Text('Notification'),
+            value: _personalProfileController.notification.value,
+            onChanged: _personalProfileController.toggleNotification,
+          ),)
         ],
         if (shouldInclude('dark_mode')) ...[
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: Text('Dark Mode'),
             trailing: Obx(() => Switch(
-              value: _themeController.isDarkMode.value,
-              onChanged: _themeController.toggleTheme,
+              value: _personalProfileController.darkMode.value,
+              onChanged: _personalProfileController.toggleTheme,
             )),
           ),
         ],
         if (shouldInclude('sound')) ...[
-          SwitchListTile(
+          Obx(() => SwitchListTile(
             contentPadding: EdgeInsets.zero,
             title: Text('Sound'),
-            value: false,
-            onChanged: (bool value) {},
-          ),
+            value: _personalProfileController.sound.value,
+            onChanged: _personalProfileController.toggleSound,
+          ),)
         ],
         if (shouldInclude('auto_update')) ...[
-          SwitchListTile(
+          Obx(() => SwitchListTile(
             contentPadding: EdgeInsets.zero,
             title: Text('Automatically Updated'),
-            value: true,
-            onChanged: (bool value) {},
-          ),
+            value: _personalProfileController.automaticallyUpdated.value,
+            onChanged: _personalProfileController.toggleAutomaticallyUpdated,
+          ),)
         ],
         if (shouldInclude('term_of_service')) ...[
           ListTile(

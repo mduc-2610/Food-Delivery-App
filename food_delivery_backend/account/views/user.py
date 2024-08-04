@@ -110,12 +110,11 @@ class UserViewSet(ManyRelatedViewSet):
     # }
 
     def get_serializer_class(self):
-        print(self.request.user, pretty=True)
         return self.many_related_serializer_class.get(self.action, super().get_serializer_class())
 
     def get_permissions(self):
-        if self.action in ['list', 'retrieve', 'get_user_details']:
-            return [IsAuthenticated()]
+        # if self.action in ['list', 'retrieve', 'get_user_details']:
+        #     return [IsAuthenticated()]
         return super().get_permissions()
     
     def get_throttles(self):

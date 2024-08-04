@@ -144,12 +144,14 @@ class THelperFunction {
     return numberPart;
   }
 
-  static String hidePhoneNumber(PhoneNumber phoneNumber) {
-    String phoneNumberStr = THelperFunction.getPhoneNumber(phoneNumber, excludePrefix: true);
+  static String hidePhoneNumber(dynamic phoneNumber) {
+    String phoneNumberStr = (phoneNumber is PhoneNumber)
+        ? THelperFunction.getPhoneNumber(phoneNumber, excludePrefix: true)
+        : phoneNumber;
     int length = phoneNumberStr.length;
-    String prefixVisiblePart = phoneNumberStr.substring(0, 2);
+    String prefixVisiblePart =  phoneNumberStr.substring(0, (phoneNumber is PhoneNumber) ? 2 : 3);
     String suffixVisiblePart = phoneNumberStr.substring(length - 3, length);
-    return '(${phoneNumber.dialCode}) $prefixVisiblePart ***** $suffixVisiblePart';
+    return '(${phoneNumber is PhoneNumber ? phoneNumber.dialCode : prefixVisiblePart}) ${(phoneNumber is PhoneNumber) ? prefixVisiblePart : ""} ***** $suffixVisiblePart';
   }
 
   static DateTime? parseToDateTime(dynamic date) {

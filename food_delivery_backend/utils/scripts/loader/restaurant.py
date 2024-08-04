@@ -2,17 +2,23 @@ import random
 from faker import Faker
 
 from account.models import User
+from food.models import Dish
 from restaurant.models import (
     BasicInfo, DetailInfo, MenuDelivery,
     Representative, OperatingHour, Restaurant
 )
+
+from utils.function import load_one_to_many_model
 
 fake = Faker()
 
 def generate_phone_number():
     return f"+84{random.randint(100000000, 99999999999)}"
 
-def load_restaurant(max_restaurants=0):
+def load_restaurant(
+    max_restaurants=0,
+    max_restaurant_dishes=20
+):
     model_list = [
         BasicInfo, DetailInfo, MenuDelivery,
         Representative, OperatingHour, Restaurant
@@ -22,6 +28,7 @@ def load_restaurant(max_restaurants=0):
         model.objects.all().delete()
 
     user_list = list(User.objects.all())
+    dish_list = list(Dish.objects.all())
     
     print("________________________________________________________________")
     print("RESTAURANT:")
@@ -98,4 +105,15 @@ def load_restaurant(max_restaurants=0):
         restaurant_list.append(restaurant)
         print(f"\tSuccessfully created Restaurant: {restaurant}\n")
     
+    print("________________________________________________________________")
+    print("RESTAURANT DISH:")
+    for restaurant in restaurant_list:
+        tmp = dish_list.copy()
+        for _ in range(random.randint(1, max_restaurant_dishes)):
+            dish = tmp.pop(random.randint(0, len(tmp) - 1))
+            dish.restaurant = restaurant
+            dish.save()
+            print(f"\tSuccessfully added Dish: {dish} to Restaurant: {restaurant}")
+
+
     return restaurant_list

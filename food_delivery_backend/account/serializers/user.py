@@ -28,8 +28,8 @@ class UserSerializer(CustomRelatedModelSerializer):
         super().__init__(*args, **kwargs)
 
         self.one_related_serializer_class = {
-            # 'profile': ProfileSerializer,
-            # 'setting': SettingSerializer
+            'profile': ProfileSerializer,
+            'setting': SettingSerializer
         }
     class Meta:
         model = User

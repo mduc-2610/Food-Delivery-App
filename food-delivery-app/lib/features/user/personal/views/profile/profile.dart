@@ -4,6 +4,11 @@ import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
 import 'package:food_delivery_app/common/widgets/misc/sliver_sized_box.dart';
+import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
+import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
+import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
+import 'package:food_delivery_app/common/widgets/skeleton/circle_box_skeleton.dart';
+import 'package:food_delivery_app/common/widgets/skeleton/list_field_skeleton.dart';
 import 'package:food_delivery_app/data/services/token_service.dart';
 import 'package:food_delivery_app/features/authentication/controllers/login/auth_controller.dart';
 import 'package:food_delivery_app/features/authentication/controllers/profile/profile_controller.dart';
@@ -12,14 +17,34 @@ import 'package:food_delivery_app/features/authentication/views/profile/profile.
 import 'package:food_delivery_app/features/authentication/views/profile/widgets/profile_detail.dart';
 import 'package:food_delivery_app/features/personal/controllers/profile/theme_controller.dart';
 import 'package:food_delivery_app/features/personal/views/profile/widgets/personal_setting.dart';
+import 'package:food_delivery_app/features/user/personal/controller/personal_profile_controller.dart';
+import 'package:food_delivery_app/features/user/personal/views/profile/widgets/personal_setting_skeleton.dart';
+import 'package:food_delivery_app/features/user/personal/views/profile/widgets/profile_skeleton.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:food_delivery_app/utils/constants/times.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
-class PersonalProfileView extends StatelessWidget {
-  final ThemeController _themeController = Get.put(ThemeController());
+class PersonalProfileView extends StatefulWidget {
+  @override
+  State<PersonalProfileView> createState() => _PersonalProfileViewState();
+}
+
+class _PersonalProfileViewState extends State<PersonalProfileView> {
+  late final _controller;
+  bool _isLoading = true;
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    _controller = Get.put(PersonalProfileController());
+    await Future.delayed(Duration(milliseconds: TTime.init));
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +60,13 @@ class PersonalProfileView extends StatelessWidget {
             ],
             noLeading: true,
           ),
-
           SliverToBoxAdapter(
             child: MainWrapper(
               child: Column(
                 children: [
-                  ListTile(
+                  _isLoading
+                      ? ProfileSkeleton()
+                      : ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: CircleAvatar(
                       backgroundImage: NetworkImage('https://via.placeholder.com/150'),
@@ -49,17 +75,17 @@ class PersonalProfileView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Thomas K. Wilson',
+                          '${_controller.user.profile.name}',
                           style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.primary),
                         ),
                         Text(
-                          '(+44) 20 1234 5629',
+                          '${THelperFunction.hidePhoneNumber(_controller.user.phoneNumber)}',
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
-                        Text(
-                          'thomas.abc.inc@gmail.com',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
+                        // Text(
+                        //   'thomas.abc.inc@gmail.com',
+                        //   style: Theme.of(context).textTheme.bodySmall,
+                        // ),
                       ],
                     ),
                     trailing: CircleIconCard(
@@ -67,14 +93,13 @@ class PersonalProfileView extends StatelessWidget {
                         showModalBottomSheet(context: context, isScrollControlled: true, builder: (context) {
                           return MainWrapper(
                             child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  ProfileDetail(
-                                    // controller: _profileController,
-                                    isEdit: true,
-                                  ),
-                                ],
-                              )
+                                child: Column(
+                                  children: [
+                                    ProfileDetail(
+                                      isEdit: true,
+                                    ),
+                                  ],
+                                )
                             ),
                           );
                         });
@@ -83,12 +108,9 @@ class PersonalProfileView extends StatelessWidget {
                       iconColor: TColor.light,
                       backgroundColor: TColor.primary,
                     ),
-                    onTap: () {
-
-                    },
+                    onTap: () {},
                   ),
-                  SizedBox(height: TSize.spaceBetweenItemsVertical,),
-
+                  SizedBox(height: TSize.spaceBetweenItemsVertical),
                   MainButton(
                     onPressed: () async {
                       await TokenService.deleteToken();
@@ -101,16 +123,15 @@ class PersonalProfileView extends StatelessWidget {
                     prefixIcon: Icons.logout,
                     prefixIconColor: TColor.primary,
                     backgroundColor: TColor.iconBgCancel,
-                  )
+                  ),
                 ],
               ),
             ),
           ),
-          SliverSizedBox(height: TSize.spaceBetweenItemsVertical,),
-
+          SliverSizedBox(height: TSize.spaceBetweenItemsVertical),
           SliverToBoxAdapter(
             child: MainWrapper(
-              child: PersonalSetting(themeController: _themeController),
+              child: _isLoading ? PersonalSettingSkeleton() : PersonalSetting(),
             ),
           ),
         ],
@@ -118,4 +139,5 @@ class PersonalProfileView extends StatelessWidget {
     );
   }
 }
+
 

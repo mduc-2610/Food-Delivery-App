@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
-class BoxSkeleton extends StatelessWidget {
+
+class CircleBoxSkeleton extends StatelessWidget {
   final double height;
   final double width;
   final double borderRadius;
 
-  const BoxSkeleton({
+  const CircleBoxSkeleton({
     required this.height,
     required this.width,
-    this.borderRadius = TSize.borderRadiusLg,
+    this.borderRadius = TSize.borderRadiusCircle,
   });
 
   @override

@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
+import 'package:food_delivery_app/features/personal/controllers/security/personal_security_controller.dart';
+import 'package:get/get.dart';
 
-class PersonalSecurityView extends StatelessWidget {
-  const PersonalSecurityView({super.key});
+class PersonalSecurityView extends StatefulWidget {
+  PersonalSecurityView({Key? key}) : super(key: key);
+
+  @override
+  State<PersonalSecurityView> createState() => _PersonalSecurityViewState();
+}
+
+class _PersonalSecurityViewState extends State<PersonalSecurityView> {
+  final _controller = Get.put(PersonalSecurityController());
 
   @override
   Widget build(BuildContext context) {
@@ -23,31 +32,24 @@ class PersonalSecurityView extends StatelessWidget {
               child: MainWrapper(
                 child: Column(
                   children: [
-                    SwitchListTile(
-                      title: Text('Push Notification'),
-                      value: true,
-                      onChanged: (bool value) {
-                        // Push Notification functionality
-                      },
+                    Obx(() => SwitchListTile(
+                      title: Text('Face ID'),
+                      value: _controller.faceId.value,
+                      onChanged: _controller.toggleFaceId,
                       contentPadding: EdgeInsets.zero,
-                    ),
-                    SwitchListTile(
-                      title: Text('Push Notification'),
-                      value: true,
-                      onChanged: (bool value) {
-                        // Push Notification functionality
-                      },
+                    )),
+                    Obx(() => SwitchListTile(
+                      title: Text('Touch ID'),
+                      value: _controller.touchId.value,
+                      onChanged: _controller.toggleTouchId,
                       contentPadding: EdgeInsets.zero,
-                    ),
-                    
-                    SwitchListTile(
-                      title: Text('Push Notification'),
-                      value: true,
-                      onChanged: (bool value) {
-                        // Push Notification functionality
-                      },
+                    )),
+                    Obx(() => SwitchListTile(
+                      title: Text('Pin Security'),
+                      value: _controller.pinSecurity.value,
+                      onChanged: _controller.togglePinSecurity,
                       contentPadding: EdgeInsets.zero,
-                    ),
+                    )),
                   ],
                 ),
               )

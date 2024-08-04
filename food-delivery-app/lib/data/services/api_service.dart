@@ -32,8 +32,8 @@ class APIService<T> {
     return (json) => classMirror.newInstance("fromJson", [json]) as T;
   }
 
-  String url({String id = ''}) {
-    return '${APIConstant.baseUrl}/${endpoint ?? APIConstant.getEndpointFor<T>() ?? ""}/${id != '' ? '$id/' : ''}';
+  String url({dynamic id}) {
+    return '${APIConstant.baseUrl}/${endpoint ?? APIConstant.getEndpointFor<T>() ?? ""}/${(id != null) ? '$id/' : ''}';
   }
 
   Future<dynamic> list() async {
@@ -90,15 +90,18 @@ class APIService<T> {
     });
   }
 
-  Future<dynamic> update(String? id, dynamic data, { Function(Map<String, dynamic>)? fromJson }) async {
+  Future<dynamic> update(dynamic id, dynamic data, { Function(Map<String, dynamic>)? fromJson, bool patch = false }) async {
     return _handleRequest(() async {
-      final response = await http.put(
-        Uri.parse(url(id: id!)),
-        headers: await _getHeaders(),
-        body: json.encode(data.toJson()),
-      );
+      final uri = Uri.parse(url(id: id!));
+      final headers = await _getHeaders();
+      final body = json.encode((data is Map<String, dynamic>) ? data : data.toJson(patch: patch));
+
+      final response = patch
+          ? await http.patch(uri, headers: headers, body: body)
+          : await http.put(uri, headers: headers, body: body);
+
       var jsonResponse = json.decode(response.body);
-      if(fromJson != null) {
+      if (fromJson != null) {
         jsonResponse = fromJson(jsonResponse);
       }
       return [response.statusCode, response.headers, jsonResponse];

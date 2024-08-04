@@ -9,7 +9,6 @@ import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 class ProfileView extends StatelessWidget {
-  final ThemeController _themeController = ThemeController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,10 +25,7 @@ class ProfileView extends StatelessWidget {
             child: MainWrapper(
               child: Column(
                 children: [
-                  PersonalSetting(
-                    themeController: _themeController,
-                    // include: ['promotions', '__all__']
-                  ),
+                  PersonalSetting(),
                   SizedBox(height: TSize.spaceBetweenItemsVertical,),
 
                   MainButton(

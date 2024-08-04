@@ -11,6 +11,7 @@ def load_one_to_many_model(
         primary_field,
         primary_objects,
         max_related_objects,
+        related_field=[],
         attributes={}
     ):
     created_objects = []
@@ -24,7 +25,7 @@ def load_one_to_many_model(
                 primary_field: primary_obj,
                 **{attr: value() if callable(value) else value for attr, value in attributes.items()}
             }
-            created_object = model_class.objects.create(**data)
+            created_object, _ = model_class.objects.get_or_create(**data)
             created_objects.append(created_object)
             print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
     return created_objects

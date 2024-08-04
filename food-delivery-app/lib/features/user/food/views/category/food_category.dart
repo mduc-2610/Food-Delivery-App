@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/widgets/bars/separate_section_bar.dart';
+import 'package:food_delivery_app/common/widgets/cards/restaurant_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/list_check_empty.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/bars/search_bar.dart';
@@ -29,28 +31,13 @@ class FoodCategoryView extends StatelessWidget {
                 MainWrapper(
                   child: Column(
                     children: [
-                      CSearchBar(),
-                      SizedBox(height: TSize.spaceBetweenSections,),
                       ListCheckEmpty(
-                        child: GridView.count(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          childAspectRatio: 14 / 16,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                        child: Column(
                           children: [
-                            for(int i = 0; i < 4; i++)
-                              FoodCard(
-                                type: FoodCardType.grid,
-                                name: 'Pizza',
-                                image: TImage.hcBurger1,
-                                stars: 4.5,
-                                originalPrice: 10.0,
-                                salePrice: 7.5,
-                                onTap: () {},
-                                heart: 'assets/icons/heart.svg',
-                              ),
+                            for(int i = 0; i < 5; i++)...[
+                              RestaurantCard(imageUrl: TImage.hcFood1, title: "Burger Restaurant", subtitle: "ok", price: "1.5", rating: "5", reviewCount: "5", tag: "2"),
+                              SeparateSectionBar()
+                            ]
                           ],
                         ),
                       )

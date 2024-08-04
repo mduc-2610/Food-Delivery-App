@@ -20,7 +20,7 @@ class ListFieldSkeleton extends StatelessWidget {
             Shimmer.fromColors(
               baseColor: Colors.grey[300]!,
               highlightColor: Colors.grey[100]!,
-              child: BoxSkeleton(height: 60, width: double.infinity, borderRadius: 10),
+              child: BoxSkeleton(height: 60, width: double.infinity),
             ),
             if(i != length - 1) SizedBox(height: TSize.spaceBetweenInputFields,),
           ]

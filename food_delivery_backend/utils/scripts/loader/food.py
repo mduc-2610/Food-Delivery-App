@@ -59,8 +59,9 @@ def load_food(
             print(f"Category folder not found: {category_folder_path}")
             continue
         else:
+            tmp = os.listdir(category_folder_path).copy()
             for i, image_file in enumerate(os.listdir(category_folder_path)):
-                if i >= 30: break
+                if i >= 50: break
                 dish_data = {
                     "name": category.name + ' ' + fake.word() + ' ' + fake.word(),
                     "description": fake.text(max_nb_chars=200),
@@ -69,12 +70,14 @@ def load_food(
                     "rating": random.uniform(1, 5),
                     "number_of_reviews": fake.random_int(min=0, max=1000),
                     "category": category,
-                    "image": f"{category_name}/{random.choice(os.listdir(category_folder_path))}",
+                    "image": f"{category_name}/{tmp.pop(random.randint(0, len(tmp) - 1))}",
+                    # "image": f"{category_name}/{image_file}",
                 }
                 
                 dish, _ = Dish.objects.get_or_create(**dish_data)
                 dish_list.append(dish)
                 print(f"\tSuccessfully created Dish: {dish}, {dish.image}\n")
+                
                 for _ in range(random.randint(1, 5)):
                     option_data = {
                         "dish": dish,
@@ -84,6 +87,7 @@ def load_food(
                     option = DishAdditionalOption.objects.create(**option_data)
                     print(f"\tSuccessfully created Dish Additional Option: {option}")
                 print()
+                
                 size_options = ["Small", "Medium", "Large", "XL Large with Sauces"]
                 for size in size_options:
                     size_data = {
@@ -109,7 +113,7 @@ def load_food(
     review_attributes = {
         'rating': lambda: fake.random_int(min=1, max=5),
         'title': lambda: fake.sentence(nb_words=6),
-        'comment': lambda: fake.text(max_nb_chars=200)
+        'content': lambda: fake.text(max_nb_chars=200)
     }
 
     print("________________________________________________________________")

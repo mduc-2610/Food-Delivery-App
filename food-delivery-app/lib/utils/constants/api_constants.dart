@@ -70,6 +70,8 @@ class APIConstant {
         return 'account/setting';
       case UserSecuritySetting:
         return 'account/security-setting';
+      case Me:
+        return 'account/user/me';
 
       ///RESTAURANT
       case Restaurant:
