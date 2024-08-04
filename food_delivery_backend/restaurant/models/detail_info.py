@@ -1,6 +1,7 @@
 from django.db import models
 
 class DetailInfo(models.Model):
+    restaurant = models.OneToOneField('restaurant.Restaurant', on_delete=models.CASCADE, related_name='detail_info', null=True)
     keywords = models.CharField(max_length=255)
     description = models.TextField()
     avatar_image = models.ImageField(upload_to='restaurant_images/')

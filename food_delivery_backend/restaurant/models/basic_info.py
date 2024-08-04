@@ -1,6 +1,7 @@
 from django.db import models
 
 class BasicInfo(models.Model):
+    restaurant = models.OneToOneField("restaurant.Restaurant", on_delete=models.CASCADE, related_name='basic_info')
     name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=15)
     city = models.CharField(max_length=255)

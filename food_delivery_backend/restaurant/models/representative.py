@@ -1,6 +1,7 @@
 from django.db import models
 
 class Representative(models.Model):
+    restaurant = models.OneToOneField('restaurant.Restaurant', on_delete=models.CASCADE, related_name='representative')
     registration_type = models.CharField(max_length=255, choices=[('Cá nhân', 'Cá nhân'), ('Công ty/Chuỗi', 'Công ty/Chuỗi')])
     full_name = models.CharField(max_length=255)
     email = models.EmailField()

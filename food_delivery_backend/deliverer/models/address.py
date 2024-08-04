@@ -1,6 +1,7 @@
 from django.db import models
 
 class Address(models.Model):
+    deliverer = models.OneToOneField("deliverer.Deliverer", on_delete=models.CASCADE, related_name="address", null=True)
     city = models.CharField(max_length=100)
     district = models.CharField(max_length=100)
     ward = models.CharField(max_length=100)

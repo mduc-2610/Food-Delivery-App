@@ -55,11 +55,11 @@ def run():
 
     # load_deliverer(max_deliverers=MAX_DELIVERERS)    
     
-    load_food(
-        max_categories=MAX_CATEGORIES, 
-        max_dishes=MAX_DISHES,
-        max_dish_likes=MAX_DISH_LIKES,
-    )
+    # load_food(
+    #     max_categories=MAX_CATEGORIES, 
+    #     max_dishes=MAX_DISHES,
+    #     max_dish_likes=MAX_DISH_LIKES,
+    # )
 
     load_restaurant(max_restaurants=MAX_RESTAURANTS)
 

@@ -36,7 +36,19 @@ def load_restaurant(
     for i, user in enumerate(user_list):
         if i >= max_restaurants: break
 
+        restaurant_data = {
+            "user": user,
+            # "basic_info": basic_info,
+            # "detail_info": detail_info,
+            # "menu_delivery": menu_delivery,
+            # "representative": representative,
+        }
+        restaurant = Restaurant.objects.create(**restaurant_data)
+        restaurant_list.append(restaurant)
+        print(f"\tSuccessfully created Restaurant: {restaurant}\n")
+
         basic_info_data = {
+            "restaurant": restaurant,
             "name": fake.company(),
             "phone_number": generate_phone_number(),
             "city": fake.city(),
@@ -48,6 +60,7 @@ def load_restaurant(
         print(f"\tSuccessfully created Basic Info: {basic_info}")
 
         detail_info_data = {
+            "restaurant": restaurant,
             "keywords": ", ".join(fake.words(nb=5, unique=True)),
             "description": fake.text(max_nb_chars=200),
             "avatar_image": fake.image_url(),
@@ -65,12 +78,14 @@ def load_restaurant(
         print(f"\tSuccessfully created Detail Info: {detail_info}")
 
         menu_delivery_data = {
+            "restaurant": restaurant,
             "menu_image": fake.image_url()
         }
         menu_delivery = MenuDelivery.objects.create(**menu_delivery_data)
         print(f"\tSuccessfully created Menu Delivery: {menu_delivery}")
 
         representative_data = {
+            "restaurant": restaurant,
             "registration_type": fake.random_element(elements=('Cá nhân', 'Công ty/Chuỗi')),
             "full_name": fake.name(),
             "email": fake.email(),
@@ -93,17 +108,6 @@ def load_restaurant(
             }
             OperatingHour.objects.create(**operating_hour_data)
             print(f"\tSuccessfully created Operating Hour for {detail_info} on {day}")
-
-        restaurant_data = {
-            "user": user,
-            "basic_info": basic_info,
-            "detail_info": detail_info,
-            "menu_delivery": menu_delivery,
-            "representative": representative,
-        }
-        restaurant = Restaurant.objects.create(**restaurant_data)
-        restaurant_list.append(restaurant)
-        print(f"\tSuccessfully created Restaurant: {restaurant}\n")
     
     print("________________________________________________________________")
     print("RESTAURANT DISH:")
@@ -114,6 +118,5 @@ def load_restaurant(
             dish.restaurant = restaurant
             dish.save()
             print(f"\tSuccessfully added Dish: {dish} to Restaurant: {restaurant}")
-
 
     return restaurant_list
