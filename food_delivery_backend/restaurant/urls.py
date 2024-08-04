@@ -7,7 +7,7 @@ from .views import (
     MenuDeliveryViewSet, 
     OperatingHourViewSet, 
     RepresentativeViewSet, 
-    RestaurantViewSet
+    RestaurantViewSet, RestaurantCategoryViewSet
 )
 
 router = DefaultRouter()
@@ -17,6 +17,8 @@ router.register(r'menu-delivery', MenuDeliveryViewSet)
 router.register(r'operating-hour', OperatingHourViewSet)
 router.register(r'restaurant', RestaurantViewSet)
 router.register(r'representative', RepresentativeViewSet)
+router.register(r'restaurant-category', RestaurantCategoryViewSet)
+
 
 urlpatterns = [
     path('', include(router.urls)),

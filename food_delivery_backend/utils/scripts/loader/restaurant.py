@@ -2,13 +2,13 @@ import random
 from faker import Faker
 
 from account.models import User
-from food.models import Dish
+from food.models import Dish, DishCategory
 from restaurant.models import (
     BasicInfo, DetailInfo, MenuDelivery,
-    Representative, OperatingHour, Restaurant
+    Representative, OperatingHour, Restaurant, RestaurantCategory
 )
 
-from utils.function import load_one_to_many_model
+from utils.function import load_one_to_many_model, load_intermediate_model
 
 fake = Faker()
 
@@ -17,11 +17,12 @@ def generate_phone_number():
 
 def load_restaurant(
     max_restaurants=0,
-    max_restaurant_dishes=20
+    max_restaurant_category_dishes=10,
+    max_restaurant_categories=5,
 ):
     model_list = [
         BasicInfo, DetailInfo, MenuDelivery,
-        Representative, OperatingHour, Restaurant
+        Representative, OperatingHour, Restaurant, RestaurantCategory
     ]
     
     for model in model_list:
@@ -29,6 +30,7 @@ def load_restaurant(
 
     user_list = list(User.objects.all())
     dish_list = list(Dish.objects.all())
+    category_list = list(DishCategory.objects.all())
     
     print("________________________________________________________________")
     print("RESTAURANT:")
@@ -71,7 +73,6 @@ def load_restaurant(
             "specialty_dishes": ", ".join(fake.words(nb=3, unique=True)),
             "serving_times": fake.time(),
             "target_audience": ", ".join(fake.words(nb=3, unique=True)),
-            "restaurant_category": fake.word(),
             "purpose": fake.word()
         }
         detail_info = DetailInfo.objects.create(**detail_info_data)
@@ -108,15 +109,32 @@ def load_restaurant(
             }
             OperatingHour.objects.create(**operating_hour_data)
             print(f"\tSuccessfully created Operating Hour for {detail_info} on {day}")
-    
+
+    print("________________________________________________________________")
+    print("RESTAURANT CATEGORY:")
+    load_intermediate_model(
+        model_class=RestaurantCategory,
+        primary_field='restaurant',
+        related_field='category',
+        primary_objects=restaurant_list,
+        related_objects=category_list,
+        max_items=max_restaurant_categories,
+    )
+
     print("________________________________________________________________")
     print("RESTAURANT DISH:")
     for restaurant in restaurant_list:
-        tmp = dish_list.copy()
-        for _ in range(random.randint(1, max_restaurant_dishes)):
-            dish = tmp.pop(random.randint(0, len(tmp) - 1))
-            dish.restaurant = restaurant
-            dish.save()
-            print(f"\tSuccessfully added Dish: {dish} to Restaurant: {restaurant}")
+        for category in restaurant.categories.all():
+            tmp = list(category.dishes.all())
+            for _ in range(random.randint(1, max_restaurant_category_dishes)):
+                if not tmp: break
+                max_loop = 100
+                dish = random.choice(tmp)
+                while dish.restaurant == None and max_loop:
+                    dish.restaurant = restaurant                
+                    dish = random.choice(tmp)
+                    max_loop -= 1
+                dish.save()
+                print(f"\tSuccessfully added Dish: {dish} to Restaurant: {restaurant}")
 
     return restaurant_list

@@ -9,5 +9,5 @@ class DetailInfoSerializer(serializers.ModelSerializer):
             'id', 'restaurant', 'keywords', 'description', 'avatar_image', 
             'cover_image', 'facade_image', 'restaurant_type', 'cuisine', 
             'specialty_dishes', 'serving_times', 'target_audience', 
-            'restaurant_category', 'purpose'
+            'purpose'
         ]

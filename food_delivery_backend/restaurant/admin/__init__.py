@@ -5,7 +5,7 @@ from .detail_info import DetailInfoAdmin
 from .menu_delivery import MenuDeliveryAdmin
 from .operating_hour import OperatingHourAdmin
 from .representative import RepresentativeAdmin
-from .restaurant import RestaurantAdmin
+from .restaurant import RestaurantAdmin, RestaurantCategoryAdmin
 
 from restaurant.models import (
     BasicInfo, 
@@ -13,7 +13,7 @@ from restaurant.models import (
     MenuDelivery,
     OperatingHour,
     Representative,
-    Restaurant
+    Restaurant, RestaurantCategory
 )
 
 admin.site.register(BasicInfo, BasicInfoAdmin)
@@ -22,3 +22,4 @@ admin.site.register(MenuDelivery, MenuDeliveryAdmin)
 admin.site.register(OperatingHour, OperatingHourAdmin)
 admin.site.register(Representative, RepresentativeAdmin)
 admin.site.register(Restaurant, RestaurantAdmin)
+admin.site.register(RestaurantCategory, RestaurantCategoryAdmin)

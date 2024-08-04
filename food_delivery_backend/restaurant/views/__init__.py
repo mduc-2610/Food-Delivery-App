@@ -3,4 +3,4 @@ from .detail_info import DetailInfoViewSet
 from .menu_delivery import MenuDeliveryViewSet
 from .operating_hour import OperatingHourViewSet
 from .representative import RepresentativeViewSet 
-from .restaurant import RestaurantViewSet
+from .restaurant import RestaurantViewSet, RestaurantCategoryViewSet

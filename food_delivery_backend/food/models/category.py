@@ -13,8 +13,4 @@ class DishCategory(models.Model):
         ordering = ['name'] 
 
     def __str__(self):
-        return self.name
-
-    def dish_count(self):
-        return self.dishes.count()
-
+        return self.name\

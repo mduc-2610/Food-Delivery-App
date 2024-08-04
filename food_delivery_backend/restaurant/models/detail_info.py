@@ -12,8 +12,8 @@ class DetailInfo(models.Model):
     specialty_dishes = models.CharField(max_length=255)  
     serving_times = models.CharField(max_length=255)  
     target_audience = models.CharField(max_length=255)  
-    restaurant_category = models.CharField(max_length=255)  
     purpose = models.CharField(max_length=255)  
     
     def __str__(self):
         return f" - Details"
+    

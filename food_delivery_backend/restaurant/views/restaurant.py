@@ -1,9 +1,11 @@
-from restaurant.models import Restaurant
+from rest_framework import viewsets
+
+from restaurant.models import Restaurant, RestaurantCategory
 from restaurant.serializers import (
-    RestaurantSerializer, DetailRestaurantSerializer
+    RestaurantSerializer, DetailRestaurantSerializer, RestaurantCategorySerializer
 )
 from account.serializers import UserAbbrSerializer
-from food.serializers import DishSerializer
+from food.serializers import DishSerializer, DishCategorySerializer
 from order.serializers import PromotionSerializer, RestaurantPromotionSerializer
 from review.serializers import RestaurantReviewSerializer
 
@@ -18,7 +20,8 @@ class RestaurantViewSet(ManyRelatedViewSet):
         'reviewed_by_users': UserAbbrSerializer,
         'dishes': DishSerializer,
         'restaurant_reviews': RestaurantReviewSerializer,
-        'owned_promotions': RestaurantPromotionSerializer
+        'owned_promotions': RestaurantPromotionSerializer,
+        'categories': DishCategorySerializer,
     }
     # many_related = {
     #     "promotions": {
@@ -53,3 +56,8 @@ class RestaurantViewSet(ManyRelatedViewSet):
         if self.action == "list":
             context.update({'detail': False})
         return context
+    
+
+class RestaurantCategoryViewSet(viewsets.ModelViewSet):
+    queryset = RestaurantCategory.objects.all()
+    serializer_class = RestaurantCategorySerializer

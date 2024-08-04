@@ -6,12 +6,13 @@ class Restaurant(models.Model):
     user = models.OneToOneField("account.User", on_delete=models.CASCADE, related_name='restaurant')
     
     promotions = models.ManyToManyField('order.Promotion', through="order.RestaurantPromotion", related_name='promotions')
+    categories = models.ManyToManyField('food.DishCategory', through="restaurant.RestaurantCategory", related_name='restaurants')
     
-    # def name(self):
-    #     return self.basic_info.name
+    def name(self):
+        return self.basic_info.name
 
-    # def description(self):
-    #     return self.detail_info.description
+    def description(self):
+        return self.detail_info.description
     
     def __getitem__(self, attr):
         if hasattr(self, attr):
@@ -21,3 +22,11 @@ class Restaurant(models.Model):
 
     def __str__(self):
         return f"{self.id}"
+    
+class RestaurantCategory(models.Model):
+    restaurant = models.ForeignKey('restaurant.Restaurant', on_delete=models.CASCADE, related_name='restaurant_categories')
+    category = models.ForeignKey('food.DishCategory', on_delete=models.CASCADE, related_name='restaurant_categories')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.restaurant} - {self.category}"

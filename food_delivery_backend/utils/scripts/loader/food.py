@@ -21,8 +21,8 @@ def load_food(
     max_categories=0, 
     max_dishes=0,
     max_dish_likes=0,
-    max_dish_reviews=30,
-    max_dish_reviews_like=30,
+    max_dish_reviews=25,
+    max_dish_reviews_like=25,
     ):
     model_list = [
         Dish, DishLike, 
@@ -61,7 +61,7 @@ def load_food(
         else:
             tmp = os.listdir(category_folder_path).copy()
             for i, image_file in enumerate(os.listdir(category_folder_path)):
-                if i >= 50: break
+                if i >= 100: break
                 dish_data = {
                     "name": category.name + ' ' + fake.word() + ' ' + fake.word(),
                     "description": fake.text(max_nb_chars=200),

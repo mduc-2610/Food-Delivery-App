@@ -30,7 +30,7 @@ def run():
     MAX_USER_NOTIFICATIONS = 30
 
     MAX_CATEGORIES = 30
-    MAX_DISHES = 100
+    MAX_DISHES = 150
     MAX_DISH_LIKES = 50
     
     MAX_PROMOTIONS = 200
@@ -40,6 +40,8 @@ def run():
     MAX_ORDERS = 80
     MAX_DELIVERIES = 100
     MAX_CARTS = 100
+    MAX_RESTAURANT_CATEGORIES=3
+    MAX_RESTAURANT_CATEGORY_DISHES=8
 
     MAX_REVIEWS = 100
     MAX_REVIEW_LIKES = 100
@@ -55,41 +57,45 @@ def run():
 
     # load_deliverer(max_deliverers=MAX_DELIVERERS)    
     
-    # load_food(
-    #     max_categories=MAX_CATEGORIES, 
-    #     max_dishes=MAX_DISHES,
-    #     max_dish_likes=MAX_DISH_LIKES,
+    load_food(
+        max_categories=MAX_CATEGORIES, 
+        max_dishes=MAX_DISHES,
+        max_dish_likes=MAX_DISH_LIKES,
+    )
+
+    load_restaurant(
+        max_restaurants=MAX_RESTAURANTS,
+        max_restaurant_category_dishes=MAX_RESTAURANT_CATEGORY_DISHES,
+        max_restaurant_categories=MAX_RESTAURANT_CATEGORIES,
+    )
+
+    # load_notification(
+    #     max_notifications=MAX_NOTIFICATIONS, 
+    #     max_messages=MAX_MESSAGES,
+    #     max_user_notifications=MAX_USER_NOTIFICATIONS
     # )
 
-    load_restaurant(max_restaurants=MAX_RESTAURANTS)
+    # load_order(
+    #     max_promotions=MAX_PROMOTIONS,
+    #     max_order_promotions=MAX_ORDER_PROMOTIONS,
+    #     max_restaurant_promotions=MAX_RESTAURANT_PROMOTIONS,
+    #     max_user_promotions=MAX_USER_PROMOTIONS,
+    #     max_orders=MAX_ORDERS,
+    #     max_deliveries=MAX_DELIVERIES,
+    #     max_carts=MAX_CARTS,
+    #     max_dishes=MAX_DISHES
+    # )
 
-    load_notification(
-        max_notifications=MAX_NOTIFICATIONS, 
-        max_messages=MAX_MESSAGES,
-        max_user_notifications=MAX_USER_NOTIFICATIONS
-    )
+    # load_review(
+    #     max_reviews=MAX_REVIEWS,
+    #     max_review_likes=MAX_REVIEW_LIKES,
+    # )
 
-    load_order(
-        max_promotions=MAX_PROMOTIONS,
-        max_order_promotions=MAX_ORDER_PROMOTIONS,
-        max_restaurant_promotions=MAX_RESTAURANT_PROMOTIONS,
-        max_user_promotions=MAX_USER_PROMOTIONS,
-        max_orders=MAX_ORDERS,
-        max_deliveries=MAX_DELIVERIES,
-        max_carts=MAX_CARTS,
-        max_dishes=MAX_DISHES
-    )
-
-    load_review(
-        max_reviews=MAX_REVIEWS,
-        max_review_likes=MAX_REVIEW_LIKES,
-    )
-
-    load_social(
-        max_posts=MAX_POSTS,
-        max_comments=MAX_COMMENTS,
-        max_comment_likes=MAX_COMMENT_LIKES,
-        max_post_likes=MAX_POST_LIKES,
-        max_post_images=MAX_POST_IMAGES,
-        max_comment_images=MAX_COMMENT_IMAGES
-    )
+    # load_social(
+    #     max_posts=MAX_POSTS,
+    #     max_comments=MAX_COMMENTS,
+    #     max_comment_likes=MAX_COMMENT_LIKES,
+    #     max_post_likes=MAX_POST_LIKES,
+    #     max_post_images=MAX_POST_IMAGES,
+    #     max_comment_images=MAX_COMMENT_IMAGES
+    # )
