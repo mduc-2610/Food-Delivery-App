@@ -35,15 +35,33 @@ class PersonalProfileView extends StatefulWidget {
 class _PersonalProfileViewState extends State<PersonalProfileView> {
   late final _controller;
   bool _isLoading = true;
+  bool _isMounted = true;
 
   @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     _controller = Get.put(PersonalProfileController());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
     await Future.delayed(Duration(milliseconds: TTime.init));
-    setState(() {
-      _isLoading = false;
-    });
+    if (_isMounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _isMounted = false;
+    super.dispose();
   }
 
   @override

@@ -18,6 +18,7 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:food_delivery_app/utils/theme/theme.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 void main() async {
@@ -25,7 +26,7 @@ void main() async {
   initializeReflectable();
   Token? token = await TokenService.getToken();
   final service = APIService<User>(endpoint:'account/user/me', token: token, pagination: false,);
-
+  $print(token);
   runApp(
     ChangeNotifierProvider(
       create: (context) => LocationModel(),
@@ -64,7 +65,7 @@ class _MyAppState extends State<MyApp> {
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
       themeMode: ThemeMode.light,
-      home: UserMenuRedirection(),
+      home: page,
     );
   }
 }

@@ -45,12 +45,11 @@ class User {
         lastLogin = DateTime.parse(json['last_login']),
         isOtpVerified = json['is_otp_verified'],
         isRegistrationVerified = json['is_registration_verified'],
-        profile = UserProfile.fromJson(json['profile']),
-        setting = UserSetting.fromJson(json['setting']);
+        profile = (json['profile'] != null) ? UserProfile.fromJson(json['profile']) : null,
+        setting = (json['setting'] != null) ? UserSetting.fromJson(json['setting']) : null;
 
-
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson({bool patch = false}) {
+    final Map<String, dynamic> data = {
       'id': id,
       'phone_number': phoneNumber,
       'email': email,
@@ -61,7 +60,15 @@ class User {
       'last_login': lastLogin?.toIso8601String(),
       'is_otp_verified': isOtpVerified,
       'is_registration_verified': isRegistrationVerified,
+      'profile': profile?.toJson(patch: patch),
+      'setting': setting?.toJson(patch: patch),
     };
+
+    if (patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
   }
 
   @override
@@ -69,7 +76,6 @@ class User {
     return THelperFunction.formatToString(this);
   }
 }
-
 
 @reflector
 @jsonSerializable
@@ -153,7 +159,7 @@ class UserLocation {
     this.id,
     this.address,
     this.latitude,
-    this.longitude
+    this.longitude,
   });
 
   UserLocation.fromJson(Map<String, dynamic> json)
@@ -164,6 +170,7 @@ class UserLocation {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'address': address,
       'latitude': latitude,
       'longitude': longitude,
@@ -184,18 +191,25 @@ class UserAbbr {
   String? name;
   String? avatar;
 
+  UserAbbr({
+    this.id,
+    this.phoneNumber,
+    this.name,
+    this.avatar,
+  });
+
   UserAbbr.fromJson(Map<String, dynamic> json)
-    : this.id = json['id'],
-      this.phoneNumber = json['phone_number'],
-      this.name = json['name'],
-      this.avatar = json['avatar'];
+      : id = json['id'],
+        phoneNumber = json['phone_number'],
+        name = json['name'],
+        avatar = json['avatar'];
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'phone_number': phoneNumber,
       'name': name,
-      'avatar': avatar
+      'avatar': avatar,
     };
   }
 
@@ -204,5 +218,3 @@ class UserAbbr {
     return THelperFunction.formatToString(this);
   }
 }
-
-

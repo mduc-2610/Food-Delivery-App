@@ -23,12 +23,12 @@ class PersonalProfileController extends GetxController {
   Rx<String> language = "".obs;
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
-    await loadUser();
+    loadUser();
   }
 
-  Future<void> loadUser() async {
+  void loadUser() async {
     token = await TokenService.getToken();
     user = await APIService<Me>(token: token, pagination: false).list();
     setting = user?.setting;

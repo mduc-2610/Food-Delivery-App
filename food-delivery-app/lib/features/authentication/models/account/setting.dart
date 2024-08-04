@@ -1,5 +1,4 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
-import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 @reflector
@@ -35,7 +34,7 @@ class UserSetting {
   Map<String, dynamic> toJson({bool patch = false}) {
     final Map<String, dynamic> data = {
       'user': user,
-      'security_setting': securitySetting?.toJson(),
+      'security_setting': securitySetting?.toJson(patch: patch),
       'notification': notification,
       'dark_mode': darkMode,
       'sound': sound,

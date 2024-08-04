@@ -24,13 +24,19 @@ class UserProfile {
         gender = json['gender'],
         dateOfBirth = json['date_of_birth'] != null ? DateTime.parse(json['date_of_birth']).toLocal() : null;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson({bool patch = false}) {
+    final Map<String, dynamic> data = {
       'user': user,
       'name': name,
       'gender': gender,
       'date_of_birth': dateOfBirth?.toUtc().toIso8601String(),
     };
+
+    if (patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
   }
 
   @override
