@@ -2,6 +2,7 @@ from rest_framework import viewsets, status, response
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from utils.pagination import CustomPagination
+from django.db import models
 
 class ManyRelatedViewSet(viewsets.ModelViewSet):
     pagination_class = CustomPagination
@@ -19,12 +20,26 @@ class ManyRelatedViewSet(viewsets.ModelViewSet):
 
     def get_object(self):
         pk = self.kwargs.get('pk', None)
+        model = self.queryset.model
+        params = self.request.query_params
+        filter_kwargs = {}
+        for field in self.get_serializer_class().Meta.model._meta.get_fields():
+            if isinstance(field, models.ForeignKey) and params.get(field.name):
+                filter_kwargs.update({
+                    f'{field.name}__id': params.get(field.name)
+                })
+        
+        print(filter_kwargs, pretty=True)
+
         if self.action in self.many_related:
             try:
-                instance = self.queryset.model.objects.get(pk=pk)
+                instance = model.objects.get(pk=pk)
             except self.queryset.model.DoesNotExist:
                 return None
-            return self.many_related[self.action]['queryset'](instance)
+            if filter_kwargs:
+                return self.many_related[self.action]['queryset'](instance).filter(**filter_kwargs)
+            else:
+                return self.many_related[self.action]['queryset'](instance)
         return super().get_object()
 
     def paginate_and_response(self, request, *args, **kwargs):

@@ -9,6 +9,7 @@ class DishCategory {
   final String? description;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final String? dishes;
 
   DishCategory({
     this.id,
@@ -16,6 +17,7 @@ class DishCategory {
     this.description,
     this.createdAt,
     this.updatedAt,
+    this.dishes
   });
 
   DishCategory.fromJson(Map<String, dynamic> json)
@@ -23,7 +25,8 @@ class DishCategory {
         name = json['name'],
         description = json['description'],
         createdAt = DateTime.parse(json['created_at']),
-        updatedAt = DateTime.parse(json['updated_at']);
+        updatedAt = DateTime.parse(json['updated_at']),
+        dishes = json['dishes'];
 
   Map<String, dynamic> toJson() {
     return {

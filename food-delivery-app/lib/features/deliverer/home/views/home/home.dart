@@ -9,7 +9,7 @@ import 'package:food_delivery_app/features/restaurant/home/views/home/widgets/me
 import 'package:food_delivery_app/features/restaurant/home/views/home/widgets/process_order.dart';
 import 'package:food_delivery_app/features/restaurant/home/views/common/widgets/revenue_chart.dart';
 import 'package:food_delivery_app/features/restaurant/home/views/home/widgets/review_summary.dart';
-import 'package:food_delivery_app/common/widgets/cards/food_card_gr.dart';
+import 'package:food_delivery_app/common/widgets/cards/food_card.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/emojis.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';

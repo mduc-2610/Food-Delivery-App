@@ -61,7 +61,7 @@ def load_food(
         else:
             tmp = os.listdir(category_folder_path).copy()
             for i, image_file in enumerate(os.listdir(category_folder_path)):
-                if i >= 100: break
+                if i >= max_dishes: break
                 dish_data = {
                     "name": category.name + ' ' + fake.word() + ' ' + fake.word(),
                     "description": fake.text(max_nb_chars=200),

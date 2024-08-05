@@ -10,9 +10,10 @@ class Dish {
   final String? description;
   final double? originalPrice;
   final double? discountPrice;
-  final String? imageUrl;
+  final String? image;
   final double? rating;
-  final int? numberOfReviews;
+  final int? totalReviews;
+  final int? totalLikes;
   final String? categoryId;
 
   Dish({
@@ -21,9 +22,10 @@ class Dish {
     this.description,
     this.originalPrice,
     this.discountPrice,
-    this.imageUrl,
+    this.image,
     this.rating,
-    this.numberOfReviews,
+    this.totalReviews,
+    this.totalLikes,
     this.categoryId,
   });
 
@@ -33,9 +35,10 @@ class Dish {
         description = json['description'],
         originalPrice = double.parse(json['original_price']),
         discountPrice = double.parse(json['discount_price']),
-        imageUrl = json['image'],
+        image = json['image'],
         rating = double.parse(json['rating']),
-        numberOfReviews = json['number_of_reviews'],
+        totalReviews = json['total_reviews'],
+        totalLikes = json['total_likes'],
         categoryId = json['category'];
 
   Map<String, dynamic> toJson() {
@@ -45,9 +48,10 @@ class Dish {
       'description': description,
       'original_price': originalPrice,
       'discount_price': discountPrice,
-      'image': imageUrl,
+      'image': image,
       'rating': rating,
-      'number_of_reviews': numberOfReviews,
+      'total_reviews': totalReviews,
+      'total_likes': totalLikes,
       'category': categoryId,
     };
   }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/bars/menu_bar.dart';
+import 'package:food_delivery_app/common/widgets/list/restaurant_list.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/bars/search_bar.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
-import 'package:food_delivery_app/features/user/food/controllers/category/food_category_controller.dart';
-import 'package:food_delivery_app/common/widgets/cards/food_card_gr.dart';
+import 'package:food_delivery_app/common/widgets/cards/food_card.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
@@ -15,7 +15,6 @@ import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:get/get.dart';
 
 class FoodLikeView extends StatelessWidget {
-  final FoodCategoryController _controller = Get.put(FoodCategoryController());
 
   @override
   Widget build(BuildContext context) {
@@ -51,17 +50,7 @@ class FoodLikeView extends StatelessWidget {
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         children: [
-                          for(int i = 0; i < 4; i++)
-                            FoodCard(
-                              type: FoodCardType.grid,
-                              name: 'Pizza',
-                              image: TImage.hcBurger1,
-                              stars: 4.5,
-                              originalPrice: 10.0,
-                              salePrice: 7.5,
-                              onTap: () {},
-                              heart: 'assets/icons/heart.svg',
-                            )
+                          RestaurantList(),
 
                         ],
                       ),

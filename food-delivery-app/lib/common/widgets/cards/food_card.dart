@@ -4,42 +4,26 @@ import 'package:food_delivery_app/common/widgets/bars/separate_bar.dart';
 import 'package:food_delivery_app/common/widgets/buttons/round_icon_button.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/icon_or_svg.dart';
+import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
+import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
+import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:shimmer/shimmer.dart';
 
 enum FoodCardType { grid, list }
 
 class FoodCard extends StatelessWidget {
   final FoodCardType type;
-  final String image;
-  final String name;
-  final double stars;
-  final double originalPrice;
-  final double salePrice;
-  final VoidCallback onTap;
   final String? heart;
-  final double? imageWidth;
-  final double? imageHeight;
-  final BoxFit fit;
-  final String? reviewCount;
-  final String? tag;
+  final Dish? dish;
 
   const FoodCard({
     required this.type,
-    required this.name,
-    required this.image,
-    this.imageWidth,
-    this.imageHeight,
-    this.fit = BoxFit.cover,
-    required this.stars,
-    required this.originalPrice,
-    required this.salePrice,
-    required this.onTap,
     this.heart,
-    this.reviewCount,
-    this.tag,
+    this.dish,
     super.key,
   });
 
@@ -54,7 +38,7 @@ class FoodCard extends StatelessWidget {
 
   Widget _buildGridCard(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {},
       child: Card(
         elevation: TSize.cardElevation,
         surfaceTintColor: Colors.white,
@@ -69,10 +53,10 @@ class FoodCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(TSize.sm),
                     child: Image.asset(
-                      image,
-                      width: imageWidth,
-                      height: imageHeight,
-                      fit: fit,
+                      "${TImage.hcBurger1 ?? dish?.image}",
+                      width: double.infinity,
+                      // height: 50,
+                      fit: BoxFit.cover,
                     ),
                   ),
                   Positioned(
@@ -93,7 +77,7 @@ class FoodCard extends StatelessWidget {
               ),
               SizedBox(height: TSize.xs),
               Text(
-                name,
+                "${dish?.name ?? "Burger"}",
                 style: Theme.of(context).textTheme.titleLarge,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -105,7 +89,7 @@ class FoodCard extends StatelessWidget {
                   SvgPicture.asset(TIcon.fillStar),
                   SizedBox(width: TSize.spaceBetweenItemsSm),
                   Text(
-                    "$stars",
+                    "${dish?.rating ?? 0}",
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(color: TColor.star),
                   ),
                   SizedBox(width: TSize.spaceBetweenItemsSm),
@@ -118,7 +102,7 @@ class FoodCard extends StatelessWidget {
                   ),
                   SizedBox(width: TSize.spaceBetweenItemsSm),
                   Text(
-                    reviewCount ?? "5.3k",
+                    "${dish?.totalLikes ?? 0}",
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
@@ -126,12 +110,12 @@ class FoodCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "£$originalPrice",
+                    "£${dish?.originalPrice ?? 0}",
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(decoration: TextDecoration.lineThrough),
                   ),
                   SizedBox(width: TSize.spaceBetweenItemsHorizontal),
                   Text(
-                    "£$salePrice",
+                    "£${dish?.discountPrice ?? 0}",
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.primary),
                   ),
                   Spacer(),
@@ -147,7 +131,7 @@ class FoodCard extends StatelessWidget {
 
   Widget _buildListCard(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: (){},
       child: Container(
         width: TDeviceUtil.getScreenWidth(),
         child: Card(
@@ -162,7 +146,7 @@ class FoodCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
                   child: Image.asset(
-                    image,
+                    "${TImage.hcBurger1 ?? dish?.image}",
                     width: TSize.imageThumbSize + 30,
                     height: TSize.imageThumbSize + 30,
                     fit: BoxFit.cover,
@@ -176,7 +160,7 @@ class FoodCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name,
+                        "${dish?.name ?? "Burger"}",
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       // SizedBox(height: TSize.spaceBetweenItemsSm),
@@ -187,7 +171,7 @@ class FoodCard extends StatelessWidget {
                           SvgPicture.asset(TIcon.fillStar),
                           SizedBox(width: TSize.spaceBetweenItemsSm),
                           Text(
-                            "$stars",
+                            "${dish?.rating ?? 0}",
                             style: Theme.of(context).textTheme.titleLarge?.copyWith(color: TColor.star),
                           ),
                           SizedBox(width: TSize.spaceBetweenItemsHorizontal),
@@ -200,7 +184,7 @@ class FoodCard extends StatelessWidget {
                           ),
                           SizedBox(width: TSize.spaceBetweenItemsSm),
                           Text(
-                            reviewCount ?? "5.3k",
+                            "${dish?.totalLikes ?? 0}",
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
@@ -210,7 +194,7 @@ class FoodCard extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            "£$originalPrice",
+                            "£${dish?.originalPrice ?? 0}",
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                 color: TColor.textDesc,
                                 decoration: TextDecoration.lineThrough,
@@ -227,7 +211,7 @@ class FoodCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            "${salePrice}00d",
+                            "£${dish?.discountPrice ?? 0}",
                             style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.primary),
                           ),
                           Spacer(),
@@ -247,6 +231,148 @@ class FoodCard extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class FoodCardGridSkeleton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: TSize.cardElevation,
+      surfaceTintColor: Colors.white,
+      child: Padding(
+        padding: EdgeInsets.all(TSize.sm + 2),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(TSize.sm),
+                  child: BoxSkeleton(
+                    height: 120,
+                    width: double.infinity,
+                  ),
+                ),
+                Positioned(
+                  top: TSize.sm,
+                  right: TSize.sm,
+                  child: BoxSkeleton(
+                    height: 24,
+                    width: 24,
+                    borderRadius: TSize.borderRadiusCircle,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: TSize.xs),
+            BoxSkeleton(
+              height: 20,
+              width: 100,
+            ),
+            SizedBox(height: TSize.xs),
+            Row(
+              children: [
+                BoxSkeleton(
+                  height: 20,
+                  width: 60,
+                ),
+                Spacer(),
+                BoxSkeleton(
+                  height: 20,
+                  width: 40,
+                ),
+              ],
+            ),
+            SizedBox(height: TSize.xs),
+            Row(
+              children: [
+                BoxSkeleton(
+                  height: 20,
+                  width: 40,
+                ),
+                Spacer(),
+                BoxSkeleton(
+                  height: 20,
+                  width: 40,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FoodCardListSkeleton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: TDeviceUtil.getScreenWidth(),
+      child: Card(
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(TSize.borderRadiusLg),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
+                child: BoxSkeleton(
+                  height: TSize.imageThumbSize + 30,
+                  width: TSize.imageThumbSize + 30,
+                ),
+              ),
+              SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BoxSkeleton(
+                      height: 20,
+                      width: 150,
+                    ),
+                    SizedBox(height: TSize.spaceBetweenItemsSm),
+                    Row(
+                      children: [
+                        BoxSkeleton(
+                          height: 20,
+                          width: 60,
+                        ),
+                        Spacer(),
+                        BoxSkeleton(
+                          height: 20,
+                          width: 40,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: TSize.spaceBetweenItemsSm),
+                    Row(
+                      children: [
+                        BoxSkeleton(
+                          height: 20,
+                          width: 40,
+                        ),
+                        Spacer(),
+                        BoxSkeleton(
+                          height: 20,
+                          width: 40,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),

@@ -1,19 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:food_delivery_app/common/controllers/menu_bar_controller.dart';
-import 'package:food_delivery_app/common/widgets/bars/menu_bar.dart';
-import 'package:food_delivery_app/data/services/api_service.dart';
-import 'package:food_delivery_app/data/services/token_service.dart';
-import 'package:food_delivery_app/data/services/user_service.dart';
-import 'package:food_delivery_app/features/authentication/controllers/login/auth_controller.dart';
-import 'package:food_delivery_app/features/authentication/models/account/user.dart';
-import 'package:food_delivery_app/features/authentication/models/auth/token.dart';
 import 'package:food_delivery_app/features/user/food/controllers/home/home_controller.dart';
-import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
-import 'package:food_delivery_app/features/user/food/models/food/dish_like.dart';
-import 'package:food_delivery_app/features/user/food/models/review/review.dart';
 import 'package:food_delivery_app/features/user/food/views/common/widgets/category_card.dart';
-import 'package:food_delivery_app/common/widgets/cards/food_card_gr.dart';
+import 'package:food_delivery_app/common/widgets/cards/food_card.dart';
 import 'package:food_delivery_app/features/user/food/views/home/widgets/home_sliver_app_bar.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
@@ -125,28 +114,23 @@ class _HomeViewState extends State<HomeView> {
                               ),
                             ],
                           ),
-                          GridView.count(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            childAspectRatio: 13 / 16,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            children: [
-                              for(int i = 0; i < 4; i++)
-                                FoodCard(
-                                  type: FoodCardType.grid,
-                                  name: 'Pizza',
-                                  image: TImage.hcBurger1,
-                                  stars: 4.5,
-                                  originalPrice: 10.0,
-                                  salePrice: 7.5,
-                                  onTap: () {},
-                                  heart: 'assets/icons/heart.svg',
-                                )
-
-                            ],
-                          ),
+                          // GridView.count(
+                          //   crossAxisCount: 2,
+                          //   crossAxisSpacing: 10,
+                          //   mainAxisSpacing: 10,
+                          //   childAspectRatio: 13 / 16,
+                          //   shrinkWrap: true,
+                          //   physics: NeverScrollableScrollPhysics(),
+                          //   children: [
+                          //     for(int i = 0; i < 4; i++)
+                          //       FoodCard(
+                          //         type: FoodCardType.grid,
+                          //         onTap: () {},
+                          //         heart: 'assets/icons/heart.svg',
+                          //       )
+                          //
+                          //   ],
+                          // ),
                           SizedBox(height: TSize.spaceBetweenSections,),
                         ],
                       ),

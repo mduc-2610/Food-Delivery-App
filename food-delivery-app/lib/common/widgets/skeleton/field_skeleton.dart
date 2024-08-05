@@ -11,12 +11,7 @@ class FieldSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-      Shimmer.fromColors(
-        baseColor: Colors.grey[300]!,
-        highlightColor: Colors.grey[100]!,
-        child: BoxSkeleton(height: 60, width: double.infinity)
-      );
+    return BoxSkeleton(height: 60, width: double.infinity);
   }
 }
 

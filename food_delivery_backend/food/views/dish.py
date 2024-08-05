@@ -10,10 +10,17 @@ from food.serializers import DishSerializer, DetailDishSerializer, DishLikeSeria
 from review.serializers import DishReviewSerializer, DishReviewLikeSerializer
 
 from utils.views import ManyRelatedViewSet
+from utils.pagination import CustomPagination
+
+class DishPagination(CustomPagination):
+    def __init__(self):
+        super().__init__()
+        self.page_size_query_param = 'dish_page_size'
 
 class DishViewSet(ManyRelatedViewSet):
     queryset = Dish.objects.all()
     serializer_class = DishSerializer
+    pagination_class = CustomPagination
     many_related_serializer_class = {
         'retrieve': DetailDishSerializer,
         'liked_by_users': UserAbbrSerializer,
@@ -33,6 +40,9 @@ class DishViewSet(ManyRelatedViewSet):
     #         'serializer_class': UserAbbrSerializer,
     #     }
     # }
+
+    def get_object(self):
+        return super().get_object()
     
     def get_serializer_context(self):
         context = super().get_serializer_context()

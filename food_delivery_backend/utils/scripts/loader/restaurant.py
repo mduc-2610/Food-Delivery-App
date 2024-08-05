@@ -56,7 +56,8 @@ def load_restaurant(
             "city": fake.city(),
             "district": fake.state(),
             "street_address": fake.street_address(),
-            "map_location": f"{fake.latitude()}, {fake.longitude()}"
+            "latitude": fake.latitude(),
+            "longitude": fake.longitude(),
         }
         basic_info = BasicInfo.objects.create(**basic_info_data)
         print(f"\tSuccessfully created Basic Info: {basic_info}")

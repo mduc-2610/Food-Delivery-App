@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
-import 'package:food_delivery_app/common/widgets/skeleton/circle_box_skeleton.dart';
+import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 
@@ -33,7 +33,7 @@ class ProfileSkeleton extends StatelessWidget {
             ),
           ],
         ),
-        trailing: CircleBoxSkeleton(height: 45, width: 45),
+        trailing: BoxSkeleton(height: 45, width: 45, borderRadius: TSize.borderRadiusCircle,),
       ),
     );
   }

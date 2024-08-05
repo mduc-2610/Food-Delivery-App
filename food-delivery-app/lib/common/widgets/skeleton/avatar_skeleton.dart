@@ -10,11 +10,6 @@ class AvatarSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-      Shimmer.fromColors(
-        baseColor: Colors.grey[300]!,
-        highlightColor: Colors.grey[100]!,
-        child: BoxSkeleton(height: 150, width: 150, borderRadius: TSize.borderRadiusCircle)
-      );
+    return BoxSkeleton(height: 150, width: 150, borderRadius: TSize.borderRadiusCircle);
   }
 }

@@ -14,7 +14,7 @@ class DishSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'original_price', 
             'discount_price', 'image', 'rating', 
-            'number_of_reviews'
+            'total_reviews', 'total_likes',
         ]
 
 class DetailDishSerializer(CustomRelatedModelSerializer):

@@ -1,20 +1,19 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/bars/separate_bar.dart';
 import 'package:food_delivery_app/common/widgets/bars/separate_section_bar.dart';
+import 'package:food_delivery_app/common/widgets/behavior/sticky_tab_bar_delegate.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
-import 'package:food_delivery_app/common/widgets/cards/food_card_gr.dart';
+import 'package:food_delivery_app/common/widgets/list/food_list.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
-import 'package:food_delivery_app/features/user/food/controllers/detail/food_detail_controller.dart';
-import 'package:food_delivery_app/features/user/food/restaurant/widgets/restaurant_detail_sliver_app_bar.dart';
+import 'package:food_delivery_app/features/user/food/controllers/restaurant/restaurant_detail_controller.dart';
+import 'package:food_delivery_app/features/user/food/views/restaurant/widgets/restaurant_detail_skeleton.dart';
+import 'package:food_delivery_app/features/user/food/views/restaurant/widgets/restaurant_detail_sliver_app_bar.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
-import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
-import 'package:food_delivery_app/utils/device/device_utility.dart';
-import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
+import 'package:food_delivery_app/utils/constants/times.dart';
 import 'package:get/get.dart';
 
 class RestaurantDetailView extends StatefulWidget {
@@ -24,17 +23,34 @@ class RestaurantDetailView extends StatefulWidget {
 
 class _RestaurantDetailViewState extends State<RestaurantDetailView>
     with SingleTickerProviderStateMixin {
+  bool _isLoading = true;
+  bool _isMounted = true;
+  late final _restaurantController;
   final ScrollController _scrollController = ScrollController();
   late TabController _tabController;
-  late List tabs;
 
   @override
   void initState() {
     super.initState();
-    tabs = ['Asss', 'B', 'C', 'asd'];
-    _tabController = TabController(length: tabs.length, vsync: this);
+    _restaurantController = Get.put(RestaurantDetailController());
   }
 
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    await Future.delayed(Duration(milliseconds: TTime.init));
+    if (_isMounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+    _tabController = TabController(length: _restaurantController.categories.length, vsync: this);
+  }
   @override
   void dispose() {
     _tabController.dispose();
@@ -43,7 +59,15 @@ class _RestaurantDetailViewState extends State<RestaurantDetailView>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final restaurant = _restaurantController.restaurant;
+    final dishes = _restaurantController?.dishes;
+    final categories = _restaurantController.categories;
+    final mapCategory = _restaurantController.mapCategory;
+    final basicInfo = restaurant?.basicInfo;
+
+    return
+      (_isLoading) ? RestaurantDetailSkeleton()
+      : Scaffold(
       body: NestedScrollView(
         controller: _scrollController,
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
@@ -56,13 +80,13 @@ class _RestaurantDetailViewState extends State<RestaurantDetailView>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Baking Bread yah",
+                        "${basicInfo.name ?? ""}",
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Row(
                         children: [
                           RatingBarIndicator(
-                            rating: 4.9,
+                            rating: restaurant?.rating,
                             itemBuilder: (context, index) => SvgPicture.asset(
                               TIcon.fillStar,
                             ),
@@ -71,7 +95,7 @@ class _RestaurantDetailViewState extends State<RestaurantDetailView>
                           ),
                           SizedBox(width: TSize.spaceBetweenItemsSm),
                           Text(
-                            '4.9 (500+ reviews)',
+                            '${restaurant?.rating} (${restaurant?.totalReviews} reviews)',
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
                           Icon(
@@ -112,30 +136,7 @@ class _RestaurantDetailViewState extends State<RestaurantDetailView>
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.primary),
                       ),
                       SizedBox(height: TSize.spaceBetweenItemsVertical),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            for (int i = 0; i < 5; i++) ...[
-                              Container(
-                                margin: EdgeInsets.only(left: TSize.spaceBetweenItemsHorizontal),
-                                width: TDeviceUtil.getScreenWidth() * 0.9,
-                                child: FoodCard(
-                                  type: FoodCardType.list,
-                                  name: 'Burger handrssss asdasdasdsddasdasdasdasdasdasdasd',
-                                  image: TImage.hcBurger1,
-                                  stars: 4.0,
-                                  originalPrice: 8.0,
-                                  salePrice: 5.0,
-                                  onTap: () {},
-                                  reviewCount: '1.2k',
-                                  tag: 'popular',
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
+                      FoodList(dishes: dishes, direction: Direction.horizontal,)
                     ],
                   ),
                 ),
@@ -145,15 +146,15 @@ class _RestaurantDetailViewState extends State<RestaurantDetailView>
           ),
           SliverPersistentHeader(
             pinned: true,
-            delegate: _StickyTabBarDelegate(
+            delegate: StickyTabBarDelegate(
               TabBar(
                 controller: _tabController,
                 indicatorSize: TabBarIndicatorSize.tab,
                 isScrollable: true,
                 tabAlignment: TabAlignment.start,
                 tabs: [
-                  for(var x in tabs)...[
-                    Tab(text: x,)
+                  for(var category in categories)...[
+                    Tab(text: "${category?.name}")
                   ]
                 ],
               ),
@@ -163,68 +164,11 @@ class _RestaurantDetailViewState extends State<RestaurantDetailView>
         body: TabBarView(
           controller: _tabController,
           children: [
-            for(int i = 0; i < tabs.length; i++)
-              SingleChildScrollView(
-                child: MainWrapper(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GridView.count(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        childAspectRatio: 13 / 16,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        children: [
-                          for (int j = 0; j < 10; j++)
-                            FoodCard(
-                              type: FoodCardType.grid,
-                              name: 'Burger',
-                              image: TImage.hcBurger1,
-                              stars: 4.0,
-                              originalPrice: 8.0,
-                              salePrice: 5.0,
-                              onTap: () {},
-                              reviewCount: '1.2k',
-                              tag: 'popular',
-                            ),
-                        ],
-                      ),
-                      SizedBox(height: TSize.spaceBetweenSections,)
-                    ],
-                  ),
-                ),
-              ),
+            for(var category in categories)
+              FoodList(dishes: mapCategory[category.name] ?? [])
           ],
         ),
       ),
     );
-  }
-
-
-}
-
-class _StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
-  _StickyTabBarDelegate(this._tabBar);
-
-  final TabBar _tabBar;
-
-  @override
-  double get minExtent => _tabBar.preferredSize.height;
-  @override
-  double get maxExtent => _tabBar.preferredSize.height;
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: _tabBar,
-    );
-  }
-
-  @override
-  bool shouldRebuild(_StickyTabBarDelegate oldDelegate) {
-    return _tabBar != oldDelegate._tabBar;
   }
 }

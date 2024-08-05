@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/common/controllers/filter_bar_controller.dart';
+import 'package:food_delivery_app/common/controllers/bars/filter_bar_controller.dart';
 import 'package:food_delivery_app/common/widgets/bars/filter_bar.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/bars/search_bar.dart';

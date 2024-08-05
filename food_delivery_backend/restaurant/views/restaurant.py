@@ -10,10 +10,12 @@ from order.serializers import PromotionSerializer, RestaurantPromotionSerializer
 from review.serializers import RestaurantReviewSerializer
 
 from utils.views import ManyRelatedViewSet
+from utils.pagination import CustomPagination
 
 class RestaurantViewSet(ManyRelatedViewSet):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
+    pagination_class = CustomPagination
     many_related_serializer_class = {
         'retrieve': DetailRestaurantSerializer,
         'promotions': PromotionSerializer,

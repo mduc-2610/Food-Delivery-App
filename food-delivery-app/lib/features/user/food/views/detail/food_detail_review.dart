@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:food_delivery_app/common/controllers/filter_bar_controller.dart';
+import 'package:food_delivery_app/common/controllers/bars/filter_bar_controller.dart';
 import 'package:food_delivery_app/common/widgets/bars/filter_bar.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';

@@ -5,7 +5,7 @@ import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/misc/profile_picture_selection.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/avatar_skeleton.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/field_skeleton.dart';
-import 'package:food_delivery_app/common/widgets/skeleton/list_field_skeleton.dart';
+import 'package:food_delivery_app/common/widgets/skeleton/field_skeleton_list.dart';
 import 'package:food_delivery_app/features/authentication/controllers/profile/profile_controller.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
@@ -70,10 +70,10 @@ class _ProfileDetailState extends State<ProfileDetail> {
       children: [
         AvatarSkeleton(),
         SizedBox(height: TSize.spaceBetweenInputFields,),
-        ListFieldSkeleton(length: 5),
+        FieldSkeletonList(length: 5),
         SizedBox(height: TSize.spaceBetweenInputFields,),
         (!widget.isEdit)
-        ? ListFieldSkeleton(length: 2)
+        ? FieldSkeletonList(length: 2)
         : FieldSkeleton(),
         SizedBox(height: TSize.spaceBetweenSections,),
       ],

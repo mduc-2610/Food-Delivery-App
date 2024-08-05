@@ -39,7 +39,6 @@ class CustomRelatedModelSerializer(serializers.ModelSerializer):
 
         self.one_related_fields = [field for field in self.one_related_fields if field not in self.one_related_exclude_fields]
         self.many_related_fields = [field for field in self.many_related_fields if field not in self.many_related_exclude_fields]
-        print(self.many_related_exclude_fields, pretty=True)
         self.one_related_serializer_class = {}
         self.many_related_serializer_class = {}
 

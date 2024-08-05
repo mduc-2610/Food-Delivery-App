@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
-import 'package:food_delivery_app/features/restaurant/food/views/list/widgets/food_list.dart';
+import 'package:food_delivery_app/common/widgets/cards/food_card.dart';
+import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 class FoodView extends StatefulWidget {
   @override
@@ -36,7 +37,18 @@ class _FoodViewState extends State<FoodView> with SingleTickerProviderStateMixin
       body: TabBarView(
         controller: _tabController,
         children: [
-          FoodList(),
+          ListView(
+            padding: EdgeInsets.all(8.0),
+            children: [
+              for(int i = 0; i < 10; i++)...[
+                FoodCard(
+                  type: FoodCardType.list,
+                ),
+                SizedBox(height: TSize.spaceBetweenItemsVertical,),
+              ]
+
+            ],
+          ),
         ],
       ),
     );

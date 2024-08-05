@@ -9,7 +9,7 @@ import 'package:food_delivery_app/features/restaurant/home/views/home/widgets/me
 import 'package:food_delivery_app/features/restaurant/home/views/home/widgets/process_order.dart';
 import 'package:food_delivery_app/features/restaurant/home/views/common/widgets/revenue_chart.dart';
 import 'package:food_delivery_app/features/restaurant/home/views/home/widgets/review_summary.dart';
-import 'package:food_delivery_app/common/widgets/cards/food_card_gr.dart';
+import 'package:food_delivery_app/common/widgets/cards/food_card.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/hardcode/hardcode.dart';
@@ -80,12 +80,6 @@ class HomeView extends StatelessWidget {
                   childCount: 8,
                   (context, index) => FoodCard(
                     type: FoodCardType.grid,
-                    name: 'Pizza',
-                    image: 'assets/images/pizza.png',
-                    stars: 4.5,
-                    originalPrice: 10.0,
-                    salePrice: 7.5,
-                    onTap: () {},
                     heart: 'assets/icons/heart.svg',
                   ),
                 ),

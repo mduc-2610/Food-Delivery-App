@@ -1,39 +1,34 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/bars/separate_bar.dart';
-import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
-import 'package:food_delivery_app/features/user/food/restaurant/restaurant_detail.dart';
+import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
+import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
+import 'package:food_delivery_app/features/user/food/views/restaurant/restaurant_detail.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
+import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 import 'package:get/get.dart';
 
 
 class RestaurantCard extends StatelessWidget {
-  final String imageUrl;
-  final String title;
-  final String subtitle;
-  final String price;
-  final String rating;
-  final String reviewCount;
-  final String tag;
+  final Restaurant? restaurant;
 
   const RestaurantCard({
-    required this.imageUrl,
-    required this.title,
-    required this.subtitle,
-    required this.price,
-    required this.rating,
-    required this.reviewCount,
-    required this.tag,
+    this.restaurant
   });
 
   @override
   Widget build(BuildContext context) {
+    List<Dish> dishes = restaurant?.dishes ?? [];
     return InkWell(
       onTap: () {
-        Get.to(RestaurantDetailView());
+        Get.to(RestaurantDetailView(), arguments: {
+          'id': restaurant?.id ?? ""
+        });
       },
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -50,7 +45,7 @@ class RestaurantCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
               child: Image.asset(
-                imageUrl,
+                "${TImage.hcBurger1}",
                 width: TSize.imageThumbSize + 30,
                 height: TSize.imageThumbSize + 30,
                 fit: BoxFit.cover,
@@ -62,7 +57,7 @@ class RestaurantCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${title} ${title} ${title}",
+                    "${restaurant?.basicInfo?.name}",
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   SizedBox(height: TSize.spaceBetweenItemsSm),
@@ -74,7 +69,7 @@ class RestaurantCard extends StatelessWidget {
                       ),
                       SizedBox(width: TSize.spaceBetweenItemsSm),
                       Text(
-                        rating,
+                        "${restaurant?.rating}",
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       SizedBox(width: TSize.spaceBetweenItemsHorizontal),
@@ -104,13 +99,13 @@ class RestaurantCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(TSize.borderRadiusSm),
                     ),
                     child: Text(
-                      subtitle,
+                      "20% discount",
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: TColor.star),
                     ),
                   ),
                   SizedBox(height: TSize.spaceBetweenItemsVertical),
 
-                  for(int i = 0; i < 2; i++)...[
+                  for(int i = 1; i < min(dishes.length, 3); i++)...[
                     Container(
                       height: 80,
                       child: Row(
@@ -118,7 +113,7 @@ class RestaurantCard extends StatelessWidget {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
                             child: Image.asset(
-                              imageUrl,
+                              "${TImage.hcBurger1}",
                               width: TSize.imageThumbSize,
                               height: TSize.imageThumbSize,
                               fit: BoxFit.cover,
@@ -132,11 +127,11 @@ class RestaurantCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Mien tron",
+                                  "${dishes[i].name}",
                                   style: Theme.of(context).textTheme.titleMedium,
                                 ),
                                 Text(
-                                  "60.000d",
+                                  "${dishes[i].originalPrice}",
                                   style: Theme.of(context).textTheme.titleMedium,
                                 )
                               ],

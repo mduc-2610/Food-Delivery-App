@@ -9,7 +9,7 @@ import 'package:reflectable/reflectable.dart';
 
 class APIService<T> {
   final String? endpoint;
-  final String? fullUrl;
+  final String fullUrl;
   Token? token;
   final String queryParams;
   final String retrieveQueryParams;
@@ -20,7 +20,7 @@ class APIService<T> {
     this.endpoint,
     this.token,
     this.queryParams = '',
-    this.fullUrl,
+    this.fullUrl = '',
     this.retrieveQueryParams = '',
     this.pagination = true,
     this.fullResponse = false,
@@ -33,22 +33,38 @@ class APIService<T> {
   }
 
   String url({dynamic id}) {
-    return '${APIConstant.baseUrl}/${endpoint ?? APIConstant.getEndpointFor<T>() ?? ""}/${(id != null) ? '$id/' : ''}';
+    String url = fullUrl.isNotEmpty ? fullUrl : '${APIConstant.baseUrl}/${endpoint ?? APIConstant.getEndpointFor<T>() ?? ""}';
+    url += (url.endsWith('/')) ? '' : '/';
+
+    if (id != null) {
+      url += '$id/';
+    }
+
+    if (queryParams.isNotEmpty) {
+      url += '?$queryParams';
+    }
+
+    if (retrieveQueryParams.isNotEmpty) {
+      url += (queryParams.isNotEmpty ? '&' : '?') + retrieveQueryParams;
+    }
+
+    return url;
   }
 
   Future<dynamic> list() async {
     return _handleRequest(() async {
-      final url_ = fullUrl ?? url() + queryParams;
+      final url_ = url();
       final response = await http.get(
         Uri.parse(url_),
         headers: await _getHeaders(),
       );
+      $print(url_);
       if (response.statusCode == 200) {
         dynamic jsonResponse = json.decode(response.body);
         if (pagination) {
           jsonResponse = jsonResponse["results"];
         }
-        if(jsonResponse is Map<String, dynamic>) {
+        if (jsonResponse is Map<String, dynamic>) {
           return fromJson(jsonResponse);
         }
         return (jsonResponse as List).map((instance) => fromJson(instance)).toList();
@@ -60,7 +76,7 @@ class APIService<T> {
 
   Future<T> retrieve(String id) async {
     return _handleRequest(() async {
-      final url_ = fullUrl ?? url(id: id) + retrieveQueryParams;
+      final url_ = url(id: id);
       final response = await http.get(
         Uri.parse(url_),
         headers: await _getHeaders(),
