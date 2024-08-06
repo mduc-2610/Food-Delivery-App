@@ -10,7 +10,6 @@ import 'package:reflectable/reflectable.dart';
 class APIService<T> {
   final String? endpoint;
   final String fullUrl;
-  Token? token;
   final String queryParams;
   final String retrieveQueryParams;
   final bool pagination;
@@ -18,7 +17,6 @@ class APIService<T> {
 
   APIService({
     this.endpoint,
-    this.token,
     this.queryParams = '',
     this.fullUrl = '',
     this.retrieveQueryParams = '',
@@ -52,11 +50,11 @@ class APIService<T> {
   }
 
   Future<dynamic> list() async {
-    return _handleRequest(() async {
+    return _handleRequest<dynamic>((Token? token) async {
       final url_ = url();
       final response = await http.get(
         Uri.parse(url_),
-        headers: await _getHeaders(),
+        headers: await _getHeaders(token),
       );
       $print(url_);
       if (response.statusCode == 200) {
@@ -75,11 +73,11 @@ class APIService<T> {
   }
 
   Future<T> retrieve(String id) async {
-    return _handleRequest(() async {
+    return _handleRequest<T>((Token? token) async {
       final url_ = url(id: id);
       final response = await http.get(
         Uri.parse(url_),
-        headers: await _getHeaders(),
+        headers: await _getHeaders(token),
       );
 
       if (response.statusCode == 200) {
@@ -92,10 +90,10 @@ class APIService<T> {
   }
 
   Future<dynamic> create(dynamic data, { Function(Map<String, dynamic>)? fromJson }) async {
-    return _handleRequest(() async {
+    return _handleRequest<dynamic>((Token? token) async {
       final response = await http.post(
         Uri.parse(url()),
-        headers: await _getHeaders(),
+        headers: await _getHeaders(token),
         body: json.encode(data.toJson()),
       );
       var jsonResponse = json.decode(response.body);
@@ -107,9 +105,9 @@ class APIService<T> {
   }
 
   Future<dynamic> update(dynamic id, dynamic data, { Function(Map<String, dynamic>)? fromJson, bool patch = false }) async {
-    return _handleRequest(() async {
+    return _handleRequest<dynamic>((Token? token) async {
       final uri = Uri.parse(url(id: id!));
-      final headers = await _getHeaders();
+      final headers = await _getHeaders(token);
       final body = json.encode((data is Map<String, dynamic>) ? data : data.toJson(patch: patch));
 
       final response = patch
@@ -125,10 +123,10 @@ class APIService<T> {
   }
 
   Future<void> delete(String id) async {
-    return _handleRequest(() async {
+    return _handleRequest<void>((Token? token) async {
       final response = await http.delete(
         Uri.parse(url(id: id)),
-        headers: await _getHeaders(),
+        headers: await _getHeaders(token),
       );
 
       if (response.statusCode != 204) {
@@ -137,7 +135,20 @@ class APIService<T> {
     });
   }
 
+  Future<R> _handleRequest<R>(Future<R> Function(Token?) request) async {
+    Token? token;
+    try {
+      token = await TokenService.getToken();
+      return await request(token);
+    } catch (e) {
+      await refreshToken();
+      token = await TokenService.getToken();
+      return await request(token);
+    }
+  }
+
   Future<void> refreshToken() async {
+    Token? token = await TokenService.getToken();
     final response = await http.post(
       Uri.parse('${APIConstant.baseUrl}/account/refresh-token/'),
       headers: {'Content-Type': 'application/json'},
@@ -152,25 +163,10 @@ class APIService<T> {
     }
   }
 
-  Future<T> _handleRequest<T>(Future<T> Function() request) async {
-    try {
-      token = await TokenService.getToken();
-      return await request();
-    } catch (e) {
-      // if (e is http.ClientException && e.message.contains('401')) {
-        await refreshToken();
-        return await request();
-      // } else {
-      //   rethrow;
-      // }
-    }
-  }
-
-  Future<Map<String, String>> _getHeaders() async {
-    token = await TokenService.getToken();
+  Future<Map<String, String>> _getHeaders(Token? token) async {
     final headers = {'Content-Type': 'application/json'};
     if (token?.access != null && token!.access.isNotEmpty) {
-      headers['Authorization'] = 'Bearer ${token!.access}';
+      headers['Authorization'] = 'Bearer ${token.access}';
     }
     return headers;
   }

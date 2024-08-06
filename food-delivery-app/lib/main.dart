@@ -20,7 +20,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initializeReflectable();
   Token? token = await TokenService.getToken();
-  final service = APIService<User>(endpoint:'account/user/me', token: token, pagination: false,);
+  final service = APIService<User>(endpoint:'account/user/me',  pagination: false,);
   $print(token);
   runApp(
     ChangeNotifierProvider(

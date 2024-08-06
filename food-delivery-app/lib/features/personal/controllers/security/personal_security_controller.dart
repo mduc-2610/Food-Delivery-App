@@ -8,7 +8,6 @@ import 'package:food_delivery_app/features/authentication/models/account/setting
 class PersonalSecurityController extends GetxController {
   final PersonalProfileController _personalProfileController = PersonalProfileController.instance;
 
-  Token? token;
   UserSetting? setting;
   UserSecuritySetting? securitySetting;
   Rx<bool> faceId = false.obs;
@@ -17,7 +16,6 @@ class PersonalSecurityController extends GetxController {
 
   @override
   void onInit() {
-    token = _personalProfileController.token;
     setting = _personalProfileController.setting;
     securitySetting = setting?.securitySetting;
     $print(securitySetting);
@@ -47,6 +45,6 @@ class PersonalSecurityController extends GetxController {
 
   Future<void> updateSecuritySetting(UserSecuritySetting updatedSecuritySettings) async {
     $print(updatedSecuritySettings);
-    await APIService<UserSecuritySetting>(token: token).update(securitySetting?.setting, updatedSecuritySettings, patch: true);
+    await APIService<UserSecuritySetting>().update(securitySetting?.setting, updatedSecuritySettings, patch: true);
   }
 }

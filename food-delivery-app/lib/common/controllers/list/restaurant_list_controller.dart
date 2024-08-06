@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 class RestaurantListController extends GetxController {
   static RestaurantListController get instance => Get.find();
 
-  Token? token;
   List<Restaurant> restaurants = [];
 
 
@@ -20,7 +19,6 @@ class RestaurantListController extends GetxController {
   }
 
   Future<void> initializeRestaurants() async {
-    token = await TokenService.getToken();
-    restaurants = await APIService<Restaurant>(token: token).list();
+    restaurants = await APIService<Restaurant>().list();
   }
 }

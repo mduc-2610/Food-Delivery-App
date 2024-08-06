@@ -12,7 +12,6 @@ class PersonalProfileController extends GetxController {
   static PersonalProfileController get instance => Get.find();
 
   // var user = Rxn<User>();
-  Token? token;
   User? user;
   UserSetting? setting;
   UserProfile? profile;
@@ -29,8 +28,7 @@ class PersonalProfileController extends GetxController {
   }
 
   void loadUser() async {
-    token = await TokenService.getToken();
-    user = await APIService<Me>(token: token, pagination: false).list();
+    user = await APIService<Me>(pagination: false).list();
     setting = user?.setting;
     darkMode.value = setting?.darkMode ?? false;
     notification.value = setting?.notification ?? false;
@@ -70,6 +68,6 @@ class PersonalProfileController extends GetxController {
 
   Future<void> updateSetting(UserSetting updatedSettings) async {
     $print(updatedSettings);
-    await APIService<UserSetting>(token: token).update(setting?.user, updatedSettings, patch: true);
+    await APIService<UserSetting>().update(setting?.user, updatedSettings, patch: true);
   }
 }

@@ -27,14 +27,13 @@ class RestaurantDetailController extends GetxController {
   }
 
   Future<void> initializeRestaurant(String id) async {
-    restaurant = await APIService<Restaurant>(token: token).retrieve(id);
+    restaurant = await APIService<Restaurant>().retrieve(id);
     categories = restaurant?.categories ?? [];
-    dishes = await APIService<Dish>(token: token, fullUrl: restaurant?.dishes ?? "", queryParams: 'category=${categories[0].id}').list();
+    dishes = await APIService<Dish>(fullUrl: restaurant?.dishes ?? "", queryParams: 'category=${categories[0].id}').list();
     $print(restaurantId);
     for(var category in categories) {
       mapCategory[category.name ?? ""] =
           await APIService<Dish>(
-              token: token,
               fullUrl: restaurant?.dishes ?? "",
               queryParams: 'category=${category.id}').list();
       if(mapCategory[category.name ?? ""] != []) dishes = mapCategory[category.name ?? ""] ?? [];

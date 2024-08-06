@@ -42,9 +42,9 @@ class ProfileController extends GetxController {
     super.onInit();
     if (isEdit) {
       final token = await TokenService.getToken();
-      user = await APIService<Me>(token: token, pagination: false,).list();
+      user = await APIService<Me>(pagination: false,).list();
       $print(user);
-      final profile = await APIService<UserProfile>(token: token).retrieve(user?.id ?? "fad06fbd-72f0-4f05-a6e0-609296184c4d");
+      final profile = await APIService<UserProfile>().retrieve(user?.id ?? "fad06fbd-72f0-4f05-a6e0-609296184c4d");
       phoneNumber.value = PhoneNumber(dialCode: '+84', phoneNumber: user?.phoneNumber, isoCode: "VN");
       emailController.text = user?.email ?? "";
       nameController.text = profile.name ?? "";
@@ -96,7 +96,7 @@ class ProfileController extends GetxController {
         $print(token);
       }
 
-      final [statusCode, headers, body] = await APIService<UserProfile>(token: token)
+      final [statusCode, headers, body] = await APIService<UserProfile>()
           .update(user?.id ?? authController?.user.id ?? "fad06fbd-72f0-4f05-a6e0-609296184c4d", profileData);
 
       if (!isEdit) {
