@@ -15,6 +15,8 @@ class Dish {
   final int? totalReviews;
   final int? totalLikes;
   final String? categoryId;
+  final String? dishReviews;
+  final Map<String, dynamic> ratingCounts;
 
   Dish({
     this.id,
@@ -27,6 +29,8 @@ class Dish {
     this.totalReviews,
     this.totalLikes,
     this.categoryId,
+    this.dishReviews,
+    this.ratingCounts = const {},
   });
 
   Dish.fromJson(Map<String, dynamic> json)
@@ -39,7 +43,9 @@ class Dish {
         rating = double.parse(json['rating']),
         totalReviews = json['total_reviews'],
         totalLikes = json['total_likes'],
-        categoryId = json['category'];
+        categoryId = json['category'],
+        dishReviews = json['dish_reviews'],
+        ratingCounts = json['rating_counts'] ?? {};
 
   Map<String, dynamic> toJson() {
     return {
@@ -54,6 +60,14 @@ class Dish {
       'total_likes': totalLikes,
       'category': categoryId,
     };
+  }
+
+  String get formatTotalReviews {
+    return THelperFunction.formatNumber(totalReviews ?? 0);
+  }
+  
+  Map<String, dynamic> get formatRatingCounts {
+    return ratingCounts.map((key, value) => MapEntry(key, THelperFunction.formatNumber(value)));
   }
 
   @override

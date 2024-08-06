@@ -16,10 +16,21 @@ class CRatingBar extends StatelessWidget {
     return Row(
       children: [
         if(prefixText != null)...[
-          Text('$prefixText'),
-          SizedBox(width: TSize.spaceBetweenItemsHorizontal,)
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text('$prefixText', textAlign: TextAlign.start,),
+              ],
+            ),
+          )
         ],
+        SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
+
         Expanded(
+          flex: 2,
+          // width: 135,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
             child: SizedBox(

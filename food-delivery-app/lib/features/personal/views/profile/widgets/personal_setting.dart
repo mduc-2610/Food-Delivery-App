@@ -50,7 +50,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
 
   @override
   Widget build(BuildContext context) {
-    final setting = _personalProfileController.user?.setting;
+    final setting = _personalProfileController.setting;
     return Column(
       children: [
         if (shouldInclude('location')) ...[
@@ -112,8 +112,8 @@ class _PersonalSettingState extends State<PersonalSetting> {
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: Text('Language'),
-            trailing: Obx(() => DropdownButton<String>(
-              value: _personalProfileController.language.value,
+            trailing: DropdownButton<String>(
+              value: setting?.language,
               items: ['English', 'Vietnamese']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
@@ -121,43 +121,43 @@ class _PersonalSettingState extends State<PersonalSetting> {
                   child: Text(value),
                 );
               }).toList(),
-              onChanged: _personalProfileController.changeLanguage,
-            ),)
+              onChanged: (_) => _personalProfileController.changeLanguage,
+            ),
           ),
         ],
         if (shouldInclude('notification')) ...[
-          Obx(() => SwitchListTile(
+          SwitchListTile(
             contentPadding: EdgeInsets.zero,
             title: Text('Notification'),
-            value: _personalProfileController.notification.value,
+            value: setting?.notification ?? false,
             onChanged: _personalProfileController.toggleNotification,
-          ),)
+          ),
         ],
         if (shouldInclude('dark_mode')) ...[
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: Text('Dark Mode'),
-            trailing: Obx(() => Switch(
-              value: _personalProfileController.darkMode.value,
+            trailing: Switch(
+              value: setting?.darkMode ?? false,
               onChanged: _personalProfileController.toggleTheme,
-            )),
+            ),
           ),
         ],
         if (shouldInclude('sound')) ...[
-          Obx(() => SwitchListTile(
+          SwitchListTile(
             contentPadding: EdgeInsets.zero,
             title: Text('Sound'),
-            value: _personalProfileController.sound.value,
+            value: setting?.sound ?? false,
             onChanged: _personalProfileController.toggleSound,
-          ),)
+          ),
         ],
         if (shouldInclude('auto_update')) ...[
-          Obx(() => SwitchListTile(
+          SwitchListTile(
             contentPadding: EdgeInsets.zero,
             title: Text('Automatically Updated'),
-            value: _personalProfileController.automaticallyUpdated.value,
+            value: setting?.automaticallyUpdated ?? false,
             onChanged: _personalProfileController.toggleAutomaticallyUpdated,
-          ),)
+          ),
         ],
         if (shouldInclude('term_of_service')) ...[
           ListTile(

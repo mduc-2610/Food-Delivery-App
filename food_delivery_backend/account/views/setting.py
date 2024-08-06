@@ -11,6 +11,6 @@ class SettingViewSet(OneRelatedViewSet):
     queryset = Setting.objects.all()
     serializer_class = SettingSerializer
         
-class SecuritySettingViewSet(viewsets.ModelViewSet):
+class SecuritySettingViewSet(OneRelatedViewSet):
     queryset = SecuritySetting.objects.all()
     serializer_class = SecuritySettingSerializer

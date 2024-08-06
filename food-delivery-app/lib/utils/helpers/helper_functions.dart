@@ -86,7 +86,7 @@ class THelperFunction {
     return MediaQuery.of(Get.context!).size.width;
   }
 
-  static String getFormattedDate(DateTime, date, { String format = 'dd MMMM yyyy' }) {
+  static String formatDate(DateTime date, { String format = 'dd MMMM yyyy, HH:mm' }) {
     return DateFormat(format).format(date);
   }
 
@@ -216,6 +216,18 @@ class THelperFunction {
     });
     formattedString += '}';
     return formattedString;
+  }
+
+  static String formatNumber(int number) {
+    if (number >= 1000000000) {
+      return (number / 1000000000).toStringAsFixed(1).replaceAll(RegExp(r'\.0$'), '') + 'b';
+    } else if (number >= 1000000) {
+      return (number / 1000000).toStringAsFixed(1).replaceAll(RegExp(r'\.0$'), '') + 'm';
+    } else if (number >= 1000) {
+      return (number / 1000).toStringAsFixed(1).replaceAll(RegExp(r'\.0$'), '') + 'k';
+    } else {
+      return number.toString();
+    }
   }
 }
 

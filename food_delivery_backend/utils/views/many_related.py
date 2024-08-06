@@ -29,7 +29,7 @@ class ManyRelatedViewSet(viewsets.ModelViewSet):
                     f'{field.name}__id': params.get(field.name)
                 })
         
-        print(filter_kwargs, pretty=True)
+        # print(filter_kwargs, pretty=True)
 
         if self.action in self.many_related:
             try:

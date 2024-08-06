@@ -53,7 +53,7 @@ class Restaurant {
             json['dishes'] is String ? json['dishes'] :
               (json['dishes'] as List).map((instance) => Dish.fromJson(instance)).toList() : [],
         rating = json['rating'] != null ? double.parse(json['rating']) : 0,
-        totalReviews = json['reviews']
+        totalReviews = json['total_reviews']
       ;
 
   Map<String, dynamic> toJson() {

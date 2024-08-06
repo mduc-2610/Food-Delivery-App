@@ -6,7 +6,7 @@ from utils.serializers import CustomRelatedModelSerializer
 class SecuritySettingSerializer(serializers.ModelSerializer):
     class Meta:
         model = SecuritySetting
-        fields = ['setting', 'face_id', 'touch_id', 'pin_security']
+        fields = ['id', 'setting', 'face_id', 'touch_id', 'pin_security']
 
 class SettingSerializer(serializers.ModelSerializer):
 

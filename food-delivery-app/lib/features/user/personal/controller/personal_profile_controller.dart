@@ -1,25 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
-import 'package:food_delivery_app/data/services/token_service.dart';
 import 'package:food_delivery_app/features/authentication/models/account/profile.dart';
-import 'package:food_delivery_app/features/authentication/models/account/setting.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
-import 'package:food_delivery_app/features/authentication/models/auth/token.dart';
+import 'package:food_delivery_app/features/authentication/models/account/setting.dart';
+import 'package:food_delivery_app/utils/constants/times.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
 class PersonalProfileController extends GetxController {
   static PersonalProfileController get instance => Get.find();
 
-  // var user = Rxn<User>();
   User? user;
   UserSetting? setting;
   UserProfile? profile;
-  Rx<bool> darkMode = false.obs;
-  Rx<bool> notification = false.obs;
-  Rx<bool> sound = false.obs;
-  Rx<bool> automaticallyUpdated = false.obs;
-  Rx<String> language = "".obs;
+
+  RxBool isLoading = true.obs;
 
   @override
   void onInit() {
@@ -27,43 +22,45 @@ class PersonalProfileController extends GetxController {
     loadUser();
   }
 
-  void loadUser() async {
+  Future<void> loadUser() async {
     user = await APIService<Me>(pagination: false).list();
     setting = user?.setting;
-    darkMode.value = setting?.darkMode ?? false;
-    notification.value = setting?.notification ?? false;
-    sound.value = setting?.sound ?? false;
-    automaticallyUpdated.value = setting?.automaticallyUpdated ?? false;
-    language.value = setting?.language ?? "English";
     profile = user?.profile;
+    isLoading.value = false;
+    update();
+    await Future.delayed(Duration(milliseconds: TTime.init));
     $print(user);
   }
 
-  void toggleTheme(value) {
-    Get.changeThemeMode(value? ThemeMode.dark : ThemeMode.light);
-    darkMode.value = !darkMode.value;
-    updateSetting(UserSetting(darkMode: darkMode.value));
-
+  void toggleTheme(bool value) {
+    Get.changeThemeMode(value ? ThemeMode.dark : ThemeMode.light);
+    setting?.darkMode = value;
+    updateSetting(setting!);
+    update();
   }
 
   void toggleNotification(bool value) {
-    notification.value = value;
-    updateSetting(UserSetting(notification: notification.value));
+    setting?.notification = value;
+    updateSetting(setting!);
+    update();
   }
 
   void toggleSound(bool value) {
-    sound.value = value;
-    updateSetting(UserSetting(sound: sound.value));
+    setting?.sound = value;
+    updateSetting(setting!);
+    update();
   }
 
   void toggleAutomaticallyUpdated(bool value) {
-    automaticallyUpdated.value = value;
-    updateSetting(UserSetting(automaticallyUpdated: automaticallyUpdated.value));
+    setting?.automaticallyUpdated = value;
+    updateSetting(setting!);
+    update();
   }
 
-  void changeLanguage(value) {
-    language.value = value;
-    updateSetting(UserSetting(language: language.value));
+  void changeLanguage(String value) {
+    setting?.language = value;
+    updateSetting(setting!);
+    update();
   }
 
   Future<void> updateSetting(UserSetting updatedSettings) async {

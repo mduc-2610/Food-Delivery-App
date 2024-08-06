@@ -8,7 +8,7 @@ class Review {
   final UserAbbr? user;
   final int? rating;
   final String? title;
-  final String? comment;
+  final String? content;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -17,7 +17,7 @@ class Review {
     this.user,
     this.rating,
     this.title,
-    this.comment,
+    this.content,
     this.createdAt,
     this.updatedAt,
   });
@@ -27,7 +27,7 @@ class Review {
       user = UserAbbr.fromJson(json['user']),
       rating = json['rating'],
       title = json['title'],
-      comment = json['comment'],
+      content = json['content'],
       createdAt = DateTime.parse(json['created_at']),
       updatedAt = DateTime.parse(json['updated_at']);
 
@@ -37,7 +37,7 @@ class Review {
       'user': user?.id,
       'rating': rating,
       'title': title,
-      'comment': comment,
+      'content': content,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
     };
@@ -59,7 +59,7 @@ class DishReview extends Review {
     UserAbbr? user,
     int? rating,
     String? title,
-    String? comment,
+    String? content,
     DateTime? createdAt,
     DateTime? updatedAt,
     this.dish,
@@ -68,7 +68,7 @@ class DishReview extends Review {
     user: user,
     rating: rating,
     title: title,
-    comment: comment,
+    content: content,
     createdAt: createdAt,
     updatedAt: updatedAt,
   );
@@ -101,7 +101,7 @@ class DelivererReview extends Review {
     UserAbbr? user,
     int? rating,
     String? title,
-    String? comment,
+    String? content,
     DateTime? createdAt,
     DateTime? updatedAt,
     this.deliverer,
@@ -110,7 +110,7 @@ class DelivererReview extends Review {
     user: user,
     rating: rating,
     title: title,
-    comment: comment,
+    content: content,
     createdAt: createdAt,
     updatedAt: updatedAt,
   );
@@ -143,7 +143,7 @@ class RestaurantReview extends Review {
     UserAbbr? user,
     int? rating,
     String? title,
-    String? comment,
+    String? content,
     DateTime? createdAt,
     DateTime? updatedAt,
     this.restaurant,
@@ -152,23 +152,14 @@ class RestaurantReview extends Review {
     user: user,
     rating: rating,
     title: title,
-    comment: comment,
+    content: content,
     createdAt: createdAt,
     updatedAt: updatedAt,
   );
 
-  factory RestaurantReview.fromJson(Map<String, dynamic> json) {
-    return RestaurantReview(
-      id: json['id'],
-      user: json['user'],
-      rating: json['rating'],
-      title: json['title'],
-      comment: json['comment'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
-      restaurant: json['restaurant'],
-    );
-  }
+  RestaurantReview.fromJson(Map<String, dynamic> json)
+      : restaurant = json['restaurant'],
+        super.fromJson(json);
 
   @override
   Map<String, dynamic> toJson() {
@@ -193,7 +184,7 @@ class DeliveryReview extends Review {
     UserAbbr? user,
     int? rating,
     String? title,
-    String? comment,
+    String? content,
     DateTime? createdAt,
     DateTime? updatedAt,
     this.delivery,
@@ -202,7 +193,7 @@ class DeliveryReview extends Review {
     user: user,
     rating: rating,
     title: title,
-    comment: comment,
+    content: content,
     createdAt: createdAt,
     updatedAt: updatedAt,
   );

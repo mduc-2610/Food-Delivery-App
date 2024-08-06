@@ -6,23 +6,24 @@ import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/icon_or_svg.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
+import 'package:food_delivery_app/features/user/food/views/detail/food_detail.dart';
+import 'package:food_delivery_app/features/user/food/views/detail/food_detail.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
 enum FoodCardType { grid, list }
 
 class FoodCard extends StatelessWidget {
   final FoodCardType type;
-  final String? heart;
   final Dish? dish;
 
   const FoodCard({
     required this.type,
-    this.heart,
     this.dish,
     super.key,
   });
@@ -38,7 +39,11 @@ class FoodCard extends StatelessWidget {
 
   Widget _buildGridCard(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Get.to(FoodDetailView(), arguments: {
+          'id': dish?.id
+        });
+      },
       child: Card(
         elevation: TSize.cardElevation,
         surfaceTintColor: Colors.white,
@@ -131,7 +136,11 @@ class FoodCard extends StatelessWidget {
 
   Widget _buildListCard(BuildContext context) {
     return GestureDetector(
-      onTap: (){},
+      onTap: () {
+        Get.to(FoodDetailView(), arguments: {
+          'id': dish?.id
+        });
+      },
       child: Container(
         width: TDeviceUtil.getScreenWidth(),
         child: Card(
@@ -217,7 +226,7 @@ class FoodCard extends StatelessWidget {
                           Spacer(),
 
                           IconOrSvg(
-                            iconStr: heart ?? TIcon.heart,
+                            iconStr: TIcon.heart,
                             size: TSize.iconSm,
                           ),
                           SizedBox(width: TSize.spaceBetweenItemsLg),

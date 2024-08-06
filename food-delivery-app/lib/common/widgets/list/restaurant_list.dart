@@ -19,35 +19,13 @@ class RestaurantList extends StatefulWidget {
 }
 
 class _RestaurantListState extends State<RestaurantList> {
-  late final _restaurantController;
-  bool _isLoading = true;
-  bool _isMounted = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _restaurantController = Get.put(RestaurantListController());
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _loadData();
-  }
-
-  Future<void> _loadData() async {
-    await Future.delayed(Duration(milliseconds: TTime.init));
-    if (_isMounted) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
+  final _restaurantController = Get.put(RestaurantListController());
 
   @override
   Widget build(BuildContext context) {
-    return ListCheck(
-      child: _isLoading
+    return Obx(() =>
+      ListCheck(
+      child: _restaurantController.isLoading.value
       ? SkeletonList(
         length: 5,
         skeleton: RestaurantCardSkeleton(),
@@ -62,7 +40,7 @@ class _RestaurantListState extends State<RestaurantList> {
             ]
           ]
       ),
-    );
+    ));
   }
 
 }

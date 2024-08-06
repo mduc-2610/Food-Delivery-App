@@ -2,40 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/features/user/food/models/review/review.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 
 class FoodDetailReviewList extends StatelessWidget {
-  final List<Map<String, dynamic>> reviews;
+  final List<DishReview> reviews;
   final String filter;
 
   const FoodDetailReviewList({
     Key? key,
-    required this.reviews,
+    this.reviews = const [],
     required this.filter,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final filteredReviews = filter == 'All'
-        ? reviews
-        : reviews.where((review) {
-      if (filter == 'Positive') {
-        return review['type'] == 'positive';
-      } else if (filter == 'Negative') {
-        return review['type'] == 'negative';
-      } else {
-        return review['rating'].toString() == filter;
-      }
-    }).toList();
+    // final filteredReviews = filter == 'All'
+    //     ? reviews
+    //     : reviews.where((review) {
+    //   if (filter == 'Positive') {
+    //     return review['type'] == 'positive';
+    //   } else if (filter == 'Negative') {
+    //     return review['type'] == 'negative';
+    //   } else {
+    //     return review['rating'].toString() == filter;
+    //   }
+    // }).toList();
 
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      itemCount: filteredReviews.length,
+      itemCount: reviews.length,
       itemBuilder: (context, index) {
-        final review = filteredReviews[index];
+        final review = reviews[index];
         return Column(
           children: [
             Row(
@@ -53,15 +55,15 @@ class FoodDetailReviewList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(review['name']),
-                        Text(review['date']),
+                        Text("${review.user?.name ?? ""}"),
+                        Text("${THelperFunction.formatDate(review.createdAt ?? DateTime.now())}"),
                       ],
                     )
                   ],
                 ),
 
                 RatingBarIndicator(
-                  rating: review['rating'].toDouble(),
+                  rating: (review.rating ?? 0).toDouble(),
                   itemBuilder: (context, index) => SvgPicture.asset(
                     TIcon.fillStar,
                   ),
@@ -75,7 +77,9 @@ class FoodDetailReviewList extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(review['review']),
+                Text(
+                  "${review.content ?? ""}"
+                ),
               ],
             ),
             SizedBox(height: TSize.spaceBetweenSections),

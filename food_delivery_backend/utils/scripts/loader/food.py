@@ -67,8 +67,6 @@ def load_food(
                     "description": fake.text(max_nb_chars=200),
                     "original_price": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=10, max_value=100),
                     "discount_price": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50),
-                    "rating": random.uniform(1, 5),
-                    "number_of_reviews": fake.random_int(min=0, max=1000),
                     "category": category,
                     "image": f"{category_name}/{tmp.pop(random.randint(0, len(tmp) - 1))}",
                     # "image": f"{category_name}/{image_file}",
@@ -98,23 +96,15 @@ def load_food(
                     size_option = DishSizeOption.objects.create(**size_data)
                     print(f"\tSuccessfully created Dish Size Option: {size_option}")
                 print()
-         
-    print("________________________________________________________________")
-    print("DISH LIKES:")
-    load_intermediate_model(
-        model_class=DishLike,
-        primary_field='dish',
-        related_field='user',
-        primary_objects=dish_list,
-        related_objects=user_list,
-        max_items=max_dish_likes,
-    )
 
     review_attributes = {
         'rating': lambda: fake.random_int(min=1, max=5),
         'title': lambda: fake.sentence(nb_words=6),
         'content': lambda: fake.text(max_nb_chars=200)
     }
+
+    for x in dish_list:
+        print(x.rating_counts)
 
     print("________________________________________________________________")
     print("DISH REVIEWS:")
@@ -128,15 +118,26 @@ def load_food(
         attributes=review_attributes
     )
 
-    print("________________________________________________________________")
-    print("DISH REVIEW LIKES:")
-    load_intermediate_model(
-        model_class=DishReviewLike,
-        primary_field='review',
-        related_field='user',
-        primary_objects=review_list,
-        related_objects=user_list,
-        max_items=max_dish_reviews_like,
-    )
+    # print("________________________________________________________________")
+    # print("DISH REVIEW LIKES:")
+    # load_intermediate_model(
+    #     model_class=DishReviewLike,
+    #     primary_field='review',
+    #     related_field='user',
+    #     primary_objects=review_list,
+    #     related_objects=user_list,
+    #     max_items=max_dish_reviews_like,
+    # )
+
+    # print("________________________________________________________________")
+    # print("DISH LIKES:")
+    # load_intermediate_model(
+    #     model_class=DishLike,
+    #     primary_field='dish',
+    #     related_field='user',
+    #     primary_objects=dish_list,
+    #     related_objects=user_list,
+    #     max_items=max_dish_likes,
+    # )
 
     return dish_list

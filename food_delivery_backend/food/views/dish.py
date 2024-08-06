@@ -9,6 +9,7 @@ from account.serializers import UserAbbrSerializer
 from food.serializers import DishSerializer, DetailDishSerializer, DishLikeSerializer
 from review.serializers import DishReviewSerializer, DishReviewLikeSerializer
 
+from review.mixins import ReviewFilterMixin
 from utils.views import ManyRelatedViewSet
 from utils.pagination import CustomPagination
 
@@ -17,7 +18,7 @@ class DishPagination(CustomPagination):
         super().__init__()
         self.page_size_query_param = 'dish_page_size'
 
-class DishViewSet(ManyRelatedViewSet):
+class DishViewSet(ManyRelatedViewSet, ReviewFilterMixin):
     queryset = Dish.objects.all()
     serializer_class = DishSerializer
     pagination_class = CustomPagination
@@ -42,6 +43,8 @@ class DishViewSet(ManyRelatedViewSet):
     # }
 
     def get_object(self):
+        if self.action == 'dish_reviews':
+            return ReviewFilterMixin.get_object(self)
         return super().get_object()
     
     def get_serializer_context(self):

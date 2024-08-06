@@ -80,7 +80,6 @@ class HomeView extends StatelessWidget {
                   childCount: 8,
                   (context, index) => FoodCard(
                     type: FoodCardType.grid,
-                    heart: 'assets/icons/heart.svg',
                   ),
                 ),
               ),

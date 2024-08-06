@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/widgets/buttons/small_button.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
@@ -27,7 +29,7 @@ class FoodDetailBottomAppBar extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 12),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Row(
                     children: [
@@ -53,8 +55,11 @@ class FoodDetailBottomAppBar extends StatelessWidget {
                       ),
                     ],
                   ),
-                  MainButton(
-                    paddingHorizontal: TSize.xl,
+                  Spacer(),
+                  SmallButton(
+                    height: 60,
+                    // paddingVertical: 0,
+                    // paddingHorizontal: TSize.xl,
                     onPressed: () {},
                     text: "Add to Basket",
                     prefixIconStr: TIcon.fillCart,

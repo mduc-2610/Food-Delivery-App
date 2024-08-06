@@ -4,58 +4,54 @@ import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
 import 'package:food_delivery_app/features/personal/controllers/security/personal_security_controller.dart';
 import 'package:get/get.dart';
 
-class PersonalSecurityView extends StatefulWidget {
-  PersonalSecurityView({Key? key}) : super(key: key);
-
-  @override
-  State<PersonalSecurityView> createState() => _PersonalSecurityViewState();
-}
-
-class _PersonalSecurityViewState extends State<PersonalSecurityView> {
-  final _controller = Get.put(PersonalSecurityController());
-
+class PersonalSecurityView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          CSliverAppBar(
-            title: "Security",
-            iconList: [
-              {
-                "icon": Icons.more_horiz
-              }
+    return GetBuilder<PersonalSecurityController>(
+      init: PersonalSecurityController(),
+      builder: (controller) {
+        var securitySetting = controller.securitySetting;
+        return Scaffold(
+          body: CustomScrollView(
+            slivers: [
+              CSliverAppBar(
+                title: "Security",
+                iconList: [
+                  {
+                    "icon": Icons.more_horiz
+                  }
+                ],
+              ),
+              SliverToBoxAdapter(
+                child: MainWrapper(
+                  child: Column(
+                    children: [
+                      SwitchListTile(
+                        title: Text('Face ID'),
+                        value: securitySetting?.faceId ?? false,
+                        onChanged: controller.toggleFaceId,
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                      SwitchListTile(
+                        title: Text('Touch ID'),
+                        value: securitySetting?.touchId ?? false,
+                        onChanged: controller.toggleTouchId,
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                      SwitchListTile(
+                        title: Text('Pin Security'),
+                        value: securitySetting?.pinSecurity ?? false,
+                        onChanged: controller.togglePinSecurity,
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
-
-          SliverToBoxAdapter(
-              child: MainWrapper(
-                child: Column(
-                  children: [
-                    Obx(() => SwitchListTile(
-                      title: Text('Face ID'),
-                      value: _controller.faceId.value,
-                      onChanged: _controller.toggleFaceId,
-                      contentPadding: EdgeInsets.zero,
-                    )),
-                    Obx(() => SwitchListTile(
-                      title: Text('Touch ID'),
-                      value: _controller.touchId.value,
-                      onChanged: _controller.toggleTouchId,
-                      contentPadding: EdgeInsets.zero,
-                    )),
-                    Obx(() => SwitchListTile(
-                      title: Text('Pin Security'),
-                      value: _controller.pinSecurity.value,
-                      onChanged: _controller.togglePinSecurity,
-                      contentPadding: EdgeInsets.zero,
-                    )),
-                  ],
-                ),
-              )
-          )
-        ],
-      ),
+        );
+      },
     );
   }
 }
