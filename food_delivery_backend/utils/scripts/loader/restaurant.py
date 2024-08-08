@@ -1,5 +1,6 @@
 import random
 from faker import Faker
+from django.db import transaction
 
 from account.models import User
 from food.models import Dish, DishCategory
@@ -15,6 +16,7 @@ fake = Faker()
 def generate_phone_number():
     return f"+84{random.randint(100000000, 99999999999)}"
 
+@transaction.atomic
 def load_restaurant(
     max_restaurants=0,
     max_restaurant_category_dishes=10,

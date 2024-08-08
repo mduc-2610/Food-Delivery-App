@@ -1,139 +1,303 @@
 
 import 'package:food_delivery_app/data/services/reflect.dart';
-import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 @reflector
-@jsonSerializable
-class Message {
-  final String? id;
-  final String? senderId;
-  final String? receiverId;
-  final String? messageType;
+class BaseMessage {
+  final String id;
+  final int userId;
   final String? content;
-  final DateTime? timestamp;
-  final bool? readStatus;
+  final double? latitude;
+  final double? longitude;
+  final DateTime createdAt;
 
-  Message({
-    this.id,
-    this.senderId,
-    this.receiverId,
-    this.messageType,
+  BaseMessage({
+    required this.id,
+    required this.userId,
     this.content,
-    this.timestamp,
-    this.readStatus,
+    this.latitude,
+    this.longitude,
+    required this.createdAt,
   });
 
-  Message.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        senderId = json['sender'],
-        receiverId = json['receiver'],
-        messageType = json['message_type'],
-        content = json['content'],
-        timestamp = DateTime.parse(json['timestamp']),
-        readStatus = json['read_status'];
+  BaseMessage.fromJson(Map<String, dynamic> json)
+    : id = json['id'],
+      userId = json['user'],
+      content = json['content'],
+      latitude = json['latitude'] != null ? (json['latitude'] as num).toDouble() : null,
+      longitude = json['longitude'] != null ? (json['longitude'] as num).toDouble() : null,
+      createdAt = DateTime.parse(json['created_at']);
+
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'sender': senderId,
-      'receiver': receiverId,
-      'message_type': messageType,
+      'user': userId,
       'content': content,
-      'timestamp': timestamp?.toIso8601String(),
-      'read_status': readStatus,
-    };
-  }
-
-  @override
-  String toString() {
-    return THelperFunction.formatToString(this);
-  }
-}
-
-@reflector
-@jsonSerializable
-class ImageMessage {
-  final String messageId;
-  final String imageUrl;
-
-  ImageMessage({
-    required this.messageId,
-    required this.imageUrl,
-  });
-
-  ImageMessage.fromJson(Map<String, dynamic> json)
-      : messageId = json['message'],
-        imageUrl = json['image'];
-
-  Map<String, dynamic> toJson() {
-    return {
-      'message': messageId,
-      'image': imageUrl,
-    };
-  }
-
-  @override
-  String toString() {
-    return THelperFunction.formatToString(this);
-  }
-}
-
-@reflector
-@jsonSerializable
-class AudioMessage {
-  final String messageId;
-  final String audioUrl;
-
-  AudioMessage({
-    required this.messageId,
-    required this.audioUrl,
-  });
-
-  AudioMessage.fromJson(Map<String, dynamic> json)
-      : messageId = json['message'],
-        audioUrl = json['audio'];
-
-  Map<String, dynamic> toJson() {
-    return {
-      'message': messageId,
-      'audio': audioUrl,
-    };
-  }
-
-  @override
-  String toString() {
-    return THelperFunction.formatToString(this);
-  }
-}
-
-@reflector
-@jsonSerializable
-class LocationMessage {
-  final String messageId;
-  final double latitude;
-  final double longitude;
-
-  LocationMessage({
-    required this.messageId,
-    required this.latitude,
-    required this.longitude,
-  });
-
-  LocationMessage.fromJson(Map<String, dynamic> json)
-      : messageId = json['message'],
-        latitude = json['latitude'].toDouble(),
-        longitude = json['longitude'].toDouble();
-
-  Map<String, dynamic> toJson() {
-    return {
-      'message': messageId,
       'latitude': latitude,
       'longitude': longitude,
+      'created_at': createdAt.toIso8601String(),
     };
   }
 
+}
+
+@reflector
+@jsonSerializable
+class DirectMessage extends BaseMessage {
+  final String? room;
+
+  DirectMessage({
+    required String id,
+    required int userId,
+    String? content,
+    double? latitude,
+    double? longitude,
+    required DateTime createdAt,
+    this.room,
+  }) : super(
+    id: id,
+    userId: userId,
+    content: content,
+    latitude: latitude,
+    longitude: longitude,
+    createdAt: createdAt,
+  );
+
+  DirectMessage.fromJson(Map<String, dynamic> json)
+    : room = json['room'],
+      super.fromJson(json);
+
   @override
-  String toString() {
-    return THelperFunction.formatToString(this);
+  Map<String, dynamic> toJson() {
+    final data = super.toJson();
+    data['room'] = room;
+    return data;
   }
 }
+
+@reflector
+@jsonSerializable
+class GroupMessage extends BaseMessage {
+  final String? room;
+
+  GroupMessage({
+    required String id,
+    required int userId,
+    String? content,
+    double? latitude,
+    double? longitude,
+    required DateTime createdAt,
+    this.room,
+  }) : super(
+    id: id,
+    userId: userId,
+    content: content,
+    latitude: latitude,
+    longitude: longitude,
+    createdAt: createdAt,
+  );
+
+  GroupMessage.fromJson(Map<String, dynamic> json)
+      : room = json['room'],
+        super.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() {
+    final data = super.toJson();
+    data['room'] = room;
+    return data;
+  }
+}
+
+
+@reflector
+class BaseImageMessage {
+  final String id;
+  final int userId;
+  final String? imageUrl;
+  final DateTime createdAt;
+
+  BaseImageMessage({
+    required this.id,
+    required this.userId,
+    this.imageUrl,
+    required this.createdAt,
+  });
+
+  BaseImageMessage.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        userId = json['user'],
+        imageUrl = json['image'],
+        createdAt = DateTime.parse(json['created_at']);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'user': userId,
+      'image': imageUrl,
+      'created_at': createdAt.toIso8601String(),
+    };
+  }
+
+  String getMessageContent() {
+    return imageUrl ?? 'No Image';
+  }
+}
+
+@reflector
+@jsonSerializable
+class DirectImageMessage extends BaseImageMessage {
+  final String? room;
+
+  DirectImageMessage({
+    required String id,
+    required int userId,
+    String? imageUrl,
+    required DateTime createdAt,
+    this.room,
+  }) : super(
+    id: id,
+    userId: userId,
+    imageUrl: imageUrl,
+    createdAt: createdAt,
+  );
+
+  DirectImageMessage.fromJson(Map<String, dynamic> json)
+      : room = json['room'],
+        super.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() {
+    final data = super.toJson();
+    data['room'] = room;
+    return data;
+  }
+}
+
+@reflector
+@jsonSerializable
+class GroupImageMessage extends BaseImageMessage {
+  final String? room;
+
+  GroupImageMessage({
+    required String id,
+    required int userId,
+    String? imageUrl,
+    required DateTime createdAt,
+    this.room,
+  }) : super(
+    id: id,
+    userId: userId,
+    imageUrl: imageUrl,
+    createdAt: createdAt,
+  );
+
+  GroupImageMessage.fromJson(Map<String, dynamic> json)
+      : room = json['room'],
+        super.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() {
+    final data = super.toJson();
+    data['room'] = room;
+    return data;
+  }
+}
+
+
+@reflector
+class BaseVideoMessage {
+  final String id;
+  final int userId;
+  final String? videoUrl;
+  final DateTime createdAt;
+
+  BaseVideoMessage({
+    required this.id,
+    required this.userId,
+    this.videoUrl,
+    required this.createdAt,
+  });
+
+  BaseVideoMessage.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        userId = json['user'],
+        videoUrl = json['video'],
+        createdAt = DateTime.parse(json['created_at']);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'user': userId,
+      'video': videoUrl,
+      'created_at': createdAt.toIso8601String(),
+    };
+  }
+
+  String getMessageContent() {
+    return videoUrl ?? 'No Video';
+  }
+}
+
+@reflector
+@jsonSerializable
+class DirectVideoMessage extends BaseVideoMessage {
+  final String? room;
+
+  DirectVideoMessage({
+    required String id,
+    required int userId,
+    String? videoUrl,
+    required DateTime createdAt,
+    this.room,
+  }) : super(
+    id: id,
+    userId: userId,
+    videoUrl: videoUrl,
+    createdAt: createdAt,
+  );
+
+  DirectVideoMessage.fromJson(Map<String, dynamic> json)
+      : room = json['room'],
+        super.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() {
+    final data = super.toJson();
+    data['room'] = room;
+    return data;
+  }
+}
+
+@reflector
+@jsonSerializable
+class GroupVideoMessage extends BaseVideoMessage {
+  final String? room;
+
+  GroupVideoMessage({
+    required String id,
+    required int userId,
+    String? videoUrl,
+    required DateTime createdAt,
+    this.room,
+  }) : super(
+    id: id,
+    userId: userId,
+    videoUrl: videoUrl,
+    createdAt: createdAt,
+  );
+
+  GroupVideoMessage.fromJson(Map<String, dynamic> json)
+      : room = json['room'],
+        super.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() {
+    final data = super.toJson();
+    data['room'] = room;
+    return data;
+  }
+}
+
+
+

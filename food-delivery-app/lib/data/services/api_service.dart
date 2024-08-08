@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/auth/token.dart';
+import 'package:food_delivery_app/features/authentication/views/login/login.dart';
 import 'package:food_delivery_app/utils/constants/api_constants.dart';
 import 'package:food_delivery_app/data/services/token_service.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:http/http.dart' as http;
 import 'package:reflectable/reflectable.dart';
+import 'package:get/get.dart';
 
 class APIService<T> {
   final String? endpoint;
@@ -159,7 +161,9 @@ class APIService<T> {
       token?.access = jsonResponse["access"] ?? "";
       await TokenService.saveToken(token!);
     } else {
-      throw Exception('Failed to refresh token: ${response.statusCode}');
+      // throw Exception('Failed to refresh token: ${response.statusCode}');
+      await TokenService.deleteToken();
+      Get.to(() => LoginView());
     }
   }
 

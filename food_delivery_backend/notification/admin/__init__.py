@@ -1,18 +1,20 @@
 from django.contrib import admin
 
-from .message import MessageAdmin, AudioMessageAdmin, ImageMessageAdmin, LocationMessageAdmin
+from .message import DirectMessageAdmin, GroupMessageAdmin
+from .room import DirectRoomAdmin, GroupRoomAdmin
 from .notification import NotificationAdmin
 from .user_notification import UserNotificationAdmin
 
 from notification.models import (
-    Message, AudioMessage, ImageMessage, LocationMessage,
+    DirectMessage, GroupMessage,
+    DirectRoom, GroupRoom,
     Notification,
     UserNotification
 )
 
-admin.site.register(Message, MessageAdmin)
-admin.site.register(AudioMessage, AudioMessageAdmin)
-admin.site.register(ImageMessage, ImageMessageAdmin)
-admin.site.register(LocationMessage, LocationMessageAdmin)
+admin.site.register(DirectMessage, DirectMessageAdmin)
+admin.site.register(GroupMessage, GroupMessageAdmin)
+admin.site.register(DirectRoom, DirectRoomAdmin)
+admin.site.register(GroupRoom, GroupRoomAdmin)
 admin.site.register(Notification, NotificationAdmin)
 admin.site.register(UserNotification, UserNotificationAdmin)

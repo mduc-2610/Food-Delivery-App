@@ -1,5 +1,6 @@
 from faker import Faker
 import random
+from django.db import transaction
 
 from account.models import User
 from deliverer.models import Deliverer
@@ -18,6 +19,7 @@ fake = Faker()
 def generate_phone_number():
     return f"+84{random.randint(100000000, 999999999)}"
 
+@transaction.atomic
 def load_order(
     max_promotions=0, max_order_promotions=0, max_restaurant_promotions=0, max_user_promotions=0,
     max_orders=0, max_deliveries=0,

@@ -1,23 +1,38 @@
-# messaging/serializers.py
 from rest_framework import serializers
-from notification.models import Message, ImageMessage, AudioMessage, LocationMessage
+from notification.models import DirectMessage, GroupMessage, DirectImageMessage, DirectVideoMessage, GroupImageMessage, GroupVideoMessage
 
-class MessageSerializer(serializers.ModelSerializer):
+class DirectImageMessageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Message
-        fields = ['id', 'sender', 'receiver', 'message_type', 'content', 'timestamp', 'read_status']
+        model = DirectImageMessage
+        fields = '__all__'
 
-class ImageMessageSerializer(serializers.ModelSerializer):
+class DirectVideoMessageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ImageMessage
-        fields = ['id', 'message', 'image']
+        model = DirectVideoMessage
+        fields = '__all__'
 
-class AudioMessageSerializer(serializers.ModelSerializer):
+class GroupImageMessageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AudioMessage
-        fields = ['id', 'message', 'audio']
+        model = GroupImageMessage
+        fields = '__all__'
 
-class LocationMessageSerializer(serializers.ModelSerializer):
+class GroupVideoMessageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LocationMessage
-        fields = ['id', 'message', 'latitude', 'longitude']
+        model = GroupVideoMessage
+        fields = '__all__'
+
+class DirectMessageSerializer(serializers.ModelSerializer):
+    image_message = DirectImageMessageSerializer(read_only=True)
+    video_message = DirectVideoMessageSerializer(read_only=True)
+
+    class Meta:
+        model = DirectMessage
+        fields = '__all__'
+
+class GroupMessageSerializer(serializers.ModelSerializer):
+    image_message = GroupImageMessageSerializer(read_only=True)
+    video_message = GroupVideoMessageSerializer(read_only=True)
+
+    class Meta:
+        model = GroupMessage
+        fields = '__all__'

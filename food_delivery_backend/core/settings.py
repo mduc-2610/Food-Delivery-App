@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "review.apps.ReviewConfig",
     "social.apps.SocialConfig",
     "utils.apps.UtilsConfig",
+    'channels'
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -84,6 +85,16 @@ TEMPLATES = [
         },
     },
 ]
+
+ASGI_APPLICATION = "food_delivery_backend.routing.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)]
+        }
+    }
+}
 
 REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_CLASSES": [

@@ -53,21 +53,21 @@ def run():
     MAX_POST_IMAGES=15
     MAX_COMMENT_IMAGES=5
     
-    load_user(max_users=MAX_USERS)
+    # load_user(max_users=MAX_USERS)
 
-    load_deliverer(max_deliverers=MAX_DELIVERERS)    
+    # load_deliverer(max_deliverers=MAX_DELIVERERS)    
     
-    load_food(
-        max_categories=MAX_CATEGORIES, 
-        max_dishes=MAX_DISHES,
-        max_dish_likes=MAX_DISH_LIKES,
-    )
+    # load_food(
+    #     max_categories=MAX_CATEGORIES, 
+    #     max_dishes=MAX_DISHES,
+    #     max_dish_likes=MAX_DISH_LIKES,
+    # )
 
-    load_restaurant(
-        max_restaurants=MAX_RESTAURANTS,
-        max_restaurant_category_dishes=MAX_RESTAURANT_CATEGORY_DISHES,
-        max_restaurant_categories=MAX_RESTAURANT_CATEGORIES,
-    )
+    # load_restaurant(
+    #     max_restaurants=MAX_RESTAURANTS,
+    #     max_restaurant_category_dishes=MAX_RESTAURANT_CATEGORY_DISHES,
+    #     max_restaurant_categories=MAX_RESTAURANT_CATEGORIES,
+    # )
 
     load_notification(
         max_notifications=MAX_NOTIFICATIONS, 
@@ -75,27 +75,27 @@ def run():
         max_user_notifications=MAX_USER_NOTIFICATIONS
     )
 
-    load_order(
-        max_promotions=MAX_PROMOTIONS,
-        max_order_promotions=MAX_ORDER_PROMOTIONS,
-        max_restaurant_promotions=MAX_RESTAURANT_PROMOTIONS,
-        max_user_promotions=MAX_USER_PROMOTIONS,
-        max_orders=MAX_ORDERS,
-        max_deliveries=MAX_DELIVERIES,
-        max_carts=MAX_CARTS,
-        max_dishes=MAX_DISHES
-    )
+    # load_order(
+    #     max_promotions=MAX_PROMOTIONS,
+    #     max_order_promotions=MAX_ORDER_PROMOTIONS,
+    #     max_restaurant_promotions=MAX_RESTAURANT_PROMOTIONS,
+    #     max_user_promotions=MAX_USER_PROMOTIONS,
+    #     max_orders=MAX_ORDERS,
+    #     max_deliveries=MAX_DELIVERIES,
+    #     max_carts=MAX_CARTS,
+    #     max_dishes=MAX_DISHES
+    # )
 
-    load_review(
-        max_reviews=MAX_REVIEWS,
-        max_review_likes=MAX_REVIEW_LIKES,
-    )
+    # load_review(
+    #     max_reviews=MAX_REVIEWS,
+    #     max_review_likes=MAX_REVIEW_LIKES,
+    # )
 
-    load_social(
-        max_posts=MAX_POSTS,
-        max_comments=MAX_COMMENTS,
-        max_comment_likes=MAX_COMMENT_LIKES,
-        max_post_likes=MAX_POST_LIKES,
-        max_post_images=MAX_POST_IMAGES,
-        max_comment_images=MAX_COMMENT_IMAGES
-    )
+    # load_social(
+    #     max_posts=MAX_POSTS,
+    #     max_comments=MAX_COMMENTS,
+    #     max_comment_likes=MAX_COMMENT_LIKES,
+    #     max_post_likes=MAX_POST_LIKES,
+    #     max_post_images=MAX_POST_IMAGES,
+    #     max_comment_images=MAX_COMMENT_IMAGES
+    # )

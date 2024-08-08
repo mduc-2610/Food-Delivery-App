@@ -2,6 +2,7 @@ from faker import Faker
 import random
 
 from django.utils import timezone
+from django.db import transaction
 
 from food.models import Dish
 from deliverer.models import Deliverer
@@ -17,6 +18,7 @@ from utils.function import load_intermediate_model
 
 fake = Faker()
 
+@transaction.atomic
 def load_review(
         max_reviews=50, 
         max_review_likes=100,

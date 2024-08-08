@@ -1,17 +1,31 @@
-# messaging/admin.py
 from django.contrib import admin
+from notification.models import DirectMessage, GroupMessage, DirectImageMessage, DirectVideoMessage, GroupImageMessage, GroupVideoMessage
 
-class MessageAdmin(admin.ModelAdmin):
-    list_display = ['sender', 'receiver', 'message_type', 'timestamp', 'read_status']
-    search_fields = ['sender__username', 'receiver__username', 'content']
-    list_filter = ['message_type', 'read_status']
-    readonly_fields = ['timestamp']
+class DirectImageMessageInline(admin.StackedInline):
+    model = DirectImageMessage
+    extra = 0
 
-class ImageMessageAdmin(admin.ModelAdmin):
-    list_display = ['message', 'image']
+class DirectVideoMessageInline(admin.StackedInline):
+    model = DirectVideoMessage
+    extra = 0
 
-class AudioMessageAdmin(admin.ModelAdmin):
-    list_display = ['message', 'audio']
+class GroupImageMessageInline(admin.StackedInline):
+    model = GroupImageMessage
+    extra = 0
 
-class LocationMessageAdmin(admin.ModelAdmin):
-    list_display = ['message', 'latitude', 'longitude']
+class GroupVideoMessageInline(admin.StackedInline):
+    model = GroupVideoMessage
+    extra = 0
+
+class DirectMessageAdmin(admin.ModelAdmin):
+    list_display = ('user', 'room', 'created_at')
+    search_fields = ('user__phone_number', 'room__name', 'content')
+    list_filter = ('created_at',)
+    inlines = [DirectImageMessageInline, DirectVideoMessageInline]
+
+class GroupMessageAdmin(admin.ModelAdmin):
+    list_display = ('user', 'room', 'created_at')
+    search_fields = ('user__phone_number', 'room__name', 'content')
+    list_filter = ('created_at',)
+    inlines = [GroupImageMessageInline, GroupVideoMessageInline]
+

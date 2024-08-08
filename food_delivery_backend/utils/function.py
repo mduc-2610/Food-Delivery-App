@@ -20,7 +20,7 @@ def load_one_to_many_model(
         primary_objects = list(primary_objects)
 
     for primary_obj in primary_objects:
-        for _ in range(random.randint(1, max(max_related_objects, 1))):
+        for _ in range(random.randint(0, max(max_related_objects, 1))):
             data = {
                 primary_field: primary_obj,
                 **{attr: value() if callable(value) else value for attr, value in attributes.items()}
@@ -50,6 +50,7 @@ def load_intermediate_model(
             if not temp_related_objects:
                 break
             related_obj = temp_related_objects.pop(random.randint(0, len(temp_related_objects) - 1))
+            if primary_obj == related_obj: continue
             data = {
                 primary_field: primary_obj,
                 related_field: related_obj,

@@ -1,20 +1,66 @@
-# messaging/views.py
 from rest_framework import viewsets
-from notification.models import Message, ImageMessage, AudioMessage, LocationMessage
-from notification.serializers import MessageSerializer, ImageMessageSerializer, AudioMessageSerializer, LocationMessageSerializer
 
-class MessageViewSet(viewsets.ModelViewSet):
-    queryset = Message.objects.all()
-    serializer_class = MessageSerializer
+from notification.models import (
+    DirectMessage, GroupMessage,
+    DirectImageMessage, DirectVideoMessage, 
+    GroupImageMessage, GroupVideoMessage
+)
 
-class ImageMessageViewSet(viewsets.ModelViewSet):
-    queryset = ImageMessage.objects.all()
-    serializer_class = ImageMessageSerializer
+from notification.serializers import (
+    DirectMessageSerializer, GroupMessageSerializer,
+    DirectImageMessageSerializer, DirectVideoMessageSerializer, 
+    GroupImageMessageSerializer, GroupVideoMessageSerializer
+)
 
-class AudioMessageViewSet(viewsets.ModelViewSet):
-    queryset = AudioMessage.objects.all()
-    serializer_class = AudioMessageSerializer
+from utils.pagination import CustomPagination
 
-class LocationMessageViewSet(viewsets.ModelViewSet):
-    queryset = LocationMessage.objects.all()
-    serializer_class = LocationMessageSerializer
+class DirectImageMessageViewSet(viewsets.ModelViewSet):
+    queryset = DirectImageMessage.objects.all()
+    serializer_class = DirectImageMessageSerializer
+    pagination_class = CustomPagination
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+class DirectVideoMessageViewSet(viewsets.ModelViewSet):
+    queryset = DirectVideoMessage.objects.all()
+    serializer_class = DirectVideoMessageSerializer
+    pagination_class = CustomPagination
+    
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+class GroupImageMessageViewSet(viewsets.ModelViewSet):
+    queryset = GroupImageMessage.objects.all()
+    serializer_class = GroupImageMessageSerializer
+    pagination_class = CustomPagination
+    
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+class GroupVideoMessageViewSet(viewsets.ModelViewSet):
+    queryset = GroupVideoMessage.objects.all()
+    serializer_class = GroupVideoMessageSerializer
+    pagination_class = CustomPagination
+    
+
+    def perform_create(self, serializer):
+        serializer.save()
+        
+class DirectMessageViewSet(viewsets.ModelViewSet):
+    queryset = DirectMessage.objects.all()
+    serializer_class = DirectMessageSerializer
+    pagination_class = CustomPagination
+
+    # def perform_create(self, serializer):
+    #     serializer.save()
+
+class GroupMessageViewSet(viewsets.ModelViewSet):
+    queryset = GroupMessage.objects.all()
+    serializer_class = GroupMessageSerializer
+    pagination_class = CustomPagination
+
+    # def perform_create(self, serializer):
+    #     serializer.save()

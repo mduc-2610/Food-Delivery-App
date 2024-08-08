@@ -2,6 +2,7 @@ import random
 from faker import Faker
 
 from django.contrib.auth.hashers import make_password
+from django.db import transaction
 
 from account.models import User
 from deliverer.models import (
@@ -11,6 +12,7 @@ from deliverer.models import (
 
 fake = Faker()
 
+@transaction.atomic
 def generate_phone_number():
     return f"+84{random.randint(100000000, 999999999)}"
 

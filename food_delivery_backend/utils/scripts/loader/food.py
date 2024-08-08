@@ -3,6 +3,7 @@ from faker import Faker
 
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
+from django.db import transaction
 
 from account.models import User
 from food.models import (
@@ -17,6 +18,7 @@ from utils.scripts.data import dish_categories
 
 fake = Faker()
 
+@transaction.atomic
 def load_food(
     max_categories=0, 
     max_dishes=0,

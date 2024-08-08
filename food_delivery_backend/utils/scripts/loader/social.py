@@ -1,5 +1,6 @@
 from faker import Faker
 import random
+from django.db import transaction
 
 from account.models import User
 from social.models import (
@@ -10,6 +11,7 @@ from utils.function import load_intermediate_model, load_one_to_many_model
 
 fake = Faker()
 
+@transaction.atomic
 def load_social(
         max_posts=0, 
         max_comments=0, 

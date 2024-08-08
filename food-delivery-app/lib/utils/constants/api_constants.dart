@@ -23,6 +23,7 @@ import 'package:food_delivery_app/features/authentication/models/restaurant/oper
 import 'package:food_delivery_app/features/authentication/models/restaurant/representative.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
 import 'package:food_delivery_app/features/notification/models/message.dart';
+import 'package:food_delivery_app/features/notification/models/room.dart';
 import 'package:food_delivery_app/features/notification/models/user_notification.dart';
 import 'package:food_delivery_app/features/user/food/models/food/addition.dart';
 import 'package:food_delivery_app/features/user/food/models/food/category.dart';
@@ -106,14 +107,14 @@ class APIConstant {
         return 'deliverer/residency-info';
 
         ///NOTIFICATION
-      case Message:
-        return 'notification/message';
-      case ImageMessage:
-        return 'notification/image-message';
-      case AudioMessage:
-        return 'notification/audio-message';
-      case LocationMessage:
-        return 'notification/location-message';
+      case DirectMessage:
+        return 'notification/direct-message';
+      case GroupMessage:
+        return 'notification/group-message';
+      case DirectRoom:
+        return 'notification/direct-room';
+      case GroupRoom:
+        return 'notification/group-room';
       case Notification:
         return 'notification/notification';
       case UserNotification:

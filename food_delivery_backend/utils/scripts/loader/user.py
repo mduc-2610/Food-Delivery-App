@@ -3,6 +3,7 @@ from faker import Faker
 from datetime import datetime, timedelta
 
 from django.utils import timezone
+from django.db import transaction
 from django.contrib.auth.hashers import make_password
 
 from account.models import (
@@ -16,6 +17,7 @@ fake = Faker()
 def generate_phone_number():
     return f"+84{random.randint(100000000, 99999999999)}"
 
+@transaction.atomic
 def load_user(max_users=0):    
     model_list = [
         User, OTP, Setting, 
@@ -34,7 +36,7 @@ def load_user(max_users=0):
         user_data = {
             "phone_number": generate_phone_number(),
             "password": make_password("Duckkucd.123"),
-            "email": fake.name() + fake.email(),
+            "email": fake.name().split()[0].lower() + fake.email(),
             "is_registration_verified": True,
         }
         user = User.objects.create(**user_data)
