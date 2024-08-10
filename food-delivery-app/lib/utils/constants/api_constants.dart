@@ -40,12 +40,15 @@ import 'package:food_delivery_app/features/user/social/models/comment.dart';
 import 'package:food_delivery_app/features/user/social/models/image.dart';
 import 'package:food_delivery_app/features/user/social/models/like.dart';
 import 'package:food_delivery_app/features/user/social/models/post.dart';
-
 class APIConstant {
+  static const String ip = "192.168.1.147";
   static const String tSecretAPIKey = "";
   // static const baseUrl = 'http://10.0.2.2:8000/api';
-  static const baseUrl = 'http://192.168.1.8:8000/api'; // VANSAU
-  // static const baseUrl = 'http://192.168.0.107:8000/api'; // Tenda
+  // static const baseUrl = 'http://192.168.1.8:8000/api'; // VANSAU
+  // static const baseUrl = 'http://192.168.1.5:8000/api'; // VANSAU
+  // static const baseUrl = 'http://192.168.0.103:8000/api'; // Tenda
+  static const baseUrl = 'http://$ip:8000/api'; // Minh Duc 5g
+  static const baseSocketUrl = 'ws://${APIConstant.ip}:8000/ws';
 
 
   static String? getEndpointFor<T>() {

@@ -7,8 +7,9 @@ from food.serializers import DishCategorySerializer, DishSerializer
 from restaurant.serializers import RestaurantSerializer, RestaurantCategorySerializer
 
 from utils.views import ManyRelatedViewSet
+from utils.mixins import DefaultGenericMixin
 
-class DishCategoryViewSet(ManyRelatedViewSet):
+class DishCategoryViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     queryset = DishCategory.objects.all()
     serializer_class = DishCategorySerializer
     many_related_serializer_class = {

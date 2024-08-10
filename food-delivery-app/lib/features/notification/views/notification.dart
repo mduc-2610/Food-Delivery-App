@@ -22,7 +22,7 @@ class NotificationView extends StatelessWidget {
         body: TabBarView(
           children: [
             NotificationTab(),
-            MessagesTab(),
+            MessageTab(),
           ],
         ),
       ),

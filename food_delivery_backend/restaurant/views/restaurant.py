@@ -11,8 +11,9 @@ from review.serializers import RestaurantReviewSerializer
 
 from utils.views import ManyRelatedViewSet
 from utils.pagination import CustomPagination
+from utils.mixins import DefaultGenericMixin
 
-class RestaurantViewSet(ManyRelatedViewSet):
+class RestaurantViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
     pagination_class = CustomPagination

@@ -5,7 +5,8 @@ from deliverer.models import EmergencyContact
 from deliverer.serializers import EmergencyContactSerializer
 
 from utils.views import OneRelatedViewSet
+from utils.mixins import DefaultGenericMixin
 
-class EmergencyContactViewSet(OneRelatedViewSet):
+class EmergencyContactViewSet(DefaultGenericMixin, OneRelatedViewSet):
     queryset = EmergencyContact.objects.all()
     serializer_class = EmergencyContactSerializer

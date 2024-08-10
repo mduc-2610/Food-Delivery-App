@@ -33,6 +33,8 @@ AUTH_USER_MODEL = "account.User"
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -52,7 +54,6 @@ INSTALLED_APPS = [
     "review.apps.ReviewConfig",
     "social.apps.SocialConfig",
     "utils.apps.UtilsConfig",
-    'channels'
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -86,14 +87,20 @@ TEMPLATES = [
     },
 ]
 
-ASGI_APPLICATION = "food_delivery_backend.routing.application"
+ASGI_APPLICATION = "core.asgi.application"
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             'hosts': [('127.0.0.1', 6379)]
+#         }
+#     }
+# }
+
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [('127.0.0.1', 6379)]
-        }
-    }
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',  
+    },
 }
 
 REST_FRAMEWORK = {

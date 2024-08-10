@@ -6,11 +6,12 @@ from account.models import Setting, SecuritySetting
 from account.serializers import SettingSerializer, SecuritySettingSerializer
 
 from utils.views import OneRelatedViewSet
+from utils.mixins import DefaultGenericMixin
 
-class SettingViewSet(OneRelatedViewSet):
+class SettingViewSet(DefaultGenericMixin, OneRelatedViewSet):
     queryset = Setting.objects.all()
     serializer_class = SettingSerializer
         
-class SecuritySettingViewSet(OneRelatedViewSet):
+class SecuritySettingViewSet(DefaultGenericMixin, OneRelatedViewSet):
     queryset = SecuritySetting.objects.all()
     serializer_class = SecuritySettingSerializer

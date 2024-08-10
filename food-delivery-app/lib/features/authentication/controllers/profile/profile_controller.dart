@@ -41,7 +41,6 @@ class ProfileController extends GetxController {
   void onInit() async {
     super.onInit();
     if (isEdit) {
-      final token = await TokenService.getToken();
       user = await APIService<Me>(pagination: false,).list();
       $print(user);
       final profile = await APIService<UserProfile>().retrieve(user?.id ?? "fad06fbd-72f0-4f05-a6e0-609296184c4d");
@@ -90,11 +89,6 @@ class ProfileController extends GetxController {
         gender: gender.toUpperCase(),
       );
       $print(profileData);
-      Token? token;
-      if(isEdit) {
-        token = await TokenService.getToken();
-        $print(token);
-      }
 
       final [statusCode, headers, body] = await APIService<UserProfile>()
           .update(user?.id ?? authController?.user.id ?? "fad06fbd-72f0-4f05-a6e0-609296184c4d", profileData);

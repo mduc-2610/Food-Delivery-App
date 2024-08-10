@@ -8,4 +8,4 @@ mysqlclient==2.2.4
 Faker==23.2.1
 djangorestframework-simplejwt==5.0.0
 phonenumbers==8.12.31
-channels==4.1.0
+channels==3.0.4

@@ -91,6 +91,11 @@ class TSize {
   // Image carousel height
   static const double imageCarouselHeight = 200.0;
   static const double imageDialogSize = 200.0;
+  static const double imageSm = 40.0;
+  static const double imageMd = 80.0;
+  static const double imageLg = 160.0;
+  static const double imageXl = 320.0;
+
 
   // Loading indicator size
   static const double loadingIndicatorSize = 36.0;

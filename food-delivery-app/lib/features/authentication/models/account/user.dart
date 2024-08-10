@@ -18,6 +18,8 @@ class User {
   final bool? isRegistrationVerified;
   final UserProfile? profile;
   final UserSetting? setting;
+  final String? user1Rooms;
+  final String? user2Rooms;
 
   User({
     this.id,
@@ -32,6 +34,8 @@ class User {
     this.isRegistrationVerified,
     this.profile,
     this.setting,
+    this.user1Rooms,
+    this.user2Rooms,
   });
 
   User.fromJson(Map<String, dynamic> json)
@@ -46,7 +50,9 @@ class User {
         isOtpVerified = json['is_otp_verified'],
         isRegistrationVerified = json['is_registration_verified'],
         profile = (json['profile'] != null) ? UserProfile.fromJson(json['profile']) : null,
-        setting = (json['setting'] != null) ? UserSetting.fromJson(json['setting']) : null;
+        setting = (json['setting'] != null) ? UserSetting.fromJson(json['setting']) : null,
+        user1Rooms = json['user1_rooms'],
+        user2Rooms = json['user2_rooms'];
 
   Map<String, dynamic> toJson({bool patch = false}) {
     final Map<String, dynamic> data = {

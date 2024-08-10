@@ -20,9 +20,9 @@ from review.serializers import (
 
 from utils.pagination import CustomPagination
 from utils.views import ManyRelatedViewSet
+from utils.mixins import DefaultGenericMixin
 
-
-class DishReviewViewSet(ManyRelatedViewSet):
+class DishReviewViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     queryset = DishReview.objects.all()
     serializer_class = DishReviewSerializer
     pagination_class = CustomPagination
@@ -32,7 +32,7 @@ class DishReviewViewSet(ManyRelatedViewSet):
         'dish_review_likes': DishReviewLikeSerializer,
     }
 
-class DelivererReviewViewSet(ManyRelatedViewSet):
+class DelivererReviewViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     queryset = DelivererReview.objects.all()
     serializer_class = DelivererReviewSerializer
     pagination_class = CustomPagination
@@ -40,7 +40,7 @@ class DelivererReviewViewSet(ManyRelatedViewSet):
         'create': CreateDelivererReviewSerializer,
     }
 
-class RestaurantReviewViewSet(ManyRelatedViewSet):
+class RestaurantReviewViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     queryset = RestaurantReview.objects.all()
     serializer_class = RestaurantReviewSerializer
     pagination_class = CustomPagination
@@ -48,7 +48,7 @@ class RestaurantReviewViewSet(ManyRelatedViewSet):
         'create': CreateRestaurantReviewSerializer,
     }
 
-class DeliveryReviewViewSet(ManyRelatedViewSet):
+class DeliveryReviewViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     queryset = DeliveryReview.objects.all()
     serializer_class = DeliveryReviewSerializer
     pagination_class = CustomPagination

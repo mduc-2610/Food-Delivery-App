@@ -71,7 +71,6 @@ def run():
 
     load_notification(
         max_notifications=MAX_NOTIFICATIONS, 
-        max_messages=MAX_MESSAGES,
         max_user_notifications=MAX_USER_NOTIFICATIONS
     )
 

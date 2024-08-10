@@ -36,13 +36,14 @@ from social.serializers import (
     CommentLikeSerializer,
     DetailPostSerializer
 )
-
+from notification.serializers import DirectRoomSerializer
 from account.throttles import OTPThrottle
 
 from utils.pagination import CustomPagination
 from utils.views import ManyRelatedViewSet
+from utils.mixins import DefaultGenericMixin
 
-class UserViewSet(ManyRelatedViewSet):
+class UserViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = []
@@ -75,6 +76,9 @@ class UserViewSet(ManyRelatedViewSet):
         'dish_likes': DishLikeSerializer,
         'post_comments': CommentSerializer,
         'comment_likes': CommentLikeSerializer,
+
+        'user1_rooms': DirectRoomSerializer,
+        'user2_rooms': DirectRoomSerializer,
     }
     # many_related = {
     #     'reviewed_dishes': {

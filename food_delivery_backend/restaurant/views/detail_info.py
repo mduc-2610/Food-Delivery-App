@@ -6,6 +6,8 @@ from restaurant.serializers import DetailInfoSerializer
 
 from utils.views import OneRelatedViewSet
 
-class DetailInfoViewSet(OneRelatedViewSet):
+from utils.mixins import DefaultGenericMixin
+
+class DetailInfoViewSet(DefaultGenericMixin,OneRelatedViewSet):
     queryset = DetailInfo.objects.all()
     serializer_class = DetailInfoSerializer

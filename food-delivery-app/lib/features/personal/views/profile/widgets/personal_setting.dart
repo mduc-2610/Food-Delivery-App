@@ -113,11 +113,11 @@ class _PersonalSettingState extends State<PersonalSetting> {
             contentPadding: EdgeInsets.zero,
             title: Text('Language'),
             trailing: DropdownButton<String>(
-              value: setting?.language,
+              value: setting?.language?.toLowerCase(),
               items: ['English', 'Vietnamese']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
-                  value: value.toUpperCase(),
+                  value: value.toLowerCase(),
                   child: Text(value),
                 );
               }).toList(),

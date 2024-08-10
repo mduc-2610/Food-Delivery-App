@@ -61,8 +61,8 @@ def load_intermediate_model(
             print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
     return created_objects
 
-def camel_to_snake(name):
-    return re.sub('([a-z0-9])([A-Z])', r'\1-\2', name).lower()
+def camel_to_snake(name, sep='-'):
+    return re.sub('([a-z0-9])([A-Z])', fr'\1{sep}\2', name).lower()
 
 def mapping_endpoint(model, type):
     return f'api/{model._meta.app_label}' + (f'/{camel_to_snake(model.__name__)}' if type == "many" else '')

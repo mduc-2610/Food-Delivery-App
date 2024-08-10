@@ -1,4 +1,5 @@
 from .message import (
+    BaseImageMessage, BaseVideoMessage,
     DirectMessage, GroupMessage, 
     DirectImageMessage, DirectVideoMessage,
     GroupImageMessage, GroupVideoMessage

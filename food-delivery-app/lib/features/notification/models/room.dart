@@ -1,55 +1,74 @@
 import 'dart:convert';
 
 import 'package:food_delivery_app/data/services/reflect.dart';
+import 'package:food_delivery_app/features/notification/models/message.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 @reflector
 @jsonSerializable
 class DirectRoom {
-  final String id;
+  final String? id;
   final String? name;
-  final int user1Id;
-  final int user2Id;
+  final String? user1;
+  final String? user2;
+  final String? messages;
+  DirectMessage? latestMessage;
 
   DirectRoom({
-    required this.id,
+    this.id,
     this.name,
-    required this.user1Id,
-    required this.user2Id,
+    this.user1,
+    this.user2,
+    this.messages,
+    this.latestMessage,
   });
 
   DirectRoom.fromJson(Map<String, dynamic> json)
     : id = json['id'],
       name = json['name'],
-      user1Id = json['user1'],
-      user2Id = json['user2'];
+      user1 = json['user1'],
+      user2 = json['user2'],
+      messages = json['messages'],
+      latestMessage = json['latest_message'] != null ? DirectMessage.fromJson(json['latest_message']) : null;
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
-      'user1': user1Id,
-      'user2': user2Id,
+      'user1': user1,
+      'user2': user2,
     };
+  }
+
+  @override
+  String toString() {
+    return THelperFunction.formatToString(this);
   }
 }
 
 @reflector
 @jsonSerializable
 class GroupRoom {
-  final String id;
+  final String? id;
   final String? name;
-  final List<int> memberIds;
+  final List<String> memberIds;
+  final String? messages;
+  GroupMessage? latestMessage;
 
   GroupRoom({
-    required this.id,
+    this.id,
     this.name,
-    required this.memberIds,
+    this.memberIds = const [],
+    this.messages,
+    this.latestMessage,
   });
 
   GroupRoom.fromJson(Map<String, dynamic> json)
     : id = json['id'],
       name = json['name'],
-      memberIds = List<int>.from(json['members']);
+      memberIds = List<String>.from(json['members']),
+      messages = json['messages'],
+      latestMessage = json['latest_message'] != null ? GroupMessage.fromJson(json['latest_message']) : null;
 
   Map<String, dynamic> toJson() {
     return {
@@ -57,5 +76,10 @@ class GroupRoom {
       'name': name,
       'members': memberIds,
     };
+  }
+
+  @override
+  String toString() {
+    return THelperFunction.formatToString(this);
   }
 }

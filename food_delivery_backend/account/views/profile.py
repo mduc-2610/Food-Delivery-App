@@ -6,6 +6,8 @@ from account.serializers import ProfileSerializer
 
 from utils.views import OneRelatedViewSet
 
-class ProfileViewSet(OneRelatedViewSet):
+from utils.mixins import DefaultGenericMixin
+
+class ProfileViewSet(DefaultGenericMixin, OneRelatedViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer

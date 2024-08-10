@@ -10,8 +10,9 @@ from social.serializers import (
 
 from utils.pagination import CustomPagination
 from utils.views import ManyRelatedViewSet
+from utils.mixins import DefaultGenericMixin
 
-class PostViewSet(ManyRelatedViewSet):
+class PostViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     pagination_class = CustomPagination

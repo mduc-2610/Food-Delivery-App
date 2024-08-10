@@ -8,9 +8,10 @@ from social.serializers import (
 from utils.pagination import CustomPagination
 
 from utils.views import ManyRelatedViewSet
+from utils.mixins import DefaultGenericMixin
 
 
-class CommentViewSet(ManyRelatedViewSet):
+class CommentViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     pagination_class = CustomPagination

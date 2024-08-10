@@ -1,7 +1,8 @@
 from .message import (
     DirectMessageSerializer, GroupMessageSerializer,
     DirectVideoMessageSerializer, GroupVideoMessageSerializer,
-    DirectImageMessageSerializer, GroupImageMessageSerializer
+    DirectImageMessageSerializer, GroupImageMessageSerializer,
+    CreateDirectMessageSerializer
 )
 from .notification import NotificationSerializer
 from .user_notification import UserNotificationSerializer

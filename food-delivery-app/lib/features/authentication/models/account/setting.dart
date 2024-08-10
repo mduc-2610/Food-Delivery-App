@@ -39,7 +39,7 @@ class UserSetting {
       'dark_mode': darkMode,
       'sound': sound,
       'automatically_updated': automaticallyUpdated,
-      'language': language,
+      'language': language?.toUpperCase(),
     };
 
     if (patch) {

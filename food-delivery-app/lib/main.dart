@@ -14,13 +14,14 @@ import 'package:food_delivery_app/utils/theme/theme.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/status.dart' as status;
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initializeReflectable();
   Token? token = await TokenService.getToken();
-  final service = APIService<User>(endpoint:'account/user/me',  pagination: false,);
   $print(token);
   runApp(
     ChangeNotifierProvider(

@@ -42,7 +42,6 @@ class CustomRelatedModelSerializer(serializers.ModelSerializer):
         self.one_related_serializer_class = {}
         self.many_related_serializer_class = {}
 
-
     def get_list_param(self, param_name, default='', separator=','):
         param_value = self.query_params.get(param_name, default)
         if param_value:
@@ -66,7 +65,7 @@ class CustomRelatedModelSerializer(serializers.ModelSerializer):
                     data[field] = get_related_url(self.request, self.model, instance, '-'.join(field.split('_')), type='one')
                 else:
                     data[field] = self.serialize_related_object(related_serializer_class, instance, field, context=self.context)
-        # print(self.many_related_fields)
+
         for field in self.many_related_fields:
             if not isinstance(data.get(field), list):
                 related_serializer_class = self.many_related_serializer_class.get(field)

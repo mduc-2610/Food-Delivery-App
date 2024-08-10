@@ -10,8 +10,9 @@ from review.serializers import DelivererReviewSerializer
 
 from utils.pagination import CustomPagination
 from utils.views import ManyRelatedViewSet
+from utils.mixins import DefaultGenericMixin
 
-class DelivererViewSet(ManyRelatedViewSet):
+class DelivererViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     queryset = Deliverer.objects.all()
     serializer_class = DelivererSerializer
     many_related_serializer_class = {

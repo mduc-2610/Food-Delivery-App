@@ -14,14 +14,9 @@ from review.serializers import (
 )
 
 from utils.pagination import CustomPagination
-from account.serializers import UserAbbrSerializer
-class UserResponseMixin:
-    def finalize_response(self, request, response, *args, **kwargs):
-        if isinstance(response, Response):
-            response.data['user'] = UserAbbrSerializer(request.user).data
-        return super().finalize_response(request, response, *args, **kwargs)
-    
-class DishReviewLikeViewSet(UserResponseMixin, viewsets.ModelViewSet):
+from utils.mixins import DefaultGenericMixin
+
+class DishReviewLikeViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
     queryset = DishReviewLike.objects.all()
     serializer_class = DishReviewLikeSerializer
     pagination_class = CustomPagination
@@ -29,7 +24,7 @@ class DishReviewLikeViewSet(UserResponseMixin, viewsets.ModelViewSet):
         'create': CreateDishReviewLikeSerializer,
     }
 
-class RestaurantReviewLikeViewSet(viewsets.ModelViewSet):
+class RestaurantReviewLikeViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
     queryset = RestaurantReviewLike.objects.all()
     serializer_class = RestaurantReviewLikeSerializer
     pagination_class = CustomPagination
@@ -37,7 +32,7 @@ class RestaurantReviewLikeViewSet(viewsets.ModelViewSet):
         'create': CreateRestaurantReviewLikeSerializer,
     }
 
-class DelivererReviewLikeViewSet(viewsets.ModelViewSet):
+class DelivererReviewLikeViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
     queryset = DelivererReviewLike.objects.all()
     serializer_class = DelivererReviewLikeSerializer
     pagination_class = CustomPagination
@@ -45,7 +40,7 @@ class DelivererReviewLikeViewSet(viewsets.ModelViewSet):
         'create': CreateDelivererReviewLikeSerializer,
     }
 
-class DeliveryReviewLikeViewSet(viewsets.ModelViewSet):
+class DeliveryReviewLikeViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
     queryset = DeliveryReviewLike.objects.all()
     serializer_class = DeliveryReviewLikeSerializer
     pagination_class = CustomPagination

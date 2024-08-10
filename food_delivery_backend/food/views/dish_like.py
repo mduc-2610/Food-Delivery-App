@@ -6,11 +6,13 @@ from food.serializers import DishLikeSerializer, CreateDishLikeSerializer
 
 from utils.pagination import CustomPagination
 from utils.views import ManyRelatedViewSet
+from utils.mixins import DefaultGenericMixin
 
 
 class DishLikeViewSet(mixins.ListModelMixin,
                       mixins.CreateModelMixin,
                       mixins.RetrieveModelMixin,
+                      DefaultGenericMixin,
                       viewsets.GenericViewSet):
     
     queryset = DishLike.objects.all()

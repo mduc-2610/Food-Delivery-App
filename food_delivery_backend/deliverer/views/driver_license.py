@@ -5,7 +5,8 @@ from deliverer.models import DriverLicense
 from deliverer.serializers import DriverLicenseSerializer
 
 from utils.views import OneRelatedViewSet
+from utils.mixins import DefaultGenericMixin
 
-class DriverLicenseViewSet(OneRelatedViewSet):
+class DriverLicenseViewSet(DefaultGenericMixin, OneRelatedViewSet):
     queryset = DriverLicense.objects.all()
     serializer_class = DriverLicenseSerializer
