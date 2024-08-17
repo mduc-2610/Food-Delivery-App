@@ -3,17 +3,17 @@ import 'package:food_delivery_app/common/widgets/bars/rating_bar.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
-class FoodDetailReviewRatingDistribution extends StatelessWidget {
-  final Dish? dish;
+class DetailReviewRatingDistribution extends StatelessWidget {
+  final dynamic item;
 
-  const FoodDetailReviewRatingDistribution({
-    this.dish,
+  const DetailReviewRatingDistribution({
+    this.item,
   });
 
   @override
   Widget build(BuildContext context) {
-    final int totalReviews = dish?.totalReviews ?? 1;
-    final Map<String, dynamic> ratingCounts = dish?.ratingCounts ?? {};
+    final int totalReviews = item?.totalReviews ?? 1;
+    final Map<String, dynamic> ratingCounts = item?.ratingCounts ?? {};
 
     return Column(
       children: [

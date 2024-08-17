@@ -4,8 +4,8 @@ import 'package:food_delivery_app/features/user/food/views/detail/skeleton/food_
 import 'package:food_delivery_app/features/user/food/views/detail/skeleton/food_detail_sliver_app_bar_skeleton.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
-class FoodDetailViewSkeleton extends StatelessWidget {
-  const FoodDetailViewSkeleton({Key? key}) : super(key: key);
+class DetailViewSkeleton extends StatelessWidget {
+  const DetailViewSkeleton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

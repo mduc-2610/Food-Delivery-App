@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/misc/head_with_action.dart';
-import 'package:food_delivery_app/features/user/food/views/detail/food_detail_review.dart';
+import 'package:food_delivery_app/features/user/food/views/review/detail_review.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
@@ -16,7 +16,7 @@ class ReviewsSummary extends StatelessWidget {
           title: "Reviews",
           actionText: "See all reviews",
           onActionTap: () {
-            Get.to(() => FoodDetailReviewView());
+            Get.to(() => DetailReviewView());
           }
         ),
         Row(

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
-class FoodDetailReviewListSkeleton extends StatelessWidget {
+class DetailReviewListSkeleton extends StatelessWidget {
   final int itemCount;
 
-  const FoodDetailReviewListSkeleton({
+  const DetailReviewListSkeleton({
     Key? key,
     this.itemCount = 3,
   }) : super(key: key);

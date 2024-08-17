@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/features/authentication/models/auth/token.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
-import 'package:food_delivery_app/features/user/food/views/detail/food_detail_review.dart';
+import 'package:food_delivery_app/features/user/food/views/review/detail_review.dart';
 import 'package:food_delivery_app/utils/constants/times.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
@@ -32,6 +32,6 @@ class FoodDetailController extends GetxController {
   }
 
   void getToFoodReview() {
-    Get.to(() => FoodDetailReviewView());
+    Get.to(() => DetailReviewView());
   }
 }

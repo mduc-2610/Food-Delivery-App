@@ -8,6 +8,7 @@ import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/list/food_list.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/features/user/food/controllers/restaurant/restaurant_detail_controller.dart';
+import 'package:food_delivery_app/features/user/food/views/review/detail_review.dart';
 import 'package:food_delivery_app/features/user/food/views/restaurant/widgets/restaurant_detail_skeleton.dart';
 import 'package:food_delivery_app/features/user/food/views/restaurant/widgets/restaurant_detail_sliver_app_bar.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
@@ -48,44 +49,49 @@ class RestaurantDetailView extends StatelessWidget {
                               "${basicInfo?.name ?? ""}",
                               style: Theme.of(context).textTheme.headlineMedium,
                             ),
-                            Row(
-                              children: [
-                                RatingBarIndicator(
-                                  rating: restaurant?.rating ?? 0.0,
-                                  itemBuilder: (context, index) => SvgPicture.asset(
-                                    TIcon.fillStar,
+                            InkWell(
+                              onTap: () {
+                                Get.to(() => DetailReviewView(reviewType: ReviewType.restaurant,));
+                              },
+                              child: Row(
+                                children: [
+                                  RatingBarIndicator(
+                                    rating: restaurant?.rating ?? 0.0,
+                                    itemBuilder: (context, index) => SvgPicture.asset(
+                                      TIcon.fillStar,
+                                    ),
+                                    itemCount: 5,
+                                    itemSize: TSize.iconSm,
                                   ),
-                                  itemCount: 5,
-                                  itemSize: TSize.iconSm,
-                                ),
-                                SizedBox(width: TSize.spaceBetweenItemsSm),
-                                Text(
-                                  '${restaurant?.rating} (${restaurant?.totalReviews} reviews)',
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                                Icon(
-                                  TIcon.arrowForward,
-                                  size: TSize.iconSm,
-                                ),
-                                SizedBox(width: TSize.spaceBetweenItemsSm),
-                                SeparateBar(),
-                                SizedBox(width: TSize.spaceBetweenItemsSm),
-                                Icon(
-                                  TIcon.clock,
-                                  size: TSize.iconSm,
-                                ),
-                                SizedBox(width: TSize.spaceBetweenItemsSm),
-                                Text(
-                                  '27 min',
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                                Spacer(),
-                                CircleIconCard(
-                                  iconSize: TSize.iconSm,
-                                  iconStr: TIcon.heart,
-                                  elevation: TSize.cardElevation,
-                                ),
-                              ],
+                                  SizedBox(width: TSize.spaceBetweenItemsSm),
+                                  Text(
+                                    '${restaurant?.rating} (${restaurant?.totalReviews} reviews)',
+                                    style: Theme.of(context).textTheme.titleSmall,
+                                  ),
+                                  Icon(
+                                    TIcon.arrowForward,
+                                    size: TSize.iconSm,
+                                  ),
+                                  SizedBox(width: TSize.spaceBetweenItemsSm),
+                                  SeparateBar(),
+                                  SizedBox(width: TSize.spaceBetweenItemsSm),
+                                  Icon(
+                                    TIcon.clock,
+                                    size: TSize.iconSm,
+                                  ),
+                                  SizedBox(width: TSize.spaceBetweenItemsSm),
+                                  Text(
+                                    '27 min',
+                                    style: Theme.of(context).textTheme.titleSmall,
+                                  ),
+                                  Spacer(),
+                                  CircleIconCard(
+                                    iconSize: TSize.iconSm,
+                                    iconStr: TIcon.heart,
+                                    elevation: TSize.cardElevation,
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),

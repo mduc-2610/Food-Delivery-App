@@ -9,11 +9,13 @@ from food.serializers import DishSerializer, DishCategorySerializer
 from order.serializers import PromotionSerializer, RestaurantPromotionSerializer
 from review.serializers import RestaurantReviewSerializer
 
+from review.mixins import ReviewFilterMixin
+
 from utils.views import ManyRelatedViewSet
 from utils.pagination import CustomPagination
 from utils.mixins import DefaultGenericMixin
 
-class RestaurantViewSet(DefaultGenericMixin, ManyRelatedViewSet):
+class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewSet):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
     pagination_class = CustomPagination
@@ -53,12 +55,17 @@ class RestaurantViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     #         'serializer_class': RestaurantPromotionSerializer,
     #     },
     # }
+    def get_object(self):
+        if self.action == 'restaurant_reviews':
+            return ReviewFilterMixin.get_object(self)
+        return super().get_object()
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
         if self.action == "list":
             context.update({'detail': False})
         return context
+        
     
 
 class RestaurantCategoryViewSet(viewsets.ModelViewSet):

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/features/user/food/controllers/detail/food_detail_controller.dart';
-import 'package:food_delivery_app/features/user/food/views/detail/skeleton/food_detail_review_skeleton.dart';
+import 'package:food_delivery_app/features/user/food/views/review/skeleton/detail_review_skeleton.dart';
 import 'package:food_delivery_app/features/user/food/views/detail/widgets/food_detail_bottom_app_bar.dart';
 import 'package:food_delivery_app/features/user/food/views/detail/widgets/food_detail_sliver_app_bar.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
@@ -20,7 +20,7 @@ class FoodDetailView extends StatelessWidget {
         return
           Obx(() =>
           (controller.isLoading.value)
-              ? FoodDetailViewSkeleton()
+              ? DetailViewSkeleton()
               : Scaffold(
             body: CustomScrollView(
               slivers: <Widget>[

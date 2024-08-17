@@ -7,6 +7,7 @@ import 'package:food_delivery_app/features/authentication/models/restaurant/menu
 import 'package:food_delivery_app/features/authentication/models/restaurant/representative.dart';
 import 'package:food_delivery_app/features/user/food/models/food/category.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
+import 'package:food_delivery_app/features/user/food/models/review/review.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 @reflector
@@ -22,6 +23,8 @@ class Restaurant {
   final dynamic dishes;
   final double? rating;
   final int? totalReviews;
+  final String? restaurantReviews;
+  final Map<String, dynamic> ratingCounts;
   // final List<RestaurantPromotion>? promotions;
 
   Restaurant({
@@ -35,6 +38,8 @@ class Restaurant {
     this.categories = const [],
     this.rating,
     this.totalReviews,
+    this.restaurantReviews,
+    this.ratingCounts = const {},
     // required this.promotions,
   });
 
@@ -53,8 +58,11 @@ class Restaurant {
             json['dishes'] is String ? json['dishes'] :
               (json['dishes'] as List).map((instance) => Dish.fromJson(instance)).toList() : [],
         rating = json['rating'] != null ? double.parse(json['rating']) : 0,
-        totalReviews = json['total_reviews']
-      ;
+        totalReviews = json['total_reviews'],
+        restaurantReviews = json['restaurant_reviews'],
+        ratingCounts = json['rating_counts'] ?? {}
+        ;
+
 
   Map<String, dynamic> toJson() {
     return {
@@ -66,6 +74,10 @@ class Restaurant {
       'menu_delivery': menuDelivery?.toJson(),
       // 'promotions': promotions?.map((promo) => promo.toJson()).toList(),
     };
+  }
+
+  String get formatTotalReviews {
+    return THelperFunction.formatNumber(totalReviews ?? 0);
   }
 
   @override
