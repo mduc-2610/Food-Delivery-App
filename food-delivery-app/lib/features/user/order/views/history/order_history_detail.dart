@@ -52,13 +52,13 @@ class OrderHistoryDetailView extends StatelessWidget {
                 ),
                 SizedBox(height: TSize.spaceBetweenSections,),
 
-                DeliveryDetail(
-                  address: "221B Baker Street, London, United Kingdom",
-                  paymentMethod: "Cash",
-                  subtotal: 31.50,
-                  discount: 6.30,
-                  total: 25.20,
-                ),
+                // DeliveryDetail(
+                //   address: "221B Baker Street, London, United Kingdom",
+                //   paymentMethod: "Cash",
+                //   subtotal: 31.50,
+                //   discount: 6.30,
+                //   total: 25.20,
+                // ),
                 SizedBox(height: TSize.spaceBetweenSections,),
               ],
             ),

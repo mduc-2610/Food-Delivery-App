@@ -1,49 +1,53 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
+import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 @reflector
 @jsonSerializable
 class Order {
-  final String id;
-  final String cartId;
-  final String deliveryAddress;
-  final String paymentMethod;
-  final String? promotionId;
+  final String? id;
+  final String? cart;
+  final UserLocation? deliveryAddress;
+  final String? paymentMethod;
+  final String? promotion;
   final double deliveryFee;
   final double discount;
-  final double total;
-  final String status;
+  double total;
+  final int rating;
+  final String? status;
 
   Order({
-    required this.id,
-    required this.cartId,
-    required this.deliveryAddress,
-    required this.paymentMethod,
-    this.promotionId,
-    required this.deliveryFee,
-    required this.discount,
-    required this.total,
-    required this.status,
+    this.id,
+    this.cart,
+    this.deliveryAddress,
+    this.paymentMethod,
+    this.promotion,
+    this.deliveryFee = 0,
+    this.discount = 0,
+    this.total = 0,
+    this.rating = 0,
+    this.status,
   });
 
   Order.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        cartId = json['cart'],
-        deliveryAddress = json['delivery_address'],
+        cart = json['cart'],
+        deliveryAddress = json['delivery_address'] != null ? UserLocation.fromJson(json['delivery_address']) : null,
         paymentMethod = json['payment_method'],
-        promotionId = json['promotion'],
-        deliveryFee = json['delivery_fee'].toDouble(),
-        discount = json['discount'].toDouble(),
-        total = json['total'].toDouble(),
+        promotion = json['promotion'],
+        deliveryFee = THelperFunction.formatDouble(json['delivery_fee']),
+        discount = THelperFunction.formatDouble(json['discount']),
+        total = THelperFunction.formatDouble(json['total']),
+        rating = json['rating'],
         status = json['status'];
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'cart': cartId,
-      'delivery_address': deliveryAddress,
+      'cart': cart,
+      'delivery_address': deliveryAddress?.id,
       'payment_method': paymentMethod,
-      'promotion': promotionId,
+      'promotion': promotion,
       'delivery_fee': deliveryFee,
       'discount': discount,
       'total': total,

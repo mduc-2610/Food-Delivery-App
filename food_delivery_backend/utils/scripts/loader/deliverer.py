@@ -16,7 +16,9 @@ fake = Faker()
 def generate_phone_number():
     return f"+84{random.randint(100000000, 999999999)}"
 
-def load_deliverer(max_deliverers):
+def load_deliverer(
+    max_deliverers=40
+):
     model_list = [
         Address, BasicInfo, DriverLicense, 
         EmergencyContact, OperationInfo, OtherInfo, 
@@ -127,3 +129,7 @@ def load_deliverer(max_deliverers):
         print(f"\tSuccessfully created Residency Info: {residency_info}")
     
     return deliverer_list
+
+
+def run():
+    load_deliverer()

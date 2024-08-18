@@ -24,17 +24,18 @@ class ListCheck extends StatelessWidget {
             "Empty",
             style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.textDesc),
           ),
-        ],
+        ]
 
-        if(checkNotFound)...[
+        else if(checkNotFound)...[
           SizedBox(height: TSize.spaceBetweenSections,),
           Text(
             "Not Found",
             style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.textDesc),
           ),
-        ],
-
-        child
+        ]
+        else...[
+          child
+        ]
       ],
     );
   }

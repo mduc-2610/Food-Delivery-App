@@ -8,8 +8,8 @@ class Dish {
   final String? id;
   final String? name;
   final String? description;
-  final double? originalPrice;
-  final double? discountPrice;
+  final double originalPrice;
+  final double discountPrice;
   final String? image;
   final double? rating;
   final int? totalReviews;
@@ -22,8 +22,8 @@ class Dish {
     this.id,
     this.name,
     this.description,
-    this.originalPrice,
-    this.discountPrice,
+    this.originalPrice = 0,
+    this.discountPrice = 0,
     this.image,
     this.rating,
     this.totalReviews,
@@ -37,8 +37,8 @@ class Dish {
       : id = json['id'],
         name = json['name'],
         description = json['description'],
-        originalPrice = double.parse(json['original_price']),
-        discountPrice = double.parse(json['discount_price']),
+        originalPrice = json['original_price'] != null ? double.parse(json['original_price']) : 0,
+        discountPrice = json['discount_price'] != null ? double.parse(json['discount_price']) : 0,
         image = json['image'],
         rating = double.parse(json['rating']),
         totalReviews = json['total_reviews'],

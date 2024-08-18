@@ -13,12 +13,12 @@ fake = Faker()
 
 @transaction.atomic
 def load_social(
-        max_posts=0, 
-        max_comments=0, 
-        max_post_likes=0,
-        max_comment_likes=0,
-        max_post_images=0,
-        max_comment_images=0
+        max_posts=6, 
+        max_comments=20, 
+        max_post_likes=30,
+        max_comment_likes=30,
+        max_post_images=15,
+        max_comment_images=5
     ):
     model_list = [
         Post, CommentLike, PostLike, 
@@ -102,3 +102,6 @@ def load_social(
     )
 
     return post_list, comment_list
+
+def run():
+    load_social()

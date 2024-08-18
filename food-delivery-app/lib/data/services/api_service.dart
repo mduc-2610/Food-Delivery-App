@@ -70,7 +70,7 @@ class APIService<T> {
   Future<dynamic> list({ bool next = false }) async {
     return _handleRequest<dynamic>((Token? token) async {
       final url_ = url();
-
+      $print(url_);
       if (dio != null) {
         final response = await dio!.get(
           url_,
@@ -90,6 +90,7 @@ class APIService<T> {
   Future<T> retrieve(String id) async {
     return _handleRequest<T>((Token? token) async {
       final url_ = url(id: id);
+      $print(url_);
 
       if (dio != null) {
         final response = await dio!.get(

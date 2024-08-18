@@ -18,25 +18,31 @@ class ReviewFilterMixin:
             except self.queryset.model.DoesNotExist:
                 raise NotFound('Instance not found')
             
-            if filter_kwargs:
-                queryset = self.many_related[self.action]['queryset'](instance).filter(**filter_kwargs)
-            else:
-                queryset = self.many_related[self.action]['queryset'](instance)
+            def _queryset(instance, filter_kwargs):
+                if filter_kwargs:
+                    return self.many_related[self.action]['queryset'](instance).filter(**filter_kwargs)
+                else:
+                    return self.many_related[self.action]['queryset'](instance)
             
             star_filter = params.get('star_filter', None)
+            if star_filter is not None:
+                try: 
+                    star_filter = int(star_filter)
+                except:
+                    star_filter = star_filter
             if star_filter:
                 if star_filter == 'positive':
-                    queryset = queryset.filter(rating__gte=3)
+                    return _queryset(instance, filter_kwargs) \
+                        .filter(rating__gte=3)
                 elif star_filter == 'negative':
-                    queryset = queryset.filter(rating__lte=2)
+                    return _queryset(instance, filter_kwargs) \
+                        .filter(rating__lte=2)
                 else:
-                    try:
-                        star_value = int(star_filter)
-                        if 1 <= star_value <= 5:
-                            queryset = queryset.filter(rating=star_value)
-                    except ValueError:
-                        pass 
+                    if 1 <= star_filter <= 5:
+                        return _queryset(instance, filter_kwargs) \
+                            .filter(rating=star_filter)       
+                    return []
+            else:
+                return _queryset(instance, filter_kwargs)
             
-            return queryset
-        
         return super().get_object()

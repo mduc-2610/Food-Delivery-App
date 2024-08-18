@@ -11,13 +11,13 @@ class StatusChip extends StatelessWidget {
   Widget build(BuildContext context) {
     Color color;
     switch (status) {
-      case 'Active':
+      case 'ACTIVE':
         color = TColor.active;
         break;
-      case 'Completed':
+      case 'COMPLETED':
         color = TColor.success;
         break;
-      case 'Cancelled':
+      case 'CANCELLED':
         color = TColor.cancel;
         break;
       default:

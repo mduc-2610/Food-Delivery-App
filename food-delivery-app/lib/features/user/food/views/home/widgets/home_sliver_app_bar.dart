@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/features/user/food/controllers/home/home_controller.dart';
+import 'package:food_delivery_app/features/user/food/views/basket/user_basket_view.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:get/get.dart';
 
 
 class HomeSliverAppBar extends StatelessWidget {
@@ -51,6 +53,9 @@ class HomeSliverAppBar extends StatelessWidget {
             top: TDeviceUtil.getAppBarHeight() / 2 + 12,
             right: 16,
             child: CircleIconCard(
+              onTap: () {
+                Get.to(() => UserBasketView());
+              },
               elevation: TSize.iconCardElevation,
               iconStr: TIcon.cart,
             ),

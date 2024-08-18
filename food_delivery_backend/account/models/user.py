@@ -5,7 +5,8 @@ from django.contrib.auth.models import AbstractBaseUser, AbstractUser, BaseUserM
 from django.core.validators import RegexValidator, validate_email
 from django.db import models
 from django.utils import timezone
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from rest_framework.settings import api_settings
 
 from utils.regex_validators import phone_regex
@@ -70,6 +71,8 @@ class User(AbstractBaseUser):
     liked_deliverer_reviews = models.ManyToManyField("review.DelivererReview", through="review.DelivererReviewLike", related_name=LIKE_RELATED_NAME)
     liked_restaurant_reviews = models.ManyToManyField("review.RestaurantReview", through="review.RestaurantReviewLike", related_name=LIKE_RELATED_NAME)
     liked_dish_reviews = models.ManyToManyField("review.DishReview", through="review.DishReviewLike", related_name=LIKE_RELATED_NAME)
+
+    carts = models.ManyToManyField('restaurant.Restaurant', through = 'order.RestaurantCart', related_name='users')
 
     def __getitem__(self, attr):
         if hasattr(self, attr):

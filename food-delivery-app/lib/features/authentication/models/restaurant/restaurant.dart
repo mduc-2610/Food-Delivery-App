@@ -21,7 +21,8 @@ class Restaurant {
   final RestaurantMenuDelivery? menuDelivery;
   final List<DishCategory> categories;
   final dynamic dishes;
-  final double? rating;
+  final double rating;
+  final double avgPrice;
   final int? totalReviews;
   final String? restaurantReviews;
   final Map<String, dynamic> ratingCounts;
@@ -36,7 +37,8 @@ class Restaurant {
     this.menuDelivery,
     this.dishes = const [],
     this.categories = const [],
-    this.rating,
+    this.rating = 0,
+    this.avgPrice = 0,
     this.totalReviews,
     this.restaurantReviews,
     this.ratingCounts = const {},
@@ -57,7 +59,8 @@ class Restaurant {
         dishes = json['dishes'] != null ?
             json['dishes'] is String ? json['dishes'] :
               (json['dishes'] as List).map((instance) => Dish.fromJson(instance)).toList() : [],
-        rating = json['rating'] != null ? double.parse(json['rating']) : 0,
+        rating = THelperFunction.formatDouble(json['rating']),
+        avgPrice = THelperFunction.formatDouble(json['avg_price']),
         totalReviews = json['total_reviews'],
         restaurantReviews = json['restaurant_reviews'],
         ratingCounts = json['rating_counts'] ?? {}

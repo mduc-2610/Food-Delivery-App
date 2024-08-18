@@ -229,6 +229,19 @@ class THelperFunction {
       return number.toString();
     }
   }
+
+  static double formatDouble(dynamic number) {
+    if(number != null) {
+      if(number is String) {
+        return double.parse(number);
+      }
+      else if(number is int) {
+        return number.toDouble();
+      }
+      return number;
+    }
+    return 0;
+  }
 }
 
 void $print(dynamic message) {

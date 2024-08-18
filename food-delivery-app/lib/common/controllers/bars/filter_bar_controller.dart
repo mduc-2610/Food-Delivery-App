@@ -1,3 +1,4 @@
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
 class FilterBarController extends GetxController {
@@ -8,7 +9,8 @@ class FilterBarController extends GetxController {
   FilterBarController(String initialFilter)
       : selectedFilter = initialFilter.obs;
 
-  void onFilterChanged(String filter) {
+  Future<void> onFilterChanged(String filter, Future<void> Function(String) filterChangeCallback) async {
     selectedFilter.value = filter;
+    await filterChangeCallback(filter);
   }
 }

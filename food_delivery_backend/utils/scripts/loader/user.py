@@ -18,7 +18,7 @@ def generate_phone_number():
     return f"+84{random.randint(100000000, 99999999999)}"
 
 @transaction.atomic
-def load_user(max_users=0):    
+def load_user(max_users=100):    
     model_list = [
         User, OTP, Setting, 
         SecuritySetting, Profile, Location
@@ -66,7 +66,7 @@ def load_user(max_users=0):
             "user": user,
             "name": fake.name(),
             "gender": fake.random_element(elements=("MALE", "FEMALE")),
-            "date_of_birth": fake.date_time_this_century(before_now=True, after_now=False, tzinfo=timezone.utc)
+            "date_of_birth": fake.date_time_this_century(before_now=True, after_now=False, tzinfo=timezone.get_current_timezone())
         }
         profile = Profile.objects.create(**profile_data)
         print(f"\tSuccessfully created Profile for User: {user}")
@@ -93,3 +93,6 @@ def load_user(max_users=0):
         print(f"\tSuccessfully created Security Setting for User: {user}\n")
     
     return user_list
+
+def run():
+    load_user()

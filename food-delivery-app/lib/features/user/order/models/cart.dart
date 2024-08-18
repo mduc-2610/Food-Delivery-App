@@ -1,75 +1,53 @@
+import 'dart:ffi';
+
 import 'package:food_delivery_app/data/services/reflect.dart';
+import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
+import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
+import 'package:food_delivery_app/features/user/order/models/order.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 @reflector
 @jsonSerializable
-class Cart {
-  final String? userId;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-
-  Cart({
-    required this.userId,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  Cart.fromJson(Map<String, dynamic> json)
-      : userId = json['user'],
-        createdAt = DateTime.parse(json['created_at']),
-        updatedAt = DateTime.parse(json['updated_at']);
-
-  Map<String, dynamic> toJson() {
-    return {
-      'user': userId,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
-    };
-  }
-
-  @override
-  String toString() {
-    return THelperFunction.formatToString(this);
-  }
-}
-
-@reflector
-@jsonSerializable
 class RestaurantCart {
-  final String id;
-  final String cartId;
-  final String restaurantId;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final bool isPlacedOrder;
-  final double rawFee;
+  final String? id;
+  final String? user;
+  final Restaurant? restaurant;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final bool? isPlacedOrder;
+  final double? rawFee;
+  final List<RestaurantCartDish> cartDishes;
+  final Order? order;
 
   RestaurantCart({
-    required this.id,
-    required this.cartId,
-    required this.restaurantId,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.isPlacedOrder,
-    required this.rawFee,
+    this.id,
+    this.user,
+    this.restaurant,
+    this.createdAt,
+    this.updatedAt,
+    this.isPlacedOrder,
+    this.rawFee,
+    this.cartDishes = const [],
+    this.order,
   });
 
   RestaurantCart.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        cartId = json['cart'],
-        restaurantId = json['restaurant'],
+        user = json['user'],
+        restaurant = json['restaurant'] != null ? Restaurant.fromJson(json['restaurant']) : null,
         createdAt = DateTime.parse(json['created_at']),
         updatedAt = DateTime.parse(json['updated_at']),
         isPlacedOrder = json['is_placed_order'],
-        rawFee = json['raw_fee'].toDouble();
+        rawFee = json['raw_fee'] != null ? double.parse(json['raw_fee']) : null,
+        cartDishes = json['dishes'] != null ? (json['dishes'] as List).map((instance) => RestaurantCartDish.fromJson(instance)).toList() : [],
+        order = json['order'] != null ? Order.fromJson(json['order']) : null
+  ;
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'cart': cartId,
-      'restaurant': restaurantId,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
+      'user': user,
+      'restaurant': restaurant,
       'is_placed_order': isPlacedOrder,
       'raw_fee': rawFee,
     };
@@ -84,32 +62,32 @@ class RestaurantCart {
 @reflector
 @jsonSerializable
 class RestaurantCartDish {
-  final String id;
-  final String cartId;
-  final String dishId;
-  final int quantity;
+  final String? id;
+  final String? cart;
+  final Dish? dish;
+  int quantity;
   final double price;
 
   RestaurantCartDish({
-    required this.id,
-    required this.cartId,
-    required this.dishId,
-    required this.quantity,
-    required this.price,
+    this.id,
+    this.cart,
+    this.dish,
+    this.quantity = 0,
+    this.price = 0,
   });
 
   RestaurantCartDish.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        cartId = json['cart'],
-        dishId = json['dish'],
-        quantity = json['quantity'],
-        price = json['price'].toDouble();
+        cart = json['cart'],
+        dish = json['dish'] != null ? Dish.fromJson(json['dish']) : null,
+        quantity = json['quantity'] ?? 0,
+        price = json['price'] != null ? double.parse(json['price']) : 0;
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'cart': cartId,
-      'dish': dishId,
+      'cart': cart,
+      'dish': dish?.id,
       'quantity': quantity,
       'price': price,
     };

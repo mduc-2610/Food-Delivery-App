@@ -30,12 +30,12 @@ class PersonalHelpCenterView extends StatelessWidget {
                 ),
                 SizedBox(height: TSize.spaceBetweenItemsVertical,),
 
-                MainWrapper(
-                  rightMargin: 0,
-                  child: FilterBar(
-                    filters: ["General", "Account", "Ordering", "Payment"],
-                  ),
-                ),
+                // MainWrapper(
+                //   rightMargin: 0,
+                //   child: FilterBar(
+                //     filters: ["General", "Account", "Ordering", "Payment"],
+                //   ),
+                // ),
                 SizedBox(height: TSize.spaceBetweenItemsVertical,),
 
                 MainWrapper(

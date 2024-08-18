@@ -42,7 +42,7 @@ class RestaurantSerializer(CustomRelatedModelSerializer):
     class Meta:
         model = Restaurant
         fields = [
-            'id', 'basic_info', 'dishes', 'rating', 'total_reviews'
+            'id', 'basic_info', 'dishes', 'rating', 'total_reviews', 'avg_price'
         ]
         depth = 1
     

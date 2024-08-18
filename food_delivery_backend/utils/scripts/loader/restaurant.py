@@ -18,9 +18,9 @@ def generate_phone_number():
 
 @transaction.atomic
 def load_restaurant(
-    max_restaurants=0,
-    max_restaurant_category_dishes=10,
-    max_restaurant_categories=5,
+    max_restaurants=50,
+    max_restaurant_category_dishes=8,
+    max_restaurant_categories=3,
 ):
     model_list = [
         BasicInfo, DetailInfo, MenuDelivery,
@@ -141,3 +141,6 @@ def load_restaurant(
                 print(f"\tSuccessfully added Dish: {dish} to Restaurant: {restaurant}")
 
     return restaurant_list
+
+def run():
+    load_restaurant()

@@ -55,6 +55,13 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewS
     #         'serializer_class': RestaurantPromotionSerializer,
     #     },
     # }
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        name = self.request.query_params.get('name')
+        if name:
+            queryset = queryset.filter(basic_info__name__icontains=name)
+        return queryset
+    
     def get_object(self):
         if self.action == 'restaurant_reviews':
             return ReviewFilterMixin.get_object(self)
@@ -65,7 +72,7 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewS
         if self.action == "list":
             context.update({'detail': False})
         return context
-        
+    
     
 
 class RestaurantCategoryViewSet(viewsets.ModelViewSet):

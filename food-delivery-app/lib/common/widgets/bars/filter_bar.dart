@@ -9,7 +9,7 @@ import 'package:food_delivery_app/utils/device/device_utility.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
-class FilterBar extends StatefulWidget {
+class FilterBar extends StatelessWidget {
   final List<String> filters;
   final String? suffixIconStr;
   final String? suffixIconStrClicked;
@@ -17,11 +17,12 @@ class FilterBar extends StatefulWidget {
   final Color? suffixIconColor;
   final Color? suffixIconColorClicked;
   final List<String> exclude;
-
+  final Future<void> Function(String) onTap;
 
   const FilterBar({
     Key? key,
     required this.filters,
+    required this.onTap,
     this.suffixIconStr,
     this.suffixIconStrClicked,
     this.suffixIcon,
@@ -31,24 +32,13 @@ class FilterBar extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<FilterBar> createState() => _FilterBarState();
-}
-
-class _FilterBarState extends State<FilterBar> {
-  final FilterBarController _controller = Get.find();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final FilterBarController _controller = Get.find();
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: widget.filters.map((filter) {
+        children: filters.map((filter) {
           return Obx(() {
             final bool isSelected = _controller.selectedFilter.value == filter;
             return Padding(
@@ -64,27 +54,27 @@ class _FilterBarState extends State<FilterBar> {
                             : Theme.of(context).textTheme.bodyMedium?.color,
                       ),
                     ),
-                    if (!THelperFunction.checkInArray(filter, widget.exclude)
+                    if (!THelperFunction.checkInArray(filter, exclude)
                         && (
                             !THelperFunction.checkIfExistsNull(
                                 [
-                                  widget.suffixIconStr,
-                                  widget.suffixIconStrClicked,
+                                  suffixIconStr,
+                                  suffixIconStrClicked,
                                 ]) ||
                                 !THelperFunction.checkIfExistsNull(
                                     [
-                                      widget.suffixIcon
+                                      suffixIcon
                                     ])
                         )) ...[
                       SizedBox(width: TSize.spaceBetweenItemsHorizontal),
                       IconOrSvg(
-                        icon: widget.suffixIcon,
+                        icon: suffixIcon,
                         color: isSelected
-                            ? widget.suffixIconColorClicked
-                            : widget.suffixIconColor,
+                            ? suffixIconColorClicked
+                            : suffixIconColor,
                         iconStr: isSelected
-                            ? widget.suffixIconStrClicked
-                            : widget.suffixIconStr,
+                            ? suffixIconStrClicked
+                            : suffixIconStr,
                       )
                     ],
                   ],
@@ -92,7 +82,7 @@ class _FilterBarState extends State<FilterBar> {
                 selected: isSelected,
                 onSelected: (selected) {
                   if (selected) {
-                    _controller.onFilterChanged(filter);
+                    _controller.onFilterChanged(filter, onTap);
                   }
                 },
                 selectedColor: TColor.primary,

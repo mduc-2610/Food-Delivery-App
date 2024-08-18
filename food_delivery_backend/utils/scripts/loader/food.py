@@ -20,9 +20,9 @@ fake = Faker()
 
 @transaction.atomic
 def load_food(
-    max_categories=0, 
-    max_dishes=0,
-    max_dish_likes=0,
+    max_categories=30, 
+    max_dishes=150,
+    max_dish_likes=50,
     max_dish_reviews=25,
     max_dish_reviews_like=25,
     ):
@@ -143,3 +143,6 @@ def load_food(
     # )
 
     return dish_list
+
+def run():
+    load_food()

@@ -9,7 +9,7 @@ from food.models import Dish
 from order.models import (
     Promotion, ActivityPromotion, OrderPromotion, 
     RestaurantPromotion, UserPromotion, Order, 
-    Delivery, Cart, RestaurantCart, RestaurantCartDish
+    Delivery, RestaurantCart, RestaurantCartDish
 )
 
 from utils.function import load_intermediate_model
@@ -21,14 +21,18 @@ def generate_phone_number():
 
 @transaction.atomic
 def load_order(
-    max_promotions=0, max_order_promotions=0, max_restaurant_promotions=0, max_user_promotions=0,
-    max_orders=0, max_deliveries=0,
-    max_carts=0, max_dishes=0
+    max_promotions=200, 
+    max_order_promotions=30, 
+    max_restaurant_promotions=50, 
+    max_user_promotions=40,
+    max_deliveries=100,
+    max_restaurants_per_cart=7,
+    max_restaurant_cart_dishes=10
 ):
     model_list = [
         Promotion, ActivityPromotion, OrderPromotion, 
         RestaurantPromotion, UserPromotion, Order, 
-        Delivery, Cart, RestaurantCart, RestaurantCartDish
+        Delivery, RestaurantCart, RestaurantCartDish
     ]
     
     user_list = list(User.objects.all())
@@ -60,52 +64,48 @@ def load_order(
         print(f"\tSuccessfully created Promotion: {promotion}")
 
     print("________________________________________________________________")
-    print("CARTS:")
-    cart_list = []
-    for user in user_list:
-        cart = Cart.objects.create(user=user)
-        print(f"\tSuccessfully created Cart: {cart}")
-        cart_list.append(cart)
-
-    print("________________________________________________________________")
     print("RESTAURANT CARTS:")
-    restaurant_cart_list = []
-    for _ in range(max_carts):
-        restaurant_cart_data = {
-            "cart": random.choice(cart_list),
-            "restaurant": random.choice(restaurant_list),
-            "is_placed_order": fake.boolean(),
-            "raw_fee": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=10, max_value=100)
+    restaurant_cart_list = load_intermediate_model(
+        model_class=RestaurantCart,
+        primary_field='user',
+        related_field='restaurant',
+        primary_objects=user_list,
+        related_objects=restaurant_list,
+        max_items=max_restaurants_per_cart,
+        min_items=1,
+        attributes={
+            "is_placed_order": fake.boolean,
+            "raw_fee": lambda: fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=10, max_value=100)
         }
-        restaurant_cart = RestaurantCart.objects.create(**restaurant_cart_data)
-        restaurant_cart_list.append(restaurant_cart)
-        print(f"\tSuccessfully created Restaurant Cart: {restaurant_cart}")
+    )
 
     print("________________________________________________________________")
     print("RESTAURANT CART DISHES:")
-    for _ in range(max_dishes):
-        restaurant_cart_dish_data = {
-            "cart": random.choice(restaurant_cart_list),
-            "dish": random.choice(dish_list),
-            "quantity": fake.random_int(min=1, max=5),
-            "price": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50)
-        }
-        restaurant_cart_dish = RestaurantCartDish.objects.create(**restaurant_cart_dish_data)
-        print(f"\tSuccessfully created Restaurant Cart Dish: {restaurant_cart_dish}")
+    load_intermediate_model(
+        model_class=RestaurantCartDish,
+        primary_field='cart',
+        related_field='dish',
+        primary_objects=restaurant_cart_list,
+        max_items=max_restaurant_cart_dishes,
+        attributes={
+            "quantity": lambda: fake.random_int(min=1, max=5),
+        },
+        query_attributes=['restaurant', 'dishes'],
+    )
 
     print("________________________________________________________________")
     print("ORDERS:")
     order_list = []
-    tmp_cart = restaurant_cart_list
-    for _ in range(max_orders):
+    for _cart in restaurant_cart_list:
+        user_location = list(_cart.user.locations.all()).copy()
+        print(user_location, pretty=True)
         order_data = {
-            "cart": tmp_cart.pop(random.randint(0, len(tmp_cart) - 1)),
-            "delivery_address": fake.address(),
+            "cart": _cart,
+            "delivery_address": random.choice(user_location) if user_location else None,
             "payment_method": fake.random_element(elements=('Credit Card', 'Paypal', 'Cash on Delivery')),
             "promotion": random.choice(promotion_list) if random.choice([True, False]) else None,
             "delivery_fee":  random.uniform(0, 10), 
             "discount":  random.uniform(0, 10),
-            "total":  random.uniform(0, 10),
             "status": fake.random_element(elements=['ACTIVE', 'CANCELLED', 'COMPLETED', 'PENDING']),
         }
         order = Order.objects.create(**order_data)
@@ -169,3 +169,6 @@ def load_order(
 
     return promotion_list, order_list, restaurant_cart_list
 
+
+def run():
+    load_order()

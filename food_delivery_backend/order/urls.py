@@ -2,21 +2,20 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from order.views import (
-    CartViewSet, RestaurantCartViewSet, RestaurantCartDishViewSet, DeliveryViewSet, OrderViewSet, OrderPromotionViewSet,
+    RestaurantCartViewSet, RestaurantCartDishViewSet, DeliveryViewSet, OrderViewSet, OrderPromotionViewSet,
     RestaurantPromotionViewSet, UserPromotionViewSet, PromotionViewSet, ActivityPromotionViewSet
 )
 
 router = DefaultRouter()
-router.register(r'carts', CartViewSet)
-router.register(r'restaurant-carts', RestaurantCartViewSet)
-router.register(r'restaurant-cart-dishes', RestaurantCartDishViewSet)
-router.register(r'deliveries', DeliveryViewSet)
-router.register(r'orders', OrderViewSet)
-router.register(r'order-promotions', OrderPromotionViewSet)
-router.register(r'restaurant-promotions', RestaurantPromotionViewSet)
-router.register(r'user-promotions', UserPromotionViewSet)
-router.register(r'promotions', PromotionViewSet)
-router.register(r'activity-promotions', ActivityPromotionViewSet)
+router.register(r'restaurant-cart', RestaurantCartViewSet)
+router.register(r'restaurant-cart-dish', RestaurantCartDishViewSet)
+router.register(r'delivery', DeliveryViewSet)
+router.register(r'order', OrderViewSet)
+router.register(r'order-promotion', OrderPromotionViewSet)
+router.register(r'restaurant-promotion', RestaurantPromotionViewSet)
+router.register(r'user-promotion', UserPromotionViewSet)
+router.register(r'promotion', PromotionViewSet)
+router.register(r'activity-promotion', ActivityPromotionViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -8,7 +8,7 @@ import "package:food_delivery_app/features/user/personal/views/profile/profile.d
 import "package:food_delivery_app/utils/constants/icon_strings.dart";
 
 class UserMenuRedirection extends StatelessWidget {
-  const UserMenuRedirection({super.key});
+  const UserMenuRedirection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

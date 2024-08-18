@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/profile.dart';
 import 'package:food_delivery_app/features/authentication/models/account/setting.dart';
+import 'package:food_delivery_app/features/user/order/models/cart.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 @reflector
@@ -20,6 +21,8 @@ class User {
   final UserSetting? setting;
   final String? user1Rooms;
   final String? user2Rooms;
+  final RestaurantCart? restaurantCart;
+  final String? restaurantCarts;
 
   User({
     this.id,
@@ -36,6 +39,8 @@ class User {
     this.setting,
     this.user1Rooms,
     this.user2Rooms,
+    this.restaurantCart,
+    this.restaurantCarts,
   });
 
   User.fromJson(Map<String, dynamic> json)
@@ -52,7 +57,10 @@ class User {
         profile = (json['profile'] != null) ? UserProfile.fromJson(json['profile']) : null,
         setting = (json['setting'] != null) ? UserSetting.fromJson(json['setting']) : null,
         user1Rooms = json['user1_rooms'],
-        user2Rooms = json['user2_rooms'];
+        user2Rooms = json['user2_rooms'],
+        restaurantCart = json['restaurant_cart'] != null ? RestaurantCart.fromJson(json['restaurant_cart']) : null,
+        restaurantCarts = json['restaurant_carts']
+  ;
 
   Map<String, dynamic> toJson({bool patch = false}) {
     final Map<String, dynamic> data = {
@@ -171,8 +179,8 @@ class UserLocation {
   UserLocation.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         address = json['address'],
-        latitude = json['latitude'],
-        longitude = json['longitude'];
+        latitude = json['latitude'] != null ? double.parse(json['latitude']) : null,
+        longitude = json['longitude'] != null ? double.parse(json['longitude']) : null;
 
   Map<String, dynamic> toJson() {
     return {

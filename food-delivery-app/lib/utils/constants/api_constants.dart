@@ -142,8 +142,6 @@ class APIConstant {
         return 'review/delivery-review-like';
 
       ///ORDER
-      case Cart:
-        return 'order/cart';
       case RestaurantCart:
         return 'order/restaurant-cart';
       case RestaurantCartDish:

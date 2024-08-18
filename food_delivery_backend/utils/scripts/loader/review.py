@@ -77,3 +77,6 @@ def load_review(
         )
 
     return review_map
+
+def run():
+    load_review()

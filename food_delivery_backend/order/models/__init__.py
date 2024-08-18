@@ -1,4 +1,4 @@
-from .cart import Cart, RestaurantCart, RestaurantCartDish
+from .cart import RestaurantCart, RestaurantCartDish
 from .delivery import Delivery
 from .order import Order
 from .promotion import Promotion, ActivityPromotion

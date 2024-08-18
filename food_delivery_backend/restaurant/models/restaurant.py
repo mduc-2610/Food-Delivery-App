@@ -20,6 +20,8 @@ class Restaurant(models.Model):
     promotions = models.ManyToManyField("order.Promotion", through="order.RestaurantPromotion", related_name="promotions")
     categories = models.ManyToManyField("food.DishCategory", through="restaurant.RestaurantCategory", related_name="restaurants")
 
+    avg_price = models.DecimalField(max_digits=9, decimal_places=2, default=0.00, blank=True, null=True)
+
     def name(self):
         if hasattr(self, "basic_info"):
             return self.basic_info.name

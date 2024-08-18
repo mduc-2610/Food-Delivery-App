@@ -30,7 +30,7 @@ class UserService {
     await prefs.setString('token', '');
   }
 
-  static Future<User?> getUser() async {
-    return await APIService<User>(endpoint: 'account/user/me', pagination: false).list();
+  static Future<User?> getUser({ String? queryParams }) async {
+    return await APIService<User>(endpoint: 'account/user/me', pagination: false, queryParams: queryParams ?? "").list();
   }
 }

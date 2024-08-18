@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
+import 'package:food_delivery_app/features/user/order/models/cart.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';
 import 'package:food_delivery_app/features/user/order/views/history/order_history_detail.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
+import 'package:food_delivery_app/utils/constants/image_strings.dart';
+import 'package:food_delivery_app/utils/constants/image_strings.dart';
+import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
 class OrderHistoryCard extends StatelessWidget {
-  final Map<String, dynamic> order;
+  final RestaurantCart? restaurantCart;
+  final bool noMargin;
 
   const OrderHistoryCard({
     Key? key,
-    required this.order,
+    this.restaurantCart,
+    this.noMargin = false,
   }) : super(key: key);
 
   @override
@@ -23,66 +32,69 @@ class OrderHistoryCard extends StatelessWidget {
       onTap: () {
         Get.to(() => OrderHistoryDetailView());
       },
-      child: Card(
-        surfaceTintColor: Theme.of(context).appBarTheme.backgroundColor,
-        elevation: TSize.cardElevation,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: TSize.md,
-            vertical: TSize.sm
-          ),
-          child: Row(
-            children: [
-              SizedBox(
-                width: TDeviceUtil.getScreenWidth() * 0.3,
-                child: Row(
-                  children: [
-                    Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        _buildImage(context, order['image']),
-                        Positioned(
-                          left: TSize.md,
-                          child: _buildImage(context, order['image']),
-                        ),
-                        Positioned(
-                          left: TSize.md * 2,
-                          child: _buildImage(context, order['image']),
-                        ),
-                      ],
-                    ),
-                  ],
+      child: MainWrapper(
+        noMargin: noMargin,
+        child: Card(
+          surfaceTintColor: Theme.of(context).appBarTheme.backgroundColor,
+          elevation: TSize.cardElevation,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: TSize.md,
+              vertical: TSize.sm
+            ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: TDeviceUtil.getScreenWidth() * 0.3,
+                  child: Row(
+                    children: [
+                      Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          _buildImage(context, TImage.hcBurger1),
+                          Positioned(
+                            left: TSize.md,
+                            child: _buildImage(context, TImage.hcBurger1),
+                          ),
+                          Positioned(
+                            left: TSize.md * 2,
+                            child: _buildImage(context, TImage.hcBurger1),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                SizedBox(width: TSize.spaceBetweenItemsHorizontal),
 
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Order ID:'),
-                    Text(
-                      '${order['id']}',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    Text(
-                      '£${order['price'].toStringAsFixed(2)}',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.red),
-                    ),
-                    SizedBox(height: TSize.spaceBetweenItemsVertical / 2),
-                    RatingBarIndicator(
-                      rating: order['rating'].toDouble(),
-                      itemBuilder: (context, index) => SvgPicture.asset(TIcon.fillStar),
-                      itemCount: 5,
-                      itemSize: TSize.iconSm,
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Order ID:'),
+                      Text(
+                        '',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      Text(
+                        '£${restaurantCart?.order?.total.toStringAsFixed(2)}',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.red),
+                      ),
+                      SizedBox(height: TSize.spaceBetweenItemsVertical / 2),
+                      RatingBarIndicator(
+                        rating: THelperFunction.formatDouble(restaurantCart?.order?.rating),
+                        itemBuilder: (context, index) => SvgPicture.asset(TIcon.fillStar),
+                        itemCount: 5,
+                        itemSize: TSize.iconSm,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                SizedBox(width: TSize.spaceBetweenItemsHorizontal),
 
-              StatusChip(status: order['status']),
-            ],
+                StatusChip(status: '${restaurantCart?.order?.status}'),
+              ],
+            ),
           ),
         ),
       ),
@@ -105,6 +117,114 @@ class OrderHistoryCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+
+class OrderHistoryCardSkeleton extends StatelessWidget {
+  final bool noMargin;
+  const OrderHistoryCardSkeleton({
+    this.noMargin = false,
+    Key? key
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MainWrapper(
+      noMargin: noMargin,
+      child: Card(
+        surfaceTintColor: Theme.of(context).appBarTheme.backgroundColor,
+        elevation: TSize.cardElevation,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: TSize.md,
+            vertical: TSize.sm,
+          ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: TDeviceUtil.getScreenWidth() * 0.3,
+                child: Row(
+                  children: [
+                    Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        _buildSkeletonImage(),
+                        Positioned(
+                          left: TSize.md,
+                          child: _buildSkeletonImage(),
+                        ),
+                        Positioned(
+                          left: TSize.md * 2,
+                          child: _buildSkeletonImage(),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildSkeletonText(),
+
+                    SizedBox(height: TSize.spaceBetweenItemsVertical / 2),
+                    _buildSkeletonRatingBar(),
+                  ],
+                ),
+              ),
+              SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+              _buildSkeletonStatusChip(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSkeletonImage() {
+    return BoxSkeleton(
+      height: 80,
+      width: 80,
+      borderRadius: TSize.borderRadiusSm,
+    );
+  }
+
+  Widget _buildSkeletonText() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        BoxSkeleton(
+          height: 16,
+          width: 100,
+          borderRadius: TSize.borderRadiusSm,
+        ),
+        SizedBox(height: TSize.spaceBetweenItemsVertical / 4),
+        BoxSkeleton(
+          height: 20,
+          width: 80,
+          borderRadius: TSize.borderRadiusSm,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSkeletonRatingBar() {
+    return BoxSkeleton(
+      height: 20,
+      width: 100,
+      borderRadius: TSize.borderRadiusSm,
+    );
+  }
+
+  Widget _buildSkeletonStatusChip() {
+    return BoxSkeleton(
+      height: 23,
+      width: 80,
+      borderRadius: TSize.borderRadiusLg,
     );
   }
 }

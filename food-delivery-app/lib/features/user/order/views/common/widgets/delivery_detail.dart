@@ -4,80 +4,109 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/features/user/order/models/cart.dart';
+import 'package:food_delivery_app/features/user/order/models/order.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 
-
 class DeliveryDetail extends StatelessWidget {
-  final String address;
-  final String paymentMethod;
-  final double subtotal;
-  final double discount;
-  final double total;
+  final RestaurantCart? cart;
   final String fromView;
 
   DeliveryDetail({
-    required this.address,
-    required this.paymentMethod,
-    required this.subtotal,
-    required this.discount,
-    required this.total,
+    this.cart,
     this.fromView = "Cancel",
   });
 
   @override
   Widget build(BuildContext context) {
+    final order = cart?.order;
     return MainWrapper(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
             children: [
-              _buildCard(context, () {}, TIcon.location, "Deliver to", "Description"),
+              DeliveryDetailCard(
+                onTap: () {},
+                icon: TIcon.location,
+                title: "Deliver to",
+                description: "${order?.deliveryAddress?.address}",
+              ),
               SizedBox(height: TSize.spaceBetweenItemsVertical),
-
-              _buildCard(context, () {}, TIcon.payment, "Payment method", "Cash"),
+              DeliveryDetailCard(
+                onTap: () {},
+                icon: TIcon.payment,
+                title: "Payment method",
+                description: "Cash",
+              ),
               SizedBox(height: TSize.spaceBetweenItemsVertical),
-
-              _buildCard(context, () {}, TIcon.promotion, "Promotions", "Free shipping 20%"),
+              DeliveryDetailCard(
+                onTap: () {},
+                icon: TIcon.promotion,
+                title: "Promotions",
+                description: "Free shipping 20%",
+              ),
             ],
           ),
           SizedBox(height: TSize.spaceBetweenSections),
-
           Column(
             children: [
-              _buildRow(context, "Subtotal", "£ ${subtotal.toStringAsFixed(2)}"),
-              _buildRow(context, "Delivery Fee", "FREE"),
-              _buildRow(context, "Discount", "- £ ${discount.toStringAsFixed(2)}"),
+              DeliveryDetailRow(
+                title: "Subtotal",
+                value: "£ ${cart?.rawFee?.toStringAsFixed(2)}",
+              ),
+              DeliveryDetailRow(
+                title: "Delivery Fee",
+                value: "£ ${order?.deliveryFee.toStringAsFixed(2)}",
+              ),
+              DeliveryDetailRow(
+                title: "Discount",
+                value: "- £ ${order?.discount.toStringAsFixed(2)}",
+              ),
               Divider(),
-              _buildRow(context, "Total", "£ ${total.toStringAsFixed(2)}"),
+              DeliveryDetailRow(
+                title: "Total",
+                value: "£ ${order?.total.toStringAsFixed(2)}",
+              ),
             ],
           ),
           SizedBox(height: TSize.spaceBetweenSections),
-          _buildReviewOrCancellationSection(context),
+          ReviewOrCancellationSection(),
           SizedBox(height: TSize.spaceBetweenSections),
-          _buildActionButtons(context),
-
+          ActionButtons(
+            order: order,
+            fromView: fromView,
+          ),
         ],
       ),
     );
   }
+}
 
-  InkWell _buildCard(BuildContext context, VoidCallback onTap, IconData icon, String title, String description) {
+class DeliveryDetailCard extends StatelessWidget {
+  final VoidCallback onTap;
+  final IconData icon;
+  final String title;
+  final String description;
+
+  DeliveryDetailCard({
+    required this.onTap,
+    required this.icon,
+    required this.title,
+    required this.description,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(
-            vertical: TSize.sm,
-            horizontal: TSize.md
-        ),
+        padding: EdgeInsets.symmetric(vertical: TSize.sm, horizontal: TSize.md),
         decoration: BoxDecoration(
-          border: Border.all(
-            width: 1,
-            color: TColor.textDesc,
-          ),
+          border: Border.all(width: 1, color: TColor.textDesc),
           borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
         ),
         child: Column(
@@ -85,28 +114,36 @@ class DeliveryDetail extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  TIcon.location,
-                  color: TColor.primary,
-                ),
-                SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
-
-                Text(
-                    'Deliver to'
-                )
+                Icon(icon, color: TColor.primary),
+                SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                Text(title),
               ],
             ),
+            SizedBox(height: TSize.spaceBetweenItemsSm,),
             Text(
-              '221B Baker Street, London, United Kingdom',
+              description,
               style: Theme.of(context).textTheme.bodyLarge,
-            )
+            ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildRow(BuildContext context, String title, String value, [Color? valueColor]) {
+class DeliveryDetailRow extends StatelessWidget {
+  final String title;
+  final String value;
+  final Color? valueColor;
+
+  DeliveryDetailRow({
+    required this.title,
+    required this.value,
+    this.valueColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -116,14 +153,18 @@ class DeliveryDetail extends StatelessWidget {
         ),
         Text(
           value,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(color: TColor.primary),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(color: valueColor ?? TColor.primary),
         ),
       ],
     );
   }
+}
 
-  Widget _buildReviewOrCancellationSection(BuildContext context) {
-    bool isReviewing = false;
+class ReviewOrCancellationSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    bool isReviewing = false; // You can modify this condition based on your logic
+
     return isReviewing
         ? Column(
       children: [
@@ -170,9 +211,21 @@ class DeliveryDetail extends StatelessWidget {
       ],
     );
   }
+}
 
-  Widget _buildActionButtons(BuildContext context) {
-    bool canReorder = false;
+class ActionButtons extends StatelessWidget {
+  final Order? order;
+  final String fromView;
+
+  ActionButtons({
+    required this.order,
+    required this.fromView,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    bool canReorder = false; // You can modify this condition based on your logic
+
     return canReorder
         ? MainButton(
       onPressed: () {},
@@ -182,19 +235,17 @@ class DeliveryDetail extends StatelessWidget {
     )
         : Card(
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: TSize.sm + 5,
-          horizontal: TSize.sm,
-        ),
+        padding: EdgeInsets.symmetric(vertical: TSize.sm + 5, horizontal: TSize.sm),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             InkWell(
-              onTap: (fromView == "Basket") ? null :  () {},
+              onTap: (fromView == "Basket") ? null : () {},
               child: Text(
-                (fromView == "Basket") ? "£ $total" : "Cancel Order",
-                style:
                 (fromView == "Basket")
+                    ? "£ ${order?.total.toStringAsFixed(2)}"
+                    : "Cancel Order",
+                style: (fromView == "Basket")
                     ? Theme.of(context).textTheme.headlineSmall
                     : Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.textDesc),
               ),

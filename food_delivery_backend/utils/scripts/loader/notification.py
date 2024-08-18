@@ -180,3 +180,6 @@ def load_notification(
             'video': lambda: fake.image_url()
         }
     )
+
+def run():
+    load_notification()

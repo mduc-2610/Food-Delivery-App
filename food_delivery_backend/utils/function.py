@@ -31,26 +31,42 @@ def load_one_to_many_model(
     return created_objects
 
 def load_intermediate_model(
-        model_class, 
-        primary_field, related_field, 
-        primary_objects, related_objects, 
-        max_items,
-        attributes={}
-    ):
+    model_class,
+    primary_field,
+    related_field,
+    primary_objects,
+    max_items,
+    related_objects=[],
+    min_items=0,
+    attributes={},
+    query_attributes=[]
+):
     created_objects = []
     
-    if type(primary_objects) is not list:
+    if not isinstance(primary_objects, list):
         primary_objects = list(primary_objects)
-    if type(related_objects) is not list:
+    if not isinstance(related_objects, list):
         related_objects = list(related_objects)
 
     for primary_obj in primary_objects:
-        temp_related_objects = related_objects.copy()
-        for _ in range(random.randint(1, max(max_items, 1))):
-            if not temp_related_objects:
+        if query_attributes:
+            """
+            Ex: RestaurantCartDish
+            The cart (Restaurant Cart) will contain many dishes
+            Restaurant Cart will have restaurant, from restaurant will get many dishes
+            """
+            tmp_related_objects = list(getattr(getattr(primary_obj, query_attributes[0]), query_attributes[1]).all()).copy()
+            print(f"Number of related objects: {len(tmp_related_objects)}")
+        else:
+            tmp_related_objects = related_objects.copy()
+
+        for _ in range(random.randint(min_items, min(len(tmp_related_objects), max_items))):
+            if not tmp_related_objects:
                 break
-            related_obj = temp_related_objects.pop(random.randint(0, len(temp_related_objects) - 1))
-            if primary_obj == related_obj: continue
+            related_obj = tmp_related_objects.pop(random.randint(0, len(tmp_related_objects) - 1))
+            if primary_obj == related_obj:
+                continue
+            
             data = {
                 primary_field: primary_obj,
                 related_field: related_obj,
@@ -59,6 +75,7 @@ def load_intermediate_model(
             created_object = model_class.objects.create(**data)
             created_objects.append(created_object)
             print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
+    
     return created_objects
 
 def camel_to_snake(name, sep='-'):

@@ -1,6 +1,7 @@
 import random
 from django.core.validators import RegexValidator
 from django.utils import timezone
+from django.db.models import Q
 
 from rest_framework import serializers
 from rest_framework.reverse import reverse
@@ -15,6 +16,7 @@ from account.serializers.setting import SettingSerializer
 
 from utils.regex_validators import phone_regex, password_regex
 from utils.function import get_related_url 
+from utils.serializers import CustomRelatedModelSerializer
 
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,18 +24,39 @@ class LocationSerializer(serializers.ModelSerializer):
 
         fields = ['id', 'address', 'latitude', 'longitude']
 
-from utils.serializers import CustomRelatedModelSerializer
+# from order.serializers import RestaurantCartSerializer
 class UserSerializer(CustomRelatedModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.one_related_serializer_class = {
             'profile': ProfileSerializer,
-            'setting': SettingSerializer
+            'setting': SettingSerializer,
         }
+
+    restaurant_cart = serializers.SerializerMethodField()
+    def get_restaurant_cart(self, obj):
+        from order.models import RestaurantCart
+        from order.serializers import RestaurantCartSerializer
+
+        if hasattr(self, 'request'):
+            restaurant_id = self.request.query_params.get('restaurant')
+            if restaurant_id:
+                filter_kwargs = {
+                    'user': obj,
+                    'restaurant': restaurant_id
+                }
+                try:
+                    res_cart = RestaurantCart.objects.filter(**filter_kwargs).first()
+                    if res_cart:
+                        return RestaurantCartSerializer(res_cart).data
+                except:
+                    return None
+        return None
+    
     class Meta:
         model = User
-        fields = ['id', 'phone_number', 'email', 'is_registration_verified', 'is_active', 'is_staff', 'is_superuser', 'date_joined', 'last_login',]
+        fields = ['id', 'phone_number', 'email', 'is_registration_verified', 'is_active', 'is_staff', 'is_superuser', 'date_joined', 'last_login', 'restaurant_cart']
 
 class OTPSerializer(serializers.ModelSerializer):
     class Meta:

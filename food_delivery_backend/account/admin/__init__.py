@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .user import (
-    UserAdmin, OTPAdmin, LocationAdmin
+    UserAdmin, OTPAdmin, LocationAdmin, 
 )
 from .profile import ProfileAdmin
 from .setting import SettingAdmin, SecuritySettingAdmin 

@@ -37,13 +37,15 @@ from social.serializers import (
     DetailPostSerializer
 )
 from notification.serializers import DirectRoomSerializer
+from order.serializers import RestaurantCartSerializer
 from account.throttles import OTPThrottle
+from order.mixins import OrderFilterMixin
 
 from utils.pagination import CustomPagination
 from utils.views import ManyRelatedViewSet
 from utils.mixins import DefaultGenericMixin
 
-class UserViewSet(DefaultGenericMixin, ManyRelatedViewSet):
+class UserViewSet(DefaultGenericMixin, OrderFilterMixin, ManyRelatedViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = []
@@ -79,7 +81,10 @@ class UserViewSet(DefaultGenericMixin, ManyRelatedViewSet):
 
         'user1_rooms': DirectRoomSerializer,
         'user2_rooms': DirectRoomSerializer,
+        'restaurant_carts': RestaurantCartSerializer,
+        'carts': RestaurantSerializer,
     }
+
     # many_related = {
     #     'reviewed_dishes': {
     #         'action': (['GET'], 'reviewed-dishes'),
