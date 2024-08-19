@@ -156,7 +156,7 @@ class APIService<T> {
       final requestData = isFormData
           ? await data.toFormData()
           : (data is Map<String, dynamic>) ? data : data.toJson(patch: patch);
-
+      $print(requestData);
       if (dio != null) {
         final response = await dio!.request(
           uri,

@@ -7,7 +7,7 @@ import 'package:food_delivery_app/features/authentication/models/account/user.da
 import 'package:food_delivery_app/features/authentication/models/auth/token.dart';
 import 'package:food_delivery_app/features/authentication/views/login/login.dart';
 import 'package:food_delivery_app/features/user/menu_redirection.dart';
-import 'package:food_delivery_app/features/user/order/models/location.dart';
+import 'package:food_delivery_app/features/user/order/views/location/widgets/location.dart';
 import 'package:food_delivery_app/main.reflectable.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:food_delivery_app/utils/theme/theme.dart';

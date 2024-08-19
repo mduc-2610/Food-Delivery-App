@@ -23,6 +23,8 @@ class User {
   final String? user2Rooms;
   final RestaurantCart? restaurantCart;
   final String? restaurantCarts;
+  final String? locations;
+  final UserLocation? selectedLocation;
 
   User({
     this.id,
@@ -41,6 +43,8 @@ class User {
     this.user2Rooms,
     this.restaurantCart,
     this.restaurantCarts,
+    this.locations,
+    this.selectedLocation,
   });
 
   User.fromJson(Map<String, dynamic> json)
@@ -59,7 +63,9 @@ class User {
         user1Rooms = json['user1_rooms'],
         user2Rooms = json['user2_rooms'],
         restaurantCart = json['restaurant_cart'] != null ? RestaurantCart.fromJson(json['restaurant_cart']) : null,
-        restaurantCarts = json['restaurant_carts']
+        restaurantCarts = json['restaurant_carts'],
+        locations = json['locations'],
+        selectedLocation = json['selected_locations'] != null ? UserLocation.fromJson(json['selected_locations']) : null
   ;
 
   Map<String, dynamic> toJson({bool patch = false}) {
@@ -168,27 +174,41 @@ class UserLocation {
   final String? address;
   final double? latitude;
   final double? longitude;
+  final String? name;
+  final bool isSelected;
 
   UserLocation({
     this.id,
     this.address,
     this.latitude,
     this.longitude,
+    this.name,
+    this.isSelected = false,
   });
 
   UserLocation.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         address = json['address'],
         latitude = json['latitude'] != null ? double.parse(json['latitude']) : null,
-        longitude = json['longitude'] != null ? double.parse(json['longitude']) : null;
+        longitude = json['longitude'] != null ? double.parse(json['longitude']) : null,
+        name = json['name'],
+        isSelected = json['is_selected'] ?? false;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson({bool patch = false}) {
+    final map = {
       'id': id,
       'address': address,
       'latitude': latitude,
       'longitude': longitude,
+      'name': name,
+      'is_selected': isSelected,
     };
+
+    if (patch) {
+      map.removeWhere((key, value) => value == null);
+    }
+
+    return map;
   }
 
   @override

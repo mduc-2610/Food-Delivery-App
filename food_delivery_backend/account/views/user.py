@@ -83,6 +83,7 @@ class UserViewSet(DefaultGenericMixin, OrderFilterMixin, ManyRelatedViewSet):
         'user2_rooms': DirectRoomSerializer,
         'restaurant_carts': RestaurantCartSerializer,
         'carts': RestaurantSerializer,
+        'locations': LocationSerializer,
     }
 
     # many_related = {

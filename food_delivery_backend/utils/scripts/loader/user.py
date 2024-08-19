@@ -51,13 +51,17 @@ def load_user(max_users=100):
         otp.expired_at = timezone.now() + timedelta(seconds=60)
         otp.save()
         print(f"\tSuccessfully created OTP for User: {user}")
-
-        for _ in range(random.randint(1, 5)):
+        
+        number_location = random.randint(1, 5)
+        selected_index = random.randint(1, number_location)
+        for _i in range(number_location):
             location_data = {
                 "user": user,
+                "name": fake.word(),
                 "address": fake.address(),
                 "latitude": fake.latitude(),
-                "longitude": fake.longitude()
+                "longitude": fake.longitude(),
+                "is_selected": True if _i == selected_index else False,
             }
             Location.objects.create(**location_data)
             print(f"\tSuccessfully created Location for User: {user}")

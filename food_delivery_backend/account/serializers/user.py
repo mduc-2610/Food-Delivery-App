@@ -22,9 +22,8 @@ class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
 
-        fields = ['id', 'address', 'latitude', 'longitude']
+        fields = ['id', 'address', 'latitude', 'longitude', 'name', 'is_selected']
 
-# from order.serializers import RestaurantCartSerializer
 class UserSerializer(CustomRelatedModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -33,7 +32,7 @@ class UserSerializer(CustomRelatedModelSerializer):
             'profile': ProfileSerializer,
             'setting': SettingSerializer,
         }
-
+    
     restaurant_cart = serializers.SerializerMethodField()
     def get_restaurant_cart(self, obj):
         from order.models import RestaurantCart
@@ -53,10 +52,18 @@ class UserSerializer(CustomRelatedModelSerializer):
                 except:
                     return None
         return None
+
+    selected_location = serializers.SerializerMethodField()
+    
+    def get_selected_location(self, obj):
+        if hasattr(obj, 'locations'):
+            selected_location = obj.locations.filter(is_selected=True).first()
+            return LocationSerializer(selected_location).data
+        return None
     
     class Meta:
         model = User
-        fields = ['id', 'phone_number', 'email', 'is_registration_verified', 'is_active', 'is_staff', 'is_superuser', 'date_joined', 'last_login', 'restaurant_cart']
+        fields = ['id', 'selected_location', 'phone_number', 'email', 'is_registration_verified', 'is_active', 'is_staff', 'is_superuser', 'date_joined', 'last_login', 'restaurant_cart']
 
 class OTPSerializer(serializers.ModelSerializer):
     class Meta:
