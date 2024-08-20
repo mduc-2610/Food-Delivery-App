@@ -2,7 +2,7 @@
 from django.contrib import admin
 
 class DishCategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'description', 'created_at', 'updated_at', 'dish_count']
+    list_display = ['name', 'description', 'created_at', 'updated_at']
     search_fields = ['name', 'description']
     readonly_fields = ['created_at', 'updated_at']
     

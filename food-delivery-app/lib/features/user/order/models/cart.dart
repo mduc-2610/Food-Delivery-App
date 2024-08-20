@@ -11,11 +11,12 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 class RestaurantCart {
   final String? id;
   final String? user;
-  final Restaurant? restaurant;
+  final dynamic restaurant;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final bool? isPlacedOrder;
-  final double? rawFee;
+  bool isCreatedOrder;
+  final bool isEmpty;
+  final double rawFee;
   final List<RestaurantCartDish> cartDishes;
   final Order? order;
 
@@ -25,8 +26,9 @@ class RestaurantCart {
     this.restaurant,
     this.createdAt,
     this.updatedAt,
-    this.isPlacedOrder,
-    this.rawFee,
+    this.isCreatedOrder = true,
+    this.isEmpty = false,
+    this.rawFee = 0,
     this.cartDishes = const [],
     this.order,
   });
@@ -34,11 +36,12 @@ class RestaurantCart {
   RestaurantCart.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         user = json['user'],
-        restaurant = json['restaurant'] != null ? Restaurant.fromJson(json['restaurant']) : null,
-        createdAt = DateTime.parse(json['created_at']),
-        updatedAt = DateTime.parse(json['updated_at']),
-        isPlacedOrder = json['is_placed_order'],
-        rawFee = json['raw_fee'] != null ? double.parse(json['raw_fee']) : null,
+        restaurant = json['restaurant'] is String ? json['restaurant'] : json['restaurant'] != null ? Restaurant.fromJson(json['restaurant']) : null,
+        createdAt = json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
+        updatedAt = json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
+        isCreatedOrder = json['is_created_order'],
+        isEmpty = json['is_empty'],
+        rawFee = THelperFunction.formatDouble(json['raw_fee']),
         cartDishes = json['dishes'] != null ? (json['dishes'] as List).map((instance) => RestaurantCartDish.fromJson(instance)).toList() : [],
         order = json['order'] != null ? Order.fromJson(json['order']) : null
   ;
@@ -48,7 +51,7 @@ class RestaurantCart {
       'id': id,
       'user': user,
       'restaurant': restaurant,
-      'is_placed_order': isPlacedOrder,
+      'is_created_order': isCreatedOrder,
       'raw_fee': rawFee,
     };
   }
@@ -64,7 +67,7 @@ class RestaurantCart {
 class RestaurantCartDish {
   final String? id;
   final String? cart;
-  final Dish? dish;
+  final dynamic dish;
   int quantity;
   final double price;
 
@@ -79,17 +82,15 @@ class RestaurantCartDish {
   RestaurantCartDish.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         cart = json['cart'],
-        dish = json['dish'] != null ? Dish.fromJson(json['dish']) : null,
+        dish = json['dish'] != null ? json['dish'] is String ? json['dish'] : Dish.fromJson(json['dish']) : null,
         quantity = json['quantity'] ?? 0,
         price = json['price'] != null ? double.parse(json['price']) : 0;
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'cart': cart,
-      'dish': dish?.id,
+      'dish': (dish is String) ? dish : dish?.id,
       'quantity': quantity,
-      'price': price,
     };
   }
 

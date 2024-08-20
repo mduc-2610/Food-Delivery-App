@@ -8,13 +8,13 @@ from django.db import transaction
 from account.models import User
 from food.models import (
     Dish, DishLike, 
-    DishCategory, DishAdditionalOption, DishSizeOption
+    DishCategory, DishOption, DishOptionItem
 )
 from restaurant.models import Restaurant
 from review.models import DishReview, DishReviewLike
 
 from utils.function import load_intermediate_model
-from utils.scripts.data import dish_categories
+from utils.scripts.data import dish_categories, category_options
 
 fake = Faker()
 
@@ -28,7 +28,7 @@ def load_food(
     ):
     model_list = [
         Dish, DishLike, 
-        DishCategory, DishAdditionalOption, DishSizeOption,
+        DishCategory, DishOption, DishOptionItem,
         # DishReview, DishReviewLike
     ]
     
@@ -57,48 +57,45 @@ def load_food(
     for category in category_list:
         category_name = category.name.lower().replace(' ', '_')
         category_folder_path = os.path.join(settings.MEDIA_ROOT, f"food/{category_name}")
+        
         if not os.path.exists(category_folder_path):
             print(f"Category folder not found: {category_folder_path}")
             continue
-        else:
-            tmp = os.listdir(category_folder_path).copy()
-            for i, image_file in enumerate(os.listdir(category_folder_path)):
-                if i >= max_dishes: break
-                dish_data = {
-                    "name": category.name + ' ' + fake.word() + ' ' + fake.word(),
-                    "description": fake.text(max_nb_chars=200),
-                    "original_price": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=10, max_value=100),
-                    "discount_price": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50),
-                    "category": category,
-                    "image": f"{category_name}/{tmp.pop(random.randint(0, len(tmp) - 1))}",
-                    # "image": f"{category_name}/{image_file}",
-                }
+        
+        tmp = os.listdir(category_folder_path).copy()
+        
+        for i, image_file in enumerate(os.listdir(category_folder_path)):
+            if i >= max_dishes:
+                break
+            
+            dish_data = {
+                "name": category.name + ' ' + fake.word() + ' ' + fake.word(),
+                "description": fake.text(max_nb_chars=200),
+                "original_price": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=10, max_value=100),
+                "discount_price": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50),
+                "category": category,
+                "image": f"{category_name}/{tmp.pop(random.randint(0, len(tmp) - 1))}",
+            }
+            
+            # Create the Dish object
+            dish, created = Dish.objects.get_or_create(**dish_data)
+            
+            # Handle dish options if the category has options
+            if category.name in category_options:
+                options = category_options[category.name]
+                for option_type, option_list in options.items():
+                    dish_option, _ = DishOption.objects.get_or_create(dish=dish, name=option_type)
+                    
+                    for option_name in option_list:
+                        DishOptionItem.objects.get_or_create(
+                            option=dish_option,
+                            name=option_name,
+                            price=float(fake.pydecimal(left_digits=1, right_digits=2, positive=True, min_value=0.5, max_value=10.0))
+                        )
+            
+            dish_list.append(dish)
+            print(f"\tSuccessfully created Dish: {dish}, {dish.image}\n")
                 
-                dish, _ = Dish.objects.get_or_create(**dish_data)
-                dish_list.append(dish)
-                print(f"\tSuccessfully created Dish: {dish}, {dish.image}\n")
-                
-                for _ in range(random.randint(1, 5)):
-                    option_data = {
-                        "dish": dish,
-                        "name": fake.word(),
-                        "price": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=1, max_value=20)
-                    }
-                    option = DishAdditionalOption.objects.create(**option_data)
-                    print(f"\tSuccessfully created Dish Additional Option: {option}")
-                print()
-                
-                size_options = ["Small", "Medium", "Large", "XL Large with Sauces"]
-                for size in size_options:
-                    size_data = {
-                        "dish": dish,
-                        "size": size,
-                        "price": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=1, max_value=50)
-                    }
-                    size_option = DishSizeOption.objects.create(**size_data)
-                    print(f"\tSuccessfully created Dish Size Option: {size_option}")
-                print()
-
     review_attributes = {
         'rating': lambda: fake.random_int(min=1, max=5),
         'title': lambda: fake.sentence(nb_words=6),

@@ -1,4 +1,5 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:food_delivery_app/common/controllers/bars/filter_bar_controller.dart';
 import 'package:food_delivery_app/utils/constants/times.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
@@ -12,33 +13,45 @@ import 'package:get/get.dart';
 class OrderHistoryController extends GetxController {
   static OrderHistoryController get instance => Get.find();
 
-  final FilterBarController filterBarController = Get.put(FilterBarController("All"));
+  late FilterBarController filterBarController;
   User? user;
   var restaurantCarts = <RestaurantCart>[].obs;
   Rx<bool> isLoading = true.obs;
+  final scrollController = ScrollController();
 
+  String _filterDefault = "All";
   @override
   void onInit() {
     super.onInit();
-    initializeCart();
+    filterBarController = Get.put(FilterBarController(_filterDefault), tag: user?.id);
+    scrollController.addListener(_scrollListener);
+    initializeUser();
   }
 
-  Future<void> initializeCart() async {
+  void _scrollListener() {
+    if(_nextPage != null && scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+      fetchFilterOrder("", loadMore: true);
+    }
+  }
+
+  Future<void> initializeUser() async {
     user = await UserService.getUser();
-    if(user?.restaurantCarts != null) {
-      restaurantCarts.value = await APIService<RestaurantCart>(fullUrl: user?.restaurantCarts ?? "").list();
-    };
-    await Future.delayed(Duration(milliseconds: TTime.init));
-    isLoading.value = false;
-    update();
+    await fetchFilterOrder(_filterDefault);
   }
 
-  Future<void> fetchFilterOrder(String filter) async {
-    isLoading.value = true;
-    restaurantCarts.value = await APIService<RestaurantCart>(fullUrl: user?.restaurantCarts ?? "", queryParams: "star_filter=${filter}").list();
-    await Future.delayed(Duration(milliseconds: TTime.init));
-    $print(restaurantCarts.length);
-    isLoading.value = false;
+  String? _nextPage;
+  Future<void> fetchFilterOrder(String filter, { bool loadMore = false }) async {
+    if(!loadMore) isLoading.value = true;
+    if(_nextPage != null || !loadMore) {
+      final [_result, _info] = await APIService<RestaurantCart>(fullUrl: (loadMore) ? _nextPage ?? "" : user?.restaurantCarts ?? "", queryParams: (loadMore) ? "" : "star_filter=${filter}").list(next: true);
+      if(!loadMore) restaurantCarts.value = _result;
+      else restaurantCarts.addAll(_result);
+      _nextPage = _info["next"];
+    }
+    if(!loadMore) {
+      await Future.delayed(Duration(milliseconds: TTime.init));
+      isLoading.value = false;
+    }
     update();
   }
 

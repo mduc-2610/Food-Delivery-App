@@ -28,6 +28,11 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewS
         'owned_promotions': RestaurantPromotionSerializer,
         'categories': DishCategorySerializer,
     }
+    many_related = {
+        'dishes': {
+            'pagination': False,
+        }
+    }
     # many_related = {
     #     "promotions": {
     #         'action': (["GET"], "promotions"),

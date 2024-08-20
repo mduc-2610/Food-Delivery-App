@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
 import 'package:food_delivery_app/features/user/order/models/order.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
@@ -263,6 +264,131 @@ class ActionButtons extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class DeliveryDetailSkeleton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(TSize.sm),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Delivery Detail Cards Skeleton
+          Column(
+            children: [
+              _buildSkeletonCard(),
+              SizedBox(height: TSize.spaceBetweenItemsVertical),
+              _buildSkeletonCard(),
+              SizedBox(height: TSize.spaceBetweenItemsVertical),
+              _buildSkeletonCard(),
+            ],
+          ),
+          SizedBox(height: TSize.spaceBetweenSections),
+          // Details Rows Skeleton
+          Column(
+            children: [
+              _buildSkeletonRow(),
+              SizedBox(height: TSize.spaceBetweenItemsVertical),
+              _buildSkeletonRow(),
+              SizedBox(height: TSize.spaceBetweenItemsVertical),
+              _buildSkeletonRow(),
+              Divider(),
+              _buildSkeletonRow(),
+            ],
+          ),
+          SizedBox(height: TSize.spaceBetweenSections),
+          // Review or Cancellation Section Skeleton
+          _buildSkeletonReviewOrCancellation(),
+          SizedBox(height: TSize.spaceBetweenSections),
+          // Action Buttons Skeleton
+          _buildSkeletonActionButtons(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSkeletonCard() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: TSize.sm, horizontal: TSize.md),
+      decoration: BoxDecoration(
+        border: Border.all(width: 1, color: Colors.grey[300]!),
+        borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
+      ),
+      child: Row(
+        children: [
+          BoxSkeleton(
+            height: 24,
+            width: 24,
+          ),
+          SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BoxSkeleton(
+                height: 14,
+                width: 120,
+              ),
+              SizedBox(height: TSize.spaceBetweenItemsSm),
+              BoxSkeleton(
+                height: 14,
+                width: 200,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSkeletonRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        BoxSkeleton(
+          height: 14,
+          width: 100,
+        ),
+        BoxSkeleton(
+          height: 14,
+          width: 80,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSkeletonReviewOrCancellation() {
+    return Column(
+      children: [
+        BoxSkeleton(
+          height: 70,
+          width: 350,
+        ),
+        SizedBox(height: TSize.spaceBetweenSections),
+        BoxSkeleton(
+          height: 100,
+          width: double.infinity,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSkeletonActionButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        BoxSkeleton(
+          height: 40,
+          width: 120,
+        ),
+        SizedBox(width: TSize.spaceBetweenSections),
+        BoxSkeleton(
+          height: 40,
+          width: 180,
+        ),
+      ],
     );
   }
 }

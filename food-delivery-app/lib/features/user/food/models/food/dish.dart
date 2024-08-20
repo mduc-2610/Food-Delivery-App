@@ -1,4 +1,5 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
+import 'package:food_delivery_app/features/user/food/models/food/option.dart';
 import 'package:food_delivery_app/main.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
@@ -17,6 +18,7 @@ class Dish {
   final String? categoryId;
   final String? dishReviews;
   final Map<String, dynamic> ratingCounts;
+  final List<DishOption> options;
 
   Dish({
     this.id,
@@ -31,6 +33,7 @@ class Dish {
     this.categoryId,
     this.dishReviews,
     this.ratingCounts = const {},
+    this.options = const [],
   });
 
   Dish.fromJson(Map<String, dynamic> json)
@@ -45,7 +48,12 @@ class Dish {
         totalLikes = json['total_likes'],
         categoryId = json['category'],
         dishReviews = json['dish_reviews'],
-        ratingCounts = json['rating_counts'] ?? {};
+        ratingCounts = json['rating_counts'] ?? {},
+        options = json['options'] != null ? json['options'] is List ? (json['options'] as List).map((instance) => DishOption.fromJson(instance)).toList() : [] : [];
+
+  String get formattedName {
+    return THelperFunction.formatName(name ?? "");
+  }
 
   Map<String, dynamic> toJson() {
     return {

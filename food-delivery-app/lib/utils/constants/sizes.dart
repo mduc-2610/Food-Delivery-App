@@ -62,6 +62,8 @@ class TSize {
   static const double borderRadiusLg = 12.0;
   static const double borderRadiusCircle = 100000000;
 
+  static const double bottomNavigationBarHeight = 90.0;
+
 
   // Divider height
   static const double dividerHeight = 1.0;

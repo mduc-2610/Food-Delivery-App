@@ -11,6 +11,7 @@ class CAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool centerTitle;
   final bool noLeading;
   final PreferredSizeWidget? bottom;
+  final TextStyle? textStyle;
 
   const CAppBar({
     this.title,
@@ -20,6 +21,7 @@ class CAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.centerTitle = true,
     this.noLeading = false,
     this.bottom,
+    this.textStyle,
     super.key,
   });
 
@@ -30,12 +32,12 @@ class CAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? title
           : Text(
         title.toString(),
-        style: isBigTitle
+        style: textStyle ?? (isBigTitle
             ? Theme.of(context)
             .textTheme
             .headlineLarge
             ?.copyWith(color: TColor.primary)
-            : Theme.of(context).textTheme.headlineMedium,
+            : Theme.of(context).textTheme.headlineMedium),
       ),
       centerTitle: centerTitle,
       leading: noLeading

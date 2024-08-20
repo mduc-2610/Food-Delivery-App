@@ -8,9 +8,14 @@ import 'package:food_delivery_app/utils/constants/sizes.dart';
 class RoundIconButton extends StatelessWidget {
   final IconData? icon;
   final VoidCallback? onPressed;
+  final Color? backgroundColor;
+  final Color? iconColor;
+
   const RoundIconButton({
     this.icon,
     this.onPressed,
+    this.backgroundColor,
+    this.iconColor,
     super.key
   });
 
@@ -21,12 +26,16 @@ class RoundIconButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(2.5),
         decoration: BoxDecoration(
-          color: TColor.primary,
+          color: backgroundColor ?? TColor.primary,
           borderRadius: BorderRadius.circular(TSize.borderRadiusSm),
+          border: Border.all(
+            width: 1,
+            color: TColor.primary,
+          )
         ),
         child: Icon(
           icon ?? TIcon.add,
-          color: TColor.light,
+          color: iconColor ?? TColor.light,
         )
       ),
     );

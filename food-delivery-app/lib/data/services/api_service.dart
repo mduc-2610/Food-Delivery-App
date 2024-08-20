@@ -67,7 +67,7 @@ class APIService<T> {
     return url;
   }
 
-  Future<dynamic> list({ bool next = false }) async {
+  Future<dynamic> list({ bool next = false, pagination = true, single = false }) async {
     return _handleRequest<dynamic>((Token? token) async {
       final url_ = url();
       $print(url_);
@@ -76,13 +76,13 @@ class APIService<T> {
           url_,
           options: Options(headers: await _getHeaders(token)),
         );
-        return _handleResponse(response.data, response.statusCode, next: next);
+        return _handleResponse(response.data, response.statusCode, next: next, pagination: pagination, single: single);
       } else {
         final response = await http.get(
           Uri.parse(url_),
           headers: await _getHeaders(token),
         );
-        return _handleResponse(json.decode(response.body), response.statusCode, next: next);
+        return _handleResponse(json.decode(response.body), response.statusCode, next: next, pagination: pagination, single: single);
       }
     });
   }
@@ -125,8 +125,9 @@ class APIService<T> {
           options: Options(headers: await _getHeaders(token, noBearer: noBearer)),
         );
         var jsonResponse = response.data;
+        fromJson = (fromJson != null) ? fromJson : this.fromJson;
         if (fromJson != null) {
-          jsonResponse = fromJson(jsonResponse);
+          jsonResponse = fromJson?.call(jsonResponse);
         }
         return [response.statusCode, response.headers, jsonResponse];
       } else {
@@ -136,9 +137,13 @@ class APIService<T> {
           body: json.encode(requestData),
         );
         var jsonResponse = json.decode(response.body);
+        fromJson = (fromJson != null) ? fromJson : this.fromJson;
         if (fromJson != null) {
-          jsonResponse = fromJson(jsonResponse);
+          jsonResponse = fromJson?.call(jsonResponse);
         }
+        // else {
+        //   jsonResponse = this.fromJson(jsonResponse);
+        // }
         return [response.statusCode, response.headers, jsonResponse];
       }
     });
@@ -189,12 +194,14 @@ class APIService<T> {
     });
   }
 
-  Future<void> delete(String id) async {
+  Future<void> delete(String id, { bool noBearer = false }) async {
     return _handleRequest<void>((Token? token) async {
+      final url_ = url(id: id);
+      $print(url_);
       if (dio != null) {
         final response = await dio!.delete(
-          url(id: id),
-          options: Options(headers: await _getHeaders(token)),
+          url_,
+          options: Options(headers: await _getHeaders(token, noBearer: noBearer)),
         );
 
         if (response.statusCode != 204) {
@@ -202,7 +209,7 @@ class APIService<T> {
         }
       } else {
         final response = await http.delete(
-          Uri.parse(url(id: id)),
+          Uri.parse(url_),
           headers: await _getHeaders(token),
         );
 
@@ -229,7 +236,7 @@ class APIService<T> {
     Token? token = await TokenService.getToken();
     try {
       final response = await http.post(
-        Uri.parse('${APIConstant.baseUrl}/account/refresh-token/'),
+        Uri.parse('${await APIConstant.baseUrl}/account/refresh-token/'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'refresh': token?.refresh}),
       );
@@ -240,7 +247,7 @@ class APIService<T> {
         await TokenService.saveToken(token!);
 
         final userResponse = await http.get(
-          Uri.parse('${APIConstant.baseUrl}/account/user/me'),
+          Uri.parse('${await APIConstant.baseUrl}/account/user/me'),
           headers: await _getHeaders(token),
         );
 
@@ -264,7 +271,7 @@ class APIService<T> {
 
   Future<void> _handleInvalidUser() async {
     await TokenService.deleteToken();
-    // Get.to(() => LoginView());
+    Get.to(() => LoginView());
   }
 
   Future<Map<String, String>> _getHeaders(Token? token, {bool noBearer = false}) async {
@@ -275,15 +282,16 @@ class APIService<T> {
     return headers;
   }
 
-  dynamic _handleResponse(dynamic responseData, int? statusCode, { bool next = false }) {
+  dynamic _handleResponse(dynamic responseData, int? statusCode, { bool next = false, pagination = true, single = false }) {
     if (statusCode == 200) {
       dynamic jsonResponse = responseData;
+      if (single) {
+        return fromJson(jsonResponse);
+      }
       if (pagination) {
         jsonResponse = jsonResponse["results"];
       }
-      if (jsonResponse is Map<String, dynamic>) {
-        return fromJson(jsonResponse);
-      }
+
       var paginatedResult = (jsonResponse as List).map((instance) => fromJson(instance)).toList();
 
       if (next) {

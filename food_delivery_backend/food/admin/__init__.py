@@ -1,19 +1,19 @@
 from django.contrib import admin
 
-from .addition import DishAdditionalOptionAdmin, DishSizeOptionAdmin
+from .option import DishOptionAdmin, DishOptionItemAdmin
 from .category import DishCategoryAdmin
 from .dish_like import DishLikeAdmin
 from .dish import DishAdmin
 
 from food.models import (
-    DishAdditionalOption, DishSizeOption,
+    DishOption, DishOptionItem,
     DishCategory,
     DishLike,
     Dish
 )
 
-admin.site.register(DishAdditionalOption, DishAdditionalOptionAdmin)
-admin.site.register(DishSizeOption, DishSizeOptionAdmin)
+admin.site.register(DishOption, DishOptionAdmin)
+admin.site.register(DishOptionItem, DishOptionItemAdmin)
 admin.site.register(DishCategory, DishCategoryAdmin)
 admin.site.register(DishLike, DishLikeAdmin)
 admin.site.register(Dish, DishAdmin)

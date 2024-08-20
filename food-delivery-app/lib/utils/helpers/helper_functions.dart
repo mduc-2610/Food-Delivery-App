@@ -94,6 +94,21 @@ class THelperFunction {
     return list.toSet().toList();
   }
 
+  static String formatName(String input) {
+    String cleaned = input.replaceAll(RegExp(r'[_\s]+'), ' ');
+
+    cleaned = cleaned.replaceAll(RegExp(r'[^\w\s]'), '');
+
+    List<String> words = cleaned.split(' ');
+
+    words = words.map((word) {
+      if (word.isEmpty) return '';
+      return word[0].toUpperCase() + word.substring(1).toLowerCase();
+    }).toList();
+
+    return words.join(' ').trim();
+  }
+
   static List<Widget> wrapWidgets(List<Widget> widgets, int rowSize) {
     final wrappedList = <Widget>[];
     for(var i = 0; i < widgets.length; i += rowSize) {

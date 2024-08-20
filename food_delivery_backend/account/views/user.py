@@ -44,6 +44,7 @@ from order.mixins import OrderFilterMixin
 from utils.pagination import CustomPagination
 from utils.views import ManyRelatedViewSet
 from utils.mixins import DefaultGenericMixin
+from order.serializers.cart import CreateRestaurantCartSerializer
 
 class UserViewSet(DefaultGenericMixin, OrderFilterMixin, ManyRelatedViewSet):
     queryset = User.objects.all()
@@ -85,7 +86,12 @@ class UserViewSet(DefaultGenericMixin, OrderFilterMixin, ManyRelatedViewSet):
         'carts': RestaurantSerializer,
         'locations': LocationSerializer,
     }
-
+    many_related = {
+        'restaurant_carts': {
+            'action': (['GET', 'POST'], 'restaurant-carts'),
+            'create_serializer_class': CreateRestaurantCartSerializer
+        },
+    }
     # many_related = {
     #     'reviewed_dishes': {
     #         'action': (['GET'], 'reviewed-dishes'),
@@ -182,7 +188,7 @@ class UserViewSet(DefaultGenericMixin, OrderFilterMixin, ManyRelatedViewSet):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
-        
+    
     @action(detail=False, methods=['POST'], url_path='verify-otp')
     def verify_otp(self, request):
         user = request.data.get('user')

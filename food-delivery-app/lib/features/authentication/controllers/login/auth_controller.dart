@@ -100,10 +100,10 @@ class AuthController extends GetxController {
           phoneNumber: phoneNumber.value,
           password: password.value
       );
-      final [statusCode, headers, body] = await APIService<LoginPassword>().create(loginPasswordData);
+      final [statusCode, headers, body] = await APIService<LoginPassword>().create(loginPasswordData, fromJson: Token.fromJson);
       if(statusCode == 200) {
-        token = Token.fromJson(body);
-        await TokenService.saveToken(token);
+        // token = Token.fromJson(body);
+        await TokenService.saveToken(body);
         Get.offAll(() => UserMenuRedirection());
       }
       else {

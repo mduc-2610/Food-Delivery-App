@@ -1,1 +1,1 @@
-from .food import dish_categories
+from .food import dish_categories, category_options

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
+import 'package:food_delivery_app/data/services/user_service.dart';
 import 'package:food_delivery_app/features/authentication/models/account/profile.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/features/authentication/models/account/setting.dart';
@@ -23,7 +24,7 @@ class PersonalProfileController extends GetxController {
   }
 
   Future<void> loadUser() async {
-    user = await APIService<Me>(pagination: false).list();
+    user = await UserService.getUser();
     setting = user?.setting;
     profile = user?.profile;
     isLoading.value = false;

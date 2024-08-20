@@ -17,17 +17,19 @@ class SkeletonList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: List.generate(length, (index) {
-        return Column(
-          children: [
-            skeleton,
-            separate ?? SizedBox(
-              height: space,
-            )
-          ],
-        );
-      })
+    return SingleChildScrollView(
+      child: Column(
+        children: List.generate(length, (index) {
+          return Column(
+            children: [
+              skeleton,
+              separate ?? SizedBox(
+                height: space,
+              )
+            ],
+          );
+        })
+      ),
     );
   }
 }

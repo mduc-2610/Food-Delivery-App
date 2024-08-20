@@ -31,14 +31,6 @@ class RestaurantDetailSliverAppBar extends StatelessWidget {
               child: CSearchBar(),
             ),
             SizedBox(width: TSize.spaceBetweenItemsSm,),
-            CircleIconCard(
-              iconStr: TIcon.cart,
-              onTap: () { Get.to(() => OrderBasketView()); $print("ABC"); },
-            ),
-            CircleIconCard(
-              icon: Icons.more_horiz,
-              iconColor: TColor.primary,
-            ),
           ],
         ),
         isScrollHidden: false,

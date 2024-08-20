@@ -31,6 +31,6 @@ class UserService {
   }
 
   static Future<User?> getUser({ String? queryParams }) async {
-    return await APIService<User>(endpoint: 'account/user/me', pagination: false, queryParams: queryParams ?? "").list();
+    return await APIService<User>(endpoint: 'account/user/me', pagination: false, queryParams: queryParams ?? "").list(single: true);
   }
 }

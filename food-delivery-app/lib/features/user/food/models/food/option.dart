@@ -4,31 +4,34 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 @reflector
 @jsonSerializable
-class DishAdditionalOption {
+class DishOption {
   final String? id;
-  final String? dishId;
+  final String? dish;
   final String? name;
-  final double? price;
+  final List<DishOptionItem> items;
 
-  DishAdditionalOption({
+  DishOption({
     this.id,
-    this.dishId,
+    this.dish,
     this.name,
-    this.price,
+    this.items = const [],
   });
 
-  DishAdditionalOption.fromJson(Map<String, dynamic> json)
+  DishOption.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        dishId = json['dish'],
+        dish = json['dish'],
         name = json['name'],
-        price = (json['price'] as num).toDouble();
+        items = json['items'] != null ? json['items'] is List ? (json['items'] as List).map((instance) => DishOptionItem.fromJson(instance)).toList() : [] : [];
+
+  String get formattedName {
+    return THelperFunction.formatName(name ?? "");
+  }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'dish': dishId,
+      'dish': dish,
       'name': name,
-      'price': price,
     };
   }
 
@@ -40,30 +43,30 @@ class DishAdditionalOption {
 
 @reflector
 @jsonSerializable
-class DishSizeOption {
+class DishOptionItem {
   final String? id;
-  final String? dishId;
-  final String? size;
+  final String? option;
+  final String? name;
   final double? price;
 
-  DishSizeOption({
+  DishOptionItem({
     this.id,
-    this.dishId,
-    this.size,
+    this.option,
+    this.name,
     this.price,
   });
 
-  DishSizeOption.fromJson(Map<String, dynamic> json)
+  DishOptionItem.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        dishId = json['dish'],
-        size = json['size'],
+        option = json['option'],
+        name = json['name'],
         price = double.parse(json['price']);
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'dish': dishId,
-      'size': size,
+      'dish': option,
+      'name': name,
       'price': price,
     };
   }

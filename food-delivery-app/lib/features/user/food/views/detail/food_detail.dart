@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/delivery_bottom_navigation_bar.dart';
+import 'package:food_delivery_app/common/widgets/buttons/round_icon_button.dart';
 import 'package:food_delivery_app/features/user/food/controllers/detail/food_detail_controller.dart';
 import 'package:food_delivery_app/features/user/food/views/review/skeleton/detail_review_skeleton.dart';
-import 'package:food_delivery_app/features/user/food/views/detail/widgets/food_detail_bottom_app_bar.dart';
 import 'package:food_delivery_app/features/user/food/views/detail/widgets/food_detail_sliver_app_bar.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
@@ -31,30 +32,73 @@ class FoodDetailView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        Text(
+                          "${dish?.name}",
+                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.primary),
+                        ),
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Stack(
-                              children: [
-                                Text(
-                                  "£${dish?.discountPrice}",
-                                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: TColor.textDesc),
-                                ),
-                                Positioned(
-                                  bottom: 7,
-                                  child: SizedBox(
-                                    width: 100,
-                                    child: Divider(
-                                      thickness: 3,
-                                      color: TColor.textDesc,
-                                    ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Stack(
+                                    children: [
+                                      Text(
+                                        "£${dish?.discountPrice}",
+                                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: TColor.textDesc),
+                                      ),
+                                      Positioned(
+                                        bottom: 7,
+                                        child: SizedBox(
+                                          width: 100,
+                                          child: Divider(
+                                            thickness: 3,
+                                            color: TColor.textDesc,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
+                                  SizedBox(width: TSize.spaceBetweenItemsVertical),
+                                  Text(
+                                    "£${dish?.originalPrice}",
+                                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: TColor.primary),
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(width: TSize.spaceBetweenItemsVertical),
-                            Text(
-                              "£${dish?.originalPrice}",
-                              style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.primary),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Obx(() => (controller.restaurantDetailController.mapDishQuantity[dish?.id] != null) ?
+                                Row(
+                                  children: [
+                                    RoundIconButton(
+                                      onPressed: controller.handleRemoveFromCart,
+                                      backgroundColor: Colors.transparent,
+                                      icon: TIcon.remove,
+                                      iconColor: TColor.primary,
+                                    ),
+                                    SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+
+                                    // Obx(() =>
+                                    Text(
+                                        "${controller.restaurantDetailController.mapDishQuantity[dish?.id]}"
+                                    ),
+                                  ],
+                                )
+
+                                    : SizedBox.shrink()),
+                                SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+
+                                RoundIconButton(
+                                  onPressed: controller.handleAddToCart,
+                                )
+                              ],
                             ),
                           ],
                         ),
@@ -92,20 +136,26 @@ class FoodDetailView extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                         SizedBox(height: TSize.spaceBetweenItemsVertical),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                        Column(
                           children: [
-                            GestureDetector(
-                              onTap: () {},
-                              child: Text(
-                                "See all",
-                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  decoration: TextDecoration.underline,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {},
+                                  child: Text(
+                                    "See all",
+                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
+
                           ],
                         ),
+
                         SizedBox(height: TSize.spaceBetweenItemsVertical),
                         Text(
                           'Additional Options:',
@@ -121,7 +171,13 @@ class FoodDetailView extends StatelessWidget {
                 ),
               ],
             ),
-            bottomNavigationBar: FoodDetailBottomAppBar(),
+            bottomNavigationBar: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    DeliveryBottomNavigationBar()
+                  ],
+                )
+            ),
           )
           );
       },

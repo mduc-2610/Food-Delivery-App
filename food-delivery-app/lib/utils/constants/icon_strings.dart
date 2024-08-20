@@ -16,6 +16,7 @@ class TIcon {
   static IconData info = Icons.info;
   static IconData warning = Icons.warning;
   static IconData add = Icons.add;
+  static IconData remove = Icons.remove;
   static IconData call = Icons.call;
   static IconData message = Icons.message;
   static IconData send = Icons.send;

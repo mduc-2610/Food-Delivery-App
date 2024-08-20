@@ -37,7 +37,7 @@ class ReviewFilterMixin:
                 elif star_filter == 'negative':
                     return _queryset(instance, filter_kwargs) \
                         .filter(rating__lte=2)
-                else:
+                elif isinstance(star_filter, int):
                     if 1 <= star_filter <= 5:
                         return _queryset(instance, filter_kwargs) \
                             .filter(rating=star_filter)       

@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:food_delivery_app/features/authentication/models/account/profile.dart';
 import 'package:food_delivery_app/features/authentication/models/account/setting.dart';
@@ -25,10 +27,10 @@ import 'package:food_delivery_app/features/authentication/models/restaurant/rest
 import 'package:food_delivery_app/features/notification/models/message.dart';
 import 'package:food_delivery_app/features/notification/models/room.dart';
 import 'package:food_delivery_app/features/notification/models/user_notification.dart';
-import 'package:food_delivery_app/features/user/food/models/food/addition.dart';
 import 'package:food_delivery_app/features/user/food/models/food/category.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish_like.dart';
+import 'package:food_delivery_app/features/user/food/models/food/option.dart';
 import 'package:food_delivery_app/features/user/food/models/review/review.dart';
 import 'package:food_delivery_app/features/user/food/models/review/review_like.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
@@ -40,8 +42,32 @@ import 'package:food_delivery_app/features/user/social/models/comment.dart';
 import 'package:food_delivery_app/features/user/social/models/image.dart';
 import 'package:food_delivery_app/features/user/social/models/like.dart';
 import 'package:food_delivery_app/features/user/social/models/post.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
+
+Future<String> getLocalIpAddress() async {
+  try {
+    final interfaces = await NetworkInterface.list(
+      includeLinkLocal: false,
+      type: InternetAddressType.IPv4,
+    );
+
+    for (var interface in interfaces) {
+      for (var addr in interface.addresses) {
+        if (addr.address.startsWith('192.168.')) {
+          return addr.address;
+        }
+      }
+    }
+  } catch (e) {
+    print('Error getting IP address: $e');
+  }
+
+  return '127.0.0.1';
+
+}
+
 class APIConstant {
-  static const String ip = "192.168.1.147";
+  static const String ip = "192.168.1.190";
   static const String tSecretAPIKey = "";
   // static const baseUrl = 'http://10.0.2.2:8000/api';
   // static const baseUrl = 'http://192.168.1.8:8000/api'; // VANSAU
@@ -49,6 +75,12 @@ class APIConstant {
   // static const baseUrl = 'http://192.168.0.103:8000/api'; // Tenda
   static const baseUrl = 'http://$ip:8000/api'; // Minh Duc 5g
   static const baseSocketUrl = 'ws://${APIConstant.ip}:8000/ws';
+
+  // static Future<String> get ip async => await getLocalIpAddress();
+  // static const String tSecretAPIKey = "";
+  //
+  // static Future<String> get baseUrl async => 'http://${await ip}:8000/api';
+  // static Future<String> get baseSocketUrl async => 'ws://${await ip}:8000/ws';
 
 
   static String? getEndpointFor<T>() {
@@ -178,10 +210,10 @@ class APIConstant {
         return 'social/comment-image';
 
       ///FOOD
-      case DishAdditionalOption:
+      case DishOption:
         return 'food/dish-option';
-      case DishSizeOption:
-        return 'food/dish-size';
+      case DishOptionItem:
+        return 'food/dish-option-item';
       case DishCategory:
         return 'food/dish-category';
       case DishLike:

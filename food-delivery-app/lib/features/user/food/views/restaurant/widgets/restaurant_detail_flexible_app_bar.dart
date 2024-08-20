@@ -47,11 +47,7 @@ class RestaurantDetailFlexibleAppBar extends StatelessWidget {
                         icon: TIcon.search,
                         backgroundColor: Colors.black.withOpacity(0.2),
                       ),
-                      CircleIconCard(
-                        elevation: 0,
-                        iconStr: TIcon.cart,
-                        backgroundColor: Colors.black.withOpacity(0.2),
-                      ),
+
                     ],
                   ),
                 ),

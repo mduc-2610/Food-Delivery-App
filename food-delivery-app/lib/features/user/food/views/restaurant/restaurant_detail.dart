@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/delivery_bottom_navigation_bar.dart';
 import 'package:food_delivery_app/common/widgets/bars/separate_bar.dart';
 import 'package:food_delivery_app/common/widgets/bars/separate_section_bar.dart';
 import 'package:food_delivery_app/common/widgets/behavior/sticky_tab_bar_delegate.dart';
@@ -14,6 +15,8 @@ import 'package:food_delivery_app/features/user/food/views/restaurant/widgets/re
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
 class RestaurantDetailView extends StatelessWidget {
@@ -27,7 +30,6 @@ class RestaurantDetailView extends StatelessWidget {
         final categories = controller.categories;
         final mapCategory = controller.mapCategory;
         final basicInfo = restaurant?.basicInfo;
-
         return Obx(() {
           if (controller.isLoading.value) {
             return RestaurantDetailSkeleton();
@@ -139,6 +141,7 @@ class RestaurantDetailView extends StatelessWidget {
                 ],
               ),
             ),
+            bottomNavigationBar: DeliveryBottomNavigationBar()
           );
         });
       },

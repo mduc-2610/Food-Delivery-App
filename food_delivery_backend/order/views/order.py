@@ -3,14 +3,16 @@ from rest_framework import viewsets
 
 from order.models import Order
 
-from order.serializers import OrderSerializer
+from order.serializers import OrderSerializer, CreateOrderSerializer
 
 from utils.mixins import DefaultGenericMixin
+from utils.pagination import CustomPagination
+from utils.views import OneRelatedViewSet
 
-class OrderViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
+class OrderViewSet(DefaultGenericMixin, OneRelatedViewSet, viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-
-    def perform_create(self, serializer):
-        instance = serializer.save()
-        instance.calculate_total()  
+    pagination_class =  CustomPagination
+    mapping_serializer_class = {
+        'create': CreateOrderSerializer,
+    }

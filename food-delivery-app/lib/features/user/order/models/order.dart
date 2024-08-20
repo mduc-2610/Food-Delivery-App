@@ -1,12 +1,13 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
+import 'package:food_delivery_app/features/user/order/models/cart.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 @reflector
 @jsonSerializable
 class Order {
   final String? id;
-  final String? cart;
+  final dynamic cart;
   final UserLocation? deliveryAddress;
   final String? paymentMethod;
   final String? promotion;
@@ -31,14 +32,14 @@ class Order {
 
   Order.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        cart = json['cart'],
+        cart = json['cart'] != null ? json['cart'] is String ? json['cart'] : RestaurantCart.fromJson(json['cart']) : null,
         deliveryAddress = json['delivery_address'] != null ? UserLocation.fromJson(json['delivery_address']) : null,
         paymentMethod = json['payment_method'],
         promotion = json['promotion'],
         deliveryFee = THelperFunction.formatDouble(json['delivery_fee']),
         discount = THelperFunction.formatDouble(json['discount']),
         total = THelperFunction.formatDouble(json['total']),
-        rating = json['rating'],
+        rating = json['rating'] ?? 0,
         status = json['status'];
 
   Map<String, dynamic> toJson() {

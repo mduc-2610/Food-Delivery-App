@@ -23,11 +23,10 @@ class Order(models.Model):
     rating = models.PositiveSmallIntegerField(default=0)
 
     def raw_fee(self):
-        return self.cart.raw_fee
+        return self.cart.raw_fee()
 
     def total(self):
-        result = self.raw_fee() + self.delivery_fee - self.discount
-        return decimal.Decimal(result)
+        return float(self.raw_fee()) + float(self.delivery_fee) - float(self.discount)
     
     def __str__(self):
         return f"Order for {self.cart} with total {self.total()}"

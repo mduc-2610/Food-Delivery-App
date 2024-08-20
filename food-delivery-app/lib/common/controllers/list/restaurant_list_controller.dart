@@ -48,7 +48,6 @@ class RestaurantListController extends GetxController {
   }
 
   void _scrollListener() {
-    $print(scrollController.position.pixels);
     if(scrollController.position.pixels == scrollController.position.maxScrollExtent) {
       initializeRestaurants(loadMore: true, fullUrl: _nextPage);
     }

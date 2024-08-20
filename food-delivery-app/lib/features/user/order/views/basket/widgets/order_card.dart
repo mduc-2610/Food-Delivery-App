@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/buttons/small_button.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
 import 'package:food_delivery_app/features/user/order/controllers/basket/order_basket_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
@@ -174,3 +175,110 @@ class _OrderCardState extends State<OrderCard> {
     );
   }
 }
+
+class OrderCardSkeleton extends StatelessWidget {
+  const OrderCardSkeleton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: TSize.md,
+          horizontal: TSize.md,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BoxSkeleton(
+                      height: 80,
+                      width: 80,
+                      borderRadius: TSize.sm,
+                    ),
+                    SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.33,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          BoxSkeleton(
+                            height: 20,
+                            width: double.infinity,
+                            borderRadius: TSize.sm,
+                          ),
+                          SizedBox(height: TSize.spaceBetweenItemsHorizontal),
+                          Row(
+                            children: [
+                              BoxSkeleton(
+                                height: 16,
+                                width: 60,
+                                borderRadius: TSize.sm,
+                              ),
+                              SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                              BoxSkeleton(
+                                height: 16,
+                                width: 60,
+                                borderRadius: TSize.sm,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: TSize.spaceBetweenItemsHorizontal),
+                          Row(
+                            children: [
+                              BoxSkeleton(
+                                height: 24,
+                                width: 24,
+                                borderRadius: TSize.sm,
+                              ),
+                              SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                              BoxSkeleton(
+                                height: 24,
+                                width: 24,
+                                borderRadius: TSize.sm,
+                              ),
+                              SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                              BoxSkeleton(
+                                height: 24,
+                                width: 24,
+                                borderRadius: TSize.sm,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    BoxSkeleton(
+                      height: 24,
+                      width: 24,
+                      borderRadius: TSize.sm,
+                    ),
+                    SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                    BoxSkeleton(
+                      height: 24,
+                      width: 24,
+                      borderRadius: TSize.sm,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

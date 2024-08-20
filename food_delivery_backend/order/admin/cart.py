@@ -2,9 +2,8 @@
 from django.contrib import admin
 
 class RestaurantCartAdmin(admin.ModelAdmin):
-    list_display = ['user', 'restaurant', 'created_at', 'updated_at', 'is_placed_order', 'raw_fee']
+    list_display = ['user', 'restaurant', 'created_at', 'updated_at', 'raw_fee']
     search_fields = ['user__phone_number', 'restaurant__name']
-    list_filter = ['is_placed_order']
     readonly_fields = ['created_at', 'updated_at']
 
 class RestaurantCartDishAdmin(admin.ModelAdmin):
