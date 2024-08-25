@@ -41,14 +41,30 @@ class CreateOrderSerializer(serializers.ModelSerializer):
         
     def create(self, validated_data):
         cart = validated_data.pop('cart', None)
+        request = self.context.get('request', None)
+        delivery_address = None
+        print(request.user, pretty=True)
+        if request is not None and hasattr(request, 'user'):
+            delivery_address = request.user.locations.filter(is_selected=True).first()
         
-        order, created = Order.objects.get_or_create(cart=cart, defaults=validated_data)
+        print(delivery_address, pretty=True)
+        
+        order, created = Order.objects.get_or_create(cart=cart)
         order.cart.is_created_order = True
-        order.cart.save() 
+        if delivery_address:
+            order.delivery_address = delivery_address
+            order.save()
 
+        order.cart.save() 
+        print(order)
         return order
 
     def to_representation(self, instance):
+        # if condition:
         from order.serializers import RestaurantCartSerializer2
         data = OrderSerializer(instance).data
+        
+        # from order.serializers import RestaurantCartSerializer
+        # data = RestaurantCartSerializer(instance.cart).data
+
         return data

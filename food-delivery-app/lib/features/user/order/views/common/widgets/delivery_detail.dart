@@ -5,25 +5,28 @@ import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
+import 'package:food_delivery_app/features/user/order/controllers/basket/order_basket_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
 import 'package:food_delivery_app/features/user/order/models/order.dart';
+import 'package:food_delivery_app/features/user/order/views/location/order_location.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:get/get.dart';
 
 class DeliveryDetail extends StatelessWidget {
-  final RestaurantCart? cart;
+  final Order? order;
   final String fromView;
 
   DeliveryDetail({
-    this.cart,
+    this.order,
     this.fromView = "Cancel",
   });
 
   @override
   Widget build(BuildContext context) {
-    final order = cart?.order;
+    final controller = OrderBasketController.instance;
     return MainWrapper(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,10 +34,13 @@ class DeliveryDetail extends StatelessWidget {
           Column(
             children: [
               DeliveryDetailCard(
-                onTap: () {},
+                onTap: () async {
+                  await Get.to(() => OrderLocationSelectView());
+                  await controller.initializeUser();
+                },
                 icon: TIcon.location,
                 title: "Deliver to",
-                description: "${order?.deliveryAddress?.address}",
+                description: "${order?.deliveryAddress?.address ?? "Choose your address"}",
               ),
               SizedBox(height: TSize.spaceBetweenItemsVertical),
               DeliveryDetailCard(
@@ -57,7 +63,7 @@ class DeliveryDetail extends StatelessWidget {
             children: [
               DeliveryDetailRow(
                 title: "Subtotal",
-                value: "£ ${cart?.totalPrice.toStringAsFixed(2)}",
+                value: "£ ${order?.cart?.totalPrice.toStringAsFixed(2)}",
               ),
               DeliveryDetailRow(
                 title: "Delivery Fee",

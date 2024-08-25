@@ -143,7 +143,6 @@ class APIService<T> {
           jsonResponse = fromJson?.call(jsonResponse);
         }
         $print([response.statusCode, response.headers, jsonResponse]);
-        $print("NO");
         return [response.statusCode, response.headers, jsonResponse];
       }
     });

@@ -21,8 +21,6 @@ class OneRelatedViewSet(viewsets.ModelViewSet):
         
     def get_related_model(self):
         for field in self.model._meta.get_fields():
-            print(field.one_to_one)
             if isinstance(field, OneToOneField):
-                print(field)
                 return field
         raise exceptions.NotFound('Related model not found')

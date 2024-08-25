@@ -12,6 +12,7 @@ import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:get/get.dart';
 
 
 class OrderCard extends StatefulWidget {
@@ -91,7 +92,7 @@ class _OrderCardState extends State<OrderCard> {
                             Row(
                               children: [
                                 CircleIconCard(
-                                  onTap: () => _controller.decreaseQuantity(widget.cartDish),
+                                  onTap: () => _controller.foodListController.handleCartUpdate(dishId: widget.cartDish.dish?.id ?? '', quantity: -1),
                                   icon: Icons.remove,
                                   iconColor: TColor.primary,
                                   borderSideWidth: 1,
@@ -100,14 +101,14 @@ class _OrderCardState extends State<OrderCard> {
                                 ),
                                 SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
 
-                                Text(
-                                  "${widget.cartDish.quantity}",
+                                Obx(() => Text(
+                                  "${_controller.restaurantDetailController.mapDishQuantity[widget.cartDish.dish?.id] ?? 0}",
                                   style: Theme.of(context).textTheme.headlineSmall,
-                                ),
+                                )),
                                 SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
 
                                 CircleIconCard(
-                                  onTap: () => _controller.increaseQuantity(widget.cartDish),
+                                  onTap: () => _controller.foodListController.handleCartUpdate(dishId: widget.cartDish.dish?.id ?? '', quantity: 1),
                                   icon: Icons.add,
                                   iconColor: TColor.primary,
                                   borderSideWidth: 1,

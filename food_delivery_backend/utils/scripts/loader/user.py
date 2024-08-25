@@ -53,7 +53,7 @@ def load_user(max_users=100):
         print(f"\tSuccessfully created OTP for User: {user}")
         
         number_location = random.randint(1, 5)
-        selected_index = random.randint(1, number_location)
+        selected_index = random.randint(0, number_location - 1)
         for _i in range(number_location):
             location_data = {
                 "user": user,

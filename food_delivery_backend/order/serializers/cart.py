@@ -73,6 +73,7 @@ class CreateRestaurantCartDishSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
+        print(data, pretty=True)
         data['cart'] = RestaurantCartSerializer2(instance.cart).data
         return data
 

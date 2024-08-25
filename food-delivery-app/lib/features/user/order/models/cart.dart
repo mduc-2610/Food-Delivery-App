@@ -83,7 +83,7 @@ class RestaurantCartDish {
 
   RestaurantCartDish.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        cart = json['cart'] != null ? json['cart'] is String ? json['cart'] : RestaurantCart.fromJson(json['cart']) : null,
+        cart = json['cart'] != null ? json['cart'] is String || json['cart'] is List<dynamic> ? json['cart'] : RestaurantCart.fromJson(json['cart']) : null,
         dish = json['dish'] != null ? json['dish'] is String ? json['dish'] : Dish.fromJson(json['dish']) : null,
         quantity = json['quantity'] ?? 0,
         price = json['price'] != null ? double.parse(json['price']) : 0;

@@ -97,14 +97,14 @@ def load_order(
     print("ORDERS:")
     order_list = []
     for _cart in restaurant_cart_list:
-        user_location = list(_cart.user.locations.all()).copy()
+        user_location = _cart.user.locations.filter(is_selected=True).first()
         print(user_location, pretty=True)
         order_data = {
             "cart": _cart,
-            "delivery_address": random.choice(user_location) if user_location else None,
+            # "delivery_address": user_location,
             "payment_method": fake.random_element(elements=('Credit Card', 'Paypal', 'Cash on Delivery')),
             "promotion": random.choice(promotion_list) if random.choice([True, False]) else None,
-            "delivery_fee":  random.uniform(0, 10), 
+            # "delivery_fee":  random.uniform(0, 10), 
             "discount":  random.uniform(0, 10),
             "status": fake.random_element(elements=['ACTIVE', 'CANCELLED', 'COMPLETED', 'PENDING']),
         }

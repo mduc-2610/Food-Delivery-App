@@ -1,4 +1,5 @@
 
+import 'package:food_delivery_app/common/controllers/list/food_list_controller.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/data/services/user_service.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
@@ -12,27 +13,23 @@ import 'package:get/get.dart';
 class OrderBasketController extends GetxController {
   static OrderBasketController get instance => Get.find();
   final restaurantDetailController = RestaurantDetailController.instance;
-  User? user;
+  final foodListController = FoodListController.instance;
+
   Rx<bool> isLoading = true.obs;
   Order? order;
   @override
   void onInit() {
     super.onInit();
     initializeUser();
-    $print("INIT");
   }
 
   Future<void> initializeUser() async {
-    user = await UserService.getUser(queryParams: "restaurant=${restaurantDetailController.restaurantId}");
-    $print(restaurantDetailController.user?.restaurantCart?.id);
-    $print(restaurantDetailController.user?.restaurantCart?.isCreatedOrder);
     if(restaurantDetailController.user?.restaurantCart?.isCreatedOrder == false) {
       final [statusCode, headers, response] = await APIService<Order>().create({
         'cart': restaurantDetailController.user?.restaurantCart?.id
-      }, noBearer: true);
+      }, );
       if(statusCode == 200 || statusCode == 201) {
         order = response;
-        restaurantDetailController.user?.restaurantCart?.isCreatedOrder = true;
       }
       else {
         order = await APIService<Order>().retrieve(restaurantDetailController.user?.restaurantCart?.id ?? "");
@@ -40,31 +37,13 @@ class OrderBasketController extends GetxController {
       }
 
     } else {
+      $print("WORKING");
       order = await APIService<Order>().retrieve(restaurantDetailController.user?.restaurantCart?.id ?? "");
-      $print(order);
     }
-    Future.delayed(Duration(milliseconds: 10000));
+    Future.delayed(Duration(milliseconds: TTime.init));
     isLoading.value = false;
     update();
 
   }
 
-  void increaseQuantity(RestaurantCartDish cartDish)  async{
-    cartDish.quantity += 1;
-    $print(cartDish.price);
-    user?.restaurantCart?.order?.total += cartDish.price;
-    update();
-  }
-
-  void decreaseQuantity(RestaurantCartDish cartDish) {
-    if (cartDish.quantity > 1) {
-      cartDish.quantity -= 1;
-      $print(cartDish.price);
-    } else {
-      user?.restaurantCart?.cartDishes.remove(cartDish);
-    }
-    user?.restaurantCart?.order?.total -= cartDish.price;
-
-    update();
-  }
 }

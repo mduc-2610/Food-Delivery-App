@@ -20,10 +20,8 @@ class OrderBasketView extends StatelessWidget {
     return GetBuilder<OrderBasketController>(
       init: OrderBasketController(),
       builder: (controller) {
-        final user = controller.user;
         final restaurantCart = controller.order?.cart;
-        $print(controller.order);
-        final cartDishes = restaurantCart?.cartDishes ?? [];
+        // $print(controller.restaurantDetailController.user?.restaurantCart);
         return
           Scaffold(
               appBar: CAppBar(
@@ -39,41 +37,50 @@ class OrderBasketView extends StatelessWidget {
                   if(!controller.isLoading.value)...[
                     Expanded(
                       child: SingleChildScrollView(
-                        child: ListCheck(
-                          checkEmpty: cartDishes.length == 0,
-                          child: Column(
-                            children: [
-                              MainWrapper(
-                                topMargin: TSize.spaceBetweenItemsVertical,
-                                bottomMargin: TSize.spaceBetweenItemsVertical,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Order summary',
-                                      style: Theme.of(context).textTheme.headlineSmall,
-                                    ),
+                        child: Obx(() {
+                          int length = controller.restaurantDetailController.cartDishes.length;
+                          return ListCheck(
+                            checkEmpty: length == 0,
+                            child: Column(
+                              children: [
+                                MainWrapper(
+                                  topMargin: TSize.spaceBetweenItemsVertical,
+                                  bottomMargin: TSize.spaceBetweenItemsVertical,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Order summary',
+                                        style: Theme.of(context).textTheme.headlineSmall,
+                                      ),
 
-                                    StatusChip(status: restaurantCart?.order?.status ?? "")
-                                  ],
+                                      StatusChip(status: restaurantCart?.order?.status ?? "")
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              for(var cartDish in cartDishes)...[
-                                OrderCard(
-                                  cartDish: cartDish,
-                                  isCompletedOrder: false,
+                                Obx(() {
+                                  return Column(
+                                    children: [
+                                      for (var cartDish in controller.restaurantDetailController.cartDishes)
+                                        OrderCard(
+                                          cartDish: cartDish,
+                                          isCompletedOrder: false,
+                                        ),
+                                    ],
+                                  );
+                                }),
+
+                                SizedBox(height: TSize.spaceBetweenSections,),
+
+                                DeliveryDetail(
+                                  order: controller.order,
+                                  fromView: "Basket",
                                 ),
+                                SizedBox(height: TSize.spaceBetweenSections,),
                               ],
-                              SizedBox(height: TSize.spaceBetweenSections,),
-
-                              DeliveryDetail(
-                                cart: restaurantCart,
-                                fromView: "Basket",
-                              ),
-                              SizedBox(height: TSize.spaceBetweenSections,),
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        })
                       ),
                     )
                   ]

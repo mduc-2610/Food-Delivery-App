@@ -17,6 +17,7 @@ class ListCheck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if(checkEmpty)...[
           SizedBox(height: TSize.spaceBetweenSections,),

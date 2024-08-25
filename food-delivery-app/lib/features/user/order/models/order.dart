@@ -32,7 +32,7 @@ class Order {
 
   Order.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        cart = json['cart'] != null ? json['cart'] is String ? json['cart'] : RestaurantCart.fromJson(json['cart']) : null,
+        cart = json['cart'] != null ? json['cart'] is String || json['cart'] is List ? json['cart'] : RestaurantCart.fromJson(json['cart']) : null,
         deliveryAddress = json['delivery_address'] != null ? UserLocation.fromJson(json['delivery_address']) : null,
         paymentMethod = json['payment_method'],
         promotion = json['promotion'],

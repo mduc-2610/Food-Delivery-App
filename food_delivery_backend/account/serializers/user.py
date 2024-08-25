@@ -22,7 +22,7 @@ class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
 
-        fields = ['id', 'address', 'latitude', 'longitude', 'name', 'is_selected']
+        fields = ['id', 'address', 'latitude', 'longitude', 'name', 'user', 'is_selected']
 
 class UserSerializer(CustomRelatedModelSerializer):
     def __init__(self, *args, **kwargs):
@@ -47,7 +47,7 @@ class UserSerializer(CustomRelatedModelSerializer):
                 }
                 try:
                     res_cart = RestaurantCart.objects.filter(**filter_kwargs).first()
-                    if res_cart and not res_cart.is_created_order:
+                    if res_cart:
                         return RestaurantCartSerializer(res_cart).data
                     else:
                         return None
@@ -58,8 +58,9 @@ class UserSerializer(CustomRelatedModelSerializer):
     selected_location = serializers.SerializerMethodField()
     
     def get_selected_location(self, obj):
-        if hasattr(obj, 'locations')  and self.context.get('detail', False):
+        if hasattr(obj, 'locations') :
             selected_location = obj.locations.filter(is_selected=True).first()
+            print(selected_location, pretty=True)
             if selected_location:
                 return LocationSerializer(selected_location).data
             return None

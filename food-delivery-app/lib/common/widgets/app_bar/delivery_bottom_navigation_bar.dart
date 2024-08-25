@@ -19,6 +19,7 @@ class DeliveryBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = RestaurantDetailController.instance;
+    $print(controller.totalItems.value);
     return
       Obx(() =>
       (controller.totalItems.value == 0)

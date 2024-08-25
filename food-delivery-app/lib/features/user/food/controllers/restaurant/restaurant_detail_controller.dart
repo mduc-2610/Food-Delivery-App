@@ -47,12 +47,14 @@ class RestaurantDetailController extends GetxController with SingleGetTickerProv
     await loadDishes();
     await Future.delayed(Duration(milliseconds: TTime.init));
     tabController = TabController(length: categories.length, vsync: this);
-    for(var item in user?.restaurantCart?.cartDishes ?? []) {
+    for (var item in user?.restaurantCart?.cartDishes ?? []) {
       mapDishQuantity[item.dish.id] = item.quantity;
     }
     totalItems.value = user?.restaurantCart?.totalItems ?? 0;
     totalPrice.value = user?.restaurantCart?.totalPrice ?? 0;
     cartDishes.addAll(user?.restaurantCart?.cartDishes ?? []);
+    $print(cartDishes.length);
+    $print(user?.restaurantCart?.cartDishes);
     isLoading.value = false;
     update();
   }
@@ -73,3 +75,4 @@ class RestaurantDetailController extends GetxController with SingleGetTickerProv
     Get.to(() => FoodDetailView());
   }
 }
+

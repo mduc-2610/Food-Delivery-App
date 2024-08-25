@@ -53,15 +53,15 @@ def run():
     MAX_POST_IMAGES=15
     MAX_COMMENT_IMAGES=5
     
-    # load_user()
+    load_user()
 
-    # load_deliverer()    
+    load_deliverer()    
     
-    # load_food()
+    load_food()
 
-    # load_restaurant()
+    load_restaurant()
 
-    # load_notification()
+    load_notification()
 
     load_order()
 

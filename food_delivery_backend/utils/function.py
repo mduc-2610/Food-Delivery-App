@@ -78,6 +78,24 @@ def load_intermediate_model(
     
     return created_objects
 
+import math
+
+def calculate_distance(lat1, lon1, lat2, lon2):
+    lat1 = math.radians(lat1)
+    lon1 = math.radians(lon1)
+    lat2 = math.radians(lat2)
+    lon2 = math.radians(lon2)
+
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+    a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2)**2
+    c = 2 * math.asin(math.sqrt(a))
+
+    r = 6371
+
+    distance = r * c
+    return distance
+
 def camel_to_snake(name, sep='-'):
     return re.sub('([a-z0-9])([A-Z])', fr'\1{sep}\2', name).lower()
 
