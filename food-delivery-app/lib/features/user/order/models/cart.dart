@@ -16,7 +16,8 @@ class RestaurantCart {
   final DateTime? updatedAt;
   bool isCreatedOrder;
   final bool isEmpty;
-  final double rawFee;
+  final double totalPrice;
+  final int totalItems;
   final List<RestaurantCartDish> cartDishes;
   final Order? order;
 
@@ -28,7 +29,8 @@ class RestaurantCart {
     this.updatedAt,
     this.isCreatedOrder = true,
     this.isEmpty = false,
-    this.rawFee = 0,
+    this.totalPrice = 0.0,
+    this.totalItems = 0,
     this.cartDishes = const [],
     this.order,
   });
@@ -39,9 +41,10 @@ class RestaurantCart {
         restaurant = json['restaurant'] is String ? json['restaurant'] : json['restaurant'] != null ? Restaurant.fromJson(json['restaurant']) : null,
         createdAt = json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
         updatedAt = json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
-        isCreatedOrder = json['is_created_order'],
-        isEmpty = json['is_empty'],
-        rawFee = THelperFunction.formatDouble(json['raw_fee']),
+        isCreatedOrder = json['is_created_order'] ?? false,
+        isEmpty = json['is_empty'] ?? false,
+        totalPrice = THelperFunction.formatDouble(json['total_price']),
+        totalItems = json['total_items'],
         cartDishes = json['dishes'] != null ? (json['dishes'] as List).map((instance) => RestaurantCartDish.fromJson(instance)).toList() : [],
         order = json['order'] != null ? Order.fromJson(json['order']) : null
   ;
@@ -52,7 +55,6 @@ class RestaurantCart {
       'user': user,
       'restaurant': restaurant,
       'is_created_order': isCreatedOrder,
-      'raw_fee': rawFee,
     };
   }
 
@@ -66,7 +68,7 @@ class RestaurantCart {
 @jsonSerializable
 class RestaurantCartDish {
   final String? id;
-  final String? cart;
+  final dynamic cart;
   final dynamic dish;
   int quantity;
   final double price;
@@ -81,7 +83,7 @@ class RestaurantCartDish {
 
   RestaurantCartDish.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        cart = json['cart'],
+        cart = json['cart'] != null ? json['cart'] is String ? json['cart'] : RestaurantCart.fromJson(json['cart']) : null,
         dish = json['dish'] != null ? json['dish'] is String ? json['dish'] : Dish.fromJson(json['dish']) : null,
         quantity = json['quantity'] ?? 0,
         price = json['price'] != null ? double.parse(json['price']) : 0;

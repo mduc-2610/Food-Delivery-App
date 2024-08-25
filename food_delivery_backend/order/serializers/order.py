@@ -49,8 +49,6 @@ class CreateOrderSerializer(serializers.ModelSerializer):
         return order
 
     def to_representation(self, instance):
-        from order.serializers import RestaurantCartSerializer
+        from order.serializers import RestaurantCartSerializer2
         data = OrderSerializer(instance).data
-        data['cart'] = RestaurantCartSerializer(instance.cart).data
-        print(data, pretty=True)
         return data

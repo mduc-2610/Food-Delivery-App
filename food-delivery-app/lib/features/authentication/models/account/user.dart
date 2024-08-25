@@ -21,7 +21,7 @@ class User {
   final UserSetting? setting;
   final String? user1Rooms;
   final String? user2Rooms;
-  final RestaurantCart? restaurantCart;
+  RestaurantCart? restaurantCart;
   final String? restaurantCarts;
   final String? locations;
   final UserLocation? selectedLocation;

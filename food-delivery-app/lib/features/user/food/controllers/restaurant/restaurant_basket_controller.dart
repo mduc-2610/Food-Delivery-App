@@ -16,25 +16,5 @@ class RestaurantBasketController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    initializeRestaurant();
   }
-
-  Future<void> initializeRestaurant() async {
-    user = await UserService.getUser(queryParams: "restaurant=${restaurantDetailController.restaurantId}");
-    await Future.delayed(Duration(milliseconds:  (TTime.init / 2).toInt()));
-    isLoading.value = false;
-    cartDishes.value = user?.restaurantCart?.cartDishes ?? [];
-    update();
-  }
-
-  Future<void> addToCart() async {
-    await initializeRestaurant();
-  }
-
-  Future<void> removeFromCart() async {
-    await initializeRestaurant();
-    if(restaurantDetailController.totalItems.value == 0)
-    Get.back();
-  }
-
 }

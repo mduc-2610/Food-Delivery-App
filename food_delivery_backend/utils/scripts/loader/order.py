@@ -74,6 +74,7 @@ def load_order(
         max_items=max_restaurants_per_cart,
         min_items=1,
         attributes={
+            "is_created_order": True,
             # "raw_fee": lambda: fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=10, max_value=100)
         }
     )

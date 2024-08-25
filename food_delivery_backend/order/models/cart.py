@@ -1,9 +1,7 @@
 import uuid
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from django.contrib.auth.models import User
-# from order.models import ChosenDishOption
 
 class RestaurantCart(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
@@ -13,12 +11,8 @@ class RestaurantCart(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     is_created_order = models.BooleanField(default=False)
     is_empty = models.BooleanField(default=True)
-
-    def raw_fee(self):
-        total_fee = 0
-        for dish in self.dishes.all():
-            total_fee += dish.total_price()
-        return total_fee
+    total_items = models.IntegerField(default=0)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     class Meta:
         ordering = ('-created_at',)
@@ -37,7 +31,6 @@ class RestaurantCartDish(models.Model):
     note = models.TextField(blank=True, null=True)
 
     class Meta: 
-        # unique_together = ('cart', 'dish')
         indexes = [
             models.Index(fields=['cart', 'dish']),
         ]
@@ -56,12 +49,6 @@ class RestaurantCartDish(models.Model):
 
     def __str__(self):
         return f"{self.quantity} of {self.dish.name}"
-    
-# @receiver(post_save, sender=RestaurantCartDish)
-# def update_raw_fee(sender, instance, **kwargs):
-#     restaurant_cart = instance.cart
-#     restaurant_cart.raw_fee += instance.quantity * instance.price
-#     restaurant_cart.save()
 
 class ChosenDishOption(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
@@ -70,4 +57,17 @@ class ChosenDishOption(models.Model):
 
     def __str__(self):
         return f"{self.option_item.name} chosen for {self.restaurant_cart_dish.dish.name}"
-       
+
+@receiver(post_save, sender=RestaurantCartDish)
+def update_cart_totals_on_save(sender, instance, **kwargs):
+    restaurant_cart = instance.cart
+    restaurant_cart.total_items = sum(dish.quantity for dish in restaurant_cart.dishes.all())
+    restaurant_cart.total_price = sum(dish.total_price() for dish in restaurant_cart.dishes.all())
+    restaurant_cart.save()
+
+@receiver(post_delete, sender=RestaurantCartDish)
+def update_cart_totals_on_delete(sender, instance, **kwargs):
+    restaurant_cart = instance.cart
+    restaurant_cart.total_items = sum(dish.quantity for dish in restaurant_cart.dishes.all())
+    restaurant_cart.total_price = sum(dish.total_price() for dish in restaurant_cart.dishes.all())
+    restaurant_cart.save()

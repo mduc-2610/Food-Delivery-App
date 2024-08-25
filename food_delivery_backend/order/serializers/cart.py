@@ -38,7 +38,8 @@ class RestaurantCartDishSerializer(serializers.ModelSerializer):
 class CreateRestaurantCartDishSerializer(serializers.ModelSerializer):
     class Meta:
         model = RestaurantCartDish
-        fields = ['cart', 'dish', 'quantity']
+        fields = ['cart', 'dish', 'quantity', 'price', 'discount_price']
+        read_only_fields = ['price', 'discount_price']
 
     def create(self, validated_data):
         cart = validated_data.get('cart')
@@ -62,7 +63,6 @@ class CreateRestaurantCartDishSerializer(serializers.ModelSerializer):
                     cart_dish.quantity = 0
                     cart_dish.cart.is_empty = True
                     cart_dish.delete()
-                    cart_dish.cart.delete()
                 else: cart_dish.save()
             elif quantity != 1: 
                 cart_dish.quantity = quantity
@@ -70,6 +70,11 @@ class CreateRestaurantCartDishSerializer(serializers.ModelSerializer):
             return cart_dish
         except Exception as e:
             raise serializers.ValidationError("Failed to create RestaurantCartDish.")
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['cart'] = RestaurantCartSerializer2(instance.cart).data
+        return data
 
 class BasicRestaurantSerializer(serializers.ModelSerializer):
     class Meta:
@@ -86,7 +91,7 @@ class RestaurantCartSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = RestaurantCart
-        fields = ['id', 'user', 'restaurant', 'created_at', 'updated_at', 'raw_fee', 'dishes', 'order', 'is_created_order', 'is_empty']
+        fields = ['id', 'user', 'restaurant', 'created_at', 'updated_at', 'total_price', 'total_items', 'dishes', 'order', 'is_created_order', 'is_empty']
 
 
 class RestaurantCartSerializer2(serializers.ModelSerializer):
@@ -95,8 +100,8 @@ class RestaurantCartSerializer2(serializers.ModelSerializer):
     
     class Meta:
         model = RestaurantCart
-        fields = ['id', 'user', 'restaurant', 'created_at', 'updated_at', 'raw_fee', 'dishes', 'is_created_order', 'is_empty']
-
+        fields = ['id', 'user', 'restaurant', 'created_at', 'updated_at', 'total_price', 'total_items', 'dishes', 'is_created_order', 'is_empty']
+        
 class CreateRestaurantCartSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     restaurant = serializers.PrimaryKeyRelatedField(queryset=Restaurant.objects.all())

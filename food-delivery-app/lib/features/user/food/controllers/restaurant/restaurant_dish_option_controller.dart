@@ -1,4 +1,4 @@
-import 'package:food_delivery_app/common/controllers/card/food_card_controller.dart';
+import 'package:food_delivery_app/common/controllers/list/food_list_controller.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/features/user/food/controllers/restaurant/restaurant_detail_controller.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
@@ -14,17 +14,14 @@ class RestaurantDishOptionController extends GetxController {
   var isLoading = true.obs;
   var mapItemChosen = {}.obs;
 
-  late final FoodCardController foodCardController;
-  late final RestaurantDetailController restaurantDetailController;
-
+  late final restaurantDetailController = RestaurantDetailController.instance;
+  late final foodListController = FoodListController.instance;
   RestaurantDishOptionController(this.dishId);
 
   @override
   void onInit() {
     super.onInit();
     initializeDish();
-    foodCardController = Get.put(FoodCardController(dish), tag: dish?.id.toString());
-    restaurantDetailController = RestaurantDetailController.instance;
   }
 
   Future<void> initializeDish() async {

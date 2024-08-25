@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:food_delivery_app/common/controllers/card/food_card_controller.dart';
+import 'package:food_delivery_app/common/controllers/list/food_list_controller.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
 import 'package:food_delivery_app/common/widgets/bars/separate_bar.dart';
@@ -139,7 +139,7 @@ class _RestaurantDishOptionState extends State<RestaurantDishOption> {
                                       Row(
                                         children: [
                                           RoundIconButton(
-                                            onPressed: controller.foodCardController.handleRemoveFromCart,
+                                            onPressed: () => controller.foodListController.handleCartUpdate(dishId: controller.dish?.id ?? '', quantity: -1),
                                             backgroundColor: Colors.transparent,
                                             icon: TIcon.remove,
                                             iconColor: TColor.primary,
@@ -155,7 +155,7 @@ class _RestaurantDishOptionState extends State<RestaurantDishOption> {
                                       SizedBox(width: TSize.spaceBetweenItemsHorizontal),
 
                                       RoundIconButton(
-                                        onPressed: controller.foodCardController.handleAddToCart,
+                                        onPressed: () => controller.foodListController.handleCartUpdate(dishId: controller.dish?.id ?? '', quantity: 1),
                                       )
                                     ],
                                   )

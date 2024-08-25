@@ -30,7 +30,6 @@ class RestaurantListController extends GetxController {
         restaurants.addAll(_result);
       }else {
         restaurants = _result;
-        $print("asdasdasd");
       }
       _nextPage = _info["next"];
       update();

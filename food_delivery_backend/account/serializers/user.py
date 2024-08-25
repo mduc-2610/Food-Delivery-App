@@ -47,7 +47,7 @@ class UserSerializer(CustomRelatedModelSerializer):
                 }
                 try:
                     res_cart = RestaurantCart.objects.filter(**filter_kwargs).first()
-                    if res_cart and not res_cart.is_confirmed_order:
+                    if res_cart and not res_cart.is_created_order:
                         return RestaurantCartSerializer(res_cart).data
                     else:
                         return None

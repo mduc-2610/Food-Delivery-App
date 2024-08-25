@@ -57,7 +57,7 @@ class DeliveryDetail extends StatelessWidget {
             children: [
               DeliveryDetailRow(
                 title: "Subtotal",
-                value: "£ ${cart?.rawFee?.toStringAsFixed(2)}",
+                value: "£ ${cart?.totalPrice.toStringAsFixed(2)}",
               ),
               DeliveryDetailRow(
                 title: "Delivery Fee",

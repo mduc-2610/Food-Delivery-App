@@ -22,11 +22,8 @@ class Order(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="PENDING")
     rating = models.PositiveSmallIntegerField(default=0)
 
-    def raw_fee(self):
-        return self.cart.raw_fee()
-
     def total(self):
-        return float(self.raw_fee()) + float(self.delivery_fee) - float(self.discount)
+        return float(self.cart.total_price) + float(self.delivery_fee) - float(self.discount)
     
     def __str__(self):
         return f"Order for {self.cart} with total {self.total()}"

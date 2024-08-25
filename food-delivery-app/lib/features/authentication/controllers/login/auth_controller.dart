@@ -84,7 +84,7 @@ class AuthController extends GetxController {
         isForgotPassword: isForgotPassword.value,
     );
     $print(sendOTPData);
-    final [statusCode, headers, body] = await APIService<SendOTP>().create(sendOTPData);
+    final [statusCode, headers, body] = await APIService<SendOTP>().create(sendOTPData, noFromJson: true);
 
     if(statusCode == 200) {
       user = User.fromJson(body["data"]["user"]);

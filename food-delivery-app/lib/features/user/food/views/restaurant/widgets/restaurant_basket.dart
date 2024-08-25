@@ -29,14 +29,19 @@ class RestaurantBasket extends StatelessWidget {
     return GetBuilder<RestaurantBasketController>(
       init: RestaurantBasketController(),
       builder: (controller) {
-        return Obx(() =>
+        final _controller = controller.restaurantDetailController;
+        $print(controller.cartDishes.length);
+        return
+          // Obx(() {
+          //   return
           SizedBox(
           height: height,
           child: Scaffold(
             body:
-            (controller.isLoading.value)
-            ? buildSkeleton(context)
-            : Column(
+            // (controller.isLoading.value)
+            // ? buildSkeleton(context)
+            // :
+            Column(
               children: [
                 MainWrapper(
                   child: Row(
@@ -73,26 +78,32 @@ class RestaurantBasket extends StatelessWidget {
 
                 Expanded(
                   child: SingleChildScrollView(
-                    child: Obx(() => Column(
-                      children: [
-                        for(var cartDish in controller.cartDishes ?? [])...[
-                          FoodCard(
-                            dish: cartDish?.dish,
-                            type: FoodCardType.list,
-                            removePressed: () => controller.removeFromCart(),
-                            addPressed: () => controller.addToCart(),
-                          ),
-                          SeparateBar(direction: Direction.horizontal,)
-                        ]
-                      ],
-                    ),
-                  )),
-                )
+                    child:
+                    Obx(() {
+                      return
+                        Column(
+                          children: [
+                            for(var cartDish in _controller.cartDishes)...[
+                              FoodCard(
+                                dish: cartDish?.dish,
+                                type: FoodCardType.list,
+                                // removePressed: () => controller.re,
+                                // addPressed: () => controller.addToCart(),
+                              ),
+                              SeparateBar(direction: Direction.horizontal,)
+                            ]
+                          ],
+                        );
+                    }),
+
+                  )
+                ),
               ],
             ),
             bottomNavigationBar: DeliveryBottomNavigationBar(),
           ),
-        ));
+        );
+          // });
       },
     );
   }

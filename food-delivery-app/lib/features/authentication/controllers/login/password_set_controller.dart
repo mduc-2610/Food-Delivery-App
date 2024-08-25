@@ -25,7 +25,7 @@ class PasswordSetController extends GetxController {
         password2: confirmPasswordController.text,
       );
 
-      final [statusCode, headers, body] = await APIService<SetPassword>().create(setPasswordData);
+      final [statusCode, headers, body] = await APIService<SetPassword>().create(setPasswordData, noFromJson: true);
 
       if (statusCode == 201) {
         authController.token = Token.fromJson(body);

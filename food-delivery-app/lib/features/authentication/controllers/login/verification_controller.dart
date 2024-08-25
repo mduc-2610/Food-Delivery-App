@@ -45,7 +45,7 @@ class VerificationController extends GetxController {
       user: _authController.user.id!,
       isLogin: true,
     );
-    final [statusCode, headers, body] = await APIService<VerifyOTP>().create(verifyOTPData);
+    final [statusCode, headers, body] = await APIService<VerifyOTP>().create(verifyOTPData, noFromJson: true);
 
     if(statusCode == 400) {
       THelperFunction.showCSnackBar(Get.context!, body["non_field_errors"][0], SnackBarType.error);

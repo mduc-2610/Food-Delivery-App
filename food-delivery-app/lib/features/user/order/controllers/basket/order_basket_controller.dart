@@ -24,23 +24,23 @@ class OrderBasketController extends GetxController {
 
   Future<void> initializeUser() async {
     user = await UserService.getUser(queryParams: "restaurant=${restaurantDetailController.restaurantId}");
-    $print(restaurantDetailController.restaurantCart?.id);
-    $print(restaurantDetailController.restaurantCart?.isCreatedOrder);
-    if(restaurantDetailController.restaurantCart?.isCreatedOrder == false) {
+    $print(restaurantDetailController.user?.restaurantCart?.id);
+    $print(restaurantDetailController.user?.restaurantCart?.isCreatedOrder);
+    if(restaurantDetailController.user?.restaurantCart?.isCreatedOrder == false) {
       final [statusCode, headers, response] = await APIService<Order>().create({
-        'cart': restaurantDetailController.restaurantCart?.id
+        'cart': restaurantDetailController.user?.restaurantCart?.id
       }, noBearer: true);
       if(statusCode == 200 || statusCode == 201) {
         order = response;
-        restaurantDetailController.restaurantCart?.isCreatedOrder = true;
+        restaurantDetailController.user?.restaurantCart?.isCreatedOrder = true;
       }
       else {
-        order = await APIService<Order>().retrieve(restaurantDetailController.restaurantCart?.id ?? "");
+        order = await APIService<Order>().retrieve(restaurantDetailController.user?.restaurantCart?.id ?? "");
         $print(order);
       }
 
     } else {
-      order = await APIService<Order>().retrieve(restaurantDetailController.restaurantCart?.id ?? "");
+      order = await APIService<Order>().retrieve(restaurantDetailController.user?.restaurantCart?.id ?? "");
       $print(order);
     }
     Future.delayed(Duration(milliseconds: 10000));

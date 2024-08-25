@@ -111,7 +111,8 @@ class APIService<T> {
   Future<dynamic> create(dynamic data, {
     Function(Map<String, dynamic>)? fromJson,
     bool noBearer = false,
-    bool isFormData = false
+    bool isFormData = false,
+    bool noFromJson = false,
   }) async {
     return _handleRequest<dynamic>((Token? token) async {
       final requestData = isFormData
@@ -125,8 +126,8 @@ class APIService<T> {
           options: Options(headers: await _getHeaders(token, noBearer: noBearer)),
         );
         var jsonResponse = response.data;
-        fromJson = (fromJson != null) ? fromJson : this.fromJson;
-        if (fromJson != null) {
+        if(!noFromJson) {
+          fromJson = (fromJson != null) ? fromJson : this.fromJson;
           jsonResponse = fromJson?.call(jsonResponse);
         }
         return [response.statusCode, response.headers, jsonResponse];
@@ -137,13 +138,12 @@ class APIService<T> {
           body: json.encode(requestData),
         );
         var jsonResponse = json.decode(response.body);
-        fromJson = (fromJson != null) ? fromJson : this.fromJson;
-        if (fromJson != null) {
+        if(!noFromJson) {
+          fromJson = (fromJson != null) ? fromJson : this.fromJson;
           jsonResponse = fromJson?.call(jsonResponse);
         }
-        // else {
-        //   jsonResponse = this.fromJson(jsonResponse);
-        // }
+        $print([response.statusCode, response.headers, jsonResponse]);
+        $print("NO");
         return [response.statusCode, response.headers, jsonResponse];
       }
     });
@@ -155,6 +155,7 @@ class APIService<T> {
         Function(Map<String, dynamic>)? fromJson,
         bool patch = false,
         bool isFormData = false,
+        bool noFromJson = false,
       }) async {
     return _handleRequest<dynamic>((Token? token) async {
       final uri = url(id: id);
@@ -172,8 +173,11 @@ class APIService<T> {
           ),
         );
         var jsonResponse = response.data;
-        if (fromJson != null) {
-          jsonResponse = fromJson(jsonResponse);
+        if(!noFromJson) {
+          fromJson = (fromJson != null) ? fromJson : this.fromJson;
+          if (fromJson != null) {
+            jsonResponse = fromJson?.call(jsonResponse);
+          }
         }
         return [response.statusCode, response.headers, jsonResponse];
       } else {
@@ -186,8 +190,11 @@ class APIService<T> {
             : await http.put(Uri.parse(uri), headers: await _getHeaders(token), body: body);
 
         var jsonResponse = json.decode(response.body);
-        if (fromJson != null) {
-          jsonResponse = fromJson(jsonResponse);
+        if(!noFromJson) {
+          fromJson = (fromJson != null) ? fromJson : this.fromJson;
+          if (fromJson != null) {
+            jsonResponse = fromJson?.call(jsonResponse);
+          }
         }
         return [response.statusCode, response.headers, jsonResponse];
       }

@@ -22,9 +22,9 @@ class RestaurantDetailController extends GetxController with SingleGetTickerProv
   Map<String, List<Dish>> mapCategory = {};
   Rx<bool> isLoading = true.obs;
   TabController? tabController;
-  RestaurantCart? restaurantCart;
   var mapDishQuantity = {}.obs;
   var totalItems = 0.obs;
+  var totalPrice = 0.0.obs;
   var cartDishes = [].obs;
 
   @override
@@ -36,6 +36,10 @@ class RestaurantDetailController extends GetxController with SingleGetTickerProv
     }
   }
 
+  Future<void> refreshCart() async {
+    user = await UserService.getUser(queryParams: "restaurant=${restaurantId}");
+  }
+
   Future<void> initializeRestaurant() async {
     user = await UserService.getUser(queryParams: "restaurant=${restaurantId}");
     restaurant = await APIService<Restaurant>().retrieve(restaurantId ?? "");
@@ -43,11 +47,12 @@ class RestaurantDetailController extends GetxController with SingleGetTickerProv
     await loadDishes();
     await Future.delayed(Duration(milliseconds: TTime.init));
     tabController = TabController(length: categories.length, vsync: this);
-    restaurantCart = user?.restaurantCart;
-    for(var item in restaurantCart?.cartDishes ?? []) {
+    for(var item in user?.restaurantCart?.cartDishes ?? []) {
       mapDishQuantity[item.dish.id] = item.quantity;
-      totalItems.value += item.quantity as int;
     }
+    totalItems.value = user?.restaurantCart?.totalItems ?? 0;
+    totalPrice.value = user?.restaurantCart?.totalPrice ?? 0;
+    cartDishes.addAll(user?.restaurantCart?.cartDishes ?? []);
     isLoading.value = false;
     update();
   }
