@@ -3,6 +3,7 @@ import 'package:food_delivery_app/common/widgets/fields/date_picker.dart';
 import 'package:food_delivery_app/common/widgets/misc/head_with_action.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/cards/order_history_card.dart';
+import 'package:food_delivery_app/features/restaurant/home/views/home/widgets/review_summary.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 
@@ -20,6 +21,14 @@ class RevenueHistory extends StatelessWidget {
       child: ListView(
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Card(
+              elevation: TSize.cardElevation,
+              child: Padding(
+                  padding: EdgeInsets.all(TSize.md),
+                  child: ReviewsSummary()
+              )
+          ),
+
           SizedBox(height: TSize.spaceBetweenItemsVertical,),
           HeadWithAction(
             title: "Order History",
@@ -37,7 +46,7 @@ class RevenueHistory extends StatelessWidget {
             physics: NeverScrollableScrollPhysics(),
             itemCount: 5,
             itemBuilder: (context, index) {
-              return OrderHistoryCard(order: orders[index]);
+              // return OrderHistoryCard(order: orders[index]);
             },
           ),
         ],

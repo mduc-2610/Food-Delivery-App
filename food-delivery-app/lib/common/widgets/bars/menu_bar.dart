@@ -5,20 +5,25 @@ import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 
+enum Menu { user, deliverer, restaurant }
+
 class CMenuBar extends StatelessWidget {
   final List<Map<String, dynamic>> iconList;
   final List<Widget> viewList;
   final double? iconSize;
+  final String tag;
 
   CMenuBar({
     required this.iconList,
     required this.viewList,
-    this.iconSize
+    this.iconSize,
+    this.tag = "user",
   });
 
   @override
   Widget build(BuildContext context) {
-    final MenuBarController controller = Get.put(MenuBarController(ls: viewList));
+    // final MenuBarController controller = MenuBarController.instance;
+    final MenuBarController controller = Get.put(MenuBarController(ls: viewList), tag: tag);
 
     return Scaffold(
       body: Obx(() => controller.getView(controller.currentIndex.value)),

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
+import 'package:food_delivery_app/features/authentication/models/deliverer/deliverer.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
+import 'package:food_delivery_app/features/deliverer/home/controllers/home/home_controller.dart';
 import 'package:food_delivery_app/features/user/food/controllers/detail/food_detail_controller.dart';
+import 'package:food_delivery_app/features/user/food/controllers/home/home_controller.dart';
 import 'package:food_delivery_app/features/user/food/controllers/restaurant/restaurant_detail_controller.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
 import 'package:food_delivery_app/features/user/food/models/review/review.dart';
@@ -115,3 +118,17 @@ class RestaurantDetailReviewController extends ReviewController<Restaurant> {
   }
 }
 
+
+class DelivererDetailReviewController extends ReviewController<Deliverer> {
+  static DelivererDetailReviewController get instance => Get.find();
+  final _delivererDetailController = DelivererHomeController.instance;
+
+  @override
+  void onInit() {
+    super.onInit();
+    initialize(
+      item: _delivererDetailController.deliverer!,
+      reviewsUrl: _delivererDetailController.deliverer?.delivererReviews!,
+    );
+  }
+}

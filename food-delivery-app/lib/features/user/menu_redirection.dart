@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
+import "package:food_delivery_app/common/controllers/bars/menu_bar_controller.dart";
 import "package:food_delivery_app/common/widgets/bars/menu_bar.dart";
 import "package:food_delivery_app/data/services/user_service.dart";
+import "package:food_delivery_app/features/authentication/models/account/user.dart";
 import "package:food_delivery_app/features/notification/views/notification.dart";
 import "package:food_delivery_app/features/user/food/views/home/home.dart";
 import "package:food_delivery_app/features/user/food/views/like/food_like.dart";
@@ -12,7 +14,7 @@ import "package:get/get.dart";
 
 class UserMenuController extends GetxController {
   static UserMenuController get instance => Get.find();
-  String? user;
+  User? user;
 
   @override
   void onInit() {
@@ -21,7 +23,8 @@ class UserMenuController extends GetxController {
   }
 
   Future<void> initializeUser() async  {
-    user = (await UserService.getUser())?.id;
+    user = await UserService.getUser();
+    update();
   }
 
 }
@@ -31,6 +34,13 @@ class UserMenuRedirection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> viewList = [
+      HomeView(),
+      OrderHistoryView(),
+      FoodLikeView(),
+      NotificationView(),
+      PersonalProfileView(),
+    ];
     final x = Get.put(UserMenuController());
     return CMenuBar(
       iconList: [
@@ -56,13 +66,8 @@ class UserMenuRedirection extends StatelessWidget {
           "label": "",
         },
       ],
-      viewList: [
-        HomeView(),
-        OrderHistoryView(),
-        FoodLikeView(),
-        NotificationView(),
-        PersonalProfileView(),
-      ],
+      viewList: viewList,
+      tag: "user",
     );
   }
 }

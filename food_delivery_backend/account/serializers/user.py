@@ -31,6 +31,8 @@ class UserSerializer(CustomRelatedModelSerializer):
         self.one_related_serializer_class = {
             'profile': ProfileSerializer,
             'setting': SettingSerializer,
+            'deliverer': 'primary_related_field',
+            'restaurant': 'primary_related_field',
         }
     
     restaurant_cart = serializers.SerializerMethodField()
@@ -68,7 +70,7 @@ class UserSerializer(CustomRelatedModelSerializer):
     
     class Meta:
         model = User
-        fields = ['id', 'selected_location', 'phone_number', 'email', 'is_registration_verified', 'is_active', 'is_staff', 'is_superuser', 'date_joined', 'last_login', 'restaurant_cart']
+        fields = ['id', 'deliverer', 'restaurant', 'selected_location', 'phone_number', 'email', 'is_registration_verified', 'is_active', 'is_staff', 'is_superuser', 'date_joined', 'last_login', 'restaurant_cart']
 
 class OTPSerializer(serializers.ModelSerializer):
     class Meta:

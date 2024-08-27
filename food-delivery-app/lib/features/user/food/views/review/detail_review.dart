@@ -5,6 +5,7 @@ import 'package:food_delivery_app/common/widgets/behavior/sticky_tab_bar_delegat
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
 import 'package:food_delivery_app/features/user/food/controllers/review/detail_review_controller.dart';
+import 'package:food_delivery_app/features/user/food/models/review/review.dart';
 import 'package:food_delivery_app/features/user/food/views/review/skeleton/detail_review_view_skeleton.dart';
 import 'package:food_delivery_app/features/user/food/views/review/widgets/detail_review_list.dart';
 import 'package:food_delivery_app/features/user/food/views/review/widgets/detail_review_rating_distribution.dart';
@@ -13,7 +14,7 @@ import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
-enum ReviewType { food, restaurant }
+enum ReviewType { food, restaurant, deliverer }
 
 class DetailReviewView extends StatelessWidget {
   final ReviewType reviewType;
@@ -25,6 +26,11 @@ class DetailReviewView extends StatelessWidget {
       case ReviewType.restaurant:
         return GetBuilder<RestaurantDetailReviewController>(
           init: RestaurantDetailReviewController(),
+          builder: builder,
+        );
+      case ReviewType.deliverer:
+        return GetBuilder<DelivererDetailReviewController>(
+          init: DelivererDetailReviewController(),
           builder: builder,
         );
       default:
@@ -40,6 +46,7 @@ class DetailReviewView extends StatelessWidget {
     return getBuilder(
       builder: (controller) {
         final item = controller.item;
+        $print(item);
         return Obx(() => controller.isPageLoading.value
             ? DetailReviewViewSkeleton()
             : Scaffold(
@@ -57,7 +64,7 @@ class DetailReviewView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '${item?.rating}',
+                              '${item?.rating ?? 0}',
                               style: TextStyle(
                                 fontSize: 40,
                                 fontWeight: FontWeight.bold,

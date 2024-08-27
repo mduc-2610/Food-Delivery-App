@@ -181,7 +181,7 @@ class MessageRoomController extends GetxController {
     );
 
     final response = await APIService<DirectMessage>(dio: Dio())
-        .create(x, isFormData: true, noBearer: true);
+        .create(x, isFormData: true, noBearer: true, noFromJson: true);
     return response;
   }
 

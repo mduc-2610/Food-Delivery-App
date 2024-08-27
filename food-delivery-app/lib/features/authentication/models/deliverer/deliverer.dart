@@ -13,7 +13,7 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 @jsonSerializable
 class Deliverer {
   final String? id;
-  final User? user;
+  final dynamic user;
   final DelivererBasicInfo? basicInfo;
   final DelivererResidencyInfo? residencyInfo;
   final DelivererDriverLicense? driverLicenseAndVehicle;
@@ -21,6 +21,11 @@ class Deliverer {
   final DelivererAddress? address;
   final DelivererOperationInfo? operationInfo;
   final DelivererEmergencyContact? emergencyContact;
+  final String? deliveries;
+  final String? delivererReviews;
+  final double rating;
+  final int totalReviews;
+  final Map<String, dynamic> ratingCounts;
 
   Deliverer({
     this.id,
@@ -32,18 +37,29 @@ class Deliverer {
     this.address,
     this.operationInfo,
     this.emergencyContact,
+    this.deliveries,
+    this.delivererReviews,
+    this.rating = 0,
+    this.totalReviews = 0,
+    this.ratingCounts = const {},
   });
 
   Deliverer.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        user = json['user'] != null ? User.fromJson(json['user']) : null,
+        user = json['user'] == null || json['user'] is String ? json['user'] : User.fromJson(json['user']),
         basicInfo = json['basic_info'] != null ? DelivererBasicInfo.fromJson(json['basic_info']) : null,
         residencyInfo = json['residency_info'] != null ? DelivererResidencyInfo.fromJson(json['residency_info']) : null,
         driverLicenseAndVehicle = json['driver_license_and_vehicle'] != null ? DelivererDriverLicense.fromJson(json['driver_license_and_vehicle']) : null,
         otherInfo = json['other_info'] != null ? DelivererOtherInfo.fromJson(json['other_info']) : null,
         address = json['address'] != null ? DelivererAddress.fromJson(json['address']) : null,
         operationInfo = json['operation_info'] != null ? DelivererOperationInfo.fromJson(json['operation_info']) : null,
-        emergencyContact = json['emergency_contact'] != null ? DelivererEmergencyContact.fromJson(json['emergency_contact']) : null;
+        emergencyContact = json['emergency_contact'] != null ? DelivererEmergencyContact.fromJson(json['emergency_contact']) : null,
+        deliveries = json['deliveries'],
+        delivererReviews = json['deliverer_reviews'],
+        rating = THelperFunction.formatDouble(json['rating']),
+        totalReviews = json['total_reviews'] ?? 0,
+        ratingCounts = json['rating_counts']
+  ;
 
   Map<String, dynamic> toJson() {
     return {
@@ -57,6 +73,10 @@ class Deliverer {
       'operation_info': operationInfo?.toJson(),
       'emergency_contact': emergencyContact?.toJson(),
     };
+  }
+
+  String get formatTotalReviews {
+    return THelperFunction.formatNumber(totalReviews ?? 0);
   }
 
   @override

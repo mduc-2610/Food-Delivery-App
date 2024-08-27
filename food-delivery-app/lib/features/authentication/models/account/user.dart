@@ -25,6 +25,8 @@ class User {
   final String? restaurantCarts;
   final String? locations;
   final UserLocation? selectedLocation;
+  final String? deliverer;
+  final String? restaurant;
 
   User({
     this.id,
@@ -45,6 +47,8 @@ class User {
     this.restaurantCarts,
     this.locations,
     this.selectedLocation,
+    this.deliverer,
+    this.restaurant,
   });
 
   User.fromJson(Map<String, dynamic> json)
@@ -65,7 +69,9 @@ class User {
         restaurantCart = json['restaurant_cart'] != null ? RestaurantCart.fromJson(json['restaurant_cart']) : null,
         restaurantCarts = json['restaurant_carts'],
         locations = json['locations'],
-        selectedLocation = json['selected_locations'] != null ? UserLocation.fromJson(json['selected_locations']) : null
+        selectedLocation = json['selected_locations'] != null ? UserLocation.fromJson(json['selected_locations']) : null,
+        deliverer = json['deliverer'],
+        restaurant = json['restaurant']
   ;
 
   Map<String, dynamic> toJson({bool patch = false}) {

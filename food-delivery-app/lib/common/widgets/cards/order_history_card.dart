@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
+import 'package:food_delivery_app/features/user/order/models/order.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';
 import 'package:food_delivery_app/features/user/order/views/history/order_history_detail.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
@@ -18,16 +19,21 @@ import 'package:get/get.dart';
 
 class OrderHistoryCard extends StatelessWidget {
   final RestaurantCart? restaurantCart;
+  final Order? order;
   final bool noMargin;
 
   const OrderHistoryCard({
     Key? key,
     this.restaurantCart,
+    this.order,
     this.noMargin = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Determine which data source to use
+    final Order? currentOrder = order ?? restaurantCart?.order;
+
     return GestureDetector(
       onTap: () {
         Get.to(() => OrderHistoryDetailView());
@@ -40,7 +46,7 @@ class OrderHistoryCard extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: TSize.md,
-              vertical: TSize.sm
+              vertical: TSize.sm,
             ),
             child: Row(
               children: [
@@ -66,23 +72,25 @@ class OrderHistoryCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: TSize.spaceBetweenItemsHorizontal),
-
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Order ID:'),
                       Text(
-                        '',
+                        currentOrder?.id?.split('-')[0].toString() ?? '',
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       Text(
-                        '£${restaurantCart?.order?.total.toStringAsFixed(2)}',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.red),
+                        '£${currentOrder?.total.toStringAsFixed(2) ?? ''}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(color: Colors.red),
                       ),
                       SizedBox(height: TSize.spaceBetweenItemsVertical / 2),
                       RatingBarIndicator(
-                        rating: THelperFunction.formatDouble(restaurantCart?.order?.rating),
+                        rating: THelperFunction.formatDouble(currentOrder?.rating),
                         itemBuilder: (context, index) => SvgPicture.asset(TIcon.fillStar),
                         itemCount: 5,
                         itemSize: TSize.iconSm,
@@ -91,8 +99,7 @@ class OrderHistoryCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: TSize.spaceBetweenItemsHorizontal),
-
-                StatusChip(status: '${restaurantCart?.order?.status}'),
+                StatusChip(status: currentOrder?.status ?? ''),
               ],
             ),
           ),

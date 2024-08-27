@@ -107,6 +107,7 @@ def load_order(
             # "delivery_fee":  random.uniform(0, 10), 
             "discount":  random.uniform(0, 10),
             "status": fake.random_element(elements=['ACTIVE', 'CANCELLED', 'COMPLETED', 'PENDING']),
+            "rating": random.randint(0, 5)
         }
         order = Order.objects.create(**order_data)
         order_list.append(order)
@@ -123,11 +124,11 @@ def load_order(
         max_items=max_deliveries,
         attributes={
             "pickup_location": fake.address,
-            "pickup_lat": fake.latitude,
-            "pickup_long": fake.longitude,
+            "pickup_latitude": fake.latitude,
+            "pickup_longitude": fake.longitude,
             "dropoff_location": fake.address,
-            "dropoff_lat": fake.latitude,
-            "dropoff_long": fake.longitude,
+            "dropoff_latitude": fake.latitude,
+            "dropoff_longitude": fake.longitude,
             "status": lambda: random.choice(['FINDING_DRIVER', 'ON_THE_WAY', 'DELIVERED']),
             "estimated_delivery_time": fake.date_time_this_year,
             "actual_delivery_time": fake.date_time_this_year

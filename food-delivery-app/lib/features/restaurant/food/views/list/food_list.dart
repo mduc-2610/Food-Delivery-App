@@ -41,9 +41,9 @@ class _FoodViewState extends State<FoodView> with SingleTickerProviderStateMixin
             padding: EdgeInsets.all(8.0),
             children: [
               for(int i = 0; i < 10; i++)...[
-                FoodCard(
-                  type: FoodCardType.list,
-                ),
+                // FoodCard(
+                //   type: FoodCardType.list,
+                // ),
                 SizedBox(height: TSize.spaceBetweenItemsVertical,),
               ]
 

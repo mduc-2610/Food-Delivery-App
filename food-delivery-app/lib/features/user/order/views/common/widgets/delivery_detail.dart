@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,14 +7,19 @@ import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
+import 'package:food_delivery_app/data/socket_services/order_socket_service.dart';
 import 'package:food_delivery_app/features/user/order/controllers/basket/order_basket_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
 import 'package:food_delivery_app/features/user/order/models/order.dart';
 import 'package:food_delivery_app/features/user/order/views/location/order_location.dart';
+import 'package:food_delivery_app/utils/constants/api_constants.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/status.dart' as status;
 import 'package:get/get.dart';
 
 class DeliveryDetail extends StatelessWidget {
@@ -220,7 +227,7 @@ class ReviewOrCancellationSection extends StatelessWidget {
   }
 }
 
-class ActionButtons extends StatelessWidget {
+class ActionButtons extends StatefulWidget {
   final Order? order;
   final String fromView;
 
@@ -228,6 +235,63 @@ class ActionButtons extends StatelessWidget {
     required this.order,
     required this.fromView,
   });
+
+  @override
+  State<ActionButtons> createState() => _ActionButtonsState();
+}
+
+class _ActionButtonsState extends State<ActionButtons> {
+  WebSocketChannel? _channel;
+  @override void initState() {
+    super.initState();
+    connect();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    disconnect();
+  }
+
+
+  void connect() {
+    final String url = 'ws://${APIConstant.ip}:8000/ws/order/';
+    print("Attempting to connect to: $url");
+    _channel = WebSocketChannel.connect(Uri.parse(url));
+    print("WebSocket channel created $_channel");
+    _channel?.stream.listen(
+          (message) {
+        print("Received message: $message");
+        handleIncomingMessage(message);
+      },
+      onError: (error) {
+        print('WebSocket error: $error');
+      },
+      onDone: () {
+        print('WebSocket connection closed');
+      },
+    );
+    print("WebSocket listener set up");
+  }
+
+  void sendMessage(Map<String, dynamic> data) {
+    _channel?.sink.add(jsonEncode(data));
+    $print(jsonEncode(data));
+  }
+
+  void handleIncomingMessage(String message) {
+    // Order? order = Order.fromJson(jsonDecode(message)["order"]);
+    $print("asdasd");
+    $print(message);
+  }
+
+  void disconnect() {
+    if (_channel != null) {
+      _channel?.sink.close();
+      $print("DISCONNECT");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -247,22 +311,26 @@ class ActionButtons extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             InkWell(
-              onTap: (fromView == "Basket") ? null : () {},
+              onTap: (widget.fromView == "Basket") ? null : () {},
               child: Text(
-                (fromView == "Basket")
-                    ? "£ ${order?.total.toStringAsFixed(2)}"
+                (widget.fromView == "Basket")
+                    ? "£ ${widget.order?.total.toStringAsFixed(2)}"
                     : "Cancel Order",
-                style: (fromView == "Basket")
+                style: (widget.fromView == "Basket")
                     ? Theme.of(context).textTheme.headlineSmall
                     : Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.textDesc),
               ),
             ),
-            SizedBox(width: TSize.spaceBetweenSections * ((fromView == "Basket") ? 2 : 1)),
+            SizedBox(width: TSize.spaceBetweenSections * ((widget.fromView == "Basket") ? 2 : 1)),
             SizedBox(
               width: TDeviceUtil.getScreenWidth() * 0.45,
               child: MainButton(
                 paddingHorizontal: TSize.lg,
-                onPressed: () {},
+                onPressed: () async {
+                  final controller = OrderBasketController.instance;
+                  sendMessage(controller.order?.toJson() ?? {});
+                  // x.sendMessage(controller.order?.toJson() ?? {});
+                },
                 text: "Track Order",
                 textStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.light),
               ),

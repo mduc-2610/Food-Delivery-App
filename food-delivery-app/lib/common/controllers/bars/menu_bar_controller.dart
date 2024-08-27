@@ -1,5 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
 class MenuBarController extends GetxController {
@@ -13,6 +14,7 @@ class MenuBarController extends GetxController {
 
 
   Widget getView(index) {
+    $print(viewList[currentIndex.value]);
     return viewList[currentIndex.value];
   }
 

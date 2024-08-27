@@ -68,22 +68,23 @@ class HomeView extends StatelessWidget {
               ),
             ),
 
-            SliverMainWrapper(
-              sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.8,
-                  crossAxisSpacing: TSize.gridViewSpacing,
-                  mainAxisSpacing: TSize.gridViewSpacing,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  childCount: 8,
-                  (context, index) => FoodCard(
-                    type: FoodCardType.grid,
-                  ),
-                ),
-              ),
-            )
+            // SliverMainWrapper(
+            //   sliver: SliverGrid(
+            //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //       crossAxisCount: 2,
+            //       childAspectRatio: 0.8,
+            //       crossAxisSpacing: TSize.gridViewSpacing,
+            //       mainAxisSpacing: TSize.gridViewSpacing,
+            //     ),
+            //     delegate: SliverChildBuilderDelegate(
+            //       childCount: 8,
+            //       (context, index) =>
+            //           FoodCard(
+            //         type: FoodCardType.grid,
+            //       ),
+            //     ),
+            //   ),
+            // )
           ]
       ),
     );

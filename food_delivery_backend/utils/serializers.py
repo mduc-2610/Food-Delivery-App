@@ -61,10 +61,11 @@ class CustomRelatedModelSerializer(serializers.ModelSerializer):
         for field in self.one_related_fields:   
             if not isinstance(data.get(field), dict):
                 related_serializer_class = self.one_related_serializer_class.get(field)
-                if not related_serializer_class:
-                    data[field] = get_related_url(self.request, self.model, instance, '-'.join(field.split('_')), type='one')
-                else:
-                    data[field] = self.serialize_related_object(related_serializer_class, instance, field, context=self.context)
+                if related_serializer_class != 'primary_related_field':
+                    if not related_serializer_class:
+                        data[field] = get_related_url(self.request, self.model, instance, '-'.join(field.split('_')), type='one')
+                    else:
+                        data[field] = self.serialize_related_object(related_serializer_class, instance, field, context=self.context)
 
         for field in self.many_related_fields:
             if not isinstance(data.get(field), list):

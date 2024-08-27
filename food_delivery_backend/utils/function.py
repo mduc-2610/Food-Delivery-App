@@ -100,6 +100,7 @@ def camel_to_snake(name, sep='-'):
     return re.sub('([a-z0-9])([A-Z])', fr'\1{sep}\2', name).lower()
 
 def mapping_endpoint(model, type):
+    # print(model, model._meta.app_label, pretty=True)
     return f'api/{model._meta.app_label}' + (f'/{camel_to_snake(model.__name__)}' if type == "many" else '')
 
 def get_related_url(request, model, obj, view_name, type):
