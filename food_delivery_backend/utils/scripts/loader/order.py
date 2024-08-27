@@ -12,7 +12,10 @@ from order.models import (
     Delivery, RestaurantCart, RestaurantCartDish
 )
 
-from utils.function import load_intermediate_model
+from utils.function import (
+    load_intermediate_model, 
+    generate_latitude, generate_longitude
+)
 
 fake = Faker()
 
@@ -124,11 +127,11 @@ def load_order(
         max_items=max_deliveries,
         attributes={
             "pickup_location": fake.address,
-            "pickup_latitude": fake.latitude,
-            "pickup_longitude": fake.longitude,
+            "pickup_latitude": generate_latitude(),
+            "pickup_longitude": generate_longitude(),
             "dropoff_location": fake.address,
-            "dropoff_latitude": fake.latitude,
-            "dropoff_longitude": fake.longitude,
+            "dropoff_latitude": generate_latitude(),
+            "dropoff_longitude": generate_longitude(),
             "status": lambda: random.choice(['FINDING_DRIVER', 'ON_THE_WAY', 'DELIVERED']),
             "estimated_delivery_time": fake.date_time_this_year,
             "actual_delivery_time": fake.date_time_this_year

@@ -14,6 +14,8 @@ from account.models import (
 
 fake = Faker()
 
+from utils.function import generate_latitude, generate_longitude
+
 def generate_phone_number():
     return f"+84{random.randint(100000000, 99999999999)}"
 
@@ -59,8 +61,8 @@ def load_user(max_users=100):
                 "user": user,
                 "name": fake.word(),
                 "address": fake.address(),
-                "latitude": fake.latitude(),
-                "longitude": fake.longitude(),
+                "latitude": generate_latitude(),
+                "longitude": generate_longitude(),
                 "is_selected": True if _i == selected_index else False,
             }
             Location.objects.create(**location_data)

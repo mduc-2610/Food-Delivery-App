@@ -9,7 +9,10 @@ from restaurant.models import (
     Representative, OperatingHour, Restaurant, RestaurantCategory
 )
 
-from utils.function import load_one_to_many_model, load_intermediate_model
+from utils.function import (
+    load_one_to_many_model, load_intermediate_model, 
+    generate_latitude, generate_longitude
+)
 
 fake = Faker()
 
@@ -58,8 +61,8 @@ def load_restaurant(
             "city": fake.city(),
             "district": fake.state(),
             "street_address": fake.street_address(),
-            "latitude": fake.latitude(),
-            "longitude": fake.longitude(),
+            "latitude": generate_latitude(),
+            "longitude": generate_longitude(),
         }
         basic_info = BasicInfo.objects.create(**basic_info_data)
         print(f"\tSuccessfully created Basic Info: {basic_info}")

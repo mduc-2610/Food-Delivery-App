@@ -74,13 +74,11 @@ def load_food(
                 "original_price": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=10, max_value=100),
                 "discount_price": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50),
                 "category": category,
-                "image": f"{category_name}/{tmp.pop(random.randint(0, len(tmp) - 1))}",
+                "image": f"food/{category_name}/{tmp.pop(random.randint(0, len(tmp) - 1))}",
             }
             
-            # Create the Dish object
             dish, created = Dish.objects.get_or_create(**dish_data)
             
-            # Handle dish options if the category has options
             if category.name in category_options:
                 options = category_options[category.name]
                 for option_type, option_list in options.items():

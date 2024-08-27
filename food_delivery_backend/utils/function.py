@@ -78,6 +78,19 @@ def load_intermediate_model(
     
     return created_objects
 
+from faker import Faker
+
+fake = Faker()
+def generate_latitude(country='Vietnam'):
+    if country == 'Vietnam':
+        return random.uniform(8.0, 23.0)
+    return fake.latitude()
+
+def generate_longitude(country='Vietnam'):
+    if country == 'Vietnam':
+        return random.uniform(102.0, 110.0)
+    return fake.longitude()
+
 import math
 
 def calculate_distance(lat1, lon1, lat2, lon2):
@@ -100,7 +113,6 @@ def camel_to_snake(name, sep='-'):
     return re.sub('([a-z0-9])([A-Z])', fr'\1{sep}\2', name).lower()
 
 def mapping_endpoint(model, type):
-    # print(model, model._meta.app_label, pretty=True)
     return f'api/{model._meta.app_label}' + (f'/{camel_to_snake(model.__name__)}' if type == "many" else '')
 
 def get_related_url(request, model, obj, view_name, type):
