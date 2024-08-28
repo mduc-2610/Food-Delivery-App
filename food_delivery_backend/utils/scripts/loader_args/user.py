@@ -11,7 +11,8 @@ from account.models import (
     Profile, Location, 
     Setting, SecuritySetting 
 )
-from utils.function import generate_latitude, generate_longitude
+from utils.function import generate_latitude, generate_longitude, generate_phone_number
+from utils.decorators import script_runner
 
 fake = Faker()
 
@@ -24,21 +25,22 @@ MODEL_MAP = {
     'security_setting': SecuritySetting
 }
 
-def generate_phone_number():
-    return f"+84{random.randint(100000000, 9999999999)}"
-
+@script_runner(MODEL_MAP)
 @transaction.atomic
-def load_user(max_users=100, models_to_update=None):
-    all_objects = {model: model.objects.all() for model in MODEL_MAP.values()}
+def load_user(
+    max_users=100,
+    models_to_update=None,
+    map_queryset=None,
+    action=None,
+):
+    if models_to_update is None:
+        models_to_update = MODEL_MAP.keys()
 
-    if models_to_update is None or any(model in models_to_update for model in MODEL_MAP.keys()):
-        for model in MODEL_MAP.values():
-            if models_to_update is None or model.__name__.lower() in models_to_update:
-                model.objects.all().delete()
-
+    if User in models_to_update:
         print("________________________________________________________________")
         print("USER:")
-        
+        User.objects.all().delete()  
+
         superuser = User.objects.create_superuser(phone_number="+84858189111", password="Duckkucd.123")
         print(f"Superuser created: {superuser}")
 
@@ -61,7 +63,7 @@ def load_user(max_users=100, models_to_update=None):
             }
             OTP.objects.create(**otp_data)
             print(f"\tSuccessfully created OTP for User: {user}")
-            
+
             number_location = random.randint(1, 5)
             selected_index = random.randint(0, number_location - 1)
             for i in range(number_location):
@@ -104,26 +106,12 @@ def load_user(max_users=100, models_to_update=None):
             }
             SecuritySetting.objects.create(**security_setting_data)
             print(f"\tSuccessfully created Security Setting for User: {user}\n")
-    
     return user_list
 
-def delete_models(models_to_delete):
-    for model_name in models_to_delete:
-        model = MODEL_MAP.get(model_name)
-        if model:
-            model.objects.all().delete()
-        else:
-            print(f"Model '{model_name}' does not exist.")
-
 def run(*args):
-    action = args[0] if args else None
-    models_to_update = args[1:] if len(args) > 1 else None
-
-    if action == 'delete':
-        models_to_delete = models_to_update if models_to_update else MODEL_MAP.keys()
-        delete_models(models_to_delete)
-    elif action == 'update':
-        load_user(models_to_update=models_to_update)
+    if len(args) > 0:
+        action = args[0]
+        models = args[1:] if len(args) > 1 else []
+        load_user(action, *models)
     else:
-        print("Invalid action. Use 'delete' or 'update'.")
-
+        load_user()

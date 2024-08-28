@@ -6,7 +6,7 @@ from deliverer.models import Deliverer
 from restaurant.models import Restaurant
 from food.models import Dish
 
-from utils.scripts.loader import (
+from utils.scripts.loader_args import (
     load_deliverer,
     load_food,
     load_notification,
@@ -17,7 +17,7 @@ from utils.scripts.loader import (
     load_user,
 )
 
-def run(start_index=0, end_index=None):
+def run(*args):
     
     MAX_USERS = 100
     
@@ -54,18 +54,22 @@ def run(start_index=0, end_index=None):
     MAX_COMMENT_IMAGES=5
 
     loaders = [
-        load_user,
-        load_deliverer,
-        load_food,
-        load_restaurant,
-        load_notification,
-        load_order,
-        load_review,
-        load_social,
+        load_user, # 0
+        load_deliverer, # 1
+        load_food, # 2
+        load_restaurant, # 3
+        load_notification, # 4
+        load_order, # 5
+        load_review, # 6
+        load_social, # 7
     ]
-
-    if end_index is None:
-        end_index = len(loaders)
+    start_index = 0
+    end_index = len(loaders)
+    try:
+        start_index = int(args[0])
+        end_index = int(args[1])
+    except:
+        print('Invalid start_index or end_index type.')
 
     if start_index < 0 or end_index > len(loaders) or start_index > end_index:
         print("Invalid start_index or end_index values.")

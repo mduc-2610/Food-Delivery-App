@@ -115,27 +115,27 @@ def load_food(
         attributes=review_attributes
     )
 
-    # print("________________________________________________________________")
-    # print("DISH REVIEW LIKES:")
-    # load_intermediate_model(
-    #     model_class=DishReviewLike,
-    #     primary_field='review',
-    #     related_field='user',
-    #     primary_objects=review_list,
-    #     related_objects=user_list,
-    #     max_items=max_dish_reviews_like,
-    # )
+    print("________________________________________________________________")
+    print("DISH REVIEW LIKES:")
+    load_intermediate_model(
+        model_class=DishReviewLike,
+        primary_field='review',
+        related_field='user',
+        primary_objects=review_list,
+        related_objects=user_list,
+        max_items=max_dish_reviews_like,
+    )
 
-    # print("________________________________________________________________")
-    # print("DISH LIKES:")
-    # load_intermediate_model(
-    #     model_class=DishLike,
-    #     primary_field='dish',
-    #     related_field='user',
-    #     primary_objects=dish_list,
-    #     related_objects=user_list,
-    #     max_items=max_dish_likes,
-    # )
+    print("________________________________________________________________")
+    print("DISH LIKES:")
+    load_intermediate_model(
+        model_class=DishLike,
+        primary_field='dish',
+        related_field='user',
+        primary_objects=dish_list,
+        related_objects=user_list,
+        max_items=max_dish_likes,
+    )
 
     return dish_list
 

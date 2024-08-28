@@ -6,28 +6,66 @@ import sys
 
 from django.apps import apps
 
+def update_attr(instance, **kwargs):
+    save = kwargs.pop('save', True)
+    for k, v in kwargs.items():
+        setattr(instance, k, v() if callable(v) else v )
+    if save:
+        instance.save()
+    return instance
+
 def load_one_to_many_model(
         model_class,
         primary_field,
         primary_objects,
         max_related_objects,
         related_field=[],
-        attributes={}
+        attributes={}, 
+        action="delete"
     ):
     created_objects = []
     
-    if type(primary_objects) is not list:
-        primary_objects = list(primary_objects)
+    if action == "delete":    
+        if type(primary_objects) is not list:
+            primary_objects = list(primary_objects)
 
-    for primary_obj in primary_objects:
-        for _ in range(random.randint(0, max(max_related_objects, 1))):
+        for primary_obj in primary_objects:
+            for _ in range(random.randint(0, max(max_related_objects, 1))):
+                data = {
+                    primary_field: primary_obj,
+                    **{attr: value() if callable(value) else value for attr, value in attributes.items()}
+                }
+                created_object, _ = model_class.objects.get_or_create(**data)
+                created_objects.append(created_object)
+                print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
+    else:
+        if attributes:
+            for instance in model_class.objects.all():
+                update_attr(instance, **attributes)
+                print(f"\tSuccessfully update{instance}")
+    return created_objects
+
+def load_normal_model(
+    model_class,
+    max_items,
+    attributes={}, 
+    action="delete"
+):
+    created_objects = []
+    
+    if action == "delete":    
+        for _ in range(max_items):
             data = {
-                primary_field: primary_obj,
                 **{attr: value() if callable(value) else value for attr, value in attributes.items()}
             }
             created_object, _ = model_class.objects.get_or_create(**data)
             created_objects.append(created_object)
             print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
+    else:
+        if attributes:
+            for instance in model_class.objects.all():
+                update_attr(instance, **attributes)
+                print(f"\tSuccessfully update{instance}")
     return created_objects
 
 def load_intermediate_model(
@@ -39,43 +77,50 @@ def load_intermediate_model(
     related_objects=[],
     min_items=0,
     attributes={},
-    query_attributes=[]
+    query_attributes=[],
+    action=None
 ):
+    if not action: action = "delete"
     created_objects = []
-    
-    if not isinstance(primary_objects, list):
-        primary_objects = list(primary_objects)
-    if not isinstance(related_objects, list):
-        related_objects = list(related_objects)
+    if action == "delete":
+        if not isinstance(primary_objects, list):
+            primary_objects = list(primary_objects)
+        if not isinstance(related_objects, list):
+            related_objects = list(related_objects)
 
-    for primary_obj in primary_objects:
-        if query_attributes:
-            """
-            Ex: RestaurantCartDish
-            The cart (Restaurant Cart) will contain many dishes
-            Restaurant Cart will have restaurant, from restaurant will get many dishes
-            """
-            tmp_related_objects = list(getattr(getattr(primary_obj, query_attributes[0]), query_attributes[1]).all()).copy()
-            print(f"Number of related objects: {len(tmp_related_objects)}")
-        else:
-            tmp_related_objects = related_objects.copy()
+        for primary_obj in primary_objects:
+            if query_attributes:
+                """
+                Ex: RestaurantCartDish
+                The cart (Restaurant Cart) will contain many dishes
+                Restaurant Cart will have restaurant, from restaurant will get many dishes
+                """
+                tmp_related_objects = list(getattr(getattr(primary_obj, query_attributes[0]), query_attributes[1]).all()).copy()
+                print(f"Number of related objects: {len(tmp_related_objects)}")
+            else:
+                tmp_related_objects = related_objects.copy()
 
-        for _ in range(random.randint(min_items, min(len(tmp_related_objects), max_items))):
-            if not tmp_related_objects:
-                break
-            related_obj = tmp_related_objects.pop(random.randint(0, len(tmp_related_objects) - 1))
-            if primary_obj == related_obj:
-                continue
+            for _ in range(random.randint(min_items, min(len(tmp_related_objects), max_items))):
+                if not tmp_related_objects:
+                    break
+                related_obj = tmp_related_objects.pop(random.randint(0, len(tmp_related_objects) - 1))
+                if primary_obj == related_obj:
+                    continue
+                
+                data = {
+                    primary_field: primary_obj,
+                    related_field: related_obj,
+                    **{attr: value() if callable(value) else value for attr, value in attributes.items()}
+                }
+                created_object = model_class.objects.create(**data)
+                created_objects.append(created_object)
+                print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
+    else:
+        if attributes:
+            for instance in model_class.objects.all():
+                update_attr(instance, **attributes)
+                print(f"\tSuccessfully update {instance}")
             
-            data = {
-                primary_field: primary_obj,
-                related_field: related_obj,
-                **{attr: value() if callable(value) else value for attr, value in attributes.items()}
-            }
-            created_object = model_class.objects.create(**data)
-            created_objects.append(created_object)
-            print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
-    
     return created_objects
 
 from faker import Faker
@@ -90,6 +135,9 @@ def generate_longitude(country='Vietnam'):
     if country == 'Vietnam':
         return random.uniform(102.0, 110.0)
     return fake.longitude()
+
+def generate_phone_number():
+    return f"+84{random.randint(100000000, 999999999)}"
 
 import math
 

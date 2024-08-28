@@ -14,8 +14,17 @@ from account.models import (
 from deliverer.models import Deliverer
 
 def run(mode=None, *args):
-    print("________________________________________________________________")
-    print(mode, [*args])
+    # print("________________________________________________________________")
+    # print(type(args))
+    from django.apps import apps
+
+    # Get all models
+    all_models = apps.get_models()
+
+    # Print model names
+    for model in all_models:
+        print(model.__name__, len(model.objects.all()))
+
     # users = Profile.objects.all()
     # for user in users:
     #     user.avatar = None
