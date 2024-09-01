@@ -3,10 +3,10 @@ from rest_framework import serializers
 
 from food.models import Dish, DishLike
 
-from account.serializers import UserAbbrSerializer
+from account.serializers import BasicUserSerializer
 
 class DishLikeSerializer(serializers.ModelSerializer):
-    user = UserAbbrSerializer()
+    user = BasicUserSerializer()
 
     class Meta:
         model = DishLike

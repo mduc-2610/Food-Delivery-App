@@ -47,8 +47,6 @@ def load_notification(
     action=None,
 ):
     if Notification in models_to_update:
-        print("________________________________________________________________")
-        print("NOTIFICATIONS:")
         notification_list = [
             Notification.objects.create(
                 notification_type=fake.random_element(elements=('DISCOUNT', 'ORDER', 'ACCOUNT')),
@@ -60,8 +58,6 @@ def load_notification(
         print(f"\tSuccessfully created {len(notification_list)} Notifications.")
     
     if UserNotification in models_to_update:
-        print("________________________________________________________________")
-        print("USER NOTIFICATIONS:")
         load_intermediate_model(
             model_class=UserNotification,
             primary_field='user',
@@ -73,8 +69,6 @@ def load_notification(
         )
 
     if DirectRoom in models_to_update:
-        print("________________________________________________________________")
-        print("DIRECT ROOMS:")
         direct_room_list = load_intermediate_model(
             model_class=DirectRoom,
             primary_field='user1',
@@ -89,8 +83,6 @@ def load_notification(
         direct_room_list = []
 
     if GroupRoom in models_to_update:
-        print("________________________________________________________________")
-        print("GROUP ROOMS:")
         group_room_list = [
             GroupRoom.objects.create(
                 name=fake.sentence(nb_words=4)
@@ -104,8 +96,6 @@ def load_notification(
         group_room_list = []
 
     if DirectMessage in models_to_update:
-        print("________________________________________________________________")
-        print("DIRECT MESSAGES:")
         direct_message_list = [
             DirectMessage.objects.create(
                 user=random.choice([direct_room.user1, direct_room.user2]),
@@ -123,8 +113,6 @@ def load_notification(
         direct_message_list = []
 
     if GroupMessage in models_to_update:
-        print("________________________________________________________________")
-        print("GROUP MESSAGES:")
         group_message_list = [
             GroupMessage.objects.create(
                 user=random.choice(group_room.members.all()),
@@ -142,57 +130,44 @@ def load_notification(
         group_message_list = []
 
     if DirectImageMessage in models_to_update:
-        print("________________________________________________________________")
-        print("DIRECT IMAGE MESSAGES:")
         load_one_to_many_model(
             model_class=DirectImageMessage,
             primary_field='message',
             primary_objects=direct_message_list,
-            max_related_objects=max_images_per_message,
+            max_related_count=max_images_per_message,
             attributes={'image': lambda: fake.image_url()},
             action=action
         )
 
     if GroupImageMessage in models_to_update:
-        print("________________________________________________________________")
-        print("GROUP IMAGE MESSAGES:")
         load_one_to_many_model(
             model_class=GroupImageMessage,
             primary_field='message',
             primary_objects=group_message_list,
-            max_related_objects=max_images_per_message,
+            max_related_count=max_images_per_message,
             attributes={'image': lambda: fake.image_url()},
             action=action
         )
 
     if DirectVideoMessage in models_to_update:
-        print("________________________________________________________________")
-        print("DIRECT VIDEO MESSAGES:")
         load_one_to_many_model(
             model_class=DirectVideoMessage,
             primary_field='message',
             primary_objects=direct_message_list,
-            max_related_objects=max_videos_per_message,
+            max_related_count=max_videos_per_message,
             attributes={'video': lambda: fake.image_url()},
             action=action
         )
 
     if GroupVideoMessage in models_to_update:
-        print("________________________________________________________________")
-        print("GROUP VIDEO MESSAGES:")
         load_one_to_many_model(
             model_class=GroupVideoMessage,
             primary_field='message',
             primary_objects=group_message_list,
-            max_related_objects=max_videos_per_message,
+            max_related_count=max_videos_per_message,
             attributes={'video': lambda: fake.image_url()},
             action=action
         )
 
 def run(*args):
-    if len(args) > 0:
-        action = args[0]
-        models = args[1:] if len(args) > 1 else []
-        load_notification(action, *models)
-    else:
-        load_notification()
+    load_notification(*args)

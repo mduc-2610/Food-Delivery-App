@@ -5,7 +5,7 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 @reflector
 class Review {
   final String? id;
-  final UserAbbr? user;
+  final BasicUser? user;
   final int? rating;
   final String? title;
   final String? content;
@@ -24,7 +24,7 @@ class Review {
 
   Review.fromJson(Map<String, dynamic> json)
     : id = json['id'],
-      user = UserAbbr.fromJson(json['user']),
+      user = BasicUser.fromJson(json['user']),
       rating = json['rating'],
       title = json['title'],
       content = json['content'],
@@ -56,7 +56,7 @@ class DishReview extends Review {
 
   DishReview({
     String? id,
-    UserAbbr? user,
+    BasicUser? user,
     int? rating,
     String? title,
     String? content,
@@ -98,7 +98,7 @@ class DelivererReview extends Review {
 
   DelivererReview({
     String? id,
-    UserAbbr? user,
+    BasicUser? user,
     int? rating,
     String? title,
     String? content,
@@ -140,7 +140,7 @@ class RestaurantReview extends Review {
 
   RestaurantReview({
     String? id,
-    UserAbbr? user,
+    BasicUser? user,
     int? rating,
     String? title,
     String? content,
@@ -181,7 +181,7 @@ class DeliveryReview extends Review {
 
   DeliveryReview({
     String? id,
-    UserAbbr? user,
+    BasicUser? user,
     int? rating,
     String? title,
     String? content,

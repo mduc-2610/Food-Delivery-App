@@ -19,13 +19,14 @@ from utils.serializers import CustomRelatedModelSerializer
 class DelivererSerializer(serializers.ModelSerializer):
     class Meta:
         model = Deliverer
-        fields = ['id', 'user']
+        fields = ['id', 'user', 'is_active', 'is_occupied', 'current_latitude', 'current_longitude',]
         
 class DetailDelivererSerializer(CustomRelatedModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
         self.one_related_serializer_class = {
+            'user': 'primary_related_field',
             'basic_info': BasicInfoSerializer,
             'residency_info': ResidencyInfoSerializer,
             'driver_license': DriverLicenseSerializer,
@@ -38,6 +39,6 @@ class DetailDelivererSerializer(CustomRelatedModelSerializer):
     class Meta:
         model = Deliverer
         fields = (
-            'id', 'rating', 'total_reviews', 'rating_counts'
+            'id', 'user', 'avatar', 'rating', 'total_reviews', 'rating_counts', 'is_active', 'is_occupied', 'current_latitude', 'current_longitude',
         )
-        depth = 2
+        # depth = 1

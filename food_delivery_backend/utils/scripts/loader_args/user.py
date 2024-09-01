@@ -37,8 +37,6 @@ def load_user(
         models_to_update = MODEL_MAP.keys()
 
     if User in models_to_update:
-        print("________________________________________________________________")
-        print("USER:")
         User.objects.all().delete()  
 
         superuser = User.objects.create_superuser(phone_number="+84858189111", password="Duckkucd.123")
@@ -109,9 +107,4 @@ def load_user(
     return user_list
 
 def run(*args):
-    if len(args) > 0:
-        action = args[0]
-        models = args[1:] if len(args) > 1 else []
-        load_user(action, *models)
-    else:
-        load_user()
+    load_user(*args)

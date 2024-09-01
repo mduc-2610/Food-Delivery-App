@@ -41,9 +41,7 @@ def load_restaurant(
     action=None,
 ):
     if Restaurant in models_to_update:
-        print("________________________________________________________________")
         user_list = list(map_queryset.get(User))
-        print("RESTAURANTS:")
         restaurant_list = load_normal_model(
             model_class=Restaurant,
             max_items=max_restaurants,
@@ -52,8 +50,6 @@ def load_restaurant(
         )    
 
     if BasicInfo in models_to_update:
-        print("________________________________________________________________")
-        print("BASIC INFO:")
         for restaurant in map_queryset.get(Restaurant):
             basic_info_data = {
                 "name": fake.company(),
@@ -75,8 +71,6 @@ def load_restaurant(
                 basic_info = update_attr(basic_info, **basic_info_data)
             print(f"\tSuccessfully created Basic Info: {basic_info}")
     if DetailInfo in models_to_update:
-        print("________________________________________________________________")
-        print("DETAIL INFO:")
         for restaurant in map_queryset.get(Restaurant):
             detail_info_data = {
                 "keywords": ", ".join(fake.words(nb=5, unique=True)),
@@ -115,8 +109,6 @@ def load_restaurant(
                     print(f"\tSuccessfully created Operating Hour for {detail_info} on {day}")
 
     if MenuDelivery in models_to_update:
-        print("________________________________________________________________")
-        print("MENU DELIVERY:")
         for restaurant in map_queryset.get(Restaurant):
             menu_delivery_data = {
                 "menu_image": fake.image_url()
@@ -132,8 +124,6 @@ def load_restaurant(
                 menu_delivery = update_attr(menu_delivery, ** menu_delivery_data)
             print(f"\tSuccessfully created Menu Delivery: {menu_delivery}")
     if Representative in models_to_update:
-        print("________________________________________________________________")
-        print("REPRESENTATIVES:")
         for restaurant in map_queryset.get(Restaurant):
             representative_data = {
                 "registration_type": fake.random_element(elements=('Cá nhân', 'Công ty/Chuỗi')),
@@ -156,8 +146,6 @@ def load_restaurant(
                 representative = update_attr(representative, ** representative_data)
             print(f"\tSuccessfully created Representative: {representative}")
     if RestaurantCategory in models_to_update:
-        print("________________________________________________________________")
-        print("RESTAURANT CATEGORIES:")
         load_intermediate_model(
             model_class=RestaurantCategory,
             primary_field='restaurant',
@@ -169,8 +157,6 @@ def load_restaurant(
         )
 
     # if Dish in models_to_update:
-        print("________________________________________________________________")
-        print("RESTAURANT DISHES:")
         for restaurant in map_queryset.get(Restaurant):
             for category in restaurant.categories.all():
                 tmp = list(category.dishes.all())
@@ -186,9 +172,4 @@ def load_restaurant(
                     dish.save()
                     print(f"\tSuccessfully added Dish: {dish} to Restaurant: {restaurant}")
 def run(*args):
-    if len(args) > 0:
-        action = args[0]
-        models = args[1:] if len(args) > 1 else []
-        load_restaurant(action, *models)
-    else:
-        load_restaurant()
+    load_restaurant(*args)

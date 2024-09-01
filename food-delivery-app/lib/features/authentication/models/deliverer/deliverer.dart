@@ -7,7 +7,9 @@ import 'package:food_delivery_app/features/authentication/models/deliverer/emerg
 import 'package:food_delivery_app/features/authentication/models/deliverer/operation_info.dart';
 import 'package:food_delivery_app/features/authentication/models/deliverer/other_info.dart';
 import 'package:food_delivery_app/features/authentication/models/deliverer/residency_info.dart';
+import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 @reflector
 @jsonSerializable
@@ -23,9 +25,16 @@ class Deliverer {
   final DelivererEmergencyContact? emergencyContact;
   final String? deliveries;
   final String? delivererReviews;
+  final String? deliveryRequests;
+  final String? requests;
   final double rating;
   final int totalReviews;
   final Map<String, dynamic> ratingCounts;
+  final double currentLatitude;
+  final double currentLongitude;
+  final String? avatar;
+  final bool isActive;
+  final bool isOccupied;
 
   Deliverer({
     this.id,
@@ -39,9 +48,16 @@ class Deliverer {
     this.emergencyContact,
     this.deliveries,
     this.delivererReviews,
+    this.deliveryRequests,
+    this.requests,
     this.rating = 0,
     this.totalReviews = 0,
     this.ratingCounts = const {},
+    this.currentLatitude = 0,
+    this.currentLongitude = 0,
+    this.avatar,
+    this.isActive = false,
+    this.isOccupied = false,
   });
 
   Deliverer.fromJson(Map<String, dynamic> json)
@@ -56,10 +72,21 @@ class Deliverer {
         emergencyContact = json['emergency_contact'] != null ? DelivererEmergencyContact.fromJson(json['emergency_contact']) : null,
         deliveries = json['deliveries'],
         delivererReviews = json['deliverer_reviews'],
+        deliveryRequests = json['delivery_requests'],
+        requests = json['requests'],
         rating = THelperFunction.formatDouble(json['rating']),
         totalReviews = json['total_reviews'] ?? 0,
-        ratingCounts = json['rating_counts']
+        ratingCounts = json['rating_counts'] ?? {},
+        currentLatitude = THelperFunction.formatDouble(json['current_latitude']),
+        currentLongitude = THelperFunction.formatDouble(json['current_longitude']),
+        avatar = json['avatar'],
+        isActive = json['is_active'] ?? false,
+        isOccupied = json['is_occupied'] ?? false
   ;
+
+  LatLng get currentCoordinate {
+    return LatLng(currentLatitude, currentLongitude);
+  }
 
   Map<String, dynamic> toJson() {
     return {

@@ -2,6 +2,7 @@ import random
 import re
 import builtins
 import inspect
+import math
 import sys
 
 from django.apps import apps
@@ -14,30 +15,53 @@ def update_attr(instance, **kwargs):
         instance.save()
     return instance
 
+def transform_value(value):
+    return value() if callable(value) else value
+
+def camel_to_full_upper(name, sep=' '):
+    return re.sub('([a-z0-9])([A-Z])', fr'\1{sep}\2', name).upper()
+
 def load_one_to_many_model(
         model_class,
         primary_field,
         primary_objects,
-        max_related_objects,
-        related_field=[],
+        max_related_count,
+        oto_field=None,
+        oto_field_objects=[],
         attributes={}, 
         action="delete"
     ):
     created_objects = []
-    
+    if model_class: 
+        print("________________________________________________________________")
+        print(f"{camel_to_full_upper(model_class.__name__)}:")
+
     if action == "delete":    
         if type(primary_objects) is not list:
             primary_objects = list(primary_objects)
-
-        for primary_obj in primary_objects:
-            for _ in range(random.randint(0, max(max_related_objects, 1))):
-                data = {
-                    primary_field: primary_obj,
-                    **{attr: value() if callable(value) else value for attr, value in attributes.items()}
-                }
-                created_object, _ = model_class.objects.get_or_create(**data)
-                created_objects.append(created_object)
-                print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
+        if oto_field and oto_field_objects:
+            for oto_obj in oto_field_objects:
+                    """
+                    Ex: Order, Delivery and Deliverer
+                    """
+                    data = {
+                        primary_field: random.choice(primary_objects),
+                        oto_field: oto_obj,
+                        **{attr: transform_value(value) for attr, value in attributes.items()}
+                    }
+                    created_object, _ = model_class.objects.get_or_create(**data)
+                    created_objects.append(created_object)
+                    print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
+        else:
+            for primary_obj in primary_objects:
+                for _ in range(random.randint(0, max(max_related_count, 1))):
+                    data = {
+                        primary_field: primary_obj,
+                        **{attr: transform_value(value) for attr, value in attributes.items()}
+                    }
+                    created_object, _ = model_class.objects.get_or_create(**data)
+                    created_objects.append(created_object)
+                    print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
     else:
         if attributes:
             for instance in model_class.objects.all():
@@ -48,19 +72,37 @@ def load_one_to_many_model(
 def load_normal_model(
     model_class,
     max_items,
+    oto_attribute={},
+    oto_field=None,
+    oto_objects=[],
     attributes={}, 
     action="delete"
 ):
     created_objects = []
-    
+    if model_class: 
+        print("________________________________________________________________")
+        print(f"{camel_to_full_upper(model_class.__name__)}:")
+        
     if action == "delete":    
-        for _ in range(max_items):
-            data = {
-                **{attr: value() if callable(value) else value for attr, value in attributes.items()}
-            }
-            created_object, _ = model_class.objects.get_or_create(**data)
-            created_objects.append(created_object)
-            print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
+        if oto_field and oto_objects:
+            for oto_obj in oto_objects:
+                data = {
+                    oto_field: oto_obj,
+                    **{attr: transform_value(value) for attr, value in attributes.items()},
+                }
+                created_object, _ = model_class.objects.get_or_create(**data)
+                created_objects.append(created_object)
+                print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
+        else:  
+            for _ in range(max_items):
+                data = {
+                    **{attr: transform_value(value) for attr, value in attributes.items()}
+                }
+                if oto_attribute:
+                    data.update(**{attr: transform_value(value) for attr, value in oto_attribute.items()})
+                created_object, _ = model_class.objects.get_or_create(**data)
+                created_objects.append(created_object)
+                print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
     else:
         if attributes:
             for instance in model_class.objects.all():
@@ -80,6 +122,10 @@ def load_intermediate_model(
     query_attributes=[],
     action=None
 ):
+    if model_class: 
+        print("________________________________________________________________")
+        print(f"{camel_to_full_upper(model_class.__name__)}:")
+        
     if not action: action = "delete"
     created_objects = []
     if action == "delete":
@@ -110,7 +156,7 @@ def load_intermediate_model(
                 data = {
                     primary_field: primary_obj,
                     related_field: related_obj,
-                    **{attr: value() if callable(value) else value for attr, value in attributes.items()}
+                    **{attr: transform_value(value) for attr, value in attributes.items()}
                 }
                 created_object = model_class.objects.create(**data)
                 created_objects.append(created_object)
@@ -123,23 +169,70 @@ def load_intermediate_model(
             
     return created_objects
 
+from datetime import timedelta
+from django.utils import timezone
+import calendar
+
+def calculate_expired_at(delayed):
+    unit = delayed[-1]  
+    value = int(delayed[:-1])  
+
+    if unit == 's':
+        expired_at = timezone.now() + timedelta(seconds=value)
+    elif unit == 'm':  
+        expired_at = timezone.now() + timedelta(minutes=value)
+    elif unit == 'h':
+        expired_at = timezone.now() + timedelta(hours=value)
+    elif unit == 'd':
+        expired_at = timezone.now() + timedelta(days=value)
+    elif unit == 'M':  
+        now = timezone.now()
+        month = now.month - 1 + value
+        year = now.year + month // 12
+        month = month % 12 + 1
+        day = min(now.day, calendar.monthrange(year, month)[1])
+        expired_at = now.replace(year=year, month=month, day=day)
+    elif unit == 'y':
+        now = timezone.now()
+        try:
+            expired_at = now.replace(year=now.year + value)
+        except ValueError:
+            expired_at = now.replace(year=now.year + value, month=2, day=28)
+    else:
+        raise ValueError("Invalid time unit in delayed value.")
+
+    return expired_at
+
+
 from faker import Faker
 
 fake = Faker()
-def generate_latitude(country='Vietnam'):
+city_coordinates = {
+    "Hanoi": {"lat": (20.8, 21.1), "lng": (105.7, 106.0)},
+    "Ho Chi Minh City": {"lat": (10.7, 10.9), "lng": (106.6, 106.8)},
+    "Da Nang": {"lat": (15.9, 16.2), "lng": (107.9, 108.3)},
+}
+
+def generate_latitude(country='Vietnam', city="Hanoi"):
     if country == 'Vietnam':
-        return random.uniform(8.0, 23.0)
+        if city in city_coordinates:
+            lat_range = city_coordinates[city]['lat']
+            return random.uniform(lat_range[0], lat_range[1])
+        else:
+            return random.uniform(8.0, 23.0)
     return fake.latitude()
 
-def generate_longitude(country='Vietnam'):
+def generate_longitude(country='Vietnam', city="Hanoi"):
     if country == 'Vietnam':
-        return random.uniform(102.0, 110.0)
+        if city in city_coordinates:
+            lng_range = city_coordinates[city]['lng']
+            return random.uniform(lng_range[0], lng_range[1])
+        else:
+            return random.uniform(102.0, 110.0)
     return fake.longitude()
 
 def generate_phone_number():
     return f"+84{random.randint(100000000, 999999999)}"
-
-import math
 
 def calculate_distance(lat1, lon1, lat2, lon2):
     lat1 = math.radians(lat1)

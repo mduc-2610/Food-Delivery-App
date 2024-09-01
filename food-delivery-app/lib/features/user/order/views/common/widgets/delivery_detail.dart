@@ -5,13 +5,18 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
+import 'package:food_delivery_app/common/widgets/dialogs/show_confirm_dialog.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
+import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/data/socket_services/order_socket_service.dart';
+import 'package:food_delivery_app/features/authentication/models/deliverer/deliverer.dart';
 import 'package:food_delivery_app/features/user/order/controllers/basket/order_basket_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
+import 'package:food_delivery_app/features/user/order/models/delivery.dart';
 import 'package:food_delivery_app/features/user/order/models/order.dart';
 import 'package:food_delivery_app/features/user/order/views/location/order_location.dart';
+import 'package:food_delivery_app/features/user/order/views/tracking/order_tracking.dart';
 import 'package:food_delivery_app/utils/constants/api_constants.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
@@ -241,62 +246,10 @@ class ActionButtons extends StatefulWidget {
 }
 
 class _ActionButtonsState extends State<ActionButtons> {
-  WebSocketChannel? _channel;
-  @override void initState() {
-    super.initState();
-    connect();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    disconnect();
-  }
-
-
-  void connect() {
-    final String url = 'ws://${APIConstant.ip}:8000/ws/order/';
-    print("Attempting to connect to: $url");
-    _channel = WebSocketChannel.connect(Uri.parse(url));
-    print("WebSocket channel created $_channel");
-    _channel?.stream.listen(
-          (message) {
-        print("Received message: $message");
-        handleIncomingMessage(message);
-      },
-      onError: (error) {
-        print('WebSocket error: $error');
-      },
-      onDone: () {
-        print('WebSocket connection closed');
-      },
-    );
-    print("WebSocket listener set up");
-  }
-
-  void sendMessage(Map<String, dynamic> data) {
-    _channel?.sink.add(jsonEncode(data));
-    $print(jsonEncode(data));
-  }
-
-  void handleIncomingMessage(String message) {
-    // Order? order = Order.fromJson(jsonDecode(message)["order"]);
-    $print("asdasd");
-    $print(message);
-  }
-
-  void disconnect() {
-    if (_channel != null) {
-      _channel?.sink.close();
-      $print("DISCONNECT");
-    }
-  }
-
-
   @override
   Widget build(BuildContext context) {
-    bool canReorder = false; // You can modify this condition based on your logic
-
+    $print(widget.order?.id);
+    bool canReorder = false;
     return canReorder
         ? MainButton(
       onPressed: () {},
@@ -327,8 +280,15 @@ class _ActionButtonsState extends State<ActionButtons> {
               child: MainButton(
                 paddingHorizontal: TSize.lg,
                 onPressed: () async {
-                  final controller = OrderBasketController.instance;
-                  sendMessage(controller.order?.toJson() ?? {});
+                  showConfirmDialog(context, onAccept: () async {
+                    final [statusCode, headers, data] = await APIService<Order>(endpoint: 'order/order/${widget.order?.id}/create-delivery-and-request').create({}, noBearer: true, noFromJson: true);
+                    final delivery = Delivery.fromJson(data["delivery"]);
+                    final nearest_deliverer = Deliverer.fromJson(data["nearest_deliverer"]);
+                    Get.to(() => OrderTrackingView(), arguments: {
+                      'delivery': delivery,
+                      'nearest_deliverer': nearest_deliverer,
+                    });
+                  });
                   // x.sendMessage(controller.order?.toJson() ?? {});
                 },
                 text: "Track Order",

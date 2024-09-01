@@ -4,6 +4,7 @@ from rest_framework import serializers
 from account.models import User
 from order.models import RestaurantCart, RestaurantCartDish, Order
 from restaurant.models import Restaurant
+from restaurant.serializers.basic_restaurant import BasicRestaurantSerializer
 
 from food.serializers import DishSerializer, DishOptionItemSerializer
 from order.serializers.order import OrderSerializer
@@ -76,14 +77,6 @@ class CreateRestaurantCartDishSerializer(serializers.ModelSerializer):
         print(data, pretty=True)
         data['cart'] = RestaurantCartSerializer2(instance.cart).data
         return data
-
-class BasicRestaurantSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Restaurant
-        fields = [
-            'id', 'basic_info', 'rating', 'total_reviews', 'avg_price'
-        ]
-        depth = 1
 
 class RestaurantCartSerializer(serializers.ModelSerializer):
     dishes = RestaurantCartDishSerializer(many=True, read_only=True)  

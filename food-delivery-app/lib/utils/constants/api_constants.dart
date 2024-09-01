@@ -67,7 +67,7 @@ Future<String> getLocalIpAddress() async {
 }
 
 class APIConstant {
-  static const String ip = "192.168.1.204";
+  static const String ip = "192.168.1.236";
   static const String tSecretAPIKey = "";
   // static const baseUrl = 'http://10.0.2.2:8000/api';
   // static const baseUrl = 'http://192.168.1.8:8000/api'; // VANSAU
@@ -82,6 +82,14 @@ class APIConstant {
   // static Future<String> get baseUrl async => 'http://${await ip}:8000/api';
   // static Future<String> get baseSocketUrl async => 'ws://${await ip}:8000/ws';
 
+  static String? getSocketEndpointFor<T>() {
+    switch(T) {
+      case Deliverer:
+        return 'deliverer';
+      default:
+        return 'order';
+    }
+  }
 
   static String? getEndpointFor<T>() {
     switch (T) {

@@ -21,7 +21,9 @@ class MainButton extends StatelessWidget {
   final double? paddingVertical;
   final Color? backgroundColor;
   final Color? borderColor;
+  final double? borderWidth;
   final TextStyle? textStyle;
+  final double? borderRadius;
 
   const MainButton({
     this.width,
@@ -40,6 +42,8 @@ class MainButton extends StatelessWidget {
     this.paddingVertical,
     this.backgroundColor,
     this.borderColor,
+    this.borderWidth,
+    this.borderRadius,
     this.textStyle = const TextStyle(),
     super.key
   });
@@ -51,7 +55,11 @@ class MainButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(35),
+          borderRadius: BorderRadius.circular(borderRadius ?? 35),
+        ),
+        side: BorderSide(
+          width: borderWidth ?? 1,
+          color: borderColor ?? TColor.primary
         ),
         // padding: EdgeInsets.symmetric(
         //     // vertical: paddingVertical ?? 0,
@@ -68,7 +76,7 @@ class MainButton extends StatelessWidget {
           // width: width,
           // width: width ?? TDeviceUtil.getScreenWidth() * 0.9,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(35),
+            borderRadius: BorderRadius.circular(borderRadius ?? 35),
           ),
           child: _buildButtonContent()
       ),
@@ -77,7 +85,11 @@ class MainButton extends StatelessWidget {
       onPressed: onPressed,
       style: TextButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(35),
+          borderRadius: BorderRadius.circular(borderRadius ?? 35),
+        ),
+        side: BorderSide(
+            width: borderWidth ?? 1,
+            color: borderColor ?? TColor.primary
         ),
       ),
       child: Container(
@@ -89,7 +101,7 @@ class MainButton extends StatelessWidget {
           // width: width,
           // width: width ?? TDeviceUtil.getScreenWidth() * 0.9,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(35),
+            borderRadius: BorderRadius.circular(borderRadius ?? 35),
           ),
           child: _buildButtonContent()),
     );

@@ -12,6 +12,8 @@ from utils.function import (
     load_one_to_many_model, 
     load_normal_model,
     generate_phone_number, 
+    generate_latitude, 
+    generate_longitude,
     update_attr
 )
 
@@ -37,163 +39,143 @@ def load_deliverer(
     action=None,
 ):
     if Deliverer in models_to_update:
-        print("________________________________________________________________")
-        print("DELIVERERS:")
         user_list = list(map_queryset.get(User))
         deliverer_list = load_normal_model(
             model_class=Deliverer,
             max_items=max_deliverers,
-            attributes={"user": lambda: user_list.pop(random.randint(0, len(user_list) - 1))},
+            attributes={
+                "current_latitude": lambda: generate_latitude(),
+                "current_longitude": lambda: generate_longitude(),
+                "is_active": lambda: random.choice([True] * 5 + [False] * 3)
+            },
+            oto_attribute={
+                "user": lambda: user_list.pop(random.randint(0, len(user_list) - 1)),
+            },
             action=action
         )
 
     if Address in models_to_update:
-        print("________________________________________________________________")
-        print("ADDRESSES:")
-        for deliverer in map_queryset.get(Deliverer):
-            address_data = {
-                "deliverer": deliverer,
-                "city": fake.city(),
-                "district": fake.state(),
-                "ward": fake.city_suffix(),
-                "detail_address": fake.street_address()
-            }
-            address = None
-            if action == "delete":
-                address = Address.objects.create(**address_data)
-            else:
-                address = Address.objects.get(deliverer__id=deliverer.id)
-                address = update_attr(address, **address_data)
-            print(f"\tSuccessfully created Address: {address}")
+        deliverer_list = map_queryset.get(Deliverer)
+        load_normal_model(
+            model_class=Address,
+            max_items=0,
+            attributes={
+                "city": lambda: fake.city(),
+                "district": lambda: fake.state(),
+                "ward": lambda: fake.city_suffix(),
+                "detail_address": lambda: fake.street_address()
+            },
+            oto_field='deliverer',
+            oto_objects=deliverer_list,
+            action=action
+        )
 
     if BasicInfo in models_to_update:
-        print("________________________________________________________________")
-        print("BASIC INFO:")
-        for deliverer in map_queryset.get(Deliverer):
-            basic_info_data = {
-                "deliverer": deliverer,
-                "full_name": fake.name(),
-                "given_name": fake.first_name(),
-                "gender": fake.random_element(elements=('MALE', 'FEMALE', 'OTHER')),
-                "date_of_birth": fake.date_of_birth(minimum_age=18, maximum_age=60),
-                "hometown": fake.city(),
-                "city": fake.city(),
-                "district": fake.state(),
-                "ward": fake.city_suffix(),
-                "address": fake.street_address(),
-                "citizen_identification": fake.ssn()
-            }
-            basic_info = None
-            if action == "delete":
-                basic_info = BasicInfo.objects.create(**basic_info_data)
-            else:
-                basic_info = BasicInfo.objects.get(deliverer__id=deliverer.id)
-                basic_info = update_attr(basic_info, **basic_info_data)
-            print(f"\tSuccessfully created Basic Info: {basic_info}")
+        deliverer_list = map_queryset.get(Deliverer)
+        load_normal_model(
+            model_class=BasicInfo,
+            max_items=0,
+            attributes={
+                "full_name": lambda: fake.name(),
+                "given_name": lambda: fake.first_name(),
+                "gender": lambda: fake.random_element(elements=('MALE', 'FEMALE', 'OTHER')),
+                "date_of_birth": lambda: fake.date_of_birth(minimum_age=18, maximum_age=60),
+                "hometown": lambda: fake.city(),
+                "city": lambda: fake.city(),
+                "district": lambda: fake.state(),
+                "ward": lambda: fake.city_suffix(),
+                "address": lambda: fake.street_address(),
+                "citizen_identification": lambda: fake.ssn()
+            },
+            oto_field='deliverer',
+            oto_objects=deliverer_list,
+            action=action
+        )
 
     if DriverLicense in models_to_update:
-        print("________________________________________________________________")
-        print("DRIVER LICENSES:")
-        for deliverer in map_queryset.get(Deliverer):
-            driver_license_data = {
-                "deliverer": deliverer,
-                "license_front": fake.image_url(),
-                "license_back": fake.image_url(),
-                "vehicle_type": fake.word(),
-                "license_plate": fake.license_plate(),
-                "registration_certificate": fake.image_url()
-            }
-            driver_license = None
-            if action == "delete":
-                driver_license = DriverLicense.objects.create(**driver_license_data)
-            else:
-                driver_license = DriverLicense.objects.get(deliverer__id=deliverer.id)
-                driver_license = update_attr(driver_license, **driver_license_data)
-            print(f"\tSuccessfully created Driver License: {driver_license}")
+        deliverer_list = map_queryset.get(Deliverer)
+        load_normal_model(
+            model_class=DriverLicense,
+            max_items=0,
+            attributes={
+                "license_front": lambda: fake.image_url(),
+                "license_back": lambda: fake.image_url(),
+                "vehicle_type": lambda: fake.word(),
+                "license_plate": lambda: fake.license_plate(),
+                "registration_certificate": lambda: fake.image_url()
+            },
+            oto_field='deliverer',
+            oto_objects=deliverer_list,
+            action=action
+        )
 
     if EmergencyContact in models_to_update:
-        print("________________________________________________________________")
-        print("EMERGENCY CONTACTS:")
-        for deliverer in map_queryset.get(Deliverer):
-            emergency_contact_data = {
-                "deliverer": deliverer,
-                "name": fake.name(),
-                "relationship": fake.random_element(elements=['Father', 'Mother', 'Sibling', 'Friend']),
-                "phone_number": generate_phone_number()
-            }
-            emergency_contact = None
-            if action == "delete":
-                emergency_contact = EmergencyContact.objects.create(**emergency_contact_data)
-            else:
-                emergency_contact = EmergencyContact.objects.get(deliverer__id=deliverer.id)
-                emergency_contact = update_attr(emergency_contact, **emergency_contact_data)
-            print(f"\tSuccessfully created Emergency Contact: {emergency_contact}")
+        deliverer_list = map_queryset.get(Deliverer)
+        load_normal_model(
+            model_class=EmergencyContact,
+            max_items=0,
+            attributes={
+                "name": lambda: fake.name(),
+                "relationship": lambda: fake.random_element(elements=['Father', 'Mother', 'Sibling', 'Friend']),
+                "phone_number": lambda: generate_phone_number()
+            },
+            oto_field='deliverer',
+            oto_objects=deliverer_list,
+            action=action
+        )
 
     if OperationInfo in models_to_update:
-        print("________________________________________________________________")
-        print("OPERATION INFO:")
-        for deliverer in map_queryset.get(Deliverer):
-            operation_info_data = {
-                "deliverer": deliverer,
-                "city": fake.city(),
-                "operation_type": fake.random_element(elements=['HUB', 'PART_TIME']),
-                "operational_area": fake.street_address(),
-                "operational_time": "9:00-18:00"
-            }
-            operation_info = None
-            if action == "delete":
-                operation_info = OperationInfo.objects.create(**operation_info_data)
-            else:
-                operation_info = OperationInfo.objects.get(deliverer__id=deliverer.id)
-                operation_info = update_attr(operation_info, **operation_info_data)
-            print(f"\tSuccessfully created Operation Info: {operation_info}")
+        deliverer_list = map_queryset.get(Deliverer)
+        load_normal_model(
+            model_class=OperationInfo,
+            max_items=0,
+            attributes={
+                "city": lambda: fake.city(),
+                "operation_type": lambda: fake.random_element(elements=['HUB', 'PART_TIME']),
+                "operational_area": lambda: fake.street_address(),
+                "operational_time": lambda: "9:00-18:00"
+            },
+            oto_field='deliverer',
+            oto_objects=deliverer_list,
+            action=action
+        )
 
     if OtherInfo in models_to_update:
-        print("________________________________________________________________")
-        print("OTHER INFO:")
-        for deliverer in map_queryset.get(Deliverer):
-            other_info_data = {
-                "deliverer": deliverer,
-                "occupation": fake.job(),
-                "details": fake.text(max_nb_chars=200),
-                "judicial_record": fake.image_url()
-            }
-            other_info = None
-            if action == "delete":
-                other_info = OtherInfo.objects.create(**other_info_data)
-            else:
-                other_info = OtherInfo.objects.get(deliverer__id=deliverer.id)
-                other_info = update_attr(other_info, **other_info_data)
-            print(f"\tSuccessfully created Other Info: {other_info}")
+        deliverer_list = map_queryset.get(Deliverer)
+        load_normal_model(
+            model_class=OtherInfo,
+            max_items=0,
+            attributes={
+                "occupation": lambda: fake.job(),
+                "details": lambda: fake.text(max_nb_chars=200),
+                "judicial_record": lambda: fake.image_url()
+            },
+            oto_field='deliverer',
+            oto_objects=deliverer_list,
+            action=action
+        )
 
     if ResidencyInfo in models_to_update:
-        print("________________________________________________________________")
+        deliverer_list = map_queryset.get(Deliverer)
         print("RESIDENCY INFO:")
-        for deliverer in map_queryset.get(Deliverer):
-            residency_info_data = {
-                "deliverer": deliverer,
-                "is_same_as_ci": fake.boolean(),
-                "city": fake.city(),
-                "district": fake.state(),
-                "ward": fake.city_suffix(),
-                "address": fake.street_address(),
-                "tax_code": fake.ssn(),
-                "email": fake.email()
-            }
-            residency_info = None
-            if action == "delete":
-                residency_info = ResidencyInfo.objects.create(**residency_info_data)
-            else:
-                residency_info = ResidencyInfo.objects.get(deliverer__id=deliverer.id)
-                residency_info = update_attr(residency_info, **residency_info_data)
-            print(f"\tSuccessfully created Residency Info: {residency_info}")
+        load_normal_model(
+            model_class=ResidencyInfo,
+            max_items=0,
+            attributes={
+                "is_same_as_ci": lambda: fake.boolean(),
+                "city": lambda: fake.city(),
+                "district": lambda: fake.state(),
+                "ward": lambda: fake.city_suffix(),
+                "address": lambda: fake.street_address(),
+                "tax_code": lambda: fake.ssn(),
+                "email": lambda: fake.email()
+            },
+            oto_field='deliverer',
+            oto_objects=deliverer_list,
+            action=action
+        )
 
     return [deliverer for deliverer in map_queryset.get(Deliverer)]
 
 def run(*args):
-    if len(args) > 0:
-        action = args[0]
-        models = args[1:] if len(args) > 1 else []
-        load_deliverer(action, *models)
-    else:
-        load_deliverer()
+    load_deliverer(*args)

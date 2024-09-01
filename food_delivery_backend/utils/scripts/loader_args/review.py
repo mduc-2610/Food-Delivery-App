@@ -50,8 +50,6 @@ def load_review(
     if DishReview in models_to_update:
         dishes = list(Dish.objects.all())
         users = list(User.objects.all())
-        print("________________________________________________________________")
-        print("DISH REVIEWS:")
         review_map[DishReviewLike] = load_intermediate_model(
             model_class=DishReview,
             primary_field='user',
@@ -66,8 +64,6 @@ def load_review(
     if DelivererReview in models_to_update:
         deliverers = list(Deliverer.objects.all())
         users = list(User.objects.all())
-        print("________________________________________________________________")
-        print("DELIVERER REVIEWS:")
         review_map[DelivererReviewLike] = load_intermediate_model(
             model_class=DelivererReview,
             primary_field='user',
@@ -82,8 +78,6 @@ def load_review(
     if RestaurantReview in models_to_update:
         restaurants = list(Restaurant.objects.all())
         users = list(User.objects.all())
-        print("________________________________________________________________")
-        print("RESTAURANT REVIEWS:")
         review_map[RestaurantReviewLike] = load_intermediate_model(
             model_class=RestaurantReview,
             primary_field='user',
@@ -98,8 +92,6 @@ def load_review(
     if DeliveryReview in models_to_update:
         deliveries = list(Delivery.objects.all())
         users = list(User.objects.all())
-        print("________________________________________________________________")
-        print("DELIVERY REVIEWS:")
         review_map[DeliveryReviewLike] = load_intermediate_model(
             model_class=DeliveryReview,
             primary_field='user',
@@ -111,8 +103,6 @@ def load_review(
             action=action
         )
 
-    print("________________________________________________________________")
-    print("REVIEW LIKES:")
     for _model in models_to_update if models_to_update else MODEL_MAP.keys():
             like_model = LIKE_MODEL_MAP.get(_model)
             reviews = review_map.get(like_model)
@@ -127,9 +117,4 @@ def load_review(
             )
 
 def run(*args):
-    if len(args) > 0:
-        action = args[0]
-        models = args[1:] if len(args) > 1 else []
-        load_review(action, *models)
-    else:
-        load_review()
+    load_review(*args)

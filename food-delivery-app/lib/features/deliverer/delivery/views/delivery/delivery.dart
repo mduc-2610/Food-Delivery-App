@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
+import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
+import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
+import 'package:food_delivery_app/common/widgets/misc/list_check.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/features/deliverer/delivery/controllers/delivery/delivery_controller.dart';
 import 'package:food_delivery_app/features/deliverer/delivery/views/delivery/widgets/nearest_order_card.dart';
+import 'package:food_delivery_app/features/deliverer/home/views/home/widgets/delivery_card.dart';
+import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';
+import 'package:food_delivery_app/features/user/order/views/tracking/widgets/order_tracking.dart';
+import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/icon_strings.dart';
+import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:get/get.dart';
 
 class DeliveryScreen extends StatefulWidget {
   @override
@@ -11,192 +23,129 @@ class DeliveryScreen extends StatefulWidget {
 }
 
 class _DeliveryScreenState extends State<DeliveryScreen> {
-  late GoogleMapController _mapController;
   bool _isActiveDelivery = false;
   String _currentStage = 'Not Started';
-
+  final deliveryController = Get.put(DeliveryController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CAppBar(
-        title: _isActiveDelivery ? 'Active Delivery' : 'Available Orders',
+        title: 'Delivery',
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            flex: 3,
-            child: _buildMap(),
-          ),
-          Expanded(
-            flex: 2,
-            child: _isActiveDelivery ? _buildActiveDeliveryInfo() : _buildAvailableOrders(),
+          Obx(() => GoogleMap(
+            onMapCreated: deliveryController.onMapCreated,
+            initialCameraPosition: CameraPosition(
+              target: LatLng(
+                  deliveryController.deliverer?.currentLatitude ?? 37.7749,
+                  deliveryController.deliverer?.currentLongitude ?? -122.4194),
+              zoom: 12,
+            ),
+            markers: deliveryController.markers.map((marker) => marker.copyWith(
+                // onTapParam: () => deliveryController.onMarkerTapped(marker.markerId, context)
+            )).toSet(),
+            polylines: deliveryController.polylines.toSet(),
+            onCameraMove: (_) {
+              // if (deliveryController.isOverlayVisible.value) {
+              //   // This will trigger the StreamBuilder to update the overlay position
+              //   deliveryController.isOverlayVisible.refresh();
+              // }
+            },
+            onTap: (_) {
+              // Remove overlay when tapping on the map
+              // deliveryController.overlayEntry.value?.remove();
+            },
+          )),
+          Positioned(
+            bottom: 40,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 70,
+                  height: 70,
+                  child: CircleIconCard(
+                    icon: TIcon.delivery,
+                    iconColor: TColor.light,
+                    iconSize: TSize.iconLg,
+                    backgroundColor: TColor.primary,
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (context) {
+                          return
+                            (!deliveryController.delivererHomeController.isOccupied.value)
+                            ? _buildAvailableOrders()
+                            : _buildTrackingOrder();
+                        },
+                        barrierColor: Colors.black.withOpacity(0.3),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildMap() {
-    return GoogleMap(
-      onMapCreated: (GoogleMapController controller) {
-        _mapController = controller;
+  Widget _buildTrackingOrder() {
+    return OrderTracking(
+      noDriverInfo: true,
+      onCancel: () {
+        deliveryController.delivererHomeController.isOccupied.value = false;
+        Get.back();
       },
-      initialCameraPosition: CameraPosition(
-        target: LatLng(37.7749, -122.4194),
-        zoom: 12,
-      ),
+      controller: deliveryController,
     );
   }
 
   Widget _buildAvailableOrders() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Nearest Available Orders',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          MainWrapper(
+            child: Text(
+              'Nearest Available Order (${deliveryController.delivererHomeController.deliveryRequests.length})',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
           ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return SizedBox(
-                width: TDeviceUtil.getScreenWidth(),
-                child: NearestOrderCard(
-                  orderNumber: '100$index',
-                  restaurantName: 'Restaurant Name',
-                  distance: (index + 1).toDouble(),
-                  estimatedPay: 10.0 + index,
-                  onPressed: () {
-                    _acceptOrder(index);
-                  },
+          SizedBox(height: TSize.spaceBetweenItemsVertical,),
+
+          MainWrapper(
+            rightMargin: 0,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Obx(() => ListCheck(
+                checkEmpty: deliveryController.delivererHomeController.deliveryRequests.length == 0,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for(var delivery in deliveryController.delivererHomeController.deliveryRequests)...[
+                        SizedBox(
+                          width: TDeviceUtil.getScreenWidth() * 0.85,
+                          child: DeliveryCard(
+                            delivery: delivery.delivery,
+                          ),
+                        ),
+                        SizedBox(width: TSize.spaceBetweenItemsLg,),
+
+                      ]
+                    ]
                 ),
-              );
-            },
+              ))
+            ),
           ),
-        ),
-      ],
-    );
-  }
-
-  void _acceptOrder(int index) {
-
-    setState(() {
-      _isActiveDelivery = true;
-    });
-  }
-
-  Widget _buildActiveDeliveryInfo() {
-    return MainWrapper(
-
-      child: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Order Details', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
-            Text('Order #1234 - 2 items'),
-            Text('Pickup: 123 Restaurant St'),
-            Text('Dropoff: 456 Customer Ave'),
-            SizedBox(height: 16),
-            Text('Customer Information', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
-            Row(
-              children: [
-                Icon(Icons.person),
-                SizedBox(width: 8),
-                Text('John Doe'),
-              ],
-            ),
-            Row(
-              children: [
-                Icon(Icons.phone),
-                SizedBox(width: 8),
-                Text('(123) 456-7890'),
-              ],
-            ),
-            SizedBox(height: 16),
-            Text('Delivery Status', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
-            _buildStatusButtons(),
-          ],
-        ),
+          SizedBox(height: TSize.spaceBetweenSections,)
+        ],
       ),
-    );
-  }
-
-  Widget _buildStatusButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _buildStatusButton('Picked Up', Colors.orange),
-        _buildStatusButton('En Route', Colors.blue),
-        _buildStatusButton('Delivered', Colors.green),
-      ],
-    );
-  }
-
-  Widget _buildStatusButton(String status, Color color) {
-    bool isActive = _currentStage == status;
-    return ElevatedButton(
-      child: Text(status),
-      style: ElevatedButton.styleFrom(
-        // primary: isActive ? color : Colors.grey,
-      ),
-      onPressed: () {
-        setState(() {
-          _currentStage = status;
-        });
-      },
-    );
-  }
-  void showExpandableBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (BuildContext context) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.5,
-          minChildSize: 0.25,
-          maxChildSize: 1,
-          expand: false,
-          builder: (context, scrollController) {
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    height: 5,
-                    width: 40,
-                    margin: EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(2.5),
-                    ),
-                  ),
-                  Expanded(
-                    child: ListView(
-                      controller: scrollController,
-                      children: [
-                        ListTile(title: Text('Item 1')),
-                        ListTile(title: Text('Item 2')),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
     );
   }
 }

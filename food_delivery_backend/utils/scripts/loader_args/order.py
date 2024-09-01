@@ -10,7 +10,7 @@ from food.models import Dish
 from order.models import (
     Promotion, ActivityPromotion, OrderPromotion, 
     RestaurantPromotion, UserPromotion, Order, 
-    Delivery, RestaurantCart, RestaurantCartDish
+    Delivery, DeliveryRequest, RestaurantCart, RestaurantCartDish
 )
 
 from utils.function import (
@@ -31,6 +31,7 @@ MODEL_MAP = {
     'user_promotion': UserPromotion,
     'order': Order,
     'delivery': Delivery,
+    'delivery_request': DeliveryRequest,
     'restaurant_cart': RestaurantCart,
     'restaurant_cart_dish': RestaurantCartDish,
 }
@@ -42,16 +43,14 @@ def load_order(
     max_promotions_per_order=30, 
     max_promotions_per_restaurant=50, 
     max_promotions_per_user=40,
-    max_deliveries=100,
-    max_restaurants_per_cart=7,
+    max_deliveries_per_deliverer=100,
+    max_restaurant_carts_per_user=12,
     max_dishes_per_restaurant_cart=10,
     models_to_update=None,
     map_queryset=None,
     action=None,
 ):
     if Promotion in models_to_update:
-        print("________________________________________________________________")
-        print("PROMOTIONS:")
         promotion_list = load_normal_model(
             model_class=Promotion,
             max_items=max_promotions,
@@ -73,23 +72,19 @@ def load_order(
     if RestaurantCart in models_to_update:
         user_list = list(User.objects.all())
         restaurant_list = list(Restaurant.objects.all())
-        print("________________________________________________________________")
-        print("RESTAURANT CARTS:")
         load_intermediate_model(
             model_class=RestaurantCart,
             primary_field='user',
             related_field='restaurant',
             primary_objects=user_list,
             related_objects=restaurant_list,
-            max_items=max_restaurants_per_cart,
+            max_items=max_restaurant_carts_per_user,
             min_items=1,
             attributes={"is_created_order": True},
             action=action
         )
 
     if RestaurantCartDish in models_to_update:
-        print("________________________________________________________________")
-        print("RESTAURANT CART DISHES:")
         dish_list = list(Dish.objects.all())
         restaurant_cart_list = map_queryset.get(RestaurantCart)
         load_intermediate_model(
@@ -104,8 +99,7 @@ def load_order(
         )
 
     if Order in models_to_update:
-        print("________________________________________________________________")
-        print("ORDERS:")
+        DeliveryRequest.objects.all().delete()
         order_list = []
         promotion_list = map_queryset.get(Promotion)
         print(promotion_list)
@@ -114,47 +108,62 @@ def load_order(
             print(user_location, pretty=True)
             order_data = {
                 "cart": _cart,
-                # "delivery_address": user_location,
                 "payment_method": fake.random_element(elements=('Credit Card', 'Paypal', 'Cash on Delivery')),
                 "promotion": random.choice(promotion_list) if random.choice([True, False]) and not promotion_list else None,
-                # "delivery_fee":  random.uniform(0, 10), 
                 "discount":  random.uniform(0, 10),
                 "status": fake.random_element(elements=['ACTIVE', 'CANCELLED', 'COMPLETED', 'PENDING']),
                 "rating": random.randint(0, 5)
             }
             order = Order.objects.create(**order_data)
+            order.create_delivery_and_request()
             order_list.append(order)
             print(f"\tSuccessfully created Order: {order}")
 
     if Delivery in models_to_update:
         deliverer_list = list(Deliverer.objects.all())
         order_list = map_queryset.get(Order)
-        print("________________________________________________________________")
-        print("DELIVERIES:")
-        load_intermediate_model(
-            model_class=Delivery,
-            primary_field='order',
-            related_field='deliverer',
-            primary_objects=order_list,
-            related_objects=deliverer_list,
-            max_items=max_deliveries,
-            attributes={
-                "pickup_location": lambda: fake.address(),
-                "pickup_latitude": generate_latitude,
-                "pickup_longitude": generate_longitude,
-                "dropoff_location": lambda: fake.address(),
-                "dropoff_latitude": generate_latitude,
-                "dropoff_longitude": generate_longitude,
-                "status": lambda: random.choice(['FINDING_DRIVER', 'ON_THE_WAY', 'DELIVERED']),
-                "estimated_delivery_time": lambda: fake.date_time_this_year(),
-                "actual_delivery_time": lambda: fake.date_time_this_year()
-            },
-            action=action
-        )
+        # load_intermediate_model(
+        #     model_class=Delivery,
+        #     primary_field='order',
+        #     related_field='deliverer',
+        #     primary_objects=order_list,
+        #     related_objects=deliverer_list,
+        #     max_items=max_deliveries_per_deliverer,
+        #     attributes={
+        #         "pickup_location": lambda: fake.address(),
+        #         "pickup_latitude": generate_latitude,
+        #         "pickup_longitude": generate_longitude,
+        #         "dropoff_location": lambda: fake.address(),
+        #         "dropoff_latitude": generate_latitude,
+        #         "dropoff_longitude": generate_longitude,
+        #         "status": lambda: random.choice(['FINDING_DRIVER', 'ON_THE_WAY', 'DELIVERED']),
+        #         "estimated_delivery_time": lambda: fake.date_time_this_year(),
+        #         "actual_delivery_time": lambda: fake.date_time_this_year(),
+        #     },
+        #     action=action
+        # )
+        # load_one_to_many_model(
+        #     model_class=Delivery,
+        #     primary_field='deliverer',
+        #     primary_objects=map_queryset.get(Deliverer),
+        #     max_related_count=max_deliveries_per_deliverer,
+        #     oto_field='order',
+        #     oto_field_objects=map_queryset.get(Order),
+        #     attributes={
+        #         "pickup_location": lambda: fake.address(),
+        #         "pickup_latitude": generate_latitude,
+        #         "pickup_longitude": generate_longitude,
+        #         "dropoff_location": lambda: fake.address(),
+        #         "dropoff_latitude": generate_latitude,
+        #         "dropoff_longitude": generate_longitude,
+        #         "status": lambda: random.choice(['FINDING_DRIVER', 'ON_THE_WAY', 'DELIVERED']),
+        #         "estimated_delivery_time": lambda: fake.date_time_this_year(),
+        #         "actual_delivery_time": lambda: fake.date_time_this_year(),
+        #     },
+        #     action=action
+        # )
 
     if OrderPromotion in models_to_update:
-        print("________________________________________________________________")
-        print("ORDER PROMOTIONS:")
         order_list = map_queryset.get(Order)
         promotion_list = map_queryset.get(Promotion)
         load_intermediate_model(
@@ -170,8 +179,6 @@ def load_order(
     if RestaurantPromotion in models_to_update:
         restaurant_list = list(Restaurant.objects.all())
         promotion_list = map_queryset.get(Promotion, [])
-        print("________________________________________________________________")
-        print("RESTAURANT PROMOTIONS:")
         load_intermediate_model(
             model_class=RestaurantPromotion,
             primary_field='restaurant',
@@ -185,8 +192,6 @@ def load_order(
     if UserPromotion in models_to_update:
         user_list = list(User.objects.all())
         promotion_list = map_queryset.get(Promotion, [])
-        print("________________________________________________________________")
-        print("USER PROMOTIONS:")
         load_intermediate_model(
             model_class=UserPromotion,
             primary_field='user',
@@ -199,9 +204,4 @@ def load_order(
 
 
 def run(*args):
-    if len(args) > 0:
-        action = args[0]
-        models = args[1:] if len(args) > 1 else []
-        load_order(action, *models)
-    else:
-        load_order()
+    load_order(*args)

@@ -1,6 +1,10 @@
 from .address import AddressSerializer
 from .basic_info import BasicInfoSerializer
-from .deliverer import DelivererSerializer, DetailDelivererSerializer
+from .deliverer import (
+    DelivererSerializer, 
+    DetailDelivererSerializer,
+)
+from .basic_deliverer import BasicDelivererSerializer
 from .driver_license import DriverLicenseSerializer
 from .emergency_contact import EmergencyContactSerializer
 from .operation_info import OperationInfoSerializer

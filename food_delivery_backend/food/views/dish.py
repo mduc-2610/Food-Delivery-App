@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 
 from food.models import Dish
 
-from account.serializers import UserAbbrSerializer
+from account.serializers import BasicUserSerializer
 from food.serializers import DishSerializer, DetailDishSerializer, DishLikeSerializer
 from review.serializers import DishReviewSerializer, DishReviewLikeSerializer
 
@@ -25,8 +25,8 @@ class DishViewSet(DefaultGenericMixin, ManyRelatedViewSet, ReviewFilterMixin):
     pagination_class = CustomPagination
     many_related_serializer_class = {
         'retrieve': DetailDishSerializer,
-        'liked_by_users': UserAbbrSerializer,
-        'reviewed_by_users': UserAbbrSerializer,
+        'liked_by_users': BasicUserSerializer,
+        'reviewed_by_users': BasicUserSerializer,
         'likes': DishLikeSerializer,
         'dish_reviews': DishReviewSerializer,
     }   

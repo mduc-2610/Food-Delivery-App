@@ -36,7 +36,7 @@ def load_social(
         model_class=Post,
         primary_field='user',
         primary_objects=user_list,
-        max_related_objects=max_posts,
+        max_related_count=max_posts,
         attributes= {
             "title": lambda: fake.sentence(nb_words=6),
             "content": lambda: fake.text(max_nb_chars=200)
@@ -83,7 +83,7 @@ def load_social(
         model_class=PostImage,
         primary_field='post',
         primary_objects=post_list,
-        max_related_objects=max_post_images,
+        max_related_count=max_post_images,
         attributes={
             "image": lambda: fake.image_url()
         }
@@ -95,7 +95,7 @@ def load_social(
         model_class=CommentImage,
         primary_field='comment',
         primary_objects=comment_list,
-        max_related_objects=max_comment_images,
+        max_related_count=max_comment_images,
         attributes={
             "image": lambda: fake.image_url()
         }

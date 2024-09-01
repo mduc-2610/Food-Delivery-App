@@ -18,7 +18,7 @@ class ReviewLike {
 
   ReviewLike.fromJson(Map<String, dynamic> json)
     : id = json['id'],
-      user = UserAbbr.fromJson(json['user']),
+      user = BasicUser.fromJson(json['user']),
       review = json['review'],
       createdAt = DateTime.parse(json['created_at']);
 
@@ -42,7 +42,7 @@ class DishReviewLike extends ReviewLike {
 
   DishReviewLike({
     String? id,
-    UserAbbr? user,
+    BasicUser? user,
     String? review,
     DateTime? createdAt,
   }) : super(id: id, user: user, createdAt: createdAt);
@@ -56,7 +56,7 @@ class RestaurantReviewLike extends ReviewLike {
 
   RestaurantReviewLike({
     String? id,
-    UserAbbr? user,
+    BasicUser? user,
     String? review,
     DateTime? createdAt,
   }) : super(id: id, user: user, createdAt: createdAt);
@@ -69,7 +69,7 @@ class RestaurantReviewLike extends ReviewLike {
 class DelivererReviewLike extends ReviewLike {
   DelivererReviewLike({
     String? id,
-    UserAbbr? user,
+    BasicUser? user,
     String? review,
     DateTime? createdAt,
   }) : super(id: id, user: user, createdAt: createdAt);
@@ -82,7 +82,7 @@ class DelivererReviewLike extends ReviewLike {
 class DeliveryReviewLike extends ReviewLike {
   DeliveryReviewLike({
     String? id,
-    UserAbbr? user,
+    BasicUser? user,
     String? review,
     DateTime? createdAt,
   }) : super(id: id, user: user, createdAt: createdAt);

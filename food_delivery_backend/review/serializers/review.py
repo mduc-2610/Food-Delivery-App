@@ -3,12 +3,12 @@ from rest_framework import serializers
 
 from review.models import DishReview, DelivererReview, RestaurantReview, DeliveryReview
 
-from account.serializers import UserAbbrSerializer
+from account.serializers import BasicUserSerializer
 
 from utils.serializers import CustomRelatedModelSerializer
 
 class ReviewSerializer(CustomRelatedModelSerializer):
-    user = UserAbbrSerializer()
+    user = BasicUserSerializer()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -47,7 +47,7 @@ class CreateReviewSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['user'] = UserAbbrSerializer(instance.user, context=self.context).data
+        data['user'] = BasicUserSerializer(instance.user, context=self.context).data
         return data
 
 class CreateDishReviewSerializer(CreateReviewSerializer):

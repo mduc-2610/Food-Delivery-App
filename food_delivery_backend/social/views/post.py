@@ -2,7 +2,7 @@ from rest_framework import viewsets
 
 from social.models import Post
 
-from account.serializers import UserAbbrSerializer
+from account.serializers import BasicUserSerializer
 from social.serializers import (
     PostSerializer, DetailPostSerializer, 
     CommentSerializer, PostLikeSerializer, PostImageSerializer
@@ -18,7 +18,7 @@ class PostViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     pagination_class = CustomPagination
     many_related_serializer_class = {
         'retrieve': DetailPostSerializer,
-        'liked_by_users': UserAbbrSerializer,
+        'liked_by_users': BasicUserSerializer,
         'user_comments': CommentSerializer,
         'post_likes': PostLikeSerializer,
         'post_images': PostImageSerializer,

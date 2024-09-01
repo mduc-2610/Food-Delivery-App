@@ -225,20 +225,20 @@ class UserLocation {
 
 @reflector
 @jsonSerializable
-class UserAbbr {
+class BasicUser {
   String? id;
   String? phoneNumber;
   String? name;
   String? avatar;
 
-  UserAbbr({
+  BasicUser({
     this.id,
     this.phoneNumber,
     this.name,
     this.avatar,
   });
 
-  UserAbbr.fromJson(Map<String, dynamic> json)
+  BasicUser.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         phoneNumber = json['phone_number'],
         name = json['name'],

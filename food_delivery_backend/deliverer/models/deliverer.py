@@ -28,6 +28,20 @@ class Deliverer(models.Model):
     total_reviews = models.IntegerField(default=0, blank=True, null=True)
     rating_counts = models.JSONField(default=default_rating_counts, blank=True, null=True)
     avatar = models.ImageField(upload_to=deliverer_avatar_upload_path, blank=True, null=True)
+    current_latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    current_longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    is_active = models.BooleanField(default=False, blank=True, null=True)
+    is_occupied = models.BooleanField(default=False, blank=True, null=True)
+    
+    acceptance_rate = models.FloatField(default=1.0, blank=True, null=True)
+    total_requests = models.IntegerField(default=0, blank=True, null=True)
+    accepted_requests = models.IntegerField(default=0, blank=True, null=True)
+    delivery_requests = models.ManyToManyField("order.Delivery", through="order.DeliveryRequest", related_name="delivery_requests")
+    
+    def update_acceptance_rate(self):
+        if self.total_requests > 0:
+            self.acceptance_rate = self.accepted_requests / self.total_requests
+        self.save()
 
     def __getitem__(self, attr):
         if hasattr(self, attr):

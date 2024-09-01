@@ -6,7 +6,7 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 @jsonSerializable
 class Post {
   final String? id;
-  final UserAbbr? user;
+  final BasicUser? user;
   final String? title;
   final String? content;
   final DateTime? createdAt;
@@ -21,7 +21,7 @@ class Post {
 
   Post.fromJson(Map<String, dynamic> json)
     : id = json['id'],
-      user = UserAbbr.fromJson(json['user']),
+      user = BasicUser.fromJson(json['user']),
       title = json['title'],
       content = json['content'],
       createdAt = DateTime.parse(json['created_at']);

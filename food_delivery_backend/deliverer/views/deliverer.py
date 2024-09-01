@@ -3,9 +3,12 @@ from rest_framework.decorators import action
 
 from deliverer.models import Deliverer
 
-from account.serializers import UserAbbrSerializer
+from account.serializers import BasicUserSerializer
 from deliverer.serializers import DelivererSerializer, DetailDelivererSerializer
-from order.serializers import DeliverySerializer
+from order.serializers import (
+    DeliverySerializer, 
+    # DeliveryRequestSerializer,
+)
 from review.serializers import DelivererReviewSerializer
 
 from utils.pagination import CustomPagination
@@ -17,10 +20,31 @@ class DelivererViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     serializer_class = DelivererSerializer
     many_related_serializer_class = {
         'retrieve': DetailDelivererSerializer,
-        'reviewed_by_users': UserAbbrSerializer,
+        'reviewed_by_users': BasicUserSerializer,
         'deliveries': DeliverySerializer,
         'deliverer_reviews': DelivererReviewSerializer,
+        'delivery_requests': DeliverySerializer,
+        # 'delivery_requests': DeliverySerializer,
+        # 'requests': DeliveryRequestSerializer,
     }
+
+    # many_related = {
+    #     'delivery_requests': {
+    #         'pagination': False
+    #     }
+    # }
+    def get_object(self):
+        object = super().get_object()
+        params = self.request.query_params
+        if self.action == "deliveries" or self.action == "delivery_requests":
+            status = params.get('status')
+            if status:
+                return object.filter(status=status.upper())
+            elif self.action == "deliveries":
+                return object.exclude(status="FINDING_DRIVER")
+            elif self.action == "delivery_requests":
+                return object.filter(status="FINDING_DRIVER")
+        return object
     
     # many_related = {
     #     "reviewed_by_users": {

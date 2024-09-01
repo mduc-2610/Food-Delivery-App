@@ -6,7 +6,7 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 @jsonSerializable
 class DishLike {
   final String? id;
-  final UserAbbr? user;
+  final BasicUser? user;
   final String? dish;
   final DateTime? createdAt;
 
@@ -19,7 +19,7 @@ class DishLike {
 
   DishLike.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        user = UserAbbr.fromJson(json['user']),
+        user = BasicUser.fromJson(json['user']),
         dish = json['dish'],
         createdAt = DateTime.parse(json['created_at']);
 

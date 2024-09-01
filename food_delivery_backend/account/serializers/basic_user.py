@@ -4,7 +4,7 @@ from django.utils.html import escape
 
 from account.models import User
 
-class UserAbbrSerializer(serializers.ModelSerializer):
+class BasicUserSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     avatar = serializers.SerializerMethodField()
 

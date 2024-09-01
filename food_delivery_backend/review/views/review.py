@@ -6,7 +6,7 @@ from review.models import (
     RestaurantReview, DeliveryReview
 )
 
-from account.serializers import UserAbbrSerializer
+from account.serializers import BasicUserSerializer
 from review.serializers import (
     DishReviewSerializer, DelivererReviewSerializer, 
     RestaurantReviewSerializer, DeliveryReviewSerializer,

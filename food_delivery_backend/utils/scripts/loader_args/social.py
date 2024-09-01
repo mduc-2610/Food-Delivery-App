@@ -37,13 +37,11 @@ def load_social(
 ):
     if Post in models_to_update:
         user_list = list(User.objects.all())
-        print("________________________________________________________________")
-        print("POSTS:")
         post_list = load_one_to_many_model(
             model_class=Post,
             primary_field='user',
             primary_objects=user_list,
-            max_related_objects=max_posts,
+            max_related_count=max_posts,
             attributes={
                 "title": lambda: fake.sentence(nb_words=6),
                 "content": lambda: fake.text(max_nb_chars=200)
@@ -52,8 +50,6 @@ def load_social(
         )
     
     if Comment in models_to_update:
-        print("________________________________________________________________")
-        print("COMMENTS:")
         post_list = map_queryset.get(Post)
         user_list = list(User.objects.all())
         comment_list = load_intermediate_model(
@@ -68,8 +64,6 @@ def load_social(
         )
     
     if CommentLike in models_to_update:
-        print("________________________________________________________________")
-        print("COMMENT LIKES:")
         comment_list = map_queryset.get(Comment)
         user_list = list(User.objects.all())
         load_intermediate_model(
@@ -83,8 +77,6 @@ def load_social(
         )
     
     if PostLike in models_to_update:
-        print("________________________________________________________________")
-        print("POST LIKES:")
         post_list = map_queryset.get(Post)
         user_list = list(User.objects.all())
         load_intermediate_model(
@@ -98,14 +90,12 @@ def load_social(
         )
     
     if PostImage in models_to_update:
-        print("________________________________________________________________")
-        print("POST IMAGES:")
         post_list = map_queryset.get(Post)
         load_one_to_many_model(
             model_class=PostImage,
             primary_field='post',
             primary_objects=post_list,
-            max_related_objects=max_images_per_post,
+            max_related_count=max_images_per_post,
             attributes={
                 "image": lambda: fake.image_url()
             },
@@ -113,14 +103,12 @@ def load_social(
         )
     
     if CommentImage in models_to_update:
-        print("________________________________________________________________")
-        print("COMMENT IMAGES:")
         comment_list = map_queryset.get(Comment)
         load_one_to_many_model(
             model_class=CommentImage,
             primary_field='comment',
             primary_objects=comment_list,
-            max_related_objects=max_images_per_comment,
+            max_related_count=max_images_per_comment,
             attributes={
                 "image": lambda: fake.image_url()
             },
@@ -129,9 +117,4 @@ def load_social(
 
 
 def run(*args):
-    if len(args) > 0:
-        action = args[0]
-        models = args[1:] if len(args) > 1 else []
-        load_social(action, *models)
-    else:
-        load_social()
+    load_social(*args)

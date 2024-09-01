@@ -1,9 +1,13 @@
 # order/views.py
-from rest_framework import viewsets
+from rest_framework import viewsets, response
+from rest_framework.decorators import action
 
 from order.models import Order
 
 from order.serializers import OrderSerializer, CreateOrderSerializer
+
+from order.serializers import DeliverySerializer
+from deliverer.serializers import BasicDelivererSerializer
 
 from utils.mixins import DefaultGenericMixin
 from utils.pagination import CustomPagination
@@ -16,3 +20,15 @@ class OrderViewSet(DefaultGenericMixin, OneRelatedViewSet, viewsets.ModelViewSet
     mapping_serializer_class = {
         'create': CreateOrderSerializer,
     }
+
+    @action(detail=True, methods=['POST'], url_path='create-delivery-and-request')
+    def create_delivery_and_request(self, request, pk=None):
+        order = self.get_object()
+        delivery, nearest_deliverer = order.create_delivery_and_request()
+        context = self.get_serializer_context()
+
+        return response.Response({
+            'delivery': DeliverySerializer(delivery, context=context).data,
+            'nearest_deliverer': BasicDelivererSerializer(nearest_deliverer).data if nearest_deliverer else None
+        })
+    

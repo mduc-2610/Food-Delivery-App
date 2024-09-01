@@ -29,9 +29,10 @@ def delete_models(models_to_delete):
 def script_runner(model_map):
     def decorator(func):
         @functools.wraps(func)
-        def wrapper(action, *args):
-            if not action: action = 'delete'
-            models_to_update = list(args)
+        def wrapper(*args):
+            action = 'delete'
+            if len(args) >= 1: action = args[0]
+            models_to_update = list(args[1:])
             
             if action == 'delete':
                 models_to_delete = models_to_update.copy() if models_to_update else model_map.keys()
@@ -39,15 +40,12 @@ def script_runner(model_map):
             
             models_to_update_classes = get_models_to_update(model_map, models_to_update)
 
-            if action in ['delete', 'update'] or action is None:
-                func(
-                    models_to_update=models_to_update_classes,
-                    map_queryset=MapQuerySet(),
-                    action=action,
-                )
-            else:
-                print("Invalid action. Use 'delete' or 'update'.")
-        
+            func(
+                models_to_update=models_to_update_classes,
+                map_queryset=MapQuerySet(),
+                action=action,
+            )
+    
         return wrapper
     
     return decorator

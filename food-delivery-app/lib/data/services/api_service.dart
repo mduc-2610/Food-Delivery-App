@@ -115,10 +115,10 @@ class APIService<T> {
     bool noFromJson = false,
   }) async {
     return _handleRequest<dynamic>((Token? token) async {
+      $print(url());
       final requestData = isFormData
           ? await data.toFormData()
-          : (data is Map<String, dynamic>) ? data : data.toJson();
-
+          : (data is Map<String, dynamic> || data is Map) ? data : data.toJson();
       if (dio != null) {
         final response = await dio!.post(
           url(),

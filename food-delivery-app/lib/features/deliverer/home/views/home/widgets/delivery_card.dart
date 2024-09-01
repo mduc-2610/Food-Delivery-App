@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
+import 'package:food_delivery_app/common/widgets/buttons/small_button.dart';
 import 'package:food_delivery_app/common/widgets/cards/order_history_card.dart';
+import 'package:food_delivery_app/common/widgets/dialogs/show_confirm_dialog.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
+import 'package:food_delivery_app/features/deliverer/delivery/controllers/delivery/delivery_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/delivery.dart';
 import 'package:food_delivery_app/features/user/order/views/basket/widgets/order_card.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';
@@ -19,7 +23,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class DeliveryCard extends StatelessWidget {
-  final Delivery delivery;
+  final Delivery? delivery;
   final bool noMargin;
 
   const DeliveryCard({
@@ -30,6 +34,7 @@ class DeliveryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final deliveryController = DeliveryController.instance;
     return GestureDetector(
       onTap: () {
         // Get.to(() => DeliveryDetailView(delivery: delivery));
@@ -47,6 +52,36 @@ class DeliveryCard extends StatelessWidget {
               _buildLocationInfo(context),
               SizedBox(height: TSize.spaceBetweenItemsVertical),
               _buildStatusAndTimeInfo(context),
+              SizedBox(height: TSize.spaceBetweenItemsVertical),
+              Row(
+                children: [
+                  if(delivery?.status == "FINDING_DRIVER")...[
+                    Expanded(
+                      child: SmallButton(
+                        paddingVertical: 0,
+                        text: "Decline",
+                        backgroundColor: TColor.reject,
+                        onPressed: () => deliveryController.handleDecline(delivery),
+                      ),
+                    ),
+                    SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+
+                    Expanded(
+                      child: SmallButton(
+                        paddingVertical: 0,
+                        text: "Accept",
+                        onPressed: () => deliveryController.handleAccept(delivery),
+                      )
+                    ),
+                  ],
+                ]
+              ),
+              SmallButton(
+                text: "Check Route",
+                backgroundColor: TColor.secondary,
+                onPressed: () => deliveryController.handleCheckRoute(delivery),
+              )
+
             ],
           ),
         ),
@@ -63,14 +98,16 @@ class DeliveryCard extends StatelessWidget {
         ),
         SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
 
-        Text(
-          'Delivery ID: ${delivery.id.split('-')[0]}',
-          style: Theme.of(context).textTheme.titleLarge,
+        Expanded(
+          child: Text(
+            'Delivery ID: ${delivery?.id?.split('-')[0]}',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
         ),
         // Spacer(),
-        // if (delivery.order != null && delivery.order?.rating != null)
+        // if (delivery?.order != null && delivery?.order?.rating != null)
         //   RatingBarIndicator(
-        //     rating: delivery.order.rating,
+        //     rating: delivery?.order.rating,
         //     itemBuilder: (context, index) => Icon(
         //       Icons.star,
         //       color: Colors.amber,
@@ -90,18 +127,20 @@ class DeliveryCard extends StatelessWidget {
           children: [
             Icon(Icons.storefront, color: TColor.primary),
             SizedBox(width: TSize.spaceBetweenItemsMd),
-            RichText(
-              text: TextSpan(
-                text: 'Pickup: ',
-                style: Theme.of(context).textTheme.bodyMedium,
-                children: [
-                  TextSpan(
-                    text: delivery.pickupLocation,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: TColor.primary,
+            Expanded(
+              child: RichText(
+                text: TextSpan(
+                  text: 'Pickup: ',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  children: [
+                    TextSpan(
+                      text: delivery?.pickupLocation,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: TColor.primary,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],
@@ -111,18 +150,20 @@ class DeliveryCard extends StatelessWidget {
           children: [
             Icon(Icons.location_on, color: TColor.primary),
             SizedBox(width: TSize.spaceBetweenItemsMd),
-            RichText(
-              text: TextSpan(
-                text: 'Drop-Off: ',
-                style: Theme.of(context).textTheme.bodyMedium,
-                children: [
-                  TextSpan(
-                    text: delivery.dropOffLocation,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: TColor.primary,
+            Expanded(
+              child: RichText(
+                text: TextSpan(
+                  text: 'Drop-Off: ',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  children: [
+                    TextSpan(
+                      text: delivery?.dropOffLocation,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: TColor.primary,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],
@@ -135,46 +176,48 @@ class DeliveryCard extends StatelessWidget {
               color: TColor.primary,
             ),
             SizedBox(width: TSize.spaceBetweenItemsMd),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (delivery.estimatedDeliveryTime != null)
-                  RichText(
-                    text: TextSpan(
-                      text: 'Estimated: ',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      children: [
-                        TextSpan(
-                          text: _formatDateTime(delivery.estimatedDeliveryTime),
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: TColor.primary,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (delivery?.estimatedDeliveryTime != null)
+                    RichText(
+                      text: TextSpan(
+                        text: 'Estimated: ',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        children: [
+                          TextSpan(
+                            text: _formatDateTime(delivery?.estimatedDeliveryTime),
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: TColor.primary,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                if (delivery.actualDeliveryTime != null)
-                  RichText(
-                    text: TextSpan(
-                      text: 'Delivered: ',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      children: [
-                        TextSpan(
-                          text: _formatDateTime(delivery.actualDeliveryTime),
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: TColor.primary,
+                  if (delivery?.actualDeliveryTime != null)
+                    RichText(
+                      text: TextSpan(
+                        text: 'Delivered: ',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        children: [
+                          TextSpan(
+                            text: _formatDateTime(delivery?.actualDeliveryTime),
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: TColor.primary,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
 
-              ],
+                ],
+              ),
             )
           ],
         ),
         SizedBox(height: TSize.spaceBetweenItemsSm),
-        StatusChip(status: '${delivery.status}')
+        StatusChip(status: '${delivery?.status}')
       ],
     )   ;
   }
@@ -211,11 +254,11 @@ class DeliveryCard extends StatelessWidget {
             children: [
               Text('Order ID:'),
               Text(
-                delivery.order?.id?.split('-')[0].toString() ?? '',
+                delivery?.order?.id?.split('-')[0].toString() ?? '',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               Text(
-                '£${delivery.order?.total.toStringAsFixed(2) ?? ''}',
+                '£${delivery?.order?.total.toStringAsFixed(2) ?? ''}',
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge
@@ -223,7 +266,7 @@ class DeliveryCard extends StatelessWidget {
               ),
               SizedBox(height: TSize.spaceBetweenItemsVertical / 2),
               RatingBarIndicator(
-                rating: THelperFunction.formatDouble(delivery.order?.rating),
+                rating: THelperFunction.formatDouble(delivery?.order?.rating),
                 itemBuilder: (context, index) => SvgPicture.asset(TIcon.fillStar),
                 itemCount: 5,
                 itemSize: TSize.iconSm,
@@ -232,7 +275,7 @@ class DeliveryCard extends StatelessWidget {
           ),
         ),
         SizedBox(width: TSize.spaceBetweenItemsHorizontal),
-        // StatusChip(status: delivery.status ?? ''),
+        // StatusChip(status: delivery?.status ?? ''),
       ],
     );
   }

@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from social.models import Comment
 
-from account.serializers import UserAbbrSerializer
+from account.serializers import BasicUserSerializer
 from social.serializers.image import CommentImageSerializer
 
 from utils.serializers import CustomRelatedModelSerializer
@@ -25,7 +25,7 @@ class CommentSerializer(CustomRelatedModelSerializer):
         
         return CommentImageSerializer(page, many=True).data
 
-    user = UserAbbrSerializer()
+    user = BasicUserSerializer()
     class Meta:
         model = Comment
         fields = '__all__'

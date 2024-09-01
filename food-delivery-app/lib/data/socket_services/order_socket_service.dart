@@ -6,13 +6,10 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
 class OrderSocketService {
-  // final String orderId;
   WebSocketChannel? _channel;
 
-  // OrderSocketService();
-
   void connect() {
-      final String url = 'ws://${APIConstant.ip}:8000/ws/order/';
+      final String url = '${APIConstant.baseSocketUrl}/order/';
       _channel = WebSocketChannel.connect(Uri.parse(url));
       $print("CONNECT");
       _channel?.stream.listen(

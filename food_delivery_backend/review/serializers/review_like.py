@@ -1,7 +1,7 @@
 # reviews/serializers.py
 from rest_framework import serializers
 
-from account.serializers import UserAbbrSerializer
+from account.serializers import BasicUserSerializer
 from review.models import (
     DishReviewLike, 
     RestaurantReviewLike, 
@@ -9,7 +9,7 @@ from review.models import (
     DeliveryReviewLike
 )
 class ReviewLikeSerializer(serializers.ModelSerializer):
-    user = UserAbbrSerializer()
+    user = BasicUserSerializer()
     class Meta:
         fields = ['id', 'user', 'review', 'created_at']
 
@@ -36,7 +36,7 @@ class CreateReviewLikeSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['user'] = UserAbbrSerializer(instance.user).data
+        data['user'] = BasicUserSerializer(instance.user).data
         from review.serializers import DishReviewSerializer
         data['review'] = DishReviewSerializer(instance.review, context=self.context).data
         return data

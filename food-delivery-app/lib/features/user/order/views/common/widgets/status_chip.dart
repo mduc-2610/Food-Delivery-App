@@ -3,9 +3,20 @@ import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 class StatusChip extends StatelessWidget {
+  final String? text;
   final String status;
+  final VoidCallback? onTap;
+  final double? paddingHorizontal;
+  final double? paddingVertical;
 
-  const StatusChip({Key? key, required this.status}) : super(key: key);
+  const StatusChip({
+    Key? key,
+    this.text,
+    required this.status,
+    this.onTap,
+    this.paddingHorizontal,
+    this.paddingVertical,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,19 +34,22 @@ class StatusChip extends StatelessWidget {
       default:
         color = Colors.black;
     }
-    return Container(
-      padding: EdgeInsets.symmetric(
-        vertical: TSize.xs,
-        horizontal: TSize.sm
-      ),
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 1,
-          color: color,
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: paddingVertical ?? TSize.xs,
+          horizontal: paddingHorizontal ?? TSize.sm
         ),
-        borderRadius: BorderRadius.circular(TSize.lg),
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: color,
+          ),
+          borderRadius: BorderRadius.circular(TSize.lg),
+        ),
+        child: Text(text ?? status, style: TextStyle(color: color)),
       ),
-      child: Text(status, style: TextStyle(color: color)),
     );
   }
 }

@@ -24,7 +24,6 @@ class HomeView extends StatelessWidget {
       init: HomeController(),
       builder: (controller) {
         final menuController = UserMenuController.instance;
-        $print(menuController.user);
         return Scaffold(
           body: CustomScrollView(
             slivers: [

@@ -43,7 +43,7 @@ class Dish {
         originalPrice = json['original_price'] != null ? double.parse(json['original_price']) : 0,
         discountPrice = json['discount_price'] != null ? double.parse(json['discount_price']) : 0,
         image = json['image'],
-        rating = double.parse(json['rating']),
+        rating = THelperFunction.formatDouble(json['rating']),
         totalReviews = json['total_reviews'],
         totalLikes = json['total_likes'],
         categoryId = json['category'],

@@ -39,8 +39,6 @@ def load_food(
     action=None,
 ):
     if DishCategory in models_to_update:
-        print("________________________________________________________________")
-        print("DISH CATEGORIES:")
         category_list = []
         for _x in dish_categories:
             category_data = {
@@ -56,8 +54,6 @@ def load_food(
             print(f"\tSuccessfully {'created' if created else 'updated'} Dish Category: {category}")
     
     if Dish in models_to_update:
-        print("________________________________________________________________")
-        print("DISHES:")
         dish_list = []
         for category in category_list:
             category_name = category.name.lower().replace(' ', '_')
@@ -73,7 +69,7 @@ def load_food(
                 model_class=Dish,
                 primary_field='category',
                 primary_objects=[category],
-                max_related_objects=min(max_dishes_per_category, len(image_files)),
+                max_related_count=min(max_dishes_per_category, len(image_files)),
                 attributes={
                     "name": lambda: f"{category.name} {fake.word()} {fake.word()}",
                     "description": lambda: fake.text(max_nb_chars=200),
@@ -99,8 +95,6 @@ def load_food(
                 print(f"\tSuccessfully created or updated Dish: {dish}, {dish.image}\n")
 
     if DishReview in models_to_update:
-        print("________________________________________________________________")
-        print("DISH REVIEWS:")
         user_list = list(User.objects.all())
         load_intermediate_model(
             model_class=DishReview,
@@ -118,8 +112,6 @@ def load_food(
         )
 
     if DishReviewLike in models_to_update:
-        print("________________________________________________________________")
-        print("DISH REVIEW LIKES:")
         user_list = list(User.objects.all())
         review_list = map_queryset.get(DishReview)
         load_intermediate_model(
@@ -133,8 +125,6 @@ def load_food(
         )
 
     if DishLike in models_to_update:
-        print("________________________________________________________________")
-        print("DISH LIKES:")
         user_list = list(User.objects.all())
         dish_list = map_queryset.get(Dish)
         load_intermediate_model(
@@ -149,12 +139,7 @@ def load_food(
 
 
 def run(*args):
-    if len(args) > 0:
-        action = args[0]
-        models = args[1:] if len(args) > 1 else []
-        load_food(action=action, models_to_update=models)
-    else:
-        load_food()
+    load_food(*args)
 
 
 # """

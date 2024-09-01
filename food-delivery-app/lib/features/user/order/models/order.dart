@@ -8,7 +8,7 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 class Order {
   final String? id;
   final dynamic cart;
-  final UserLocation? deliveryAddress;
+  final dynamic deliveryAddress;
   final String? paymentMethod;
   final String? promotion;
   final double deliveryFee;
@@ -33,7 +33,7 @@ class Order {
   Order.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         cart = json['cart'] == null || json['cart'] is String || json['cart'] is List ? json['cart'] : RestaurantCart.fromJson(json['cart']),
-        deliveryAddress = json['delivery_address'] != null ? UserLocation.fromJson(json['delivery_address']) : null,
+        deliveryAddress = json['delivery_address'] == null || json['delivery_address'] is String ? json['delivery_address'] : UserLocation.fromJson(json['delivery_address']),
         paymentMethod = json['payment_method'],
         promotion = json['promotion'],
         deliveryFee = THelperFunction.formatDouble(json['delivery_fee']),

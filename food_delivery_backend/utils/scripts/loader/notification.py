@@ -138,7 +138,7 @@ def load_notification(
         model_class=DirectImageMessage,
         primary_field='message',
         primary_objects=direct_message_list,
-        max_related_objects=max_images_per_message,
+        max_related_count=max_images_per_message,
         attributes={
             'image': lambda: fake.image_url()
         }
@@ -150,7 +150,7 @@ def load_notification(
         model_class=GroupImageMessage,
         primary_field='message',
         primary_objects=group_message_list,
-        max_related_objects=max_images_per_message,
+        max_related_count=max_images_per_message,
         attributes={
             'image': lambda: fake.image_url()
         }
@@ -163,7 +163,7 @@ def load_notification(
         model_class=DirectVideoMessage,
         primary_field='message',
         primary_objects=direct_message_list,
-        max_related_objects=max_videos_per_message,
+        max_related_count=max_videos_per_message,
         attributes={
             'video': lambda: fake.image_url()
         }
@@ -175,7 +175,7 @@ def load_notification(
         model_class=GroupVideoMessage,
         primary_field='message',
         primary_objects=group_message_list,
-        max_related_objects=max_videos_per_message,
+        max_related_count=max_videos_per_message,
         attributes={
             'video': lambda: fake.image_url()
         }

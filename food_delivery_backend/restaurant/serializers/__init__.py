@@ -4,3 +4,4 @@ from .menu_delivery import MenuDeliverySerializer
 from .operating_hour import OperatingHourSerializer
 from .representative import RepresentativeSerializer 
 from .restaurant import RestaurantSerializer, DetailRestaurantSerializer, RestaurantCategorySerializer
+from .basic_restaurant import BasicRestaurantSerializer

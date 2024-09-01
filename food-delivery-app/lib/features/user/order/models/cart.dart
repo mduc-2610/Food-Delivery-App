@@ -44,7 +44,7 @@ class RestaurantCart {
         isCreatedOrder = json['is_created_order'] ?? false,
         isEmpty = json['is_empty'] ?? false,
         totalPrice = THelperFunction.formatDouble(json['total_price']),
-        totalItems = json['total_items'],
+        totalItems = json['total_items'] ?? 0,
         cartDishes = json['dishes'] != null ? (json['dishes'] as List).map((instance) => RestaurantCartDish.fromJson(instance)).toList() : [],
         order = json['order'] != null ? Order.fromJson(json['order']) : null
   ;

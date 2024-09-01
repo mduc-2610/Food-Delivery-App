@@ -4,7 +4,7 @@ from restaurant.models import Restaurant, RestaurantCategory
 from restaurant.serializers import (
     RestaurantSerializer, DetailRestaurantSerializer, RestaurantCategorySerializer
 )
-from account.serializers import UserAbbrSerializer
+from account.serializers import BasicUserSerializer
 from food.serializers import DishSerializer, DishCategorySerializer
 from order.serializers import PromotionSerializer, RestaurantPromotionSerializer
 from review.serializers import RestaurantReviewSerializer
@@ -22,7 +22,7 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewS
     many_related_serializer_class = {
         'retrieve': DetailRestaurantSerializer,
         'promotions': PromotionSerializer,
-        'reviewed_by_users': UserAbbrSerializer,
+        'reviewed_by_users': BasicUserSerializer,
         'dishes': DishSerializer,
         'restaurant_reviews': RestaurantReviewSerializer,
         'owned_promotions': RestaurantPromotionSerializer,
