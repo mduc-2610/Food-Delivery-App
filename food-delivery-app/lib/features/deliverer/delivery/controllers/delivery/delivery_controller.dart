@@ -34,7 +34,7 @@ class DeliveryController extends GetxController {
   BitmapDescriptor currentIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
-  Map<String, bool> mapActive = <String, bool>{}.obs;
+  Rx<int> trackingStage = 0.obs;
 
   @override
   void onInit() {
@@ -121,16 +121,20 @@ class DeliveryController extends GetxController {
     sourceIcon = await createCustomMarkerBitmap(
       "https://th.bing.com/th/id/OIP.J7Td_S41uQvsuGI73Pu5dwHaH_?rs=1&pid=ImgDetMain" ?? 'https://example.com/source_icon.png',
       size: 120,
-      borderColor: Colors.green,
+      borderColor: TColor.secondary,
       borderWidth: 0,
     );
 
     destinationIcon = await createCustomMarkerBitmap(
       delivery?.user?.avatar ?? 'https://example.com/destination_icon.png',
       size: 120,
-      borderColor: Colors.red,
+      borderColor: TColor.primary,
       borderWidth: 0,
     );
+
+    delivererSocket?.add({
+      'delivery': delivery
+    });
 
     markers.add(Marker(
       markerId: MarkerId('pick_up'),
@@ -191,17 +195,16 @@ class DeliveryController extends GetxController {
     }
   }
 
-  bool isNearLocation(LatLng currentPosition, LatLng targetPosition, {double thresholdInMeters = 50, bool toward = true}) {
+  bool isNearLocation(LatLng currentPosition, LatLng targetPosition, {double thresholdInMeters = 500}) {
     final double distance = Geolocator.distanceBetween(
       currentPosition.latitude,
       currentPosition.longitude,
       targetPosition.latitude,
       targetPosition.longitude,
     );
-
-    if(toward)
-      return distance <= thresholdInMeters;
-    return distance >= thresholdInMeters;
+    $print("Distance: ${distance} ${thresholdInMeters}");
+    $print("Tracking stage: ${trackingStage}");
+    return distance <= thresholdInMeters;
   }
 
   void startMovingMarkerAlongRoute(Delivery? delivery) {
@@ -215,37 +218,27 @@ class DeliveryController extends GetxController {
 
       LatLng currentPoint = polylineCoordinates[polylineIndex];
 
-      // Check if the marker is near the pickup location
-      if (delivery.pickupCoordinate != null &&
-          !mapActive.containsKey('store') &&
-          isNearLocation(currentPoint, delivery.pickupCoordinate!)) {
-        mapActive['store'] = true;
+      if (trackingStage.value == 1 && isNearLocation(currentPoint, delivery.pickupCoordinate!)) {
+        trackingStage.value = 2;
       }
 
-      // Check if the marker is moving away from the pickup location (within 200m but not toward it)
-      if (delivery.pickupCoordinate != null &&
-          !mapActive.containsKey('delivery') &&
-          isNearLocation(currentPoint, delivery.pickupCoordinate!, thresholdInMeters: 200, toward: false)) {
-        mapActive['delivery'] = true;
+      if (trackingStage.value == 0 && isNearLocation(currentPoint, delivery.pickupCoordinate!)) {
+        trackingStage.value = 1;
       }
 
-      // Check if the marker is near the drop-off location
-      if (delivery.dropOffCoordinate != null &&
-          !mapActive.containsKey('done') &&
-          isNearLocation(currentPoint, delivery.dropOffCoordinate!)) {
-        mapActive['done'] = true;
-        mapActive['delivery'] = true;  // Ensure `delivery` is also set if reaching the drop-off point
+      if (trackingStage.value == 2 && isNearLocation(currentPoint, delivery.dropOffCoordinate!)) {
+        trackingStage.value = 3;
       }
-
-      $print(mapActive);
       update();
-
-      // Update marker movement
+      if(polylineIndex < polylineCoordinates.length) {
+        delivererSocket?.add({
+          'coordinate': polylineCoordinates[polylineIndex]
+        });
+      }
       if (polylineIndex < polylineCoordinates.length - 1) {
         LatLng currentLatLng = polylineCoordinates[polylineIndex];
         LatLng nextLatLng = polylineCoordinates[polylineIndex + 1];
 
-        // Remove and add the current marker
         markers.removeWhere((marker) => marker.markerId == MarkerId('current'));
         markers.add(Marker(
           markerId: MarkerId('current'),
@@ -253,20 +246,34 @@ class DeliveryController extends GetxController {
           icon: currentIcon,
         ));
         markers.refresh();
+
+        Polyline completedRoute = Polyline(
+          polylineId: PolylineId('completed_route'),
+          points: polylineCoordinates.sublist(0, polylineIndex + 1),
+          color: TColor.primary,
+          width: 5,
+        );
+
+        Polyline remainingRoute = Polyline(
+          polylineId: PolylineId('remaining_route'),
+          points: polylineCoordinates.sublist(polylineIndex),
+          color: Colors.red,
+          width: 5,
+        );
+
+        polylines.clear();
+        polylines.addAll([completedRoute, remainingRoute]);
+
         update();
 
-        // Animate the camera to follow the marker
         animateCamera(currentLatLng, nextLatLng);
 
-        // Move to the next point in the polyline
         polylineIndex++;
       } else {
-        // Stop the timer once the marker has completed the route
         timer.cancel();
       }
     });
   }
-
 
   void animateCamera(LatLng from, LatLng to) {
     final CameraUpdate cameraUpdate = CameraUpdate.newLatLng(to);
@@ -274,6 +281,7 @@ class DeliveryController extends GetxController {
   }
 
   void handleDecline(Delivery? delivery) {
+    trackingStage.value = 0;
     showConfirmDialog(
         Get.context!,
         title: "Are you sure ?",
@@ -288,6 +296,7 @@ class DeliveryController extends GetxController {
   }
 
   void handleAccept(Delivery? delivery) {
+    trackingStage.value = 0;
     showConfirmDialog(
         Get.context!,
         title: "Are you sure ?",
@@ -303,6 +312,10 @@ class DeliveryController extends GetxController {
   void handleCheckRoute(Delivery? delivery) async {
     await addMarkers(delivery);
     Get.back();
+  }
+
+  void handleCompleteOrder(Delivery? delivery) async {
+    trackingStage.value = 0;
   }
 
   @override

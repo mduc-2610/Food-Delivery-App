@@ -7,19 +7,21 @@ import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
+enum OrderTrackingType { deliverer, user }
 
 class OrderTracking extends StatelessWidget {
   final Delivery? delivery;
-  final bool noDriverInfo;
   final VoidCallback onCancel;
+  final OrderTrackingType type;
   final controller;
 
   const OrderTracking({
     this.delivery,
-    this.noDriverInfo = false,
     required this.onCancel,
-    this.controller
+    this.controller,
+    this.type = OrderTrackingType.user
   });
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -28,12 +30,12 @@ class OrderTracking extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            if(!noDriverInfo)...[
-              _driverInfoCard(context, isFind: true,),
+            if(type == OrderTrackingType.user)...[
+              Obx(() => _driverInfoCard(context, isFind: controller.deliverer.value == null,)),
               SizedBox(height: TSize.spaceBetweenSections,),
             ],
 
-            Obx(() => _orderTrackingProgressIndicator(context, mapActive: controller.mapActive.value)),
+            Obx(() => _orderTrackingProgressIndicator(context, stage: controller.trackingStage.value)),
             SizedBox(height: TSize.spaceBetweenSections,),
 
             Row(
@@ -50,7 +52,6 @@ class OrderTracking extends StatelessWidget {
               ],
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical,),
-
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -70,26 +71,81 @@ class OrderTracking extends StatelessWidget {
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical,),
 
-            Card(
+            Obx(() => Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(TSize.borderRadiusCircle)
               ),
               child: MainButton(
-                onPressed: onCancel,
-                text: 'Cancel Order',
-                textColor: TColor.reject,
+                onPressed: (controller.trackingStage.value < 3)
+                    ? onCancel
+                    : type == OrderTrackingType.user
+                    ? null
+                    : () => controller.handleCompleteOrder(delivery),
+                text: (controller.trackingStage.value < 3)
+                    ? 'Cancel Order'
+                    : type == OrderTrackingType.user
+                    ? 'Completed'
+                    : 'Complete Order',
+                textColor: (controller.trackingStage.value < 3)
+                    ? TColor.reject
+                    : TColor.complete,
                 backgroundColor: Colors.transparent,
                 borderColor: Colors.transparent,
                 borderRadius: TSize.borderRadiusCircle,
               ),
-            ),
+            )),
             SizedBox(height: TSize.spaceBetweenSections,),
-
           ],
         ),
       ),
     );
   }
+
+  Widget _orderTrackingProgressIndicator(BuildContext context, {int stage = 0}) {
+    final steps = [
+      {'icon': Icons.person, 'isActive': stage >= 0},
+      {'icon': Icons.store, 'isActive': stage >= 1},
+      {'icon': Icons.delivery_dining, 'isActive': stage >= 2},
+      {'icon': Icons.check_circle, 'isActive': stage >= 3},
+    ];
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        for (int i = 0; i < steps.length; i++) ...[
+          _buildStep(steps[i]['icon'] as IconData, isActive: steps[i]['isActive'] as bool),
+          if (i < steps.length - 1)
+            _buildConnector(isActive: (stage > i)),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildStep(IconData icon, {bool isActive = false}) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 20,
+          backgroundColor: isActive ? TColor.primary : Colors.grey.shade300,
+          child: Icon(
+            icon,
+            color: isActive ? Colors.white : Colors.grey,
+            size: 20,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildConnector({bool isActive = false}) {
+    return Expanded(
+      child: Container(
+        height: 2,
+        color: isActive ? TColor.primary : Colors.grey.shade300,
+      ),
+    );
+  }
+
   Widget _driverInfoCard(BuildContext context, {bool isFind = false}) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -180,45 +236,5 @@ class OrderTracking extends StatelessWidget {
       dotCount = (dotCount + 1) % 8;
       await Future.delayed(Duration(milliseconds: 500));
     }
-  }
-
-  Widget _orderTrackingProgressIndicator(BuildContext context, { Map<String, bool> mapActive = const {}}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _buildStep(Icons.person, isActive: true),
-        _buildConnector(isActive: controller.mapActive['store'] ?? false),
-        _buildStep(Icons.store, isActive: controller.mapActive['store'] ?? false),
-        _buildConnector(isActive: controller.mapActive['delivery'] ?? false),
-        _buildStep(Icons.delivery_dining, isActive: controller.mapActive['delivery'] ?? false),
-        _buildConnector(isActive: controller.mapActive['done'] ?? false),
-        _buildStep(Icons.check_circle, isActive: controller.mapActive['done'] ?? false),
-      ],
-    );
-  }
-
-  Widget _buildStep(IconData icon, {bool isActive = false}) {
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: 20,
-          backgroundColor: isActive ? TColor.primary : Colors.grey.shade300,
-          child: Icon(
-            icon,
-            color: isActive ? Colors.white : Colors.grey,
-            size: 20,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildConnector({bool isActive = false}) {
-    return Expanded(
-      child: Container(
-        height: 2,
-        color: isActive ? TColor.primary : Colors.grey.shade300,
-      ),
-    );
   }
 }

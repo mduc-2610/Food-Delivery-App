@@ -10,18 +10,21 @@ class UserProfile {
   final String? name;
   final String? gender;
   final DateTime? dateOfBirth;
+  final String? avatar;
 
   UserProfile({
     this.user,
     this.name,
     this.gender,
     dynamic dateOfBirth,
+    this.avatar,
   }) : dateOfBirth = THelperFunction.parseToDateTime(dateOfBirth);
 
   UserProfile.fromJson(Map<String, dynamic> json)
       : user = json['user'],
         name = json['name'],
         gender = json['gender'],
+        avatar = json['avatar'],
         dateOfBirth = json['date_of_birth'] != null ? DateTime.parse(json['date_of_birth']).toLocal() : null;
 
   Map<String, dynamic> toJson({bool patch = false}) {

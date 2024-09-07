@@ -36,12 +36,32 @@ class DelivererConsumer(AsyncWebsocketConsumer):
         except json.JSONDecodeError:
             print("Failed to decode JSON")
             return
+        print(text_data_json.get('coordinate'), pretty=True)
         
         await self.channel_layer.group_send(
             self.room_name,
             {
                 'type': 'receive_delivery_request',
                 "message": text_data_json
+            }
+        )
+        delivery = text_data_json.get('delivery')
+        
+        # if delivery:
+        #     deliverer_data = await self.get_deliverer()
+        #     print(deliverer_data, pretty=True)
+        #     if deliverer_data:
+        #         delivery['deliverer'] = deliverer_data 
+        #         print(delivery['deliverer'], pretty=True)
+        #     print(delivery, pretty=True)
+        if delivery:
+            delivery['deliverer'] = self.deliverer_id
+        # print(delivery, pretty=True)
+        await self.channel_layer.group_send(
+            f'order',
+            {
+                'type': 'tracking_request',
+                'message': delivery
             }
         )
 
@@ -54,7 +74,6 @@ class DelivererConsumer(AsyncWebsocketConsumer):
 
     async def receive_delivery_request(self, event):
         message = event['message']
-        print(message)
         await self.send(text_data=json.dumps({
             'message': message,
         }))
@@ -68,3 +87,14 @@ class DelivererConsumer(AsyncWebsocketConsumer):
             print(deliverer, pretty=True)
         except Deliverer.DoesNotExist:
             print(f"Deliverer with ID {self.deliverer_id} does not exist.")
+
+    @database_sync_to_async
+    def get_deliverer(self):
+        try:
+            deliverer = Deliverer.objects.get(id=self.deliverer_id)
+            from deliverer.serializers import BasicDelivererSerializer
+            serializer = BasicDelivererSerializer(deliverer)  
+            return serializer.data
+        except Deliverer.DoesNotExist:
+            print(f"Deliverer with ID {self.deliverer_id} does not exist.")
+            return None

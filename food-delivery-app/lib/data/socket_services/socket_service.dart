@@ -8,10 +8,12 @@ class SocketService<T> {
   WebSocketChannel? _channel;
   final String? endpoint;
   String? incomingMessage;
+  Function(String)? handleIncomingMessage;
 
   SocketService({
     this.endpoint,
     this.incomingMessage,
+    this.handleIncomingMessage,
   });
 
   String url({String? id}) {
@@ -35,7 +37,10 @@ class SocketService<T> {
 
     _channel?.stream.listen(
           (message) {
-        handleIncomingMessage(message);
+        handleIncomingMessage?.call(message) ?? (message) {
+          incomingMessage = message;
+          $print("Received message: $message");
+        };
         print(message);
       },
       onError: (error) {
@@ -51,11 +56,6 @@ class SocketService<T> {
     if(data != null) {
       _channel?.sink.add(jsonEncode(data));
     }
-  }
-
-  void handleIncomingMessage(String message) {
-    incomingMessage = message;
-    $print("Received message: $message");
   }
 
   void disconnect() {

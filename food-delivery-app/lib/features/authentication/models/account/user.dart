@@ -3,6 +3,7 @@ import 'package:food_delivery_app/features/authentication/models/account/profile
 import 'package:food_delivery_app/features/authentication/models/account/setting.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 @reflector
 @jsonSerializable
@@ -69,7 +70,7 @@ class User {
         restaurantCart = json['restaurant_cart'] != null ? RestaurantCart.fromJson(json['restaurant_cart']) : null,
         restaurantCarts = json['restaurant_carts'],
         locations = json['locations'],
-        selectedLocation = json['selected_locations'] != null ? UserLocation.fromJson(json['selected_locations']) : null,
+        selectedLocation = json['selected_location'] != null ? UserLocation.fromJson(json['selected_location']) : null,
         deliverer = json['deliverer'],
         restaurant = json['restaurant']
   ;
@@ -178,16 +179,16 @@ class OTP {
 class UserLocation {
   final String? id;
   final String? address;
-  final double? latitude;
-  final double? longitude;
+  final double latitude;
+  final double longitude;
   final String? name;
   final bool isSelected;
 
   UserLocation({
     this.id,
     this.address,
-    this.latitude,
-    this.longitude,
+    this.latitude = 0,
+    this.longitude = 0,
     this.name,
     this.isSelected = false,
   });
@@ -195,8 +196,8 @@ class UserLocation {
   UserLocation.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         address = json['address'],
-        latitude = json['latitude'] != null ? double.parse(json['latitude']) : null,
-        longitude = json['longitude'] != null ? double.parse(json['longitude']) : null,
+        latitude = THelperFunction.formatDouble(json['latitude']),
+        longitude = THelperFunction.formatDouble(json['longitude']),
         name = json['name'],
         isSelected = json['is_selected'] ?? false;
 
@@ -215,6 +216,10 @@ class UserLocation {
     }
 
     return map;
+  }
+
+  LatLng get currentCoordinate {
+    return LatLng(latitude, longitude);
   }
 
   @override

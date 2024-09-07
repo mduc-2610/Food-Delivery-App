@@ -42,18 +42,15 @@ def run(mode=None, *args):
 
         return nearest_deliverer
     
-    restaurant = Restaurant.objects.filter(basic_info__name="May-Cooley").first()
+    restaurant = Restaurant.objects.filter(basic_info__name="Pierce-Tate").first()
     available_deliverers = Deliverer.objects.filter(is_active=True, is_occupied=False)
     print(restaurant)
     
     result = _find_nearest_deliverer(restaurant, available_deliverers)
     if result:
         print(result.basic_info, result.id, result.user.id, result.user.phone_number)
-
-    x = {
-        'x': 1
-    }
-    print({'x' : 1} in x)
+        print(f"Deliverer ID: {result.id}")
+    
     # print([1][0:])
     # users = Profile.objects.all()
     # for user in users:

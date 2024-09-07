@@ -23,8 +23,6 @@ class DeliveryScreen extends StatefulWidget {
 }
 
 class _DeliveryScreenState extends State<DeliveryScreen> {
-  bool _isActiveDelivery = false;
-  String _currentStage = 'Not Started';
   final deliveryController = Get.put(DeliveryController());
   @override
   Widget build(BuildContext context) {
@@ -37,9 +35,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
           Obx(() => GoogleMap(
             onMapCreated: deliveryController.onMapCreated,
             initialCameraPosition: CameraPosition(
-              target: LatLng(
-                  deliveryController.deliverer?.currentLatitude ?? 37.7749,
-                  deliveryController.deliverer?.currentLongitude ?? -122.4194),
+              target: deliveryController.deliverer?.currentCoordinate ?? LatLng(0, 0),
               zoom: 12,
             ),
             markers: deliveryController.markers.map((marker) => marker.copyWith(
@@ -97,12 +93,12 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
 
   Widget _buildTrackingOrder() {
     return OrderTracking(
-      noDriverInfo: true,
       onCancel: () {
         deliveryController.delivererHomeController.isOccupied.value = false;
         Get.back();
       },
       controller: deliveryController,
+      type: OrderTrackingType.deliverer,
     );
   }
 

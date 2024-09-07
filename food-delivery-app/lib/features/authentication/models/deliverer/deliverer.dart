@@ -30,8 +30,8 @@ class Deliverer {
   final double rating;
   final int totalReviews;
   final Map<String, dynamic> ratingCounts;
-  final double currentLatitude;
-  final double currentLongitude;
+  double currentLatitude;
+  double currentLongitude;
   final String? avatar;
   final bool isActive;
   final bool isOccupied;
@@ -86,6 +86,11 @@ class Deliverer {
 
   LatLng get currentCoordinate {
     return LatLng(currentLatitude, currentLongitude);
+  }
+
+  set currentCoordinate(LatLng newCoordinate) {
+    currentLatitude = newCoordinate.latitude;
+    currentLongitude = newCoordinate.longitude;
   }
 
   Map<String, dynamic> toJson() {

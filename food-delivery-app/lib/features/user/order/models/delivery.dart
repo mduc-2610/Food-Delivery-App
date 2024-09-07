@@ -14,7 +14,7 @@ class Delivery {
   final dynamic order;
   final dynamic user;
   final dynamic restaurant;
-  final String? deliverer;
+  final dynamic deliverer;
   final String? pickupLocation;
   final double pickUpLatitude;
   final double pickUpLongitude;
@@ -51,7 +51,7 @@ class Delivery {
         order = json['order'] == null || json['order'] is String ? json['order'] : Order.fromJson(json['order']),
         user = json['user'] == null || json['user'] is String ? json['user'] : BasicUser.fromJson(json['user']),
         restaurant = json['restaurant'] == null || json['restaurant'] is String ? json['restaurant'] : Restaurant.fromJson(json['restaurant']),
-        deliverer = json['deliverer'],
+        deliverer = json['deliverer'] == null || json['deliverer'] is String ? json['deliverer'] : Deliverer.fromJson(json['deliverer']),
         pickupLocation = json['pickup_location'],
         pickUpLatitude = THelperFunction.formatDouble(json['pickup_latitude']),
         pickUpLongitude = THelperFunction.formatDouble(json['pickup_longitude']),
