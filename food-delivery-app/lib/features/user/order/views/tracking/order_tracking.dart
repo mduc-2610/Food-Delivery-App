@@ -57,20 +57,8 @@ class _OrderTrackingViewState extends State<OrderTrackingView> {
                   target: controller.user?.selectedLocation?.currentCoordinate ?? LatLng(0, 0),
                   zoom: 12,
                 ),
-                markers: controller.markers.map((marker) => marker.copyWith(
-                  // onTapParam: () => deliveryController.onMarkerTapped(marker.markerId, context)
-                )).toSet(),
-                polylines: controller.polylines.toSet(),
-                onCameraMove: (_) {
-                  // if (deliveryController.isOverlayVisible.value) {
-                  //   // This will trigger the StreamBuilder to update the overlay position
-                  //   deliveryController.isOverlayVisible.refresh();
-                  // }
-                },
-                onTap: (_) {
-                  // Remove overlay when tapping on the map
-                  // deliveryController.overlayEntry.value?.remove();
-                },
+                markers: controller.markers.toSet(),
+                polylines: controller.polylines.toSet()
               )),
               Positioned(
                 bottom: 40,

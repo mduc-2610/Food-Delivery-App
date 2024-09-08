@@ -47,16 +47,8 @@ class DelivererConsumer(AsyncWebsocketConsumer):
         )
         delivery = text_data_json.get('delivery')
         
-        # if delivery:
-        #     deliverer_data = await self.get_deliverer()
-        #     print(deliverer_data, pretty=True)
-        #     if deliverer_data:
-        #         delivery['deliverer'] = deliverer_data 
-        #         print(delivery['deliverer'], pretty=True)
-        #     print(delivery, pretty=True)
         if delivery:
             delivery['deliverer'] = self.deliverer_id
-        # print(delivery, pretty=True)
         await self.channel_layer.group_send(
             f'order',
             {

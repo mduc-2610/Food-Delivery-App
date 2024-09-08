@@ -38,20 +38,8 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
               target: deliveryController.deliverer?.currentCoordinate ?? LatLng(0, 0),
               zoom: 12,
             ),
-            markers: deliveryController.markers.map((marker) => marker.copyWith(
-                // onTapParam: () => deliveryController.onMarkerTapped(marker.markerId, context)
-            )).toSet(),
+            markers: deliveryController.markers.toSet(),
             polylines: deliveryController.polylines.toSet(),
-            onCameraMove: (_) {
-              // if (deliveryController.isOverlayVisible.value) {
-              //   // This will trigger the StreamBuilder to update the overlay position
-              //   deliveryController.isOverlayVisible.refresh();
-              // }
-            },
-            onTap: (_) {
-              // Remove overlay when tapping on the map
-              // deliveryController.overlayEntry.value?.remove();
-            },
           )),
           Positioned(
             bottom: 40,
