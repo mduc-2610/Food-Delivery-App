@@ -7,7 +7,8 @@ class OrderFilterMixin:
         model = self.queryset.model
         params = self.request.query_params
 
-        if hasattr(self, 'action') and self.action == 'restaurant_carts':
+        if hasattr(self, 'action') and \
+            (self.action == 'restaurant_carts' or self.action == 'orders'):
             try:
                 instance = model.objects.get(pk=pk)
             except self.queryset.model.DoesNotExist:
@@ -22,17 +23,17 @@ class OrderFilterMixin:
                     star_filter = int(star_filter)
                 except:
                     star_filter = star_filter.upper()
-                
+            filter_kwargs = {}
             if star_filter:
                 if isinstance(star_filter, str):
                     if star_filter == "ALL":
                         return _queryset(instance)
-                    return  _queryset(instance) \
-                        .filter(order__status=star_filter)
+                    filter_kwargs[f"{'order__status' if self.action == 'restaurant_carts' else 'status'}"] = star_filter
                 elif isinstance(star_filter, int):
                     if 1 <= star_filter <= 5:
-                        return _queryset(instance) \
-                            .filter(order__rating=star_filter)
+                        filter_kwargs[f"{'order__rating' if self.action == 'restaurant_carts' else 'rating'}"] = star_filter
                     else:
                         return []
+                print(filter_kwargs, pretty=True)
+                return _queryset(instance).filter(**filter_kwargs)
         return super().get_object()

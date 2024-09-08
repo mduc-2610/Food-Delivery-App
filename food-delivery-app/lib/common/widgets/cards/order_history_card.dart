@@ -31,12 +31,13 @@ class OrderHistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Determine which data source to use
     final Order? currentOrder = order ?? restaurantCart?.order;
 
     return GestureDetector(
       onTap: () {
-        Get.to(() => OrderHistoryDetailView());
+        Get.to(() => OrderHistoryDetailView(), arguments: {
+          'id': order?.id
+          });
       },
       child: MainWrapper(
         noMargin: noMargin,

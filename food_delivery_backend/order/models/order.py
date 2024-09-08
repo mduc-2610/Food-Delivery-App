@@ -21,6 +21,7 @@ class Order(models.Model):
     ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
     cart = models.OneToOneField("order.RestaurantCart", related_name="order", on_delete=models.CASCADE)
+    user = models.ForeignKey("account.User", related_name="orders", on_delete=models.CASCADE, blank=True, null=True)
     payment_method = models.CharField(max_length=50)
     promotion = models.ForeignKey("order.Promotion", null=True, blank=True, on_delete=models.SET_NULL)
     discount = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
@@ -28,6 +29,9 @@ class Order(models.Model):
     rating = models.PositiveSmallIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def total_price(self):
+        return self.cart.total_price
 
     def total(self):
         return float(self.cart.total_price) + float(self.delivery_fee()) - float(self.discount)
@@ -98,7 +102,11 @@ class Order(models.Model):
 
         return delivery, nearest_deliverer
 
-
+    def save(self, *args, **kwargs):
+        if hasattr(self, 'cart') and hasattr(self.cart, 'user'):
+            self.user = self.cart.user
+        self.cart.is_created_order = True
+        super(Order, self).save(*args, **kwargs)
     def __str__(self):
         return f"Order for {self.cart} with total {self.total()}"
 
@@ -111,4 +119,4 @@ class Order(models.Model):
 
 @receiver(post_save, sender='order.Order')
 def broadcast_to_deliverers(sender, instance, **kwargs):
-    instance.cart.is_created_order = True
+    pass

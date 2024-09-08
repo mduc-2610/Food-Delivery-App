@@ -1,72 +1,134 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
+import 'package:food_delivery_app/common/widgets/misc/list_check.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
+import 'package:food_delivery_app/features/authentication/views/splash/splash.dart';
+import 'package:food_delivery_app/features/user/order/controllers/basket/order_basket_controller.dart';
+import 'package:food_delivery_app/features/user/order/controllers/history/order_history_detail_controller.dart';
+import 'package:food_delivery_app/features/user/order/views/basket/widgets/order_card.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/delivery_detail.dart';
-import 'package:food_delivery_app/features/user/order/views/history/widgets/order_history_detail_card.dart';
+import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
+import 'package:get/get.dart';
+import 'package:loading_progress_indicator/loading_progress_indicator.dart';
 
 class OrderHistoryDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          CSliverAppBar(
-            title: "SP 0023502",
-            iconList: [
-              {
-                "icon": Icons.more_horiz
-              }
-            ],
-          ),
+    return GetBuilder<OrderHistoryDetailController>(
+      init: OrderHistoryDetailController(),
+      builder: (controller) {
+        return
+          Scaffold(
+              appBar: CAppBar(
+                title: "My Basket",
+              ),
+              body:
+              Obx(() =>
+              controller.isLoading.value
+                  ? OrderBasketSkeleton()
+                  : Column(
+                children: [
 
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                OrderHistoryDetailCard(
-                  name: "Chicken Burger",
-                  imageUrl: "https://via.placeholder.com/150",
-                  originalPrice: 10.0,
-                  discountedPrice: 6.0,
-                  options: ['Add Cheese: £0.50', 'Add Meat (Extra Patty): £2.00'],
-                  review: "Chicken burger is delicious! I will save it for next order.",
-                  rating: 5,
-                  isCompletedOrder: false,
-                ),
-                OrderHistoryDetailCard(
-                  name: "Ramen Noodles",
-                  imageUrl: "https://via.placeholder.com/150",
-                  originalPrice: 22.0,
-                  discountedPrice: 15.0,
-                  review: "Chicken burger is delicious! I will save it for next order.",
-                  rating: 5,
-                  isCompletedOrder: false,
-                ),
-                OrderHistoryDetailCard(
-                  name: "Cherry Tomato Salad",
-                  imageUrl: "https://via.placeholder.com/150",
-                  originalPrice: 8.0,
-                  discountedPrice: 10,
-                  review: "Chicken burger is delicious! I will save it for next order.",
-                  rating: 5,
-                  isCompletedOrder: false,
-                ),
-                SizedBox(height: TSize.spaceBetweenSections,),
+                  if(!controller.isLoading.value)...[
+                    Expanded(
+                      child: SingleChildScrollView(
+                          child: ListCheck(
+                            checkEmpty: controller.order?.cart.cartDishes.length == 0,
+                            child: Column(
+                              children: [
+                                MainWrapper(
+                                  topMargin: TSize.spaceBetweenItemsVertical,
+                                  bottomMargin: TSize.spaceBetweenItemsVertical,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Order summary',
+                                        style: Theme.of(context).textTheme.headlineSmall,
+                                      ),
 
-                // DeliveryDetail(
-                //   address: "221B Baker Street, London, United Kingdom",
-                //   paymentMethod: "Cash",
-                //   subtotal: 31.50,
-                //   discount: 6.30,
-                //   total: 25.20,
-                // ),
-                SizedBox(height: TSize.spaceBetweenSections,),
+                                      StatusChip(status: controller.order?.status ?? "")
+                                    ],
+                                  ),
+                                ),
+                                Column(
+                                    children: [
+                                      for (var cartDish in controller.order?.cart.cartDishes)
+                                        OrderCard(
+                                          cartDish: cartDish,
+                                          isCompletedOrder: false,
+                                          canEdit: false,
+                                        ),
+                                    ],
+                                  ),
+
+
+                                SizedBox(height: TSize.spaceBetweenSections,),
+
+                                DeliveryDetail(
+                                  order: controller.order,
+                                  viewType: OrderViewType.history,
+                                ),
+                                SizedBox(height: TSize.spaceBetweenSections,),
+                              ],
+                            ),
+                          )
+                      ),
+                    )
+                  ]
+
+                ],
+              ),
+              ));
+      },
+    );
+  }
+}
+
+class OrderBasketSkeleton extends StatelessWidget {
+  const OrderBasketSkeleton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: MainWrapper(
+        child: Column(
+          children: [
+            SizedBox(height: TSize.spaceBetweenItemsVertical),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                BoxSkeleton(
+                  height: 20,
+                  width: 150,
+                  borderRadius: TSize.sm,
+                ),
+                BoxSkeleton(
+                  height: 20,
+                  width: 100,
+                  borderRadius: TSize.sm,
+                ),
               ],
             ),
-          ),
-
-        ],
+            SizedBox(height: TSize.spaceBetweenItemsVertical),
+            Column(
+              children: List.generate(
+                3,
+                    (index) => OrderCardSkeleton(),
+              ),
+            ),
+            DeliveryDetailSkeleton(),
+            SizedBox(height: TSize.spaceBetweenSections),
+          ],
+        ),
       ),
     );
   }
 }
+
 

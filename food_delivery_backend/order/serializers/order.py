@@ -3,21 +3,22 @@ from rest_framework import serializers
 from order.models import Order, RestaurantCart, Promotion
 
 from account.serializers import LocationSerializer
+
 class OrderSerializer(serializers.ModelSerializer):
     delivery_address = LocationSerializer(read_only=True)
     
     class Meta:
         model = Order
-        fields = ['id', 'cart', 'delivery_address', 'payment_method', 'promotion', 'delivery_fee', 
-                  'discount', 'total', 'status', 'rating']
+        fields = ['id', 'cart', 'user', 'delivery_address', 'payment_method', 'promotion', 'delivery_fee', 
+                  'discount', 'total_price', 'total', 'status', 'rating']
         read_only_fields = ['total']
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        from order.serializers import RestaurantCartSerializer2
-        data['cart'] = RestaurantCartSerializer2(instance.cart).data
+        from order.serializers.basic import BasicRestaurantCartSerializer
+        data['cart'] = BasicRestaurantCartSerializer(instance.cart).data
         return data
-
+    
     # def create(self, validated_data):
     #     order = super().create(validated_data)
     #     order.calculate_total()  # Calculate total on creation

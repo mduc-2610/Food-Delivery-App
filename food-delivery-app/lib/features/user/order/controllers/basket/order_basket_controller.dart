@@ -35,11 +35,11 @@ class OrderBasketController extends GetxController {
         order = await APIService<Order>().retrieve(restaurantDetailController.user?.restaurantCart?.id ?? "");
         $print(order);
       }
-
     } else {
-      $print("WORKING");
       order = await APIService<Order>().retrieve(restaurantDetailController.user?.restaurantCart?.id ?? "");
     }
+    foodListController.order.value = order;
+    $print("CHECK: ${foodListController.order.value}");
     Future.delayed(Duration(milliseconds: TTime.init));
     isLoading.value = false;
     update();

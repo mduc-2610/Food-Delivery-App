@@ -14,6 +14,7 @@ class Order {
   final double deliveryFee;
   final double discount;
   double total;
+  double totalPrice;
   final int rating;
   final String? status;
 
@@ -27,6 +28,7 @@ class Order {
     this.discount = 0,
     this.total = 0,
     this.rating = 0,
+    this.totalPrice = 0,
     this.status,
   });
 
@@ -38,6 +40,7 @@ class Order {
         promotion = json['promotion'],
         deliveryFee = THelperFunction.formatDouble(json['delivery_fee']),
         discount = THelperFunction.formatDouble(json['discount']),
+        totalPrice = THelperFunction.formatDouble(json['total_price']),
         total = THelperFunction.formatDouble(json['total']),
         rating = json['rating'] ?? 0,
         status = json['status'];

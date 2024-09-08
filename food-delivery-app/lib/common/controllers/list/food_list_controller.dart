@@ -1,3 +1,4 @@
+import 'package:food_delivery_app/features/user/order/models/order.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 import 'package:food_delivery_app/features/user/food/controllers/restaurant/restaurant_detail_controller.dart';
@@ -9,7 +10,7 @@ class FoodListController extends GetxController {
   static FoodListController get instance => Get.find();
 
   final RestaurantDetailController restaurantDetailController = RestaurantDetailController.instance;
-
+  Rx<Order?> order = (null as Order?).obs;
   @override
   void onInit() {
     super.onInit();
@@ -34,6 +35,10 @@ class FoodListController extends GetxController {
     $print(cartDish.toJson());
     final [statusCode, headers, response] = await APIService<RestaurantCartDish>().create(cartDish, noBearer: true);
     restaurantDetailController.user?.restaurantCart = response.cart;
+
+    $print("TOTAL price: ${restaurantDetailController.user?.restaurantCart?.order?.total}");
+    order.value = restaurantDetailController.user?.restaurantCart?.order;
+
     restaurantDetailController.totalItems.value = restaurantDetailController.user?.restaurantCart?.totalItems ?? 0;
     restaurantDetailController.totalPrice.value = restaurantDetailController.user?.restaurantCart?.totalPrice ?? 0;
     restaurantDetailController.cartDishes.value = restaurantDetailController.user?.restaurantCart?.cartDishes ?? [];

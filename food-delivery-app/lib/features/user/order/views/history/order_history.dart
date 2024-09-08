@@ -4,7 +4,6 @@ import 'package:food_delivery_app/common/widgets/bars/filter_bar.dart';
 import 'package:food_delivery_app/common/widgets/cards/order_history_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/bars/search_bar.dart';
-import 'package:food_delivery_app/features/authentication/views/splash/splash.dart';
 import 'package:food_delivery_app/features/user/order/controllers/history/order_history_controller.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
@@ -36,8 +35,8 @@ class _OrderHistoryViewState extends State<OrderHistoryView> {
                   MainWrapper(
                     rightMargin: 0,
                     child: FilterBar(
-                      filters: ["All", "Active", "Completed", "Cancelled", "5", "4", "3", "2", "1"],
-                      exclude: ["All", "Active", "Completed", "Cancelled"],
+                      filters: ["All", "Active", "Completed", "Pending", "Cancelled", "5", "4", "3", "2", "1"],
+                      exclude: ["All", "Active", "Completed", "Pending", "Cancelled"],
                       suffixIconStr: TIcon.unearnedStar,
                       suffixIconStrClicked: TIcon.fillStar,
                       onTap: controller.fetchFilterOrder,
@@ -53,12 +52,12 @@ class _OrderHistoryViewState extends State<OrderHistoryView> {
                     controller: controller.scrollController,
                     itemCount: controller.isLoading.value
                         ? 5
-                        : controller.restaurantCarts.length,
+                        : controller.orders.length,
                     itemBuilder: (context, index) {
                       if (controller.isLoading.value) {
                         return OrderHistoryCardSkeleton();
                       } else {
-                        return OrderHistoryCard(restaurantCart: controller.restaurantCarts[index]);
+                        return OrderHistoryCard(order: controller.orders[index]);
                       }
                     },
                   );

@@ -37,7 +37,10 @@ from social.serializers import (
     DetailPostSerializer
 )
 from notification.serializers import DirectRoomSerializer
-from order.serializers import RestaurantCartSerializer
+from order.serializers import (
+    OrderSerializer,
+    RestaurantCartSerializer
+)
 from account.throttles import OTPThrottle
 from order.mixins import OrderFilterMixin
 
@@ -85,6 +88,7 @@ class UserViewSet(DefaultGenericMixin, OrderFilterMixin, ManyRelatedViewSet):
         'restaurant_carts': RestaurantCartSerializer,
         'carts': RestaurantSerializer,
         'locations': LocationSerializer,
+        'orders': OrderSerializer
     }
     many_related = {
         'restaurant_carts': {

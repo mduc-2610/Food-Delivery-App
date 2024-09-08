@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:food_delivery_app/common/controllers/bars/filter_bar_controller.dart';
+import 'package:food_delivery_app/features/user/order/models/order.dart';
 import 'package:food_delivery_app/utils/constants/times.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
@@ -15,20 +16,30 @@ class OrderHistoryController extends GetxController {
 
   late FilterBarController filterBarController;
   User? user;
-  var restaurantCarts = <RestaurantCart>[].obs;
+  var orders = <Order>[].obs;
   Rx<bool> isLoading = true.obs;
   final scrollController = ScrollController();
 
   String _filterDefault = "All";
+
   @override
   void onInit() {
     super.onInit();
-    filterBarController = Get.put(FilterBarController(_filterDefault), tag: user?.id);
+    filterBarController = Get.put(FilterBarController(_filterDefault));
+    _filterDefault = filterBarController.selectedFilter.value;
     scrollController.addListener(_scrollListener);
     initializeUser();
   }
 
+  @override
+  void onClose() {
+    super.onInit();
+    scrollController.removeListener(_scrollListener);
+    scrollController.dispose();
+  }
+
   void _scrollListener() {
+    $print(scrollController.position.pixels);
     if(_nextPage != null && scrollController.position.pixels == scrollController.position.maxScrollExtent) {
       fetchFilterOrder("", loadMore: true);
     }
@@ -43,9 +54,9 @@ class OrderHistoryController extends GetxController {
   Future<void> fetchFilterOrder(String filter, { bool loadMore = false }) async {
     if(!loadMore) isLoading.value = true;
     if(_nextPage != null || !loadMore) {
-      final [_result, _info] = await APIService<RestaurantCart>(fullUrl: (loadMore) ? _nextPage ?? "" : user?.restaurantCarts ?? "", queryParams: (loadMore) ? "" : "star_filter=${filter}").list(next: true);
-      if(!loadMore) restaurantCarts.value = _result;
-      else restaurantCarts.addAll(_result);
+      final [_result, _info] = await APIService<Order>(fullUrl: (loadMore) ? _nextPage ?? "" : user?.orders ?? "", queryParams: (loadMore) ? "" : "star_filter=${filter}").list(next: true);
+      if(!loadMore) orders.value = _result;
+      else orders.addAll(_result);
       _nextPage = _info["next"];
     }
     if(!loadMore) {

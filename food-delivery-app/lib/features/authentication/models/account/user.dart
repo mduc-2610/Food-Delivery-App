@@ -24,6 +24,7 @@ class User {
   final String? user2Rooms;
   RestaurantCart? restaurantCart;
   final String? restaurantCarts;
+  final String? orders;
   final String? locations;
   final UserLocation? selectedLocation;
   final String? deliverer;
@@ -46,6 +47,7 @@ class User {
     this.user2Rooms,
     this.restaurantCart,
     this.restaurantCarts,
+    this.orders,
     this.locations,
     this.selectedLocation,
     this.deliverer,
@@ -69,6 +71,7 @@ class User {
         user2Rooms = json['user2_rooms'],
         restaurantCart = json['restaurant_cart'] != null ? RestaurantCart.fromJson(json['restaurant_cart']) : null,
         restaurantCarts = json['restaurant_carts'],
+        orders = json['orders'],
         locations = json['locations'],
         selectedLocation = json['selected_location'] != null ? UserLocation.fromJson(json['selected_location']) : null,
         deliverer = json['deliverer'],

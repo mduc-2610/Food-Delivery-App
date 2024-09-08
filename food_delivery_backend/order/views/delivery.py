@@ -12,10 +12,10 @@ from order.serializers import (
 )
 
 from utils.mixins import DefaultGenericMixin
-from utils.views import ManyRelatedViewSet
+from utils.views import ManyRelatedViewSet, OneRelatedViewSet
 from utils.pagination import CustomPagination
 
-class DeliveryViewSet(DefaultGenericMixin, ManyRelatedViewSet):
+class DeliveryViewSet(DefaultGenericMixin, OneRelatedViewSet, ManyRelatedViewSet):
     queryset = Delivery.objects.all()
     serializer_class = DeliverySerializer
     many_related_serializer_class = {

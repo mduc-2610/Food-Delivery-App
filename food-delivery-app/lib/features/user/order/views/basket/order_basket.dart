@@ -72,10 +72,10 @@ class OrderBasketView extends StatelessWidget {
 
                                 SizedBox(height: TSize.spaceBetweenSections,),
 
-                                DeliveryDetail(
-                                  order: controller.order,
-                                  fromView: "Basket",
-                                ),
+                                Obx(() => DeliveryDetail(
+                                  order: controller.foodListController.order.value,
+                                  viewType: OrderViewType.other,
+                                )),
                                 SizedBox(height: TSize.spaceBetweenSections,),
                               ],
                             ),

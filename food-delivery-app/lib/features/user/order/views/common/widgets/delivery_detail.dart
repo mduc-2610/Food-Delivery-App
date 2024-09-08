@@ -27,165 +27,204 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:get/get.dart';
 
+enum OrderViewType { basket, history, cancel, other }
+
 class DeliveryDetail extends StatelessWidget {
   final Order? order;
-  final String fromView;
+  final OrderViewType viewType;
 
   DeliveryDetail({
     this.order,
-    this.fromView = "Cancel",
+    this.viewType = OrderViewType.cancel,
   });
 
   @override
   Widget build(BuildContext context) {
-    final controller = OrderBasketController.instance;
+    $print("aaaaa${order}");
+    var controller;
+    if (viewType != OrderViewType.history) {
+      controller = OrderBasketController.instance;
+    }
+
     return MainWrapper(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            children: [
-              DeliveryDetailCard(
-                onTap: () async {
-                  await Get.to(() => OrderLocationSelectView());
-                  await controller.initializeUser();
-                },
-                icon: TIcon.location,
-                title: "Deliver to",
-                description: "${order?.deliveryAddress?.address ?? "Choose your address"}",
+          // Delivery Address Section
+          InkWell(
+            onTap: (viewType != OrderViewType.history)
+                ? () async {
+              await Get.to(() => OrderLocationSelectView());
+              await controller.initializeUser();
+            }
+                : null,
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: TSize.sm, horizontal: TSize.md),
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: TColor.textDesc),
+                borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
               ),
-              SizedBox(height: TSize.spaceBetweenItemsVertical),
-              DeliveryDetailCard(
-                onTap: () {},
-                icon: TIcon.payment,
-                title: "Payment method",
-                description: "Cash",
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(TIcon.location, color: TColor.primary),
+                      SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                      Text("Deliver to"),
+                    ],
+                  ),
+                  SizedBox(height: TSize.spaceBetweenItemsSm),
+                  Text(
+                    order?.deliveryAddress?.address ?? "Choose your address",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ],
               ),
-              SizedBox(height: TSize.spaceBetweenItemsVertical),
-              DeliveryDetailCard(
-                onTap: () {},
-                icon: TIcon.promotion,
-                title: "Promotions",
-                description: "Free shipping 20%",
-              ),
-            ],
+            ),
           ),
+          SizedBox(height: TSize.spaceBetweenItemsVertical),
+
+          // Payment Method Section
+          InkWell(
+            onTap: () {},
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: TSize.sm, horizontal: TSize.md),
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: TColor.textDesc),
+                borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(TIcon.payment, color: TColor.primary),
+                      SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                      Text("Payment method"),
+                    ],
+                  ),
+                  SizedBox(height: TSize.spaceBetweenItemsSm),
+                  Text(
+                    "Cash",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: TSize.spaceBetweenItemsVertical),
+
+          // Promotions Section
+          InkWell(
+            onTap: () {},
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: TSize.sm, horizontal: TSize.md),
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: TColor.textDesc),
+                borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(TIcon.promotion, color: TColor.primary),
+                      SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                      Text("Promotions"),
+                    ],
+                  ),
+                  SizedBox(height: TSize.spaceBetweenItemsSm),
+                  Text(
+                    "Free shipping 20%",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ],
+              ),
+            ),
+          ),
+
           SizedBox(height: TSize.spaceBetweenSections),
+
+          // Price Breakdown Section
           Column(
             children: [
-              DeliveryDetailRow(
-                title: "Subtotal",
-                value: "£ ${order?.cart?.totalPrice.toStringAsFixed(2)}",
-              ),
-              DeliveryDetailRow(
-                title: "Delivery Fee",
-                value: "£ ${order?.deliveryFee.toStringAsFixed(2)}",
-              ),
-              DeliveryDetailRow(
-                title: "Discount",
-                value: "- £ ${order?.discount.toStringAsFixed(2)}",
-              ),
+              _buildRow(context, "Subtotal", "£ ${order?.totalPrice.toStringAsFixed(2)}"),
+              _buildRow(context, "Delivery Fee" , "£ ${order?.deliveryFee.toStringAsFixed(2)}"),
+              _buildRow(context, "Discount", "- £ ${order?.discount.toStringAsFixed(2)}"),
               Divider(),
-              DeliveryDetailRow(
-                title: "Total",
-                value: "£ ${order?.total.toStringAsFixed(2)}",
-              ),
+              _buildRow(context, "Total", "£ ${order?.total.toStringAsFixed(2)}"),
             ],
           ),
+
           SizedBox(height: TSize.spaceBetweenSections),
-          ReviewOrCancellationSection(),
+
+          // Review or Cancellation Section
+          if (viewType == OrderViewType.basket) _buildReviewSection(context),
+          if (viewType != OrderViewType.basket) _buildCancellationSection(context),
+
           SizedBox(height: TSize.spaceBetweenSections),
-          ActionButtons(
-            order: order,
-            fromView: fromView,
+
+          // Action Buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (viewType == OrderViewType.basket)
+                MainButton(
+                  onPressed: () {},
+                  text: "Reorder",
+                  prefixIconStr: TIcon.fillCart,
+                  textStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.light),
+                ),
+              if (viewType != OrderViewType.basket)
+                InkWell(
+                  onTap: () {},
+                  child: Text(
+                    "Cancel Order",
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.textDesc),
+                  ),
+                ),
+              SizedBox(width: TSize.spaceBetweenSections),
+              SizedBox(
+                width: TDeviceUtil.getScreenWidth() * 0.45,
+                child: MainButton(
+                  paddingHorizontal: TSize.lg,
+                  onPressed: () async {
+                    showConfirmDialog(context, onAccept: () async {
+                      final [statusCode, headers, data] = await APIService<Order>(
+                        endpoint: 'order/order/${order?.id}/create-delivery-and-request',
+                      ).create({}, noBearer: true, noFromJson: true);
+                      final delivery = Delivery.fromJson(data["delivery"]);
+                      Get.to(() => OrderTrackingView(), arguments: {
+                        'id': delivery.order.id,
+                      });
+                    });
+                  },
+                  text: "Track Order",
+                  textStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.light),
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
-}
 
-class DeliveryDetailCard extends StatelessWidget {
-  final VoidCallback onTap;
-  final IconData icon;
-  final String title;
-  final String description;
-
-  DeliveryDetailCard({
-    required this.onTap,
-    required this.icon,
-    required this.title,
-    required this.description,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: TSize.sm, horizontal: TSize.md),
-        decoration: BoxDecoration(
-          border: Border.all(width: 1, color: TColor.textDesc),
-          borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, color: TColor.primary),
-                SizedBox(width: TSize.spaceBetweenItemsHorizontal),
-                Text(title),
-              ],
-            ),
-            SizedBox(height: TSize.spaceBetweenItemsSm,),
-            Text(
-              description,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class DeliveryDetailRow extends StatelessWidget {
-  final String title;
-  final String value;
-  final Color? valueColor;
-
-  DeliveryDetailRow({
-    required this.title,
-    required this.value,
-    this.valueColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  // Price Row Widget
+  Widget _buildRow(BuildContext context, String title, String value) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          title,
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        Text(
-          value,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(color: valueColor ?? TColor.primary),
-        ),
+        Text(title, style: Theme.of(context).textTheme.titleMedium),
+        Text(value, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: TColor.primary)),
       ],
     );
   }
-}
 
-class ReviewOrCancellationSection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    bool isReviewing = false; // You can modify this condition based on your logic
-
-    return isReviewing
-        ? Column(
+  // Review Section
+  Widget _buildReviewSection(BuildContext context) {
+    return Column(
       children: [
         RatingBarIndicator(
           itemBuilder: (context, _) => SvgPicture.asset(TIcon.fillStar),
@@ -203,22 +242,20 @@ class ReviewOrCancellationSection extends StatelessWidget {
           maxLines: 5,
         ),
       ],
-    )
-        : Row(
+    );
+  }
+
+  // Cancellation Section
+  Widget _buildCancellationSection(BuildContext context) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Reason for Cancellation',
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-              Text(
-                '221B Baker Street, London, United Kingdom',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+              Text('Reason for Cancellation', style: Theme.of(context).textTheme.titleSmall),
+              Text('221B Baker Street, London, United Kingdom', style: Theme.of(context).textTheme.titleLarge),
             ],
           ),
         ),
@@ -232,75 +269,6 @@ class ReviewOrCancellationSection extends StatelessWidget {
   }
 }
 
-class ActionButtons extends StatefulWidget {
-  final Order? order;
-  final String fromView;
-
-  ActionButtons({
-    required this.order,
-    required this.fromView,
-  });
-
-  @override
-  State<ActionButtons> createState() => _ActionButtonsState();
-}
-
-class _ActionButtonsState extends State<ActionButtons> {
-  @override
-  Widget build(BuildContext context) {
-    $print(widget.order?.id);
-    bool canReorder = false;
-    return canReorder
-        ? MainButton(
-      onPressed: () {},
-      text: "Reorder",
-      prefixIconStr: TIcon.fillCart,
-      textStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.light),
-    )
-        : Card(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: TSize.sm + 5, horizontal: TSize.sm),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            InkWell(
-              onTap: (widget.fromView == "Basket") ? null : () {},
-              child: Text(
-                (widget.fromView == "Basket")
-                    ? "£ ${widget.order?.total.toStringAsFixed(2)}"
-                    : "Cancel Order",
-                style: (widget.fromView == "Basket")
-                    ? Theme.of(context).textTheme.headlineSmall
-                    : Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.textDesc),
-              ),
-            ),
-            SizedBox(width: TSize.spaceBetweenSections * ((widget.fromView == "Basket") ? 2 : 1)),
-            SizedBox(
-              width: TDeviceUtil.getScreenWidth() * 0.45,
-              child: MainButton(
-                paddingHorizontal: TSize.lg,
-                onPressed: () async {
-                  showConfirmDialog(context, onAccept: () async {
-                    final [statusCode, headers, data] = await APIService<Order>(endpoint: 'order/order/${widget.order?.id}/create-delivery-and-request').create({}, noBearer: true, noFromJson: true);
-                    final delivery = Delivery.fromJson(data["delivery"]);
-                    final nearest_deliverer = Deliverer.fromJson(data["nearest_deliverer"]);
-                    Get.to(() => OrderTrackingView(), arguments: {
-                      'delivery': delivery,
-                      'nearest_deliverer': nearest_deliverer,
-                    });
-                  });
-                  // x.sendMessage(controller.order?.toJson() ?? {});
-                },
-                text: "Track Order",
-                textStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.light),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 class DeliveryDetailSkeleton extends StatelessWidget {
   @override

@@ -7,6 +7,7 @@ import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
 import 'package:food_delivery_app/features/user/order/controllers/basket/order_basket_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
+import 'package:food_delivery_app/features/user/order/views/common/widgets/delivery_detail.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
@@ -19,11 +20,13 @@ class OrderCard extends StatefulWidget {
   final RestaurantCartDish cartDish;
   final bool noMargin;
   final bool isCompletedOrder;
+  final bool canEdit;
 
   OrderCard({
     required this.cartDish,
     this.noMargin = false,
     this.isCompletedOrder = true,
+    this.canEdit = true,
   });
 
   @override
@@ -31,9 +34,14 @@ class OrderCard extends StatefulWidget {
 }
 
 class _OrderCardState extends State<OrderCard> {
-  final _controller = OrderBasketController.instance;
+
   @override
   Widget build(BuildContext context) {
+    var _controller;
+    bool canEdit = widget.canEdit;
+    if(canEdit) {
+      _controller = OrderBasketController.instance;
+    }
     return MainWrapper(
       noMargin: widget.noMargin,
       child: Card(
@@ -74,6 +82,7 @@ class _OrderCardState extends State<OrderCard> {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
+
                                 Text(
                                   '£${widget.cartDish.price.toStringAsFixed(2)}',
                                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -92,7 +101,9 @@ class _OrderCardState extends State<OrderCard> {
                             Row(
                               children: [
                                 CircleIconCard(
-                                  onTap: () => _controller.foodListController.handleCartUpdate(dishId: widget.cartDish.dish?.id ?? '', quantity: -1),
+                                  onTap: (canEdit)
+                                      ? () => _controller.foodListController.handleCartUpdate(dishId: widget.cartDish.dish?.id ?? '', quantity: -1)
+                                      : null,
                                   icon: Icons.remove,
                                   iconColor: TColor.primary,
                                   borderSideWidth: 1,
@@ -101,14 +112,21 @@ class _OrderCardState extends State<OrderCard> {
                                 ),
                                 SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
 
-                                Obx(() => Text(
+                                (canEdit)
+                                ? Obx(() => Text(
                                   "${_controller.restaurantDetailController.mapDishQuantity[widget.cartDish.dish?.id] ?? 0}",
                                   style: Theme.of(context).textTheme.headlineSmall,
-                                )),
+                                ))
+                                : Text(
+                                  "${widget.cartDish.quantity}",
+                                  style: Theme.of(context).textTheme.headlineSmall,
+                                ),
                                 SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
 
                                 CircleIconCard(
-                                  onTap: () => _controller.foodListController.handleCartUpdate(dishId: widget.cartDish.dish?.id ?? '', quantity: 1),
+                                  onTap: (canEdit)
+                                    ? () => _controller.foodListController.handleCartUpdate(dishId: widget.cartDish.dish?.id ?? '', quantity: 1)
+                                    : null,
                                   icon: Icons.add,
                                   iconColor: TColor.primary,
                                   borderSideWidth: 1,

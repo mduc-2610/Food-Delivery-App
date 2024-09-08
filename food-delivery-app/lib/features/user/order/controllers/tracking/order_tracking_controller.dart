@@ -44,14 +44,19 @@ class OrderTrackingController extends GetxController {
     super.onInit();
     orderSocket = SocketService<Order>(handleIncomingMessage: handleIncomingMessage);
     orderSocket.connect();
-    initializeUser();
+    initialize();
   }
 
   Future<void> handleIncomingMessage(String message) async {
     $print("CUSTOM: $message");
     final decodedMessage = json.decode(message);
     if(decodedMessage["delivery"] != null) {
-      delivery = Delivery.fromJson(decodedMessage["delivery"]);
+      if(delivery == null) {
+        delivery = Delivery.fromJson(decodedMessage["delivery"]);
+      }
+      else {
+        $print("HAVE init");
+      }
       deliverer.value = await APIService<Deliverer>().retrieve(delivery?.deliverer ?? '');
       delivererSocket = SocketService<Deliverer>(handleIncomingMessage: delivererIncomingMessage);
       delivererSocket?.connect(id: delivery?.deliverer);
@@ -84,12 +89,13 @@ class OrderTrackingController extends GetxController {
   }
 
 
-  Future<void> initializeUser() async {
+  Future<void> initialize() async {
     user = await UserService.getUser();
+    if(Get.arguments['id'] != null) {
+      delivery = await APIService<Delivery>().retrieve(Get.arguments['id'] ?? '');
+    }
     await Future.delayed(Duration(milliseconds: TTime.init));
     isLoading.value = false;
-    $print(user);
-    $print(isLoading.value);
     update();
   }
 

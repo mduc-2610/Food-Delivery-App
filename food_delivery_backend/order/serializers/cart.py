@@ -74,27 +74,27 @@ class CreateRestaurantCartDishSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        print(data, pretty=True)
-        data['cart'] = RestaurantCartSerializer2(instance.cart).data
+        from order.serializers.basic import BasicRestaurantCartSerializer
+        data['cart'] = RestaurantCartSerializer(instance.cart).data
         return data
 
 class RestaurantCartSerializer(serializers.ModelSerializer):
     dishes = RestaurantCartDishSerializer(many=True, read_only=True)  
-    order = OrderSerializer(read_only=True)
     restaurant = BasicRestaurantSerializer(read_only=True)
     
     class Meta:
         model = RestaurantCart
         fields = ['id', 'user', 'restaurant', 'created_at', 'updated_at', 'total_price', 'total_items', 'dishes', 'order', 'is_created_order', 'is_empty']
+        extra_kwargs = {
+            'order': {'read_only': True}
+        }
 
-
-class RestaurantCartSerializer2(serializers.ModelSerializer):
-    dishes = RestaurantCartDishSerializer(many=True, read_only=True)  
-    restaurant = BasicRestaurantSerializer(read_only=True)
-    
-    class Meta:
-        model = RestaurantCart
-        fields = ['id', 'user', 'restaurant', 'created_at', 'updated_at', 'total_price', 'total_items', 'dishes', 'is_created_order', 'is_empty']
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        from order.serializers.basic import BasicOrderSerializer
+        if hasattr(instance, 'order'):
+            data['order'] = BasicOrderSerializer(instance.order).data
+        return data    
         
 class CreateRestaurantCartSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
