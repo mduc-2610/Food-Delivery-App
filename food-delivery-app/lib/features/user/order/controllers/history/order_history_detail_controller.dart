@@ -23,10 +23,12 @@ class OrderHistoryDetailController extends GetxController {
 
   Future<void> initialize() async {
     if(Get.arguments['id'] != null) {
+      isLoading.value = true;
       order = await APIService<Order>().retrieve(Get.arguments['id']);
       $print(order);
       Future.delayed(Duration(milliseconds: TTime.init));
       isLoading.value = false;
+      $print("INITIALIZE");
     }
   }
 }

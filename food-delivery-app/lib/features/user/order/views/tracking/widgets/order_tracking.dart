@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/widgets/animation/text_with_dot_animation.dart';
 import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/features/user/order/models/delivery.dart';
@@ -173,21 +174,9 @@ class OrderTracking extends StatelessWidget {
           SizedBox(width: 16),
           Expanded(
             child: isFind
-                ? StreamBuilder<int>(
-              stream: _dotStream(),
-              builder: (context, snapshot) {
-                final dotCount = snapshot.data ?? 0;
-                final dots = List.generate(dotCount, (_) => '.').join();
-                return Text(
-                  'Finding Driver${dots}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                );
-              },
-            )
+                ? TextWithDotAnimation(
+                  text: "Finding driver",
+                )
                 : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

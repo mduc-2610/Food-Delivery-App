@@ -54,7 +54,7 @@ class OrderBasketView extends StatelessWidget {
                                         style: Theme.of(context).textTheme.headlineSmall,
                                       ),
 
-                                      StatusChip(status: restaurantCart?.order?.status ?? "")
+                                      StatusChip(status: restaurantCart?.order?.status ?? "PENDING")
                                     ],
                                   ),
                                 ),
@@ -74,7 +74,7 @@ class OrderBasketView extends StatelessWidget {
 
                                 Obx(() => DeliveryDetail(
                                   order: controller.foodListController.order.value,
-                                  viewType: OrderViewType.other,
+                                  viewType: OrderViewType.basket,
                                 )),
                                 SizedBox(height: TSize.spaceBetweenSections,),
                               ],

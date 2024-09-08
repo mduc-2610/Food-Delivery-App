@@ -153,6 +153,7 @@ class APIService<T> {
       dynamic data, {
         Function(Map<String, dynamic>)? fromJson,
         bool patch = false,
+        bool noBearer = false,
         bool isFormData = false,
         bool noFromJson = false,
       }) async {
@@ -168,7 +169,7 @@ class APIService<T> {
           data: requestData,
           options: Options(
             method: patch ? 'PATCH' : 'PUT',
-            headers: await _getHeaders(token),
+            headers: await _getHeaders(token, noBearer: noBearer),
           ),
         );
         var jsonResponse = response.data;
@@ -185,8 +186,8 @@ class APIService<T> {
             : json.encode(requestData);
 
         final response = patch
-            ? await http.patch(Uri.parse(uri), headers: await _getHeaders(token), body: body)
-            : await http.put(Uri.parse(uri), headers: await _getHeaders(token), body: body);
+            ? await http.patch(Uri.parse(uri), headers: await _getHeaders(token, noBearer: noBearer), body: body)
+            : await http.put(Uri.parse(uri), headers: await _getHeaders(token, noBearer: noBearer), body: body);
 
         var jsonResponse = json.decode(response.body);
         if(!noFromJson) {

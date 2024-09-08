@@ -1,5 +1,6 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
+import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
@@ -9,6 +10,7 @@ class Order {
   final String? id;
   final dynamic cart;
   final dynamic deliveryAddress;
+  final dynamic cancellation;
   final String? paymentMethod;
   final String? promotion;
   final double deliveryFee;
@@ -23,6 +25,7 @@ class Order {
     this.cart,
     this.deliveryAddress,
     this.paymentMethod,
+    this.cancellation,
     this.promotion,
     this.deliveryFee = 0,
     this.discount = 0,
@@ -36,6 +39,7 @@ class Order {
       : id = json['id'],
         cart = json['cart'] == null || json['cart'] is String || json['cart'] is List ? json['cart'] : RestaurantCart.fromJson(json['cart']),
         deliveryAddress = json['delivery_address'] == null || json['delivery_address'] is String ? json['delivery_address'] : UserLocation.fromJson(json['delivery_address']),
+        cancellation = json['cancellation'] == null || json['cancellation'] is String ? json['cancellation'] : OrderCancellation.fromJson(json['cancellation']),
         paymentMethod = json['payment_method'],
         promotion = json['promotion'],
         deliveryFee = THelperFunction.formatDouble(json['delivery_fee']),
@@ -56,6 +60,52 @@ class Order {
       'discount': discount,
       'total': total,
       'status': status,
+    };
+  }
+
+  @override
+  String toString() {
+    return THelperFunction.formatToString(this);
+  }
+}
+
+@reflector
+@jsonSerializable
+class OrderCancellation {
+  final dynamic order;
+  final dynamic user;
+  final dynamic restaurant;
+  final String? reason;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final bool isAccepted;
+
+  OrderCancellation({
+    this.order,
+    this.user,
+    this.restaurant,
+    this.reason,
+    this.createdAt,
+    this.updatedAt,
+    this.isAccepted = false,
+  });
+
+  OrderCancellation.fromJson(Map<String, dynamic> json)
+    : order = json['order'] == null || json['order'] is String || json['order'] is List ? json['order']  : Order.fromJson(json['order']),
+      user = json['user'] == null || json['user'] is String ? json['user'] : User.fromJson(json['user']),
+      restaurant = json['restaurant'] == null || json['restaurant'] is String ? json['restaurant'] : Restaurant.fromJson(json['restaurant']),
+      reason = json['reason'],
+      createdAt = DateTime.parse(json['created_at'] ?? DateTime.now()),
+      updatedAt = DateTime.parse(json['updated_at'] ?? DateTime.now()),
+      isAccepted = json['is_accepted'] ?? false
+  ;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'order': order is String ? order : order?.id,
+      'user': user is String ? user : user?.id,
+      'restaurant': restaurant is String ? restaurant : restaurant?.id,
+      'reason': reason,
     };
   }
 

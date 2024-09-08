@@ -120,3 +120,21 @@ class Order(models.Model):
 @receiver(post_save, sender='order.Order')
 def broadcast_to_deliverers(sender, instance, **kwargs):
     pass
+
+class OrderCancellation(models.Model):
+    order = models.OneToOneField("order.Order", related_name="cancellation", on_delete=models.CASCADE)
+    user = models.OneToOneField("account.User", related_name="cancellations", on_delete=models.CASCADE)
+    restaurant = models.OneToOneField("restaurant.Restaurant", related_name="cancellations", on_delete=models.CASCADE)
+    reason = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+    is_accepted = models.BooleanField(default=False, blank=True, null=True)
+
+    def __str__(self):
+        return f"Cancellation for {self.order}"
+    
+@receiver(post_save, sender='order.OrderCancellation')
+def update_order_status(sender, instance, **kwargs):
+    if instance.is_accepted:
+        instance.order.status = 'CANCELLED'
+        instance.order.save()

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_delivery_app/common/widgets/animation/text_with_dot_animation.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
 import 'package:food_delivery_app/common/widgets/dialogs/show_confirm_dialog.dart';
@@ -12,9 +13,11 @@ import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/data/socket_services/order_socket_service.dart';
 import 'package:food_delivery_app/features/authentication/models/deliverer/deliverer.dart';
 import 'package:food_delivery_app/features/user/order/controllers/basket/order_basket_controller.dart';
+import 'package:food_delivery_app/features/user/order/controllers/history/order_history_detail_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
 import 'package:food_delivery_app/features/user/order/models/delivery.dart';
 import 'package:food_delivery_app/features/user/order/models/order.dart';
+import 'package:food_delivery_app/features/user/order/views/cancel/order_cancel.dart';
 import 'package:food_delivery_app/features/user/order/views/location/order_location.dart';
 import 'package:food_delivery_app/features/user/order/views/tracking/order_tracking.dart';
 import 'package:food_delivery_app/utils/constants/api_constants.dart';
@@ -29,7 +32,7 @@ import 'package:get/get.dart';
 
 enum OrderViewType { basket, history, cancel, other }
 
-class DeliveryDetail extends StatelessWidget {
+class DeliveryDetail extends StatefulWidget {
   final Order? order;
   final OrderViewType viewType;
 
@@ -39,11 +42,19 @@ class DeliveryDetail extends StatelessWidget {
   });
 
   @override
+  State<DeliveryDetail> createState() => _DeliveryDetailState();
+}
+
+class _DeliveryDetailState extends State<DeliveryDetail> {
+  var controller;
+
+  @override
   Widget build(BuildContext context) {
-    $print("aaaaa${order}");
-    var controller;
-    if (viewType != OrderViewType.history) {
+    if (widget.viewType == OrderViewType.basket) {
       controller = OrderBasketController.instance;
+    }
+    else if(widget.viewType == OrderViewType.history) {
+      controller = OrderHistoryDetailController.instance;
     }
 
     return MainWrapper(
@@ -52,7 +63,7 @@ class DeliveryDetail extends StatelessWidget {
         children: [
           // Delivery Address Section
           InkWell(
-            onTap: (viewType != OrderViewType.history)
+            onTap: (widget.viewType != OrderViewType.history)
                 ? () async {
               await Get.to(() => OrderLocationSelectView());
               await controller.initializeUser();
@@ -76,7 +87,7 @@ class DeliveryDetail extends StatelessWidget {
                   ),
                   SizedBox(height: TSize.spaceBetweenItemsSm),
                   Text(
-                    order?.deliveryAddress?.address ?? "Choose your address",
+                    widget.order?.deliveryAddress?.address ?? "Choose your address",
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],
@@ -149,61 +160,128 @@ class DeliveryDetail extends StatelessWidget {
           // Price Breakdown Section
           Column(
             children: [
-              _buildRow(context, "Subtotal", "£ ${order?.totalPrice.toStringAsFixed(2)}"),
-              _buildRow(context, "Delivery Fee" , "£ ${order?.deliveryFee.toStringAsFixed(2)}"),
-              _buildRow(context, "Discount", "- £ ${order?.discount.toStringAsFixed(2)}"),
+              _buildRow(context, "Subtotal", "£ ${widget.order?.totalPrice.toStringAsFixed(2)}"),
+              _buildRow(context, "Delivery Fee" , "£ ${widget.order?.deliveryFee.toStringAsFixed(2)}"),
+              _buildRow(context, "Discount", "- £ ${widget.order?.discount.toStringAsFixed(2)}"),
               Divider(),
-              _buildRow(context, "Total", "£ ${order?.total.toStringAsFixed(2)}"),
+              _buildRow(context, "Total", "£ ${widget.order?.total.toStringAsFixed(2)}"),
             ],
           ),
 
           SizedBox(height: TSize.spaceBetweenSections),
 
           // Review or Cancellation Section
-          if (viewType == OrderViewType.basket) _buildReviewSection(context),
-          if (viewType != OrderViewType.basket) _buildCancellationSection(context),
+          if (widget.viewType == OrderViewType.history && widget.order?.status == "COMPLETED") _buildReviewSection(context),
+          if ((widget.viewType == OrderViewType.history && widget.order?.status == "CANCELLED") ||
+              widget.order?.cancellation != null) _buildCancellationSection(context, widget.order?.cancellation?.reason),
 
           SizedBox(height: TSize.spaceBetweenSections),
 
           // Action Buttons
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (viewType == OrderViewType.basket)
-                MainButton(
-                  onPressed: () {},
-                  text: "Reorder",
-                  prefixIconStr: TIcon.fillCart,
-                  textStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.light),
-                ),
-              if (viewType != OrderViewType.basket)
-                InkWell(
-                  onTap: () {},
-                  child: Text(
-                    "Cancel Order",
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.textDesc),
+              if (widget.viewType == OrderViewType.history && widget.order?.status == "COMPLETED")...[
+                Expanded(
+                  child: MainButton(
+                    onPressed: () {},
+                    text: "Reorder",
+                    prefixIconStr: TIcon.fillCart,
+                    backgroundColor: TColor.secondary,
+                    borderColor: TColor.secondary,
+                    textStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.light),
                   ),
                 ),
-              SizedBox(width: TSize.spaceBetweenSections),
-              SizedBox(
-                width: TDeviceUtil.getScreenWidth() * 0.45,
-                child: MainButton(
-                  paddingHorizontal: TSize.lg,
-                  onPressed: () async {
-                    showConfirmDialog(context, onAccept: () async {
-                      final [statusCode, headers, data] = await APIService<Order>(
-                        endpoint: 'order/order/${order?.id}/create-delivery-and-request',
-                      ).create({}, noBearer: true, noFromJson: true);
-                      final delivery = Delivery.fromJson(data["delivery"]);
-                      Get.to(() => OrderTrackingView(), arguments: {
-                        'id': delivery.order.id,
-                      });
-                    });
+                SizedBox(width: TSize.spaceBetweenItemsVertical),
+
+              ],
+              if (widget.viewType == OrderViewType.history && widget.order?.status == "ACTIVE" && (widget.order?.cancellation == null))...[
+                Expanded(
+                  child: InkWell(onTap: () async {
+                    await Get.to(() => OrderCancelView());
+                    await controller.initialize(); // From OrderHistoryDetailController
                   },
-                  text: "Track Order",
-                  textStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.light),
+                    child: Text(
+                      "Cancel Order",
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.textDesc),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
-              ),
+                SizedBox(width: TSize.spaceBetweenItemsVertical),
+              ],
+              if(widget.viewType == OrderViewType.history && widget.order?.status == "ACTIVE" && (widget.order?.cancellation == null))...[
+                Expanded(
+                  // width: TDeviceUtil.getScreenWidth() * 0.45,
+                  child: MainButton(
+                    paddingHorizontal: TSize.lg,
+                    onPressed: () async {
+                      void onAccept() async {
+                        final [statusCode, headers, data] = await APIService<Order>(
+                          endpoint: 'order/order/${widget.order?.id}/create-delivery-and-request',
+                        ).create({}, noBearer: true, noFromJson: true);
+                        final delivery = Delivery.fromJson(data["delivery"]);
+                        final nearestDeliverer = Deliverer.fromJson(data["nearest_deliverer"]);
+                        $print(nearestDeliverer);
+                        Get.to(() => OrderTrackingView(), arguments: {
+                          'id': delivery.order.id,
+                        });
+                      }
+                      onAccept();
+                    },
+                    text: "Track Order",
+                    textStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.light),
+                  ),
+                ),
+              ],
+              if(widget.order?.status == "PENDING")...[
+                Expanded(
+                  // width: TDeviceUtil.getScreenWidth() * 0.45,
+                  child: MainButton(
+                    paddingHorizontal: TSize.lg,
+                    onPressed: () async {
+                      void onAccept() async {
+                        final [statusCode, headers, data] = await APIService<Order>(
+                          endpoint: 'order/order/${widget.order?.id}/create-delivery-and-request',
+                        ).create({}, noBearer: true, noFromJson: true);
+                        final delivery = Delivery.fromJson(data["delivery"]);
+                        final nearestDeliverer = Deliverer.fromJson(data["nearest_deliverer"]);
+                        $print(nearestDeliverer);
+                        Get.to(() => OrderTrackingView(), arguments: {
+                          'id': delivery.order.id,
+                        });
+                      }
+                      showConfirmDialog(context, onAccept: onAccept,
+                        title: "Are you sure ?",
+                        description: "Check the information carefully ",
+                      );
+                    },
+                    text: "Order",
+                    textStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.light),
+                  ),
+                ),
+              ],
+              if(widget.order?.cancellation != null)...[
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: Color(0xfffbc972),
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: TextWithDotAnimation(
+                      text: "Waiting for response",
+                    ),
+                  ),
+                )
+              ]
+
             ],
           ),
         ],
@@ -245,8 +323,7 @@ class DeliveryDetail extends StatelessWidget {
     );
   }
 
-  // Cancellation Section
-  Widget _buildCancellationSection(BuildContext context) {
+  Widget _buildCancellationSection(BuildContext context, String? reason) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -255,14 +332,40 @@ class DeliveryDetail extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Reason for Cancellation', style: Theme.of(context).textTheme.titleSmall),
-              Text('221B Baker Street, London, United Kingdom', style: Theme.of(context).textTheme.titleLarge),
+              Text('${reason ?? ''}', style: Theme.of(context).textTheme.titleLarge),
             ],
           ),
         ),
         CircleIconCard(
+          onTap: () async {
+            await Get.to(() => OrderCancelView());
+            await controller.initialize(); // From OrderHistoryDetailController
+          },
           icon: Icons.edit,
           iconColor: TColor.light,
           backgroundColor: TColor.primary,
+        ),
+
+        CircleIconCard(
+          onTap: () {
+            showConfirmDialog(context, onAccept: () async {
+              if(widget.order?.id != null) {
+                $print("DELETE");
+                await APIService<OrderCancellation>().delete(widget.order?.id ?? '');
+              }
+              else {
+                $print("NO ACTION");
+              }
+              await controller.initialize(); // From OrderHistoryDetailController
+
+            },
+              title: "Are you sure to continue the order ?",
+              description: "Check information carefully",
+            );
+          },
+          icon: TIcon.delete,
+          iconColor: TColor.light,
+          backgroundColor: TColor.error,
         ),
       ],
     );

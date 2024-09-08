@@ -1,15 +1,32 @@
 # order/serializers.py
 from rest_framework import serializers
-from order.models import Order, RestaurantCart, Promotion
+from order.models import (
+    Order, 
+    OrderCancellation,
+    RestaurantCart, 
+    Promotion, 
+)
 
 from account.serializers import LocationSerializer
+    
+class OrderCancellationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderCancellation
+        fields = ['id', 'order', 'user', 'restaurant', 'reason', 'is_accepted', 'created_at', 'updated_at']
+        read_only_fields = [
+            'id', 
+            'created_at',
+            'updated_at'
+        ]
+
 
 class OrderSerializer(serializers.ModelSerializer):
+    cancellation = OrderCancellationSerializer(read_only=True)
     delivery_address = LocationSerializer(read_only=True)
     
     class Meta:
         model = Order
-        fields = ['id', 'cart', 'user', 'delivery_address', 'payment_method', 'promotion', 'delivery_fee', 
+        fields = ['id', 'cart', 'user', 'cancellation', 'delivery_address', 'payment_method', 'promotion', 'delivery_fee', 
                   'discount', 'total_price', 'total', 'status', 'rating']
         read_only_fields = ['total']
 

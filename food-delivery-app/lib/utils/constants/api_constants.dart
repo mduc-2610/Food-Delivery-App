@@ -192,6 +192,8 @@ class APIConstant {
         return 'order/delivery';
       case Order:
         return 'order/order';
+      case OrderCancellation:
+        return 'order/order-cancellation';
       case OrderPromotion:
         return 'order/order-promotion';
       case RestaurantPromotion:

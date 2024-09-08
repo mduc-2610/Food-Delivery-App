@@ -2,11 +2,11 @@
 from rest_framework import viewsets, response
 from rest_framework.decorators import action
 
-from order.models import Order
+from order.models import Order, OrderCancellation
 
 from order.serializers import OrderSerializer, CreateOrderSerializer
 
-from order.serializers import DeliverySerializer
+from order.serializers import DeliverySerializer, OrderCancellationSerializer
 from deliverer.serializers import BasicDelivererSerializer
 
 from utils.mixins import DefaultGenericMixin
@@ -31,4 +31,11 @@ class OrderViewSet(DefaultGenericMixin, OneRelatedViewSet, viewsets.ModelViewSet
             'delivery': DeliverySerializer(delivery, context=context).data,
             'nearest_deliverer': BasicDelivererSerializer(nearest_deliverer).data if nearest_deliverer else None
         })
-    
+
+class OrderCancellationViewSet(DefaultGenericMixin, OneRelatedViewSet, viewsets.ModelViewSet):
+    queryset = OrderCancellation.objects.all()
+    serializer_class = OrderCancellationSerializer
+    pagination_class =  CustomPagination
+    mapping_serializer_class = {
+        'create': OrderCancellationSerializer,
+    }

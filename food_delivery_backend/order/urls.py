@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from order.views import (
     RestaurantCartViewSet, RestaurantCartDishViewSet, DeliveryViewSet, 
     DeliveryRequestViewSet,
-    OrderViewSet, OrderPromotionViewSet,
+    OrderViewSet, OrderPromotionViewSet, OrderCancellationViewSet,
     RestaurantPromotionViewSet, UserPromotionViewSet, PromotionViewSet, ActivityPromotionViewSet
 )
 
@@ -15,6 +15,7 @@ router.register(r'delivery', DeliveryViewSet)
 router.register(r'delivery-request', DeliveryRequestViewSet)
 router.register(r'order', OrderViewSet)
 router.register(r'order-promotion', OrderPromotionViewSet)
+router.register(r'order-cancellation', OrderCancellationViewSet)
 router.register(r'restaurant-promotion', RestaurantPromotionViewSet)
 router.register(r'user-promotion', UserPromotionViewSet)
 router.register(r'promotion', PromotionViewSet)
