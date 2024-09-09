@@ -14,7 +14,6 @@ class MenuBarController extends GetxController {
 
 
   Widget getView(index) {
-    $print(viewList[currentIndex.value]);
     return viewList[currentIndex.value];
   }
 

@@ -71,6 +71,8 @@ class Order(models.Model):
         restaurant = self.cart.restaurant
         user = self.cart.user
         delivery_address = self.delivery_address()
+        self.status = "ACTIVE"
+        self.save()
 
         if not delivery_address:
             return
@@ -105,8 +107,9 @@ class Order(models.Model):
     def save(self, *args, **kwargs):
         if hasattr(self, 'cart') and hasattr(self.cart, 'user'):
             self.user = self.cart.user
-        self.cart.is_created_order = True
+        # self.cart.is_created_order = True
         super(Order, self).save(*args, **kwargs)
+
     def __str__(self):
         return f"Order for {self.cart} with total {self.total()}"
 
@@ -123,12 +126,15 @@ def broadcast_to_deliverers(sender, instance, **kwargs):
 
 class OrderCancellation(models.Model):
     order = models.OneToOneField("order.Order", related_name="cancellation", on_delete=models.CASCADE)
-    user = models.OneToOneField("account.User", related_name="cancellations", on_delete=models.CASCADE)
-    restaurant = models.OneToOneField("restaurant.Restaurant", related_name="cancellations", on_delete=models.CASCADE)
+    user = models.ForeignKey("account.User", related_name="cancellations", on_delete=models.CASCADE)
+    restaurant = models.ForeignKey("restaurant.Restaurant", related_name="cancellations", on_delete=models.CASCADE)
     reason = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     is_accepted = models.BooleanField(default=False, blank=True, null=True)
+
+    class Meta: 
+        unique_together = ("user", "restaurant")
 
     def __str__(self):
         return f"Cancellation for {self.order}"

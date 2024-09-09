@@ -9,10 +9,15 @@ class RestaurantCart(models.Model):
     restaurant = models.ForeignKey("restaurant.Restaurant", related_name="user_Carts", on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    is_created_order = models.BooleanField(default=False)
     is_empty = models.BooleanField(default=True)
     total_items = models.IntegerField(default=0)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    
+    def is_created_order(self):
+        return hasattr(self, 'order')
+    
+    def is_created_delivery(self):
+        return hasattr(self, 'order') and hasattr(self.order, 'delivery')
 
     class Meta:
         ordering = ('-created_at',)
@@ -29,6 +34,7 @@ class RestaurantCartDish(models.Model):
     discount_price = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     options = models.ManyToManyField("food.DishOptionItem", through="order.ChosenDishOption", related_name='in_dishes')
     note = models.TextField(blank=True, null=True)
+
 
     class Meta: 
         indexes = [

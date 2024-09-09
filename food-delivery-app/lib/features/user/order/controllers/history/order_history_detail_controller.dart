@@ -25,10 +25,9 @@ class OrderHistoryDetailController extends GetxController {
     if(Get.arguments['id'] != null) {
       isLoading.value = true;
       order = await APIService<Order>().retrieve(Get.arguments['id']);
-      $print(order);
+      $print(order?.cancellation);
       Future.delayed(Duration(milliseconds: TTime.init));
       isLoading.value = false;
-      $print("INITIALIZE");
     }
   }
 }

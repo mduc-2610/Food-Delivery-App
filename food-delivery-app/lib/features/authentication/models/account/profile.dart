@@ -25,7 +25,7 @@ class UserProfile {
         name = json['name'],
         gender = json['gender'],
         avatar = json['avatar'],
-        dateOfBirth = json['date_of_birth'] != null ? DateTime.parse(json['date_of_birth']).toLocal() : null;
+        dateOfBirth = THelperFunction.parseDateNormalize(json['date_of_birth']);
 
   Map<String, dynamic> toJson({bool patch = false}) {
     final Map<String, dynamic> data = {

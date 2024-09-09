@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
-import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
 import 'package:food_delivery_app/common/widgets/misc/list_check.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
-import 'package:food_delivery_app/features/authentication/views/splash/splash.dart';
-import 'package:food_delivery_app/features/user/order/controllers/basket/order_basket_controller.dart';
+import 'package:food_delivery_app/features/user/order/controllers/common/order_info.dart';
 import 'package:food_delivery_app/features/user/order/controllers/history/order_history_detail_controller.dart';
 import 'package:food_delivery_app/features/user/order/views/basket/widgets/order_card.dart';
-import 'package:food_delivery_app/features/user/order/views/common/widgets/delivery_detail.dart';
+import 'package:food_delivery_app/features/user/order/views/common/widgets/order_info.dart';
+import 'package:food_delivery_app/features/user/order/views/common/widgets/order_bottom_navigation_bar.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
-import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
-import 'package:loading_progress_indicator/loading_progress_indicator.dart';
 
 class OrderHistoryDetailView extends StatelessWidget {
   @override
@@ -69,7 +66,7 @@ class OrderHistoryDetailView extends StatelessWidget {
 
                                 SizedBox(height: TSize.spaceBetweenSections,),
 
-                                DeliveryDetail(
+                                OrderInfo(
                                   order: controller.order,
                                   viewType: OrderViewType.history,
                                 ),
@@ -83,7 +80,16 @@ class OrderHistoryDetailView extends StatelessWidget {
 
                 ],
               ),
-              ));
+              ),
+            bottomNavigationBar: Obx(() =>
+            controller.isLoading.value
+                ? OrderBottomNavigationBarSkeleton()
+                :  OrderBottomNavigationBar(
+              order: controller.order,
+              viewType: OrderViewType.history,
+            )
+            ),
+          );
       },
     );
   }

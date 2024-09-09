@@ -92,11 +92,11 @@ class OrderCancellation {
 
   OrderCancellation.fromJson(Map<String, dynamic> json)
     : order = json['order'] == null || json['order'] is String || json['order'] is List ? json['order']  : Order.fromJson(json['order']),
-      user = json['user'] == null || json['user'] is String ? json['user'] : User.fromJson(json['user']),
-      restaurant = json['restaurant'] == null || json['restaurant'] is String ? json['restaurant'] : Restaurant.fromJson(json['restaurant']),
+      user = json['user'] == null || json['user'] is String || json['user'] is List ? json['user']  : User.fromJson(json['user']),
+      restaurant = json['restaurant'] == null || json['restaurant'] is String || json['restaurant'] is List? json['restaurant'] : Restaurant.fromJson(json['restaurant']),
       reason = json['reason'],
-      createdAt = DateTime.parse(json['created_at'] ?? DateTime.now()),
-      updatedAt = DateTime.parse(json['updated_at'] ?? DateTime.now()),
+      createdAt = json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
+      updatedAt = json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
       isAccepted = json['is_accepted'] ?? false
   ;
 

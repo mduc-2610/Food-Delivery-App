@@ -90,6 +90,18 @@ class THelperFunction {
     return DateFormat(format).format(date);
   }
 
+  static DateTime? parseDateNormalize(String? dateStr) {
+    if (dateStr == null) return null;
+
+    try {
+      dateStr = dateStr.replaceAll(RegExp(r'([+-]\d{2}:\d{2}:\d{2})'), '+07:00');
+      return DateTime.parse(dateStr).toLocal();
+    } catch (e) {
+      print('Error parsing date: $e');
+      return null;
+    }
+  }
+
   static List<T> removeDuplicates<T>(List<T> list) {
     return list.toSet().toList();
   }

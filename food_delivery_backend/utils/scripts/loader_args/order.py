@@ -80,7 +80,6 @@ def load_order(
             related_objects=restaurant_list,
             max_items=max_restaurant_carts_per_user,
             min_items=1,
-            attributes={"is_created_order": True},
             action=action
         )
 

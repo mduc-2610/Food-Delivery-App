@@ -91,6 +91,7 @@ class OrderTrackingController extends GetxController {
 
   Future<void> initialize() async {
     user = await UserService.getUser();
+    $print(Get.arguments);
     if(Get.arguments['id'] != null) {
       delivery = await APIService<Delivery>().retrieve(Get.arguments['id'] ?? '');
     }

@@ -39,7 +39,6 @@ class OrderHistoryController extends GetxController {
   }
 
   void _scrollListener() {
-    $print(scrollController.position.pixels);
     if(_nextPage != null && scrollController.position.pixels == scrollController.position.maxScrollExtent) {
       fetchFilterOrder("", loadMore: true);
     }

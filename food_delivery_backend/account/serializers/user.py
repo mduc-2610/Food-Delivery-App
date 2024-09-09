@@ -45,7 +45,8 @@ class UserSerializer(CustomRelatedModelSerializer):
             if restaurant_id:
                 filter_kwargs = {
                     'user': obj,
-                    'restaurant': restaurant_id
+                    'restaurant': restaurant_id,
+                    'order__delivery': None,
                 }
                 try:
                     res_cart = RestaurantCart.objects.filter(**filter_kwargs).first()

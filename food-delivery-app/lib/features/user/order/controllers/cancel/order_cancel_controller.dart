@@ -79,6 +79,7 @@ class OrderCancelController extends GetxController {
       restaurant: restaurant is String ? restaurant : restaurant?.id,
       reason: reason,
     );
+    $print(orderCancellationData);
 
     if (order?.cancellation == null) {
       final [statusCode, headers, data] = await APIService<OrderCancellation>().create(
@@ -86,6 +87,7 @@ class OrderCancelController extends GetxController {
         noBearer: true,
       );
       $print(data);
+
     } else {
       $print("$orderCancellationData");
       final [statusCode, headers, data] = await APIService<OrderCancellation>().update(
