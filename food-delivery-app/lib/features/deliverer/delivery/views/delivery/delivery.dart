@@ -116,7 +116,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                         SizedBox(
                           width: TDeviceUtil.getScreenWidth() * 0.85,
                           child: DeliveryCard(
-                            delivery: delivery.delivery,
+                            deliveryRequest: delivery,
                           ),
                         ),
                         SizedBox(width: TSize.spaceBetweenItemsLg,),

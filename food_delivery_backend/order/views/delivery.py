@@ -25,7 +25,7 @@ class DeliveryViewSet(DefaultGenericMixin, OneRelatedViewSet, ManyRelatedViewSet
 class DeliveryRequestViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
     queryset = DeliveryRequest.objects.all()
     serializer_class = DeliveryRequestSerializer
-    # pagination_class = CustomPagination
+    pagination_class = CustomPagination
     mapping_serializer_class = {
         ('accept', 'decline'): DeliveryRequestSerializer,
     }
@@ -35,6 +35,7 @@ class DeliveryRequestViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
         getattr(obj, action_name)()  
         serializer = self.get_serializer(obj)
         return response.Response(serializer.data, status=status.HTTP_200_OK)
+    
 
     @action(detail=True, methods=['POST'], url_path='accept')
     def accept(self, request, *args, **kwargs):
@@ -47,3 +48,7 @@ class DeliveryRequestViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=['POST'], url_path='expire')
     def expire(self, request, *args, **kwargs):
         return self.handle_action('expire', *args, **kwargs)
+    
+    @action(detail=True, methods=['POST'], url_path='complete')
+    def complete(self, request, *args, **kwargs):
+        return self.handle_action('complete', *args, **kwargs)

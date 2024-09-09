@@ -28,27 +28,28 @@ class DeliveryRequestSerializer(serializers.ModelSerializer):
     user = BasicUserSerializer(read_only=True)
     accept = serializers.SerializerMethodField()
     decline = serializers.SerializerMethodField()
+    complete = serializers.SerializerMethodField()
 
     def get_delivery(self, obj):
         return DeliverySerializer(obj.delivery, context=self.context).data
 
-    def get_accept(self, obj):
-        request = self.context.get('request')
-        if request:
-            uri = request.build_absolute_uri(
-                f'/api/{obj._meta.app_label}/{camel_to_snake(obj._meta.model.__name__)}/{obj.id}/accept'
-            )
-            return uri
-        return None
-
-    def get_decline(self, obj):
+    def build_uri(self, action, obj):
         request = self.context.get('request')
         if request:
             return request.build_absolute_uri(
-                f'/api/{obj._meta.app_label}/{camel_to_snake(obj._meta.model.__name__)}/{obj.id}/decline'
+                f'/api/{obj._meta.app_label}/{camel_to_snake(obj._meta.model.__name__)}/{obj.id}/{action}'
             )
         return None
 
+    def get_accept(self, obj):
+        return self.build_uri('accept', obj)
+
+    def get_decline(self, obj):
+        return self.build_uri('decline', obj)
+    
+    def get_complete(self, obj):
+        return self.build_uri('complete', obj)
+    
     class Meta:
         model = DeliveryRequest
         fields = "__all__"

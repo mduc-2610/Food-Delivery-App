@@ -46,7 +46,7 @@ class CAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: Icon(Icons.arrow_back, color: Colors.black),
         onPressed: () {
           backButtonOnPressed?.call();
-          Navigator.pop(context);
+          // Navigator.pop(context);
         },
       ),
       actions: iconList.map((iconData) {

@@ -43,6 +43,8 @@ class DelivererHomeController extends GetxController {
     }
   }
 
+
+
   String? _nextPage, _nextPage2;
   Future<void> initialize({ bool loadMore = false }) async {
     deliverer = await DelivererService.getDeliverer();

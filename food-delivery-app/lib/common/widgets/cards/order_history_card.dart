@@ -3,6 +3,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
+import 'package:food_delivery_app/features/user/order/controllers/history/order_history_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
 import 'package:food_delivery_app/features/user/order/models/order.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';
@@ -32,12 +33,17 @@ class OrderHistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Order? currentOrder = order ?? restaurantCart?.order;
-
+    final controller = OrderHistoryController.instance;
     return GestureDetector(
-      onTap: () {
-        Get.to(() => OrderHistoryDetailView(), arguments: {
+      onTap: () async {
+        // $print("INITIALIZE");
+        final _order = (await Get.to(() => OrderHistoryDetailView(), arguments: {
           'id': order?.id
-          });
+          }))?['order'];
+        if(_order?.status != order?.status) {
+          await controller.initialize();
+        }
+
       },
       child: MainWrapper(
         noMargin: noMargin,

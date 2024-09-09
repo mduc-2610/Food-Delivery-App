@@ -109,7 +109,7 @@ class HomeView extends StatelessWidget {
                       itemCount: controller.deliveries.length,
                       itemBuilder: (context, index) {
                         final delivery = controller.deliveries[index];
-                        return DeliveryCard(delivery: delivery);
+                        // return DeliveryCard(delivery: delivery);
                         // return OrderHistoryCard(order: orders[index]);
                       },
                     ),

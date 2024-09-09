@@ -3,9 +3,12 @@ from django.db import models
 from django.db.models import F
 
 class Point:
-    def __init__(self, latitude, longitude):
-        self.latitude = latitude
-        self.longitude = longitude
+    def __init__(self, *args):
+        if len(args) >= 2:
+            self.latitude = args[0]
+            self.longitude = args[1]
+        else:
+            raise ValueError("Insufficient arguments provided for Point initialization. Latitude and longitude are required.")
 
     def __str__(self):
         return f"Point({self.latitude}, {self.longitude})"

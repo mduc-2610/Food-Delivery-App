@@ -8,7 +8,8 @@ class SocketService<T> {
   WebSocketChannel? _channel;
   final String? endpoint;
   String? incomingMessage;
-  Function(String)? handleIncomingMessage;
+  Function(String)? handleIncomingMessage; // Can be either Future<void> or normal void function
+  bool _isConnected = false; // Connection state flag
 
   SocketService({
     this.endpoint,
@@ -35,25 +36,37 @@ class SocketService<T> {
     _channel = WebSocketChannel.connect(Uri.parse(serviceUrl));
     print("CONNECT to $serviceUrl");
 
+    _isConnected = true; // Mark as connected
+
     _channel?.stream.listen(
-          (message) {
-        handleIncomingMessage?.call(message) ?? (message) {
+          (message) async {
+        if (handleIncomingMessage != null) {
+          try {
+            await Future.sync(() => handleIncomingMessage!(message));
+          } catch (e) {
+            print('Error handling message: $e');
+          }
+        } else {
           incomingMessage = message;
           $print("Received message: $message");
-        };
+        }
         print(message);
       },
       onError: (error) {
         print('WebSocket error: $error');
+        _isConnected = false; // Mark as disconnected on error
       },
       onDone: () {
         print('WebSocket connection closed');
+        _isConnected = false; // Mark as disconnected when the connection closes
       },
     );
   }
 
+  bool get isConnected => _isConnected; // Getter to check connection status
+
   void add(dynamic data) {
-    if(data != null) {
+    if (data != null) {
       _channel?.sink.add(jsonEncode(data));
     }
   }
@@ -61,6 +74,7 @@ class SocketService<T> {
   void disconnect() {
     if (_channel != null) {
       $print("DISCONNECT");
+      _isConnected = false; // Mark as disconnected when disconnecting manually
       _channel?.sink.close();
     }
   }

@@ -28,7 +28,7 @@ class OrderHistoryController extends GetxController {
     filterBarController = Get.put(FilterBarController(_filterDefault));
     _filterDefault = filterBarController.selectedFilter.value;
     scrollController.addListener(_scrollListener);
-    initializeUser();
+    initialize();
   }
 
   @override
@@ -44,7 +44,9 @@ class OrderHistoryController extends GetxController {
     }
   }
 
-  Future<void> initializeUser() async {
+  Future<void> initialize() async {
+    $print(isLoading.value);
+    isLoading.value = true;
     user = await UserService.getUser();
     await fetchFilterOrder(_filterDefault);
   }

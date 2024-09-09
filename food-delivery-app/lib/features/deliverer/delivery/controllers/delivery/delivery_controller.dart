@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_maps_webservices/distance.dart';
 import 'package:food_delivery_app/common/widgets/dialogs/show_confirm_dialog.dart';
+import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/data/socket_services/socket_service.dart';
 import 'package:food_delivery_app/features/authentication/models/deliverer/deliverer.dart';
 import 'package:food_delivery_app/features/deliverer/home/controllers/home/home_controller.dart';
@@ -50,7 +51,8 @@ class DeliveryController extends GetxController {
     update();
   }
 
-  Future<void> addMarkers(Delivery? delivery, {bool isCheckRoute = false}) async {
+  Future<void> addMarkers(DeliveryRequest? deliveryRequest, {bool isCheckRoute = false}) async {
+    final Delivery? delivery = deliveryRequest?.delivery;
     markers.add(await TMapFunction.createMarker(
         'pick_up',
         avatar: "https://th.bing.com/th/id/OIP.J7Td_S41uQvsuGI73Pu5dwHaH_?rs=1&pid=ImgDetMain",
@@ -87,20 +89,22 @@ class DeliveryController extends GetxController {
         index: 0,
         coordinates: polylineCoordinates
     );
-    if(!isCheckRoute) startMovingMarkerAlongRoute(delivery);
+    if(!isCheckRoute) await startMovingMarkerAlongRoute(deliveryRequest);
     update();
   }
 
-  void startMovingMarkerAlongRoute(Delivery? delivery) {
+  Future<void> startMovingMarkerAlongRoute(DeliveryRequest? deliveryRequest) async {
+    final Delivery? delivery = deliveryRequest?.delivery;
     if (polylineCoordinates.isEmpty) return;
 
-    movementTimer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
+    movementTimer = Timer.periodic(Duration(seconds: 1), (Timer timer) async {
       if (delivery == null) {
         timer.cancel();
         return;
       }
-
-      LatLng currentPoint = polylineCoordinates[polylineIndex];
+      int index = polylineIndex;
+      if(polylineIndex == polylineCoordinates.length) index -= 1;
+      LatLng currentPoint = polylineCoordinates[index];
 
       if (trackingStage.value == 1 &&
           TMapFunction.isNearLocation(currentPoint, delivery.pickupCoordinate!)) {
@@ -115,16 +119,15 @@ class DeliveryController extends GetxController {
       if (trackingStage.value == 2 &&
           TMapFunction.isNearLocation(currentPoint, delivery.dropOffCoordinate!)) {
         trackingStage.value = 3;
+
+        final [statusCode, headers, data] = await APIService<DeliveryRequest>(fullUrl: deliveryRequest?.complete ?? "").create({}, noBearer: true);
       }
 
-      if(polylineIndex < polylineCoordinates.length) {
-        delivererSocket?.add({
-          'coordinate': polylineCoordinates[polylineIndex]
-        });
-      }
-      if (polylineIndex < polylineCoordinates.length - 1) {
+      int len = polylineCoordinates.length;
+
+      if (polylineIndex < len) {
         LatLng currentLatLng = polylineCoordinates[polylineIndex];
-        LatLng nextLatLng = polylineCoordinates[polylineIndex + 1];
+        LatLng nextLatLng = polylineCoordinates[polylineIndex + (polylineIndex == len - 1 ? 0 : 1)];
 
         TMapFunction.updateMarkerCoordinate(markers: markers, coordinate: currentLatLng);
 
@@ -133,18 +136,22 @@ class DeliveryController extends GetxController {
             index: polylineIndex,
             coordinates: polylineCoordinates
         );
-        update();
+        delivererSocket?.add({
+          'coordinate': polylineCoordinates[polylineIndex],
+          'tracking_stage': trackingStage.value,
+        });
 
         TMapFunction.animateCamera(_mapController, currentLatLng, nextLatLng);
-
         polylineIndex++;
+        update();
       } else {
         timer.cancel();
       }
     });
   }
 
-  void handleDecline(Delivery? delivery) {
+  void handleDecline(DeliveryRequest? deliveryRequest) {
+    final Delivery? delivery = deliveryRequest?.delivery;
     trackingStage.value = 0;
     showConfirmDialog(
         Get.context!,
@@ -153,28 +160,36 @@ class DeliveryController extends GetxController {
         onAccept: () async {
           var element = delivererHomeController.deliveryRequests.firstWhere((instance) => instance.delivery == delivery);
           delivererHomeController.deliveryRequests.remove(element);
+
           update();
         }
     );
     delivererHomeController.isOccupied.value = true;
   }
 
-  void handleAccept(Delivery? delivery) {
+  void handleAccept(DeliveryRequest? deliveryRequest) {
+    final Delivery? delivery = deliveryRequest?.delivery;
     trackingStage.value = 0;
     showConfirmDialog(
         Get.context!,
         title: "Are you sure ?",
         description: "Please check the route carefully",
         onAccept: () async {
-          await addMarkers(delivery, isCheckRoute: false);
+          if(deliveryRequest?.accept != null) {
+            final [statusCode, headers, data] = await APIService<DeliveryRequest>(fullUrl: deliveryRequest?.accept ?? "")
+                .create({}, noBearer: true);
+            $print(data?.status);
+          }
+          await addMarkers(deliveryRequest, isCheckRoute: false);
           Get.back();
         }
     );
     delivererHomeController.isOccupied.value = true;
   }
 
-  void handleCheckRoute(Delivery? delivery) async {
-    await addMarkers(delivery, isCheckRoute: true);
+  void handleCheckRoute(DeliveryRequest? deliveryRequest) async {
+    final Delivery? delivery = deliveryRequest?.delivery;
+    await addMarkers(deliveryRequest, isCheckRoute: true);
     Get.back();
   }
 

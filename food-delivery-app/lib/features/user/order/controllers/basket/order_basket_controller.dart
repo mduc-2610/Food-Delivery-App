@@ -20,10 +20,11 @@ class OrderBasketController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    initializeUser();
+    initialize();
   }
 
-  Future<void> initializeUser() async {
+  Future<void> initialize() async {
+    isLoading.value = true;
     final [statusCode, headers, response] = await APIService<Order>().create({
       'cart': restaurantDetailController.user?.restaurantCart?.id
     }, );

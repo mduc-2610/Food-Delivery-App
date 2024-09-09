@@ -5,8 +5,7 @@ import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 void showConfirmDialog(
-    BuildContext context, 
-    {
+    BuildContext context, {
       VoidCallback? onDecline,
       VoidCallback? onAccept,
       String? accept,
@@ -14,6 +13,10 @@ void showConfirmDialog(
       String? title,
       String? description,
       String? imagePath,
+      TextStyle? titleTextStyle,
+      TextStyle? descriptionTextStyle,
+      Color? acceptButtonColor,
+      Color? declineButtonColor,
     }) {
   showDialog(
     context: context,
@@ -21,7 +24,7 @@ void showConfirmDialog(
       return AlertDialog(
         title: Text(
           '${title ?? ''}',
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: titleTextStyle ?? Theme.of(context).textTheme.headlineSmall,
           textAlign: TextAlign.center,
         ),
         content: Column(
@@ -33,7 +36,11 @@ void showConfirmDialog(
               width: 100,
             ),
             SizedBox(height: 16),
-            Text('${description ?? ''}'),
+            Text(
+              '${description ?? ''}',
+              style: descriptionTextStyle, // Apply custom or default text style
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
         actions: <Widget>[
@@ -41,7 +48,7 @@ void showConfirmDialog(
             children: [
               Expanded(
                 child: SmallButton(
-                  backgroundColor: TColor.reject,
+                  backgroundColor: declineButtonColor ?? TColor.reject,
                   text: '${decline ?? 'No'}',
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -49,19 +56,19 @@ void showConfirmDialog(
                   },
                 ),
               ),
-              SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
-
+              SizedBox(width: TSize.spaceBetweenItemsHorizontal),
               Expanded(
                 child: SmallButton(
+                  backgroundColor: acceptButtonColor ?? TColor.success,
                   text: '${accept ?? 'Yes'}',
                   onPressed: () {
                     Navigator.of(context).pop();
-                    onAccept?.call(); // Trigger the custom action
+                    onAccept?.call();
                   },
                 ),
               ),
             ],
-          )
+          ),
         ],
       );
     },

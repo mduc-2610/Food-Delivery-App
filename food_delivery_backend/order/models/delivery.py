@@ -108,7 +108,7 @@ class DeliveryRequest(models.Model):
         self._update_status('ACCEPTED')
         self._update_delivery()
 
-        self._reassign_nearest_deliverers()
+        # self._reassign_nearest_deliverers()
 
     def decline(self):
         self._update_status('DECLINED')
@@ -123,6 +123,26 @@ class DeliveryRequest(models.Model):
         self.delivery.deliverer = None
         self.delivery.status = 'FINDING_DRIVER'
         self.delivery.save()
+    
+    def complete(self):
+        self._update_status('DONE')
+        
+        deliverer = self.delivery.deliverer
+        deliverer.is_occupied = False
+        """
+        WARNING
+        """
+        deliverer.is_active = True
+        deliverer.accepted_requests += 1
+        deliverer.save(update_fields=['is_occupied', 'is_active', 'accepted_requests'])
+        
+        order = self.delivery.order
+        order.status = 'COMPLETED'
+        order.save(update_fields=['status'])
+        
+        self.delivery.status = 'DELIVERED'
+        self.delivery.save(update_fields=['status'])
+
 
     def _update_status(self, status):
         self.status = status

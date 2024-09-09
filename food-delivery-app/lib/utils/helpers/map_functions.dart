@@ -117,7 +117,7 @@ class TMapFunction {
     Set<Marker>? markers,
   }) async {
     final bitMapDescriptorImage = await TMapFunction.createCustomMarkerBitmap(
-      avatar ?? 'https://example.com/destination_icon.png',
+      avatar ?? 'https://www.bing.com/images/search?view=detailV2&ccid=jPwfygtS&id=0292812677F30AD5785F40BA8BDBCF0C5CC3BF44&thid=OIP.jPwfygtS-rvpGhJ6A-Y1BwHaEK&mediaurl=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fym6dRz1jHFQ%2Fmaxresdefault.jpg&cdnurl=https%3A%2F%2Fth.bing.com%2Fth%2Fid%2FR.8cfc1fca0b52fabbe91a127a03e63507%3Frik%3DRL%252fDXAzP24u6QA%26pid%3DImgRaw%26r%3D0&exph=720&expw=1280&q=animation+2d+image&simid=608027358347868647&FORM=IRPRST&ck=925AE2376F8EC802D646031ED0D8E00D&selectedIndex=8&itb=0&cw=1310&ch=629&ajaxhist=0&ajaxserp=0',
       size: size ?? 120,
       borderColor: borderColor ?? TColor.primary,
       borderWidth: borderWidth ?? 0,

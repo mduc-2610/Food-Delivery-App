@@ -106,6 +106,9 @@ class DeliveryRequest {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final DateTime? respondedAt;
+  final String? accept;
+  final String? decline;
+  final String? complete;
 
   DeliveryRequest({
     this.id,
@@ -116,6 +119,9 @@ class DeliveryRequest {
     this.createdAt,
     this.updatedAt,
     this.respondedAt,
+    this.accept,
+    this.decline,
+    this.complete,
   });
 
   DeliveryRequest.fromJson(Map<String, dynamic> json)
@@ -130,7 +136,11 @@ class DeliveryRequest {
         expiredAt = json['expired_at'] != null ? DateTime.parse(json['expired_at']) : null,
         createdAt = DateTime.parse(json['created_at']),
         updatedAt = DateTime.parse(json['updated_at']),
-        respondedAt = json['responded_at'] != null ? DateTime.parse(json['responded_at']) : null;
+        respondedAt = json['responded_at'] != null ? DateTime.parse(json['responded_at']) : null,
+        accept = json['accept'],
+        decline = json['decline'],
+        complete = json['complete']
+  ;
 
   Map<String, dynamic> toJson() {
     return {

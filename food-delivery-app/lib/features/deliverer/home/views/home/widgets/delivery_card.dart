@@ -23,14 +23,17 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class DeliveryCard extends StatelessWidget {
-  final Delivery? delivery;
+  final DeliveryRequest? deliveryRequest;
   final bool noMargin;
+  final Delivery? delivery;
 
-  const DeliveryCard({
+  DeliveryCard({
     Key? key,
-    required this.delivery,
+    this.deliveryRequest,
     this.noMargin = false,
-  }) : super(key: key);
+    Delivery? delivery
+  }) : delivery = deliveryRequest?.delivery ?? delivery;
+
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +64,7 @@ class DeliveryCard extends StatelessWidget {
                         paddingVertical: 0,
                         text: "Decline",
                         backgroundColor: TColor.reject,
-                        onPressed: () => deliveryController.handleDecline(delivery),
+                        onPressed: () => deliveryController.handleDecline(deliveryRequest),
                       ),
                     ),
                     SizedBox(width: TSize.spaceBetweenItemsHorizontal),
@@ -70,7 +73,7 @@ class DeliveryCard extends StatelessWidget {
                       child: SmallButton(
                         paddingVertical: 0,
                         text: "Accept",
-                        onPressed: () => deliveryController.handleAccept(delivery),
+                        onPressed: () => deliveryController.handleAccept(deliveryRequest),
                       )
                     ),
                   ],
@@ -79,7 +82,7 @@ class DeliveryCard extends StatelessWidget {
               SmallButton(
                 text: "Check Route",
                 backgroundColor: TColor.secondary,
-                onPressed: () => deliveryController.handleCheckRoute(delivery),
+                onPressed: () => deliveryController.handleCheckRoute(deliveryRequest),
               )
 
             ],

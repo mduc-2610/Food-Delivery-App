@@ -7,6 +7,7 @@ import 'package:food_delivery_app/features/user/order/controllers/common/order_i
 import 'package:food_delivery_app/features/user/order/controllers/history/order_history_detail_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/delivery.dart';
 import 'package:food_delivery_app/features/user/order/views/location/order_location.dart';
+import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -52,10 +53,12 @@ class OrderBottomNavigationBarController extends GetxController {
           endpoint: 'order/order/${order?.id}/create-delivery-and-request',
         ).create({}, noBearer: true, noFromJson: true);
         final delivery = Delivery.fromJson(data["delivery"]);
-        final nearestDeliverer = Deliverer.fromJson(data["nearest_deliverer"]);
-        Get.to(() => OrderTrackingView(), arguments: {
+        // final nearestDeliverer = Deliverer.fromJson(data["nearest_deliverer"]);
+        await Get.to(() => OrderTrackingView(), arguments: {
           'id': delivery.order.id,
         });
+        await controller.initialize();
+
       }
       onAccept();
     }
@@ -72,14 +75,15 @@ class OrderBottomNavigationBarController extends GetxController {
         showConfirmDialog(
           context,
           title: "Successfully ordered",
-          description: "You can check your order status in order history",
+          description: "You can track your order in order history",
           onAccept: () {
             Get.to(() => OrderTrackingView(), arguments: {
               'id': delivery.order.id,
             });
           },
           accept: "Check",
-          decline: "No",
+          decline: "Later",
+          declineButtonColor: TColor.secondary
         );
       }
       showConfirmDialog(context, onAccept: onAccept,
