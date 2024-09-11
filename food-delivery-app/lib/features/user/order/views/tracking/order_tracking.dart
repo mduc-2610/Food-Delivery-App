@@ -30,7 +30,6 @@ class _OrderTrackingViewState extends State<OrderTrackingView> {
     return GetBuilder<OrderTrackingController>(
       init: OrderTrackingController(),
       builder: (controller) {
-        $print("asaas: ${controller.user?.selectedLocation}");
         return Scaffold(
           appBar: CAppBar(
             title: 'Delivery',

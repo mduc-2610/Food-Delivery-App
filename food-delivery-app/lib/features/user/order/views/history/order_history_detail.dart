@@ -22,10 +22,8 @@ class OrderHistoryDetailView extends StatelessWidget {
           Scaffold(
               appBar: CAppBar(
                 title: "My Basket",
-                backButtonOnPressed: () {
-                  Get.back(result: {
-                    'order': controller.order
-                  });
+                result: {
+                  'order': controller.order
                 },
               ),
               body:

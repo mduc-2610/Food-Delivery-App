@@ -24,10 +24,16 @@ class OrderHistoryDetailController extends GetxController {
   Future<void> initialize() async {
     if(Get.arguments['id'] != null) {
       isLoading.value = true;
+      $print("GET BACK");
       order = await APIService<Order>().retrieve(Get.arguments['id']);
       $print(order?.cancellation);
       Future.delayed(Duration(milliseconds: TTime.init));
       isLoading.value = false;
+      update();
+    }
+    else {
+      $print("GET Out");
+
     }
   }
 }

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:get/get.dart';
 
 class CAppBar extends StatelessWidget implements PreferredSizeWidget {
   final dynamic title;
   final VoidCallback? backButtonOnPressed;
+  final dynamic result;
   final List<Map<String, dynamic>> iconList;
   final bool isBigTitle;
   final bool centerTitle;
@@ -17,6 +19,7 @@ class CAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title,
     this.iconList = const [],
     this.backButtonOnPressed,
+    this.result,
     this.isBigTitle = false,
     this.centerTitle = true,
     this.noLeading = false,
@@ -46,6 +49,7 @@ class CAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: Icon(Icons.arrow_back, color: Colors.black),
         onPressed: () {
           backButtonOnPressed?.call();
+          Get.back(result: result);
           // Navigator.pop(context);
         },
       ),

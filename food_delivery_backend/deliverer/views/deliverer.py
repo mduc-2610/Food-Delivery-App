@@ -1,3 +1,4 @@
+import re
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
 
@@ -36,14 +37,17 @@ class DelivererViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     def get_object(self):
         object = super().get_object()
         params = self.request.query_params
-        if self.action == "deliveries" or self.action == "delivery_requests":
+        if self.action == "requests" or self.action == "delivery_requests":
             status = params.get('status')
+            filter_kwargs = {}
             if status:
-                return object.filter(status=status.upper())
-            elif self.action == "deliveries":
-                return object.exclude(status="FINDING_DRIVER")
+                split_status = re.sub(r'\W+', '_', status).upper()
+                filter_kwargs[f"{'status' if self.action == 'delivery_requests' else 'delivery__status'}"] = split_status
+            elif self.action == "requests":
+                return object.exclude(status="FINDING_DRIVER").order_by("-created_at")
             elif self.action == "delivery_requests":
-                return object.filter(status="FINDING_DRIVER")
+                return object.exclude(status="FINDING_DRIVER")
+            return object.filter(**filter_kwargs).order_by("-created_at")
         return object
     
     # many_related = {

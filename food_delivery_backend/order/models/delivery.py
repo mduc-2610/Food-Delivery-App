@@ -4,6 +4,8 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
+from django.db import transaction
+from django.db.models import F
 
 from deliverer.models import Deliverer
 
@@ -70,9 +72,10 @@ class Delivery(models.Model):
             self.estimated_delivery_time = self.calculate_estimated_delivery_time()
         if self.status != 'FINDING_DRIVER' and self._state.adding:
             self.started_at = timezone.now()
-        if self.status in ['DELIVERED', 'CANCELLED']:
+        if self.status == 'DELIVERED':
             self.finished_at = timezone.now()
             self.order.status = 'COMPLETED'
+            self.order.save()
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -125,23 +128,16 @@ class DeliveryRequest(models.Model):
         self.delivery.save()
     
     def complete(self):
-        self._update_status('DONE')
-        
         deliverer = self.delivery.deliverer
         deliverer.is_occupied = False
-        """
-        WARNING
-        """
         deliverer.is_active = True
-        deliverer.accepted_requests += 1
+        deliverer.accepted_requests = F('accepted_requests') + 1
         deliverer.save(update_fields=['is_occupied', 'is_active', 'accepted_requests'])
         
-        order = self.delivery.order
-        order.status = 'COMPLETED'
-        order.save(update_fields=['status'])
-        
         self.delivery.status = 'DELIVERED'
-        self.delivery.save(update_fields=['status'])
+        self.delivery.save()
+        
+        self._update_status('DONE')
 
 
     def _update_status(self, status):

@@ -35,11 +35,11 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
           Obx(() => GoogleMap(
             onMapCreated: deliveryController.onMapCreated,
             initialCameraPosition: CameraPosition(
-              target: deliveryController.deliverer?.currentCoordinate ?? LatLng(0, 0),
+              target: deliveryController.delivererHomeController.deliverer?.currentCoordinate ?? LatLng(0, 0),
               zoom: 12,
             ),
-            markers: deliveryController.markers.toSet(),
-            polylines: deliveryController.polylines.toSet(),
+            markers: deliveryController.delivererHomeController.markers.toSet(),
+            polylines: deliveryController.delivererHomeController.polylines.toSet(),
           )),
           Positioned(
             bottom: 40,

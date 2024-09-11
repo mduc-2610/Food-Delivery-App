@@ -37,9 +37,10 @@ class OrderHistoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         // $print("INITIALIZE");
-        final _order = (await Get.to(() => OrderHistoryDetailView(), arguments: {
+        final result = (await Get.to(() => OrderHistoryDetailView(), arguments: {
           'id': order?.id
-          }))?['order'];
+          })) as Map<String, Order?>;
+        final _order = result["order"];
         if(_order?.status != order?.status) {
           await controller.initialize();
         }

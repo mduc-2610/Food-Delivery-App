@@ -39,7 +39,8 @@ class OrderTrackingController extends GetxController {
   User? user;
   Order? order;
   String? delivererId;
-  Delivery? delivery;
+  Delivery? currentDelivery;
+  DeliveryRequest? currentDeliveryRequest;
   Timer? movementTimer;
   int polylineIndex = 0;
 
@@ -70,9 +71,9 @@ class OrderTrackingController extends GetxController {
     user = await UserService.getUser();
     $print(Get.arguments);
     if (Get.arguments['id'] != null) {
-      delivery = await APIService<Delivery>().retrieve(Get.arguments['id'] ?? '');
-      $print("CHECK DELIVERER: ${delivery?.deliverer}");
-      if(delivery?.status == "DELIVERED") {
+      currentDelivery = await APIService<Delivery>().retrieve(Get.arguments['id'] ?? '');
+      $print("CHECK DELIVERER: ${currentDelivery?.deliverer}");
+      if(currentDelivery?.status == "DELIVERED") {
         showSuccessDialog(
             Get.context!,
             accept: "Get back",
@@ -80,17 +81,25 @@ class OrderTrackingController extends GetxController {
             description: "Enjoy your meal ${TEmoji.faceSavoringFood}",
             image: TImage.diaConfetti,
             canPop: false,
-            onAccept: () {
+            onAccept: () async {
+              // if(currentDeliveryRequest != null) {
+              //   final [statusCode, headers, data] = await APIService<DeliveryRequest>(
+              //       fullUrl: currentDeliveryRequest?.complete ?? "").create({}, noBearer: true);
+              //   $print(data?.delivery);
+              //   $print(data?.delivery?.order);
+              // }
+              // else {
+              //   $print("NO UPDATE");
+              // }
               Get.back();
-
             }
         );
       }
-      else if (delivery?.deliverer != null) {
+      else if (currentDelivery?.deliverer != null) {
         delivererSocket = SocketService<Deliverer>(handleIncomingMessage: delivererIncomingMessage);
-        delivererSocket?.connect(id: delivery?.deliverer);
-        deliverer.value = await APIService<Deliverer>().retrieve(delivery?.deliverer ?? '');
-        await addMarkers(delivery);
+        delivererSocket?.connect(id: currentDelivery?.deliverer);
+        deliverer.value = await APIService<Deliverer>().retrieve(currentDelivery?.deliverer ?? '');
+        await addMarkers(currentDelivery);
       }
 
     }
@@ -102,13 +111,14 @@ class OrderTrackingController extends GetxController {
   Future<void> handleIncomingMessage(String message) async {
     $print("CUSTOM: $message");
     final decodedMessage = json.decode(message);
-    if (decodedMessage["delivery"] != null) {
+    if (decodedMessage["delivery_request"] != null) {
       if (delivererSocket == null) {
-        delivery = Delivery.fromJson(decodedMessage["delivery"]);
-        deliverer.value = await APIService<Deliverer>().retrieve(delivery?.deliverer ?? '');
+        currentDeliveryRequest = DeliveryRequest.fromJson(decodedMessage["delivery_request"]);
+        currentDelivery = Delivery.fromJson(currentDeliveryRequest?.delivery);
+        deliverer.value = await APIService<Deliverer>().retrieve(currentDelivery?.deliverer ?? '');
         delivererSocket = SocketService<Deliverer>(handleIncomingMessage: delivererIncomingMessage);
-        delivererSocket?.connect(id: delivery?.deliverer);
-        await addMarkers(delivery);
+        delivererSocket?.connect(id: currentDelivery?.deliverer);
+        await addMarkers(currentDelivery);
       }
       update();
     }
@@ -134,7 +144,7 @@ class OrderTrackingController extends GetxController {
           trackingStage.value = _trackingStage;
           markers.refresh();
 
-          startMovingMarkerAlongRoute(delivery, deliverer.value?.currentCoordinate ?? newDelivererPosition);
+          startMovingMarkerAlongRoute(currentDelivery, deliverer.value?.currentCoordinate ?? newDelivererPosition);
           TMapFunction.animateCamera(_mapController, deliverer.value?.currentCoordinate ?? newDelivererPosition, newDelivererPosition);
           update();
         }
@@ -143,15 +153,15 @@ class OrderTrackingController extends GetxController {
       print("Error handling deliverer incoming message: $e");
     }
   }
-
-  Future<void> reconnectSockets() async {
-    if (!orderSocket.isConnected) {
-      orderSocket.connect();
-    }
-    if (delivererSocket != null && !delivererSocket!.isConnected) {
-      delivererSocket?.connect(id: delivery?.deliverer);
-    }
-  }
+  //
+  // Future<void> reconnectSockets() async {
+  //   if (!orderSocket.isConnected) {
+  //     orderSocket.connect();
+  //   }
+  //   if (delivererSocket != null) {
+  //     delivererSocket?.connect(id: delivery?.deliverer);
+  //   }
+  // }
 
   Future<void> onMapCreated(GoogleMapController controller) async {
     await TMapFunction.createMarker(
@@ -207,7 +217,7 @@ class OrderTrackingController extends GetxController {
     update();
   }
 
-  void startMovingMarkerAlongRoute(Delivery? delivery, LatLng newPosition) {
+  void startMovingMarkerAlongRoute(Delivery? delivery, LatLng newPosition) async {
     if (polylineCoordinates.isEmpty) return;
     if (delivery == null) return;
 
@@ -217,10 +227,23 @@ class OrderTrackingController extends GetxController {
     if (trackingStage.value == 3) {
       showSuccessDialog(
           Get.context!,
-          accept: "ok",
+          accept: "Get back",
           title: "Successfully delivered ${TEmoji.smilingFaceWithHeart}",
           description: "Enjoy your meal ${TEmoji.faceSavoringFood}",
-          image: TImage.diaConfetti
+          image: TImage.diaConfetti,
+          canPop: false,
+          onAccept: () async {
+            // if(currentDeliveryRequest != null) {
+            //   final [statusCode, headers, data] = await APIService<DeliveryRequest>(
+            //       fullUrl: currentDeliveryRequest?.complete ?? "").create({}, noBearer: true);
+            //   $print(data?.delivery);
+            //   $print(data?.delivery?.order);
+            // }
+            // else {
+            //   $print("NO UPDATE");
+            // }
+            Get.back();
+          }
       );
     }
 

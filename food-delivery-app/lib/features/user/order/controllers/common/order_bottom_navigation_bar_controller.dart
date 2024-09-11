@@ -59,6 +59,8 @@ class OrderBottomNavigationBarController extends GetxController {
         });
         await controller.initialize();
 
+        $print("GET BACK ${controller.order?.status}");
+
       }
       onAccept();
     }

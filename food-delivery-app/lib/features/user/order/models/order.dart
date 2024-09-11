@@ -52,8 +52,8 @@ class Order {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'cart': cart,
-      'delivery_address': deliveryAddress?.id,
+      'cart': cart is String ? cart : cart?.toJson(),
+      'delivery_address': deliveryAddress,
       'payment_method': paymentMethod,
       'promotion': promotion,
       'delivery_fee': deliveryFee,

@@ -52,8 +52,8 @@ class OrderConsumer(AsyncWebsocketConsumer):
             'nearest_deliverer': message.get('nearest_deliverer'),
         }))
 
-    async def tracking_request(self, event):
-        message = event['message']
+    async def receive_delivery_request(self, event):
+        delivery_request = event['message']
         await self.send(text_data=json.dumps({
-            'delivery': message,
+            'delivery_request': delivery_request,
         }))

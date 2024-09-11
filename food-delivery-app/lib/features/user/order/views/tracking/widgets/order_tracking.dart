@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/animation/text_with_dot_animation.dart';
 import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/features/deliverer/delivery/controllers/delivery/delivery_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/delivery.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
@@ -25,6 +26,7 @@ class OrderTracking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final forTrackingStage = controller is DeliveryController ? controller.delivererHomeController : controller;
     return SingleChildScrollView(
       child: MainWrapper(
         child: Column(
@@ -36,7 +38,7 @@ class OrderTracking extends StatelessWidget {
               SizedBox(height: TSize.spaceBetweenSections,),
             ],
 
-            Obx(() => _orderTrackingProgressIndicator(context, stage: controller.trackingStage.value)),
+            Obx(() => _orderTrackingProgressIndicator(context, stage: forTrackingStage.trackingStage.value)),
             SizedBox(height: TSize.spaceBetweenSections,),
 
             Row(
@@ -77,17 +79,17 @@ class OrderTracking extends StatelessWidget {
                   borderRadius: BorderRadius.circular(TSize.borderRadiusCircle)
               ),
               child: MainButton(
-                onPressed: (controller.trackingStage.value < 3)
+                onPressed: (forTrackingStage.trackingStage.value < 3)
                     ? onCancel
                     : type == OrderTrackingType.user
                     ? null
                     : () => controller.handleCompleteOrder(delivery),
-                text: (controller.trackingStage.value < 3)
+                text: (forTrackingStage.trackingStage.value < 3)
                     ? 'Cancel Order'
                     : type == OrderTrackingType.user
                     ? 'Completed'
                     : 'Complete Order',
-                textColor: (controller.trackingStage.value < 3)
+                textColor: (forTrackingStage.trackingStage.value < 3)
                     ? TColor.reject
                     : TColor.complete,
                 backgroundColor: Colors.transparent,

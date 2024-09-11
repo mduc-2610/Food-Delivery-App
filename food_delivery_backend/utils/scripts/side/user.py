@@ -53,10 +53,12 @@ def run(mode=None, *args):
 
     result = DeliveryRequest.objects.all().order_by('-created_at').first()
     if result:
+        print('Total price', result.delivery.order.total_price(), pretty=True)
         result = result.deliverer
         print(f"Deliverer ID: {result.id}")
         print(f"User: {result.user.id} - {result.user.phone_number} - {result.user.profile.name}")
-    
+    order = Order.objects.get(id="330550f8-5e16-49af-ac32-150b1d366d0f")
+    print(order.status)
     # print([1][0:])
     # users = Profile.objects.all()
     # for user in users:

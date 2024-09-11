@@ -75,8 +75,8 @@ class Delivery {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'order': order,
-      'deliverer': deliverer,
+      'order': order is String ? order : order?.toJson(),
+      'deliverer': deliverer is String ? deliverer : deliverer?.toJson(),
       'pickup_location': pickupLocation,
       'pickup_latitude': pickUpLatitude,
       'pickup_longitude': pickUpLongitude,
@@ -144,13 +144,17 @@ class DeliveryRequest {
 
   Map<String, dynamic> toJson() {
     return {
-      'deliverer': deliverer.toJson(),
-      'delivery': delivery.toJson(),
+      'id': id,
+      'deliverer': deliverer is String ? deliverer : deliverer?.toJson(),
+      'delivery': delivery is String ?  delivery : delivery?.toJson(),
       'status': status,
       'expired_at': expiredAt?.toIso8601String(),
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
       'responded_at': respondedAt?.toIso8601String(),
+      'accept': accept,
+      'decline': decline,
+      'complete': complete,
     };
   }
 
