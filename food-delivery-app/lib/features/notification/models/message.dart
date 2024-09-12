@@ -35,8 +35,8 @@ class BaseMessage {
         user = json['user'],
         room = json['room'],
         content = json['content'],
-        latitude = json['latitude'] != null ? double.parse(json['latitude']) : null,
-        longitude = json['longitude'] != null ? double.parse(json['latitude']) : null,
+        latitude = THelperFunction.formatDouble(json['latitude']),
+        longitude = THelperFunction.formatDouble(json['longitude']),
         createdAt = json['created_at'] != null ? DateTime.parse(json['created_at']).toLocal() : null,
         images = json['images'] != null ? (json['images'] as List<dynamic>).map((instance) => BaseImage.fromJson(instance)).toList() : [],
         videos = json['videos'] != null ? (json['videos'] as List<dynamic>).map((instance) => BaseVideo.fromJson(instance)).toList() : [];

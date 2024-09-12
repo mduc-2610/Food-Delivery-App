@@ -2,10 +2,15 @@ import uuid
 import decimal
 
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from order.models import RestaurantCart, Delivery, DeliveryRequest
+from review.models import (
+    DishReview,
+    DelivererReview, 
+    RestaurantReview
+)
 from deliverer.models import Deliverer
 from utils.objects import Point, Distance
 
@@ -28,8 +33,16 @@ class Order(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="PENDING")
     rating = models.PositiveSmallIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)        
+    is_reviewed = models.BooleanField(default=False, null=True, blank=True)
+    is_order_reviewed = models.BooleanField(default=False, null=True, blank=True)
+    is_dish_reviewed = models.BooleanField(default=False, null=True, blank=True)
+    is_deliverer_reviewed = models.BooleanField(default=False, null=True, blank=True)
+    is_restaurant_reviewed = models.BooleanField(default=False, null=True, blank=True)
 
+    # def is_reviewed(self):
+    #     return self.is_order_reviewed and self.is_dish_reviewed and self.is_deliverer_reviewed
+    
     def total_price(self):
         return self.cart.total_price
 
@@ -123,6 +136,61 @@ class Order(models.Model):
 @receiver(post_save, sender='order.Order')
 def broadcast_to_deliverers(sender, instance, **kwargs):
     pass
+
+@receiver(post_save, sender='order.Order')
+def check_order_status(sender, instance, **kwargs):
+    check_order_ratings(instance)
+
+@receiver(post_save, sender='review.DelivererReview')
+def update_deliverer_rated(sender, instance, **kwargs):
+    order = instance.order
+    check_order_ratings(order)
+
+@receiver(post_save, sender='review.DishReview')
+def update_food_rated(sender, instance, **kwargs):
+    order = instance.order
+    check_order_ratings(order)
+
+@receiver(post_save, sender='review.RestaurantReview')
+def update_restaurant_rated(sender, instance, **kwargs):
+    order = instance.order
+    check_order_ratings(order)
+
+def check_order_ratings(order):
+    update_fields = []
+
+    if order.status == "COMPLETED":
+        if order.rating > 0 and not order.is_order_reviewed:
+            order.is_order_reviewed = True
+            update_fields.append('is_order_reviewed')
+
+        if hasattr(order, 'delivery') and not order.is_deliverer_reviewed:
+            if DelivererReview.objects.filter(user=order.user, order=order, deliverer=order.delivery.deliverer).exists():
+                order.is_deliverer_reviewed = True
+                update_fields.append('is_deliverer_reviewed')
+
+        if hasattr(order, 'cart') and  order.cart.restaurant and not order.is_restaurant_reviewed:
+            if RestaurantReview.objects.filter(user=order.user, order=order, restaurant=order.cart.restaurant).exists():
+                order.is_restaurant_reviewed = True
+                update_fields.append('is_restaurant_reviewed')
+
+        cart_dishes = order.cart.dishes.all()
+        all_rated = any(
+            DishReview.objects.filter(user=order.user, order=order, dish=dish.dish).exists()
+            for dish in cart_dishes
+        )
+        if all_rated and not order.is_dish_reviewed:
+            order.is_dish_reviewed = True
+            update_fields.append('is_dish_reviewed')
+        
+        if update_fields:
+            order.is_reviewed = order.is_order_reviewed \
+                                and order.is_dish_reviewed \
+                                and order.is_deliverer_reviewed \
+                                and order.is_restaurant_reviewed
+            update_fields.append('is_reviewed')
+            order.save(update_fields=update_fields)
+
 
 class OrderCancellation(models.Model):
     order = models.OneToOneField("order.Order", related_name="cancellation", on_delete=models.CASCADE)

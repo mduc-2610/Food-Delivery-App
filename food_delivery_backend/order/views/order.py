@@ -6,20 +6,34 @@ from order.models import Order, OrderCancellation
 
 from order.serializers import OrderSerializer, CreateOrderSerializer
 
-from order.serializers import DeliverySerializer, OrderCancellationSerializer
+from order.serializers import (
+    DeliverySerializer, 
+    DetailOrderSerializer,
+    UpdateOrderSerializer,
+    OrderCancellationSerializer, 
+)
 from deliverer.serializers import BasicDelivererSerializer
 
-from utils.mixins import DefaultGenericMixin
+from utils.mixins import DefaultGenericMixin, DynamicFilterMixin
 from utils.pagination import CustomPagination
 from utils.views import OneRelatedViewSet
 
-class OrderViewSet(DefaultGenericMixin, OneRelatedViewSet, viewsets.ModelViewSet):
+class OrderViewSet(DefaultGenericMixin, DynamicFilterMixin, OneRelatedViewSet, viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     pagination_class =  CustomPagination
     mapping_serializer_class = {
+        'retrieve': DetailOrderSerializer,
         'create': CreateOrderSerializer,
+        'update': UpdateOrderSerializer,
     }
+
+    # def get_queryset(self):
+    #     status = self.request.query_params.get('status', None)
+    #     queryset = super().get_queryset()
+    #     if status:
+    #         queryset = queryset.exclude(status=status)
+    #     return queryset
 
     @action(detail=True, methods=['POST'], url_path='create-delivery-and-request')
     def create_delivery_and_request(self, request, pk=None):

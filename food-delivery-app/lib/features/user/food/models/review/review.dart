@@ -23,16 +23,16 @@ class Review {
   });
 
   Review.fromJson(Map<String, dynamic> json)
-    : id = json['id'],
-      user = BasicUser.fromJson(json['user']),
-      rating = json['rating'],
-      title = json['title'],
-      content = json['content'],
-      createdAt = DateTime.parse(json['created_at']),
-      updatedAt = DateTime.parse(json['updated_at']);
+      : id = json['id'],
+        user = BasicUser.fromJson(json['user']),
+        rating = json['rating'],
+        title = json['title'],
+        content = json['content'],
+        createdAt = DateTime.parse(json['created_at']),
+        updatedAt = DateTime.parse(json['updated_at']);
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson({bool patch = false}) {
+    final Map<String, dynamic> data = {
       'id': id,
       'user': user?.id,
       'rating': rating,
@@ -41,6 +41,12 @@ class Review {
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
     };
+
+    if (patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
   }
 
   @override
@@ -74,15 +80,20 @@ class DishReview extends Review {
   );
 
   DishReview.fromJson(Map<String, dynamic> json)
-    : dish = json['dish'],
-      super.fromJson(json);
-
+      : dish = json['dish'],
+        super.fromJson(json);
 
   @override
-  Map<String, dynamic> toJson() {
-    return super.toJson()..addAll({
+  Map<String, dynamic> toJson({bool patch = false}) {
+    final Map<String, dynamic> data = super.toJson(patch: patch)..addAll({
       'dish': dish,
     });
+
+    if (patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
   }
 
   @override
@@ -116,15 +127,20 @@ class DelivererReview extends Review {
   );
 
   DelivererReview.fromJson(Map<String, dynamic> json)
-    : deliverer = json['deliverer'],
-      super.fromJson(json);
-
+      : deliverer = json['deliverer'],
+        super.fromJson(json);
 
   @override
-  Map<String, dynamic> toJson() {
-    return super.toJson()..addAll({
+  Map<String, dynamic> toJson({bool patch = false}) {
+    final Map<String, dynamic> data = super.toJson(patch: patch)..addAll({
       'deliverer': deliverer,
     });
+
+    if (patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
   }
 
   @override
@@ -162,10 +178,16 @@ class RestaurantReview extends Review {
         super.fromJson(json);
 
   @override
-  Map<String, dynamic> toJson() {
-    return super.toJson()..addAll({
+  Map<String, dynamic> toJson({bool patch = false}) {
+    final Map<String, dynamic> data = super.toJson(patch: patch)..addAll({
       'restaurant': restaurant,
     });
+
+    if (patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
   }
 
   @override
@@ -199,15 +221,20 @@ class DeliveryReview extends Review {
   );
 
   DeliveryReview.fromJson(Map<String, dynamic> json)
-    : delivery = json['order'],
-      super.fromJson(json);
-
+      : delivery = json['order'],
+        super.fromJson(json);
 
   @override
-  Map<String, dynamic> toJson() {
-    return super.toJson()..addAll({
+  Map<String, dynamic> toJson({bool patch = false}) {
+    final Map<String, dynamic> data = super.toJson(patch: patch)..addAll({
       'order': delivery,
     });
+
+    if (patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
   }
 
   @override

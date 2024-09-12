@@ -2,5 +2,5 @@
 **/.idea/
 /food_delivery_backend/utils/scripts/test.py
 /food-delivery-app/test/
-__pycache__/
+**/__pycache__/
 /food-delivery-app/lib/main.reflectable.dart

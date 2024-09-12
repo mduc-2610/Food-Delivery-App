@@ -32,7 +32,6 @@ class OrderHistoryDetailView extends StatelessWidget {
                   ? OrderBasketSkeleton()
                   : Column(
                 children: [
-
                   if(!controller.isLoading.value)...[
                     Expanded(
                       child: SingleChildScrollView(

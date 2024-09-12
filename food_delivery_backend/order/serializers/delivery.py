@@ -31,7 +31,9 @@ class DeliveryRequestSerializer(serializers.ModelSerializer):
     complete = serializers.SerializerMethodField()
 
     def get_delivery(self, obj):
-        return DeliverySerializer(obj.delivery, context=self.context).data
+        if hasattr(obj, 'delivery'):
+            return DeliverySerializer(obj.delivery, context=self.context).data
+        return None
 
     def build_uri(self, action, obj):
         request = self.context.get('request')

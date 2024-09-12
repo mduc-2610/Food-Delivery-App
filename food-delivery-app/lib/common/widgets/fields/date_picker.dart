@@ -7,6 +7,7 @@ class CDatePicker extends StatefulWidget {
   final String hintText;
   final String datePattern;
   final String? Function(String?)? validator;
+  final Function(DateTime?)? onDateSelected;  // Add this line
 
   const CDatePicker({
     required this.controller,
@@ -14,6 +15,7 @@ class CDatePicker extends StatefulWidget {
     this.hintText = "",
     this.datePattern = 'MM/yy',
     this.validator,
+    this.onDateSelected,  // Add this line
     Key? key,
   }) : super(key: key);
 
@@ -43,6 +45,9 @@ class _CDatePickerState extends State<CDatePicker> {
         if (pickedDate != null) {
           String formattedDate = DateFormat(widget.datePattern).format(pickedDate);
           widget.controller.text = formattedDate;
+          widget.onDateSelected?.call(pickedDate);  // Add this line
+        } else {
+          widget.onDateSelected?.call(null);  // Add this line to handle date clearing
         }
       },
       validator: widget.validator ?? (value) {

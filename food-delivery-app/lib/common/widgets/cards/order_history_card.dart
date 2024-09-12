@@ -56,58 +56,73 @@ class OrderHistoryCard extends StatelessWidget {
               horizontal: TSize.md,
               vertical: TSize.sm,
             ),
-            child: Row(
+            child: Stack(
+              clipBehavior: Clip.none,
               children: [
-                SizedBox(
-                  width: TDeviceUtil.getScreenWidth() * 0.3,
-                  child: Row(
-                    children: [
-                      Stack(
-                        clipBehavior: Clip.none,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: TDeviceUtil.getScreenWidth() * 0.3,
+                      child: Row(
                         children: [
-                          _buildImage(context, TImage.hcBurger1),
-                          Positioned(
-                            left: TSize.md,
-                            child: _buildImage(context, TImage.hcBurger1),
-                          ),
-                          Positioned(
-                            left: TSize.md * 2,
-                            child: _buildImage(context, TImage.hcBurger1),
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              _buildImage(context, TImage.hcBurger1),
+                              Positioned(
+                                left: TSize.md,
+                                child: _buildImage(context, TImage.hcBurger1),
+                              ),
+                              Positioned(
+                                left: TSize.md * 2,
+                                child: _buildImage(context, TImage.hcBurger1),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Order ID:'),
+                          Text(
+                            currentOrder?.id?.split('-')[0].toString() ?? '',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          Text(
+                            '£${currentOrder?.total.toStringAsFixed(2) ?? ''}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(color: Colors.red),
+                          ),
+                          SizedBox(height: TSize.spaceBetweenItemsVertical / 2),
+                          RatingBarIndicator(
+                            rating: THelperFunction.formatDouble(currentOrder?.rating),
+                            itemBuilder: (context, index) => SvgPicture.asset(TIcon.fillStar),
+                            itemCount: 5,
+                            itemSize: TSize.iconSm,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                    StatusChip(status: currentOrder?.status ?? ''),
+                  ],
                 ),
-                SizedBox(width: TSize.spaceBetweenItemsHorizontal),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Order ID:'),
-                      Text(
-                        currentOrder?.id?.split('-')[0].toString() ?? '',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      Text(
-                        '£${currentOrder?.total.toStringAsFixed(2) ?? ''}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(color: Colors.red),
-                      ),
-                      SizedBox(height: TSize.spaceBetweenItemsVertical / 2),
-                      RatingBarIndicator(
-                        rating: THelperFunction.formatDouble(currentOrder?.rating),
-                        itemBuilder: (context, index) => SvgPicture.asset(TIcon.fillStar),
-                        itemCount: 5,
-                        itemSize: TSize.iconSm,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: TSize.spaceBetweenItemsHorizontal),
-                StatusChip(status: currentOrder?.status ?? ''),
+                //
+                if(currentOrder?.isReviewed == false)...[
+                  Positioned(
+                    top: -5,
+                    right: -5,
+                    child: SvgPicture.asset(
+                      TIcon.notifyDot,
+                    ),
+                  )
+                ]
               ],
             ),
           ),

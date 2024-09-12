@@ -14,7 +14,7 @@ class Review(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ('-created_at')
+        ordering = ('-created_at',)
 
     def __str__(self):
         return f"{self.title}'s review"
@@ -22,19 +22,22 @@ class Review(models.Model):
 class DishReview(Review):
     user = models.ForeignKey("account.User", related_name="dish_reviews", on_delete=models.CASCADE)
     dish = models.ForeignKey("food.Dish", related_name='dish_reviews', on_delete=models.CASCADE)
+    order = models.ForeignKey("order.Order", related_name='dish_reviews', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        unique_together = ('user', 'dish')
+        unique_together = ['user', 'dish', 'order']
+
 
     def __str__(self):
         return f"{self.user}'s review of {self.dish}"
 
 class DelivererReview(Review):
     user = models.ForeignKey("account.User", related_name="deliverer_reviews", on_delete=models.CASCADE)
-    deliverer = models.ForeignKey("deliverer.Deliverer", related_name='deliverer_reviews', on_delete=models.CASCADE)
+    deliverer = models.ForeignKey("deliverer.Deliverer", related_name='deliverer_reviews', on_delete=models.CASCADE, blank=True, null=True)
+    order = models.OneToOneField("order.Order", related_name='deliverer_review', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        unique_together = ('user', 'deliverer')
+        unique_together = ['user', 'deliverer', 'order']
 
     def __str__(self):
         return f"{self.user}'s review of {self.deliverer}"
@@ -42,9 +45,10 @@ class DelivererReview(Review):
 class RestaurantReview(Review):
     user = models.ForeignKey("account.User", related_name="restaurant_reviews", on_delete=models.CASCADE)
     restaurant = models.ForeignKey("restaurant.Restaurant", related_name='restaurant_reviews', on_delete=models.CASCADE)
+    order = models.OneToOneField("order.Order", related_name='restaurant_review', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        unique_together = ('user', 'restaurant')
+        unique_together = ['user', 'restaurant', 'order']
 
     def __str__(self):
         return f"{self.user}'s review of {self.restaurant}"
@@ -52,9 +56,10 @@ class RestaurantReview(Review):
 class DeliveryReview(Review):
     user = models.ForeignKey("account.User", related_name="delivery_reviews", on_delete=models.CASCADE)
     delivery = models.ForeignKey("order.Delivery", related_name='delivery_reviews', on_delete=models.CASCADE)
+    order = models.OneToOneField("order.Order", related_name='delivery_review', on_delete=models.CASCADE, blank=True, null=True)
 
-    class Meta:
-        unique_together = ('user', 'delivery')
+    class Meta: 
+        unique_together = ['user', 'delivery', 'order']
 
     def __str__(self):
         return f"{self.user}'s review of {self.delivery}"
@@ -66,7 +71,7 @@ def update_dish_review_save(sender, instance, created, **kwargs):
     if created:
         dish.total_reviews += 1
     if instance.rating:
-        dish.rating_counts[str(instance.rating)] += 1
+        dish.rating_counts[str(int(instance.rating))] += 1
 
     reviews = DishReview.objects.filter(dish=dish)
     average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
@@ -78,7 +83,7 @@ def update_dish_review_delete(sender, instance, **kwargs):
     dish = instance.dish
     dish.total_reviews -= 1
     if instance.rating:
-        dish.rating_counts[str(instance.rating)] -= 1
+        dish.rating_counts[str(int(instance.rating))] -= 1
 
     reviews = DishReview.objects.filter(dish=dish)
     average_rating = reviews.aggregate(Avg('rating'))['rating__avg']

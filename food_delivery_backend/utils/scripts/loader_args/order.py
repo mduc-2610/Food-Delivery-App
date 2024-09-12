@@ -44,7 +44,7 @@ def load_order(
     max_promotions_per_restaurant=50, 
     max_promotions_per_user=40,
     max_deliveries_per_deliverer=100,
-    max_restaurant_carts_per_user=12,
+    max_restaurant_carts_per_user=20,
     max_dishes_per_restaurant_cart=10,
     models_to_update=None,
     map_queryset=None,
@@ -101,46 +101,68 @@ def load_order(
         DeliveryRequest.objects.all().delete()
         order_list = []
         promotion_list = map_queryset.get(Promotion)
+        deliverers = map_queryset.get(Deliverer)
         print(promotion_list)
         for _cart in restaurant_cart_list:
             user_location = _cart.user.locations.filter(is_selected=True).first()
-            print(user_location, pretty=True)
+            # print(user_location, pretty=True)
             order_data = {
                 "cart": _cart,
                 "payment_method": fake.random_element(elements=('Credit Card', 'Paypal', 'Cash on Delivery')),
                 "promotion": random.choice(promotion_list) if random.choice([True, False]) and not promotion_list else None,
                 "discount":  random.uniform(0, 10),
-                "status": fake.random_element(elements=['ACTIVE', 'CANCELLED', 'COMPLETED', 'PENDING']),
+                "status": random.choice(['ACTIVE', 'CANCELLED', 'COMPLETED', 'PENDING']),
                 "rating": random.randint(0, 5)
             }
             order = Order.objects.create(**order_data)
-            order.create_delivery_and_request()
+            if order.status == 'ACTIVE':
+                order.create_delivery_and_request()
+            else:
+                _restaurant = _cart.restaurant
+                _user = _cart.user
+                delivery_address = order.delivery_address()
+                if not delivery_address: continue
+
+                delivery, created_delivery = Delivery.objects.get_or_create(
+                    order=order, 
+                    user=_user,
+                    restaurant=_restaurant,
+                    deliverer=random.choice(deliverers),
+                    defaults={
+                        'pickup_location': _restaurant.basic_info.street_address,
+                        'pickup_latitude': _restaurant.basic_info.latitude,
+                        'pickup_longitude': _restaurant.basic_info.longitude,
+                        'dropoff_location': delivery_address.address,
+                        'dropoff_latitude': delivery_address.latitude,
+                        'dropoff_longitude': delivery_address.longitude,
+                    }
+                )
             order_list.append(order)
             print(f"\tSuccessfully created Order: {order}")
 
-    if Delivery in models_to_update:
-        deliverer_list = list(Deliverer.objects.all())
-        order_list = map_queryset.get(Order)
-        # load_intermediate_model(
-        #     model_class=Delivery,
-        #     primary_field='order',
-        #     related_field='deliverer',
-        #     primary_objects=order_list,
-        #     related_objects=deliverer_list,
-        #     max_items=max_deliveries_per_deliverer,
-        #     attributes={
-        #         "pickup_location": lambda: fake.address(),
-        #         "pickup_latitude": generate_latitude,
-        #         "pickup_longitude": generate_longitude,
-        #         "dropoff_location": lambda: fake.address(),
-        #         "dropoff_latitude": generate_latitude,
-        #         "dropoff_longitude": generate_longitude,
-        #         "status": lambda: random.choice(['FINDING_DRIVER', 'ON_THE_WAY', 'DELIVERED']),
-        #         "estimated_delivery_time": lambda: fake.date_time_this_year(),
-        #         "actual_delivery_time": lambda: fake.date_time_this_year(),
-        #     },
-        #     action=action
-        # )
+    # if Delivery in models_to_update:
+    #     deliverer_list = list(Deliverer.objects.all())
+    #     order_list = map_queryset.get(Order).filter(status="COMPLETED")
+    #     load_intermediate_model(
+    #         model_class=Delivery,
+    #         primary_field='order',
+    #         related_field='deliverer',
+    #         primary_objects=order_list,
+    #         related_objects=deliverer_list,
+    #         max_items=max_deliveries_per_deliverer,
+    #         attributes={
+    #             "pickup_location": lambda: fake.address(),
+    #             "pickup_latitude": generate_latitude,
+    #             "pickup_longitude": generate_longitude,
+    #             "dropoff_location": lambda: fake.address(),
+    #             "dropoff_latitude": generate_latitude,
+    #             "dropoff_longitude": generate_longitude,
+    #             "status": 'DELIVERED',
+    #             "estimated_delivery_time": lambda: fake.date_time_this_year(),
+    #             "actual_delivery_time": lambda: fake.date_time_this_year(),
+    #         },
+    #         action=action
+    #     )
         # load_one_to_many_model(
         #     model_class=Delivery,
         #     primary_field='deliverer',
@@ -162,44 +184,44 @@ def load_order(
         #     action=action
         # )
 
-    if OrderPromotion in models_to_update:
-        order_list = map_queryset.get(Order)
-        promotion_list = map_queryset.get(Promotion)
-        load_intermediate_model(
-            model_class=OrderPromotion,
-            primary_field='order',
-            related_field='promotion',
-            primary_objects=order_list,
-            related_objects=promotion_list,
-            max_items=max_promotions_per_order,
-            action=action
-        )
+    # if OrderPromotion in models_to_update:
+    #     order_list = map_queryset.get(Order)
+    #     promotion_list = map_queryset.get(Promotion)
+    #     load_intermediate_model(
+    #         model_class=OrderPromotion,
+    #         primary_field='order',
+    #         related_field='promotion',
+    #         primary_objects=order_list,
+    #         related_objects=promotion_list,
+    #         max_items=max_promotions_per_order,
+    #         action=action
+    #     )
 
-    if RestaurantPromotion in models_to_update:
-        restaurant_list = list(Restaurant.objects.all())
-        promotion_list = map_queryset.get(Promotion, [])
-        load_intermediate_model(
-            model_class=RestaurantPromotion,
-            primary_field='restaurant',
-            related_field='promotion',
-            primary_objects=restaurant_list,
-            related_objects=promotion_list,
-            max_items=max_promotions_per_restaurant,
-            action=action
-        )
+    # if RestaurantPromotion in models_to_update:
+    #     restaurant_list = list(Restaurant.objects.all())
+    #     promotion_list = map_queryset.get(Promotion, [])
+    #     load_intermediate_model(
+    #         model_class=RestaurantPromotion,
+    #         primary_field='restaurant',
+    #         related_field='promotion',
+    #         primary_objects=restaurant_list,
+    #         related_objects=promotion_list,
+    #         max_items=max_promotions_per_restaurant,
+    #         action=action
+    #     )
 
-    if UserPromotion in models_to_update:
-        user_list = list(User.objects.all())
-        promotion_list = map_queryset.get(Promotion, [])
-        load_intermediate_model(
-            model_class=UserPromotion,
-            primary_field='user',
-            related_field='promotion',
-            primary_objects=user_list,
-            related_objects=promotion_list,
-            max_items=max_promotions_per_user,
-            action=action
-        )
+    # if UserPromotion in models_to_update:
+    #     user_list = list(User.objects.all())
+    #     promotion_list = map_queryset.get(Promotion, [])
+    #     load_intermediate_model(
+    #         model_class=UserPromotion,
+    #         primary_field='user',
+    #         related_field='promotion',
+    #         primary_objects=user_list,
+    #         related_objects=promotion_list,
+    #         max_items=max_promotions_per_user,
+    #         action=action
+    #     )
 
 
 def run(*args):

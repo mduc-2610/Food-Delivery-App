@@ -91,7 +91,7 @@ class DeliveryRequest(models.Model):
         ('DECLINED', 'Declined'),
         ('EXPIRED', 'Expired'),
         ('CANCELLED', 'Cancelled'),
-        ('DONE', 'Done'),
+        ('COMPLETED', 'Completed'),
     ]
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
@@ -107,72 +107,81 @@ class DeliveryRequest(models.Model):
         self.expired_at = calculate_expired_at('10m')
         super().save(*args, **kwargs)
 
-    def accept(self):
-        self._update_status('ACCEPTED')
-        self._update_delivery()
-
-        # self._reassign_nearest_deliverers()
-
-    def decline(self):
-        self._update_status('DECLINED')
-        self._reassign_nearest_deliverers(action='decline')
-
-    def expire(self):
-        self._update_status('EXPIRED')
-        self._reassign_nearest_deliverers(action='decline')
-
-    def cancel(self):
-        self._update_status('CANCELLED')
-        self.delivery.deliverer = None
-        self.delivery.status = 'FINDING_DRIVER'
-        self.delivery.save()
-    
-    def complete(self):
-        deliverer = self.delivery.deliverer
-        deliverer.is_occupied = False
-        deliverer.is_active = True
-        deliverer.accepted_requests = F('accepted_requests') + 1
-        deliverer.save(update_fields=['is_occupied', 'is_active', 'accepted_requests'])
-        
-        self.delivery.status = 'DELIVERED'
-        self.delivery.save()
-        
-        self._update_status('DONE')
-
-
-    def _update_status(self, status):
-        self.status = status
+    def _update_status(self, new_status):
+        old_status = self.status
+        self.status = new_status
         self.responded_at = timezone.now()
         self.save()
 
-    def _update_delivery(self):
+        if new_status == 'ACCEPTED':
+            self._handle_accepted()
+        elif new_status in ['DECLINED', 'EXPIRED']:
+            self._handle_declined_or_expired()
+        elif new_status == 'CANCELLED':
+            self._handle_cancelled()
+        elif new_status == 'COMPLETED':
+            self._handle_complete()
+
+        if new_status in ['ACCEPTED', 'DECLINED', 'EXPIRED'] and old_status == 'PENDING':
+            self.deliverer.total_requests = F('total_requests') + 1
+            self.deliverer.save(update_fields=['total_requests'])
+
+    def _handle_accepted(self):
         self.delivery.deliverer = self.deliverer
         self.delivery.status = 'ON_THE_WAY'
         self.delivery.started_at = timezone.now()
-        self.delivery.deliverer.is_occupied = True
-        self.delivery.deliverer.save()
         self.delivery.save()
+
+        self.deliverer.is_occupied = True
+        self.deliverer.save(update_fields=['is_occupied'])
+
+        self._reassign_nearest_deliverers(action='accept')
+
+    def _handle_declined_or_expired(self):
+        self._reassign_nearest_deliverers(action='decline')
+
+    def _handle_cancelled(self):
+        self.delivery.deliverer = None
+        self.delivery.status = 'FINDING_DRIVER'
+        self.delivery.save()
+
+    def _handle_complete(self):
+        self.deliverer.is_occupied = False
+        self.deliverer.is_active = True
+        self.deliverer.accepted_requests = F('accepted_requests') + 1
+        self.deliverer.save(update_fields=['is_occupied', 'is_active', 'accepted_requests'])
+        
+        self.delivery.status = 'DELIVERED'
+        self.delivery.save()
+
+    def accept(self):
+        self._update_status('ACCEPTED')
+
+    def decline(self):
+        self._update_status('DECLINED')
+
+    def expire(self):
+        self._update_status('EXPIRED')
+
+    def cancel(self):
+        self._update_status('CANCELLED')
+    
+    def complete(self):
+        self._update_status('COMPLETED')
 
     def _reassign_nearest_deliverers(self, action='accept'):
         if action == 'decline':
             available_deliverers = Deliverer.objects.filter(is_active=True, is_occupied=False).exclude(id=self.deliverer.id)
             nearest_deliverer = self._find_nearest_deliverer(self.delivery, available_deliverers)
             if nearest_deliverer:
-                print(nearest_deliverer, pretty=True)
-                instance = DeliveryRequest.objects.create(
+                DeliveryRequest.objects.create(
                     deliverer=nearest_deliverer,
                     delivery=self.delivery
                 )
-                print(instance)
-                self.save()
         else:
             available_deliverers = Deliverer.objects.filter(is_active=True, is_occupied=False)
             for _request in self.deliverer.requests.exclude(id=self.id):
-                """
-                List if delivery
-                """
                 nearest_deliverer = self._find_nearest_deliverer(_request.delivery, available_deliverers)
-                print(_request, pretty=True)
                 if nearest_deliverer:
                     _request.deliverer = nearest_deliverer
                     _request.save()
@@ -191,21 +200,4 @@ class DeliveryRequest(models.Model):
                 nearest_deliverer = deliverer
 
         return nearest_deliverer
-
-
-@receiver(post_save, sender='order.DeliveryRequest')
-def update_delivery_on_accept(sender, instance, **kwargs):
-    if instance.status == 'ACCEPTED':
-        instance.delivery.deliverer = instance.deliverer
-        instance.delivery.status = 'ON_THE_WAY'
-        instance.delivery.save()
-    elif instance.status == 'DECLINED' or instance.status == 'ACCEPTED' or instance.status == 'EXPIRED':
-        instance.deliverer.total_requests += 1
-        instance.deliverer.save()
-    elif instance.delivery.status == "DELIVERED":
-        instance.deliverer.is_occupied = False
-        instance.deliverer.accepted_requests += 1
-        instance.deliverer.save()
-        instance.status = 'DONE' 
-        instance.save()
         

@@ -26,18 +26,26 @@ class DeliveryCard extends StatelessWidget {
   final DeliveryRequest? deliveryRequest;
   final bool noMargin;
   final Delivery? delivery;
+  final bool isTracking;
 
   DeliveryCard({
     Key? key,
     this.deliveryRequest,
     this.noMargin = false,
-    Delivery? delivery
+    this.isTracking = true,
+    Delivery? delivery,
   }) : delivery = deliveryRequest?.delivery ?? delivery;
 
 
   @override
   Widget build(BuildContext context) {
-    final deliveryController = DeliveryController.instance;
+    var deliveryController;
+    try {
+      deliveryController = DeliveryController.instance;
+    }
+    catch(e) {
+
+    }
     return GestureDetector(
       onTap: () {
         // Get.to(() => DeliveryDetailView(delivery: delivery));
@@ -58,7 +66,7 @@ class DeliveryCard extends StatelessWidget {
               SizedBox(height: TSize.spaceBetweenItemsVertical),
               Row(
                 children: [
-                  if(delivery?.status == "FINDING_DRIVER")...[
+                  if(isTracking && delivery?.status == "FINDING_DRIVER")...[
                     Expanded(
                       child: SmallButton(
                         paddingVertical: 0,
@@ -79,11 +87,13 @@ class DeliveryCard extends StatelessWidget {
                   ],
                 ]
               ),
-              SmallButton(
-                text: "Check Route",
-                backgroundColor: TColor.secondary,
-                onPressed: () => deliveryController.handleCheckRoute(deliveryRequest),
-              )
+              if(isTracking)...[
+                SmallButton(
+                  text: "Check Route",
+                  backgroundColor: TColor.secondary,
+                  onPressed: () => deliveryController.handleCheckRoute(deliveryRequest),
+                )
+              ]
 
             ],
           ),

@@ -169,6 +169,59 @@ def load_intermediate_model(
             
     return created_objects
 
+def load_oto_with_more_than_two_fk(
+    model_class,
+    oto_field,
+    related_field_1,
+    related_field_2,
+    max_items,
+    min_items=0,
+    oto_objects=[],
+    related_objects_1=[],
+    related_objects_2=[],
+    attributes={},
+    query_attributes=[],
+    action=None
+):
+    if model_class: 
+        print("________________________________________________________________")
+        print(f"{camel_to_full_upper(model_class.__name__)}:")
+        
+    if not action: action = "delete"
+    created_objects = []
+    if action == "delete":
+        if not isinstance(oto_objects, list):
+            oto_objects = list(oto_objects)
+        if not isinstance(related_objects_1, list):
+            related_objects_1 = list(related_objects_1)
+        if not isinstance(related_objects_2, list):
+            related_objects_2 = list(related_objects_2)
+
+        for _oto_obj in oto_objects:
+            for _ in range(random.randint(min_items, max_items)):
+                data = {
+                    related_field_1: random.choice(related_objects_1),
+                    related_field_2: random.choice(related_objects_2),
+                    **{attr: transform_value(value) for attr, value in attributes.items()}
+                }
+                filter = {
+                    f"{oto_field}": _oto_obj,
+                }
+                created_object, created = model_class.objects.get_or_create(
+                    **filter,
+                    defaults=data
+                )
+                created_objects.append(created_object)
+                print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
+    else:
+        if attributes:
+            for instance in model_class.objects.all():
+                update_attr(instance, **attributes)
+                print(f"\tSuccessfully update {instance}")
+            
+    return created_objects
+
+
 from datetime import timedelta
 from django.utils import timezone
 import calendar
@@ -254,18 +307,50 @@ def camel_to_snake(name, sep='-'):
     return re.sub('([a-z0-9])([A-Z])', fr'\1{sep}\2', name).lower()
 
 def mapping_endpoint(model, type):
-    return f'api/{model._meta.app_label}' + (f'/{camel_to_snake(model.__name__)}' if type == "many" else '')
+    return f'/api/{model._meta.app_label}' + (f'/{camel_to_snake(model.__name__)}' if type == "many" else '')
 
-def get_related_url(request, model, obj, view_name, type):
+def get_base_ip(request):
+    try:
+        return f"{'/'.join(request.build_absolute_uri().split('/')[0: 3])}"
+    except:
+        raise ValueError
+
+def get_related_url(request, model, obj, field, type):
+    if isinstance(field, str):
+        field = model._meta.get_field(field)
+    field = field.name.replace('_', '-')
+
     if request:
-        base_uri = f"{'/'.join(request.build_absolute_uri().split('/')[0: 3])}/" + mapping_endpoint(model, type)
+        base_uri = f"{get_base_ip(request)}" + mapping_endpoint(model, type)
         
+        if type == "many":
+            uri = f"{base_uri}/{obj.pk}/{field}"
+        elif type == "one":
+            uri = f"{base_uri}/{field}/{obj.pk}"
+        else:
+            raise ValueError("Invalid relationship_type. Use 'many' or 'one'.")
+        return uri
+    return None
+
+
+def get_related_url_2(request, model, obj, field, type='one'):
+    if isinstance(field, str):
+        field = model._meta.get_field(field)
+    
+    if field:
+        view_name = field.name.replace('_', '-')
+        related_model = field.model
+        related_model_app_label = related_model._meta.app_label
+        
+        base_uri = f"{get_base_ip(request)}/api/{related_model_app_label}/{camel_to_snake(related_model.__name__, sep='_')}"
+        uri = ""
         if type == "many":
             uri = f"{base_uri}/{obj.pk}/{view_name}"
         elif type == "one":
             uri = f"{base_uri}/{view_name}/{obj.pk}"
         else:
             raise ValueError("Invalid relationship_type. Use 'many' or 'one'.")
+        # print(uri, pretty=True)
         return uri
     return None
 

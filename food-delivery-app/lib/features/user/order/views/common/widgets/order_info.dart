@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_delivery_app/common/widgets/buttons/small_button.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
 import 'package:food_delivery_app/features/user/order/controllers/common/order_info.dart';
+import 'package:food_delivery_app/features/user/order/controllers/history/order_history_detail_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/order.dart';
+import 'package:food_delivery_app/features/user/order/views/rating/order_rating.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
 class OrderInfo extends StatelessWidget {
@@ -158,23 +162,50 @@ class OrderInfo extends StatelessWidget {
 
   // Review Section
   Widget _buildReviewSection(BuildContext context) {
+    final orderHistoryDetailController = OrderHistoryDetailController.instance;
     return Column(
       children: [
-        RatingBarIndicator(
-          itemBuilder: (context, _) => SvgPicture.asset(TIcon.fillStar),
-          itemCount: 5,
-          itemSize: 70,
-          rating: 4,
+        Stack(
+          children: [
+            SmallButton(
+                onPressed: () async {
+                  final result = await Get.to(() => OrderRatingView(), arguments: {
+                    "order": order
+                  }) as Map<String, dynamic>?;
+                    $print(result?["isUpdated"]);
+                  if(result != null && result["isUpdated"] == true) {
+                    await orderHistoryDetailController.initialize();
+                  }
+                },
+                text: "Rating your order"
+            ),
+            if(order?.isReviewed == false)...[
+              Positioned(
+                top: 0,
+                right: 0,
+                child: SvgPicture.asset(
+                  TIcon.notifyDot,
+                ),
+              )
+            ]
+          ],
         ),
-        SizedBox(height: TSize.spaceBetweenSections),
-        TextFormField(
-          decoration: InputDecoration(
-            hintText: 'Type your review ... ',
-            hintStyle: Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(fontSize: TSize.md),
-          ),
-          style: Theme.of(context).textTheme.titleMedium,
-          maxLines: 5,
-        ),
+        // SizedBox(height: TSize.spaceBetweenSections),
+        // RatingBarIndicator(
+        //   itemBuilder: (context, _) => SvgPicture.asset(TIcon.fillStar),
+        //   itemCount: 5,
+        //   itemSize: 70,
+        //   rating: 4,
+        // ),
+        // SizedBox(height: TSize.spaceBetweenSections),
+        // TextFormField(
+        //   decoration: InputDecoration(
+        //     hintText: 'Type your review ... ',
+        //     hintStyle: Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(fontSize: TSize.md),
+        //   ),
+        //   style: Theme.of(context).textTheme.titleMedium,
+        //   maxLines: 5,
+        // ),
       ],
     );
   }

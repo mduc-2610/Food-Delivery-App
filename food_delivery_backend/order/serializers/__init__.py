@@ -14,7 +14,9 @@ from .delivery import (
 )
 from .order import (
     OrderSerializer, 
+    DetailOrderSerializer,
     CreateOrderSerializer,
+    UpdateOrderSerializer,
     OrderCancellationSerializer,
 )
 from .owned_promotion import (

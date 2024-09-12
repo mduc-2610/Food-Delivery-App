@@ -12,6 +12,7 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:food_delivery_app/utils/helpers/map_functions.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 
 class DelivererHomeController extends GetxController {
   static DelivererHomeController get instance => Get.find();
@@ -27,6 +28,7 @@ class DelivererHomeController extends GetxController {
   Rx<LatLng?> currentCoordinate = (null as LatLng?).obs;
   Rx<int> trackingStage = 0.obs;
   Rx<int> polylineIndex = 0.obs;
+  Rx<DateTime?> selectedDate = Rx<DateTime?>(null);
 
   // New properties for route tracking
   RxSet<Marker> markers = <Marker>{}.obs;
@@ -54,19 +56,46 @@ class DelivererHomeController extends GetxController {
     }
   }
 
+  Future<void> filterDeliveriesByDate(DateTime? date) async {
+    selectedDate.value = date;
+    isLoading.value = true;
+    update();
+
+    if (date != null) {
+      final formattedDate = DateFormat('yyyy-MM-dd').format(date);
+      final url = '${deliverer?.deliveries}/?';
+      final [result, info] = await APIService<Delivery>(fullUrl: deliverer?.deliveries ?? '', queryParams: "date=$formattedDate").list();
+      deliveries = result;
+      _nextPage = info["next"];
+    } else {
+      // Reset to initial state
+      await initialize(loadMore: false);
+    }
+
+    isLoading.value = false;
+    update();
+  }
+
+
   String? _nextPage, _nextPage2;
   Future<void> initialize({ bool loadMore = false }) async {
     deliverer = await DelivererService.getDeliverer();
     isOccupied.value = deliverer?.isOccupied ?? false;
     delivererSocket = SocketService<Deliverer>();
     delivererSocket?.connect(id: deliverer?.id);
-    if(_nextPage != null || !loadMore) {
-      var [_result, _info] = await APIService<Delivery>(fullUrl: _nextPage ?? deliverer?.deliveries ?? '').list(next: true);
-      deliveries.addAll(_result);
-      _nextPage = _info["next"];
-      [_result, _info] = await APIService<DeliveryRequest>(fullUrl: _nextPage2 ?? deliverer?.requests ?? '', queryParams: 'status=FINDING_DRIVER').list(next: true);
-      deliveryRequests.addAll(_result);
-      _nextPage2 = _info["next"];
+    if (_nextPage != null || !loadMore) {
+      var url = _nextPage ?? deliverer?.deliveries ?? '';
+      if (selectedDate.value != null) {
+        final formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate.value!);
+        url += '${url.contains('?') ? '&' : '?'}date=$formattedDate';
+      }
+      var [_result, info] = await APIService<Delivery>(fullUrl: url).list(next: true);
+      if (!loadMore) {
+        deliveries = _result;
+      } else {
+        deliveries.addAll(_result);
+      }
+      _nextPage = info["next"];
     }
     if(!loadMore) {
       await Future.delayed(Duration(milliseconds: TTime.init));
@@ -74,6 +103,7 @@ class DelivererHomeController extends GetxController {
     isLoading.value = false;
     update();
   }
+
   void handleIncomingMessage(String message) {
     final decodedMessage = json.decode(message);
     $print("Message: $message");

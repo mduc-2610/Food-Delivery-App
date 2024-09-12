@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.db.models import OneToOneField
-from utils.function import get_related_url
+from utils.function import get_related_url, get_related_url_2
 from django.apps import apps
 
 class CustomRelatedModelSerializer(serializers.ModelSerializer):
@@ -63,7 +63,7 @@ class CustomRelatedModelSerializer(serializers.ModelSerializer):
                 related_serializer_class = self.one_related_serializer_class.get(field)
                 if related_serializer_class != 'primary_related_field':
                     if not related_serializer_class:
-                        data[field] = get_related_url(self.request, self.model, instance, '-'.join(field.split('_')), type='one')
+                        data[field] = get_related_url_2(self.request, self.model, instance, field, type='one')
                     else:
                         data[field] = self.serialize_related_object(related_serializer_class, instance, field, context=self.context)
 
@@ -71,7 +71,7 @@ class CustomRelatedModelSerializer(serializers.ModelSerializer):
             if not isinstance(data.get(field), list):
                 related_serializer_class = self.many_related_serializer_class.get(field)
                 if not related_serializer_class:
-                    data[field] = get_related_url(self.request, self.model, instance, '-'.join(field.split('_')), type='many')
+                    data[field] = get_related_url_2(self.request, self.model, instance, field, type='many')
                 else:
                     if isinstance(related_serializer_class, dict):
                         _context = {**related_serializer_class.get('context', {}), **self.context}
