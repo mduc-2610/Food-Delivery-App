@@ -5,7 +5,7 @@ import 'package:food_delivery_app/common/widgets/buttons/small_button.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
-import 'package:food_delivery_app/features/user/order/controllers/common/order_info.dart';
+import 'package:food_delivery_app/features/user/order/controllers/common/order_info_controller.dart';
 import 'package:food_delivery_app/features/user/order/controllers/history/order_history_detail_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/order.dart';
 import 'package:food_delivery_app/features/user/order/views/rating/order_rating.dart';

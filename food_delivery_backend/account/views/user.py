@@ -14,12 +14,12 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 
 from account.models import (
-    User, OTP, Location,
+    User, OTP, UserLocation,
     Profile, Setting, SecuritySetting
 )
 
 from account.serializers import (
-    UserSerializer, SendOTPSerializer, OTPSerializer, LocationSerializer,
+    UserSerializer, SendOTPSerializer, OTPSerializer, UserLocationSerializer,
     VerifyOTPSerializer, LoginPasswordSerializer, SetPasswordSerializer
 )
 from food.serializers import DishSerializer, DishLikeSerializer
@@ -87,7 +87,7 @@ class UserViewSet(DefaultGenericMixin, OrderFilterMixin, ManyRelatedViewSet):
         'user2_rooms': DirectRoomSerializer,
         'restaurant_carts': RestaurantCartSerializer,
         'carts': RestaurantSerializer,
-        'locations': LocationSerializer,
+        'locations': UserLocationSerializer,
         'orders': OrderSerializer
     }
     many_related = {
@@ -264,6 +264,6 @@ class UserViewSet(DefaultGenericMixin, OrderFilterMixin, ManyRelatedViewSet):
         serializer = self.get_serializer(request.user)
         return response.Response(serializer.data, status=status.HTTP_200_OK)
 
-class LocationViewSet(viewsets.ModelViewSet):
-    queryset = Location.objects.all()
-    serializer_class = LocationSerializer
+class UserLocationViewSet(viewsets.ModelViewSet):
+    queryset = UserLocation.objects.all()
+    serializer_class = UserLocationSerializer

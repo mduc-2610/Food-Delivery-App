@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/data/services/deliverer_service.dart';
 import 'package:food_delivery_app/data/socket_services/socket_service.dart';
+import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/features/authentication/models/deliverer/deliverer.dart';
 import 'package:food_delivery_app/features/user/order/models/delivery.dart';
+import 'package:food_delivery_app/features/user/order/models/order.dart';
+import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/times.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:food_delivery_app/utils/helpers/map_functions.dart';
@@ -22,6 +25,7 @@ class DelivererHomeController extends GetxController {
   var isOccupied = true.obs;
   Deliverer? deliverer;
   DeliveryRequest? currentDeliveryRequest;
+  BasicUser? currentUserAccepted;
   List<Delivery> deliveries = [];
   RxList<DeliveryRequest> deliveryRequests = <DeliveryRequest>[].obs;
   SocketService? delivererSocket;
@@ -34,6 +38,7 @@ class DelivererHomeController extends GetxController {
   RxSet<Marker> markers = <Marker>{}.obs;
   RxSet<Polyline> polylines = <Polyline>{}.obs;
   RxList<LatLng> polylineCoordinates = <LatLng>[].obs;
+  Rx<bool> isLoadingDeliveryRequest = false.obs;
   Timer? movementTimer;
 
   @override
@@ -58,21 +63,17 @@ class DelivererHomeController extends GetxController {
 
   Future<void> filterDeliveriesByDate(DateTime? date) async {
     selectedDate.value = date;
-    isLoading.value = true;
     update();
 
     if (date != null) {
       final formattedDate = DateFormat('yyyy-MM-dd').format(date);
-      final url = '${deliverer?.deliveries}/?';
       final [result, info] = await APIService<Delivery>(fullUrl: deliverer?.deliveries ?? '', queryParams: "date=$formattedDate").list();
       deliveries = result;
       _nextPage = info["next"];
     } else {
-      // Reset to initial state
       await initialize(loadMore: false);
     }
 
-    isLoading.value = false;
     update();
   }
 
@@ -81,7 +82,7 @@ class DelivererHomeController extends GetxController {
   Future<void> initialize({ bool loadMore = false }) async {
     deliverer = await DelivererService.getDeliverer();
     isOccupied.value = deliverer?.isOccupied ?? false;
-    delivererSocket = SocketService<Deliverer>();
+    delivererSocket = SocketService<Deliverer>(handleIncomingMessage: handleIncomingMessage);
     delivererSocket?.connect(id: deliverer?.id);
     if (_nextPage != null || !loadMore) {
       var url = _nextPage ?? deliverer?.deliveries ?? '';
@@ -100,32 +101,49 @@ class DelivererHomeController extends GetxController {
     if(!loadMore) {
       await Future.delayed(Duration(milliseconds: TTime.init));
     }
+    if(_nextPage2 != null || !loadMore) {
+      var url = _nextPage2 ?? deliverer?.requests ?? '';
+      var [_result, info] = await APIService<DeliveryRequest>(fullUrl: url, queryParams: "status=FINDING_DRIVER").list(next: true);
+      if (!loadMore) {
+        deliveryRequests.value = _result;
+      } else {
+        deliveryRequests.addAll(_result);
+      }
+      _nextPage = info["next"];
+    }
     isLoading.value = false;
     update();
   }
 
-  void handleIncomingMessage(String message) {
+  void handleIncomingMessage(String message) async {
     final decodedMessage = json.decode(message);
     $print("Message: $message");
-    if(decodedMessage != null && decodedMessage["delivery_request"] != null) {
-      currentDeliveryRequest = DeliveryRequest.fromJson(decodedMessage["delivery_request"]);
-    }
-    if (decodedMessage != null && decodedMessage["message"] != null) {
-      final messageData = decodedMessage["message"];
-      final _trackingStage = decodedMessage["tracking_stage"];
-      final _polylineIndex = decodedMessage["polyline_index"];
-      if (_trackingStage != null) {
-        trackingStage.value = _trackingStage;
+    if(decodedMessage != null) {
+      $print("FLAG: ${decodedMessage["flag"]}");
+      if(decodedMessage["flag"] != null) {
+        deliveryRequests.insert(0, DeliveryRequest.fromJson(decodedMessage["delivery_request"]));
+        // currentDeliveryRequest = DeliveryRequest.fromJson(decodedMessage["delivery_request"]);
       }
-      if(_polylineIndex != null) {
-        polylineIndex.value = _polylineIndex;
+      if(decodedMessage["delivery_request"] != null && currentDeliveryRequest == null) {
+        currentDeliveryRequest = DeliveryRequest.fromJson(decodedMessage["delivery_request"]);
       }
+      if (decodedMessage["message"] != null) {
+        final messageData = decodedMessage["message"];
+        final _trackingStage = decodedMessage["tracking_stage"];
+        final _polylineIndex = decodedMessage["polyline_index"];
+        if (_trackingStage != null) {
+          trackingStage.value = _trackingStage;
+        }
+        if(_polylineIndex != null) {
+          polylineIndex.value = _polylineIndex;
+        }
 
-      if (messageData["coordinate"] != null) {
-        final newLatitude = messageData["coordinate"][0];
-        final newLongitude = messageData["coordinate"][1];
-        LatLng newDelivererPosition = LatLng(newLatitude, newLongitude);
-        currentCoordinate.value = newDelivererPosition;
+        if (messageData["coordinate"] != null) {
+          final newLatitude = messageData["coordinate"][0];
+          final newLongitude = messageData["coordinate"][1];
+          LatLng newDelivererPosition = LatLng(newLatitude, newLongitude);
+          currentCoordinate.value = newDelivererPosition;
+        }
       }
     }
   }
@@ -133,7 +151,7 @@ class DelivererHomeController extends GetxController {
   Future<void> initializeMarkersAndRoute() async {
     markers.add(await TMapFunction.createMarker(
       'current',
-      avatar: deliverer?.avatar,
+      avatar: deliverer?.avatar ?? TImage.defaultAvatar,
       size: 150,
       borderColor: Colors.blue,
       borderWidth: 0,
@@ -160,7 +178,7 @@ class DelivererHomeController extends GetxController {
 
     markers.add(await TMapFunction.createMarker(
       'drop_off',
-      avatar: delivery?.user?.avatar,
+      avatar: delivery?.user?.avatar ?? TImage.defaultAvatar,
       size: 120,
       borderColor: Colors.red,
       borderWidth: 0,
@@ -185,7 +203,7 @@ class DelivererHomeController extends GetxController {
       coordinates: polylineCoordinates,
     );
 
-    if (!isCheckRoute || currentDeliveryRequest != null) {
+    if (!isCheckRoute && currentDeliveryRequest != null) {
       await startMovingMarkerAlongRoute(deliveryRequest);
     }
 
@@ -212,9 +230,9 @@ class DelivererHomeController extends GetxController {
         timer.cancel();
         return;
       }
-      int index = polylineIndex.value;
-      if (polylineIndex.value == polylineCoordinates.length) index -= 1;
-      LatLng currentPoint = polylineCoordinates[index];
+      if (polylineIndex.value < polylineCoordinates.length) {
+      // if (polylineIndex.value == polylineCoordinates.length) index -= 1;
+      LatLng currentPoint = polylineCoordinates[polylineIndex.value];
 
       if (trackingStage.value == 1 &&
           TMapFunction.isNearLocation(currentPoint, delivery.pickupCoordinate!)) {
@@ -231,7 +249,6 @@ class DelivererHomeController extends GetxController {
         trackingStage.value = 3;
       }
 
-      if (polylineIndex.value < polylineCoordinates.length) {
         LatLng currentLatLng = polylineCoordinates[polylineIndex.value];
         LatLng nextLatLng = polylineCoordinates[polylineIndex.value + (polylineIndex.value == polylineCoordinates.length - 1 ? 0 : 1)];
 
@@ -252,17 +269,17 @@ class DelivererHomeController extends GetxController {
         polylineIndex.value++;
         update();
       } else {
+        timer.cancel();
         final [statusCode, headers, data] = await APIService<DeliveryRequest>(
             fullUrl: deliveryRequest?.complete ?? "").create({}, noBearer: true);
         var x = data?.delivery?.order;
         $print("COMPLETE ${x?.status} ${x?.totalPrice}");
         trackingStage.value = 3;
         delivererSocket?.add({
-          'coordinate': polylineCoordinates[polylineIndex.value],
+          'coordinate': polylineCoordinates[polylineIndex.value - 1],
           'tracking_stage': trackingStage.value,
         });
 
-        timer.cancel();
       }
     });
   }

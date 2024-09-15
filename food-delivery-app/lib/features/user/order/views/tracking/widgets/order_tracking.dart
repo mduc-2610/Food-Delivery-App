@@ -36,6 +36,10 @@ class OrderTracking extends StatelessWidget {
             if(type == OrderTrackingType.user)...[
               Obx(() => _driverInfoCard(context, isFind: controller.deliverer.value == null,)),
               SizedBox(height: TSize.spaceBetweenSections,),
+            ]
+            else...[
+              _userInfoCard(context),
+              SizedBox(height: TSize.spaceBetweenSections,),
             ],
 
             Obx(() => _orderTrackingProgressIndicator(context, stage: forTrackingStage.trackingStage.value)),
@@ -49,7 +53,7 @@ class OrderTracking extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Text(
-                  '10:25',
+                  '${delivery?.formatEstimatedDeliveryTime}',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],
@@ -83,7 +87,7 @@ class OrderTracking extends StatelessWidget {
                     ? onCancel
                     : type == OrderTrackingType.user
                     ? null
-                    : () => controller.handleCompleteOrder(delivery),
+                    : () => controller.handleCompleteOrder(),
                 text: (forTrackingStage.trackingStage.value < 3)
                     ? 'Cancel Order'
                     : type == OrderTrackingType.user
@@ -149,6 +153,71 @@ class OrderTracking extends StatelessWidget {
     );
   }
 
+  Widget _userInfoCard(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Color(0xfffbc972),
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 25,
+            backgroundColor: Colors.orangeAccent.withOpacity(0.8),
+            child:
+            (delivery?.user?.avatar != null)
+            ? ClipRRect(
+              borderRadius: BorderRadius.circular(TSize.borderRadiusCircle),
+              child: Image.network(
+                "${delivery?.user?.avatar}"
+              ),
+            )
+            : Icon(
+              Icons.person,
+              color: Colors.white,
+            )
+          ),
+          SizedBox(width: TSize.spaceBetweenItemsVertical),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${delivery?.user?.name}',
+                  style: Theme.of(context).textTheme.titleLarge,
+                )
+              ],
+            ),
+          ),
+          CircleAvatar(
+            backgroundColor: Color(0xfffcd899),
+            child: IconButton(
+              icon: Icon(Icons.chat, color: TColor.dark),
+              onPressed: () {},
+            ),
+          ),
+          SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
+
+          CircleAvatar(
+            backgroundColor: Color(0xfffcd899),
+            child: IconButton(
+              icon: Icon(Icons.phone, color: TColor.dark),
+              onPressed: () {},
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _driverInfoCard(BuildContext context, {bool isFind = false}) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -173,7 +242,7 @@ class OrderTracking extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          SizedBox(width: 16),
+          SizedBox(width: TSize.spaceBetweenItemsVertical),
           Expanded(
             child: isFind
                 ? TextWithDotAnimation(
@@ -183,15 +252,15 @@ class OrderTracking extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'David Wayne',
+                  '${controller.deliverer.value.basicInfo.giveName} ${controller.deliverer.value.basicInfo.fullName}',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Row(
                   children: [
                     Icon(Icons.star, color: Colors.yellow, size: 16),
                     SizedBox(width: TSize.spaceBetweenItemsSm,),
-                    Text('4.9'),
-                    Text(' · ID 0997125', style: TextStyle(color: Colors.grey)),
+                    Text('${controller.deliverer.value.rating}'),
+                    // Text(' · ID 0997125', style: TextStyle(color: Colors.grey)),
                   ],
                 ),
               ],

@@ -26,7 +26,6 @@ class OrderFilterMixin:
             filter_kwargs = {}
             if self.action == 'restaurant_carts':
                 filter_kwargs['order__delivery'] = None
-            print(filter_kwargs, pretty=True)
             if star_filter:
                 if isinstance(star_filter, str):
                     if star_filter == "ALL":

@@ -34,7 +34,7 @@ class SocketService<T> {
   void connect({String? id}) {
     final String serviceUrl = url(id: id);
     _channel = WebSocketChannel.connect(Uri.parse(serviceUrl));
-    print("CONNECT to $serviceUrl");
+    $print("CONNECT to $serviceUrl");
 
     _isConnected = true; // Mark as connected
 
@@ -44,20 +44,20 @@ class SocketService<T> {
           try {
             await Future.sync(() => handleIncomingMessage!(message));
           } catch (e) {
-            print('Error handling message: $e');
+            $print('Error handling message: $e');
           }
         } else {
           incomingMessage = message;
           $print("Received message: $message");
         }
-        print(message);
+        $print(message);
       },
       onError: (error) {
-        print('WebSocket error: $error');
+        $print('WebSocket error: $error');
         _isConnected = false; // Mark as disconnected on error
       },
       onDone: () {
-        print('WebSocket connection closed');
+        $print('WebSocket connection closed');
         _isConnected = false; // Mark as disconnected when the connection closes
       },
     );

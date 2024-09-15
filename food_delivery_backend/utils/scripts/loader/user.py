@@ -8,7 +8,7 @@ from django.contrib.auth.hashers import make_password
 
 from account.models import (
     User, OTP,
-    Profile, Location, 
+    Profile, UserLocation, 
     Setting, SecuritySetting 
 )
 
@@ -23,7 +23,7 @@ def generate_phone_number():
 def load_user(max_users=100):    
     model_list = [
         User, OTP, Setting, 
-        SecuritySetting, Profile, Location
+        SecuritySetting, Profile, UserLocation
     ]
     
     for model in model_list:
@@ -65,7 +65,7 @@ def load_user(max_users=100):
                 "longitude": generate_longitude(),
                 "is_selected": True if _i == selected_index else False,
             }
-            Location.objects.create(**location_data)
+            UserLocation.objects.create(**location_data)
             print(f"\tSuccessfully created Location for User: {user}")
 
         profile_data = {

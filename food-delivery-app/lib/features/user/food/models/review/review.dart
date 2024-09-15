@@ -24,12 +24,12 @@ class Review {
 
   Review.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        user = BasicUser.fromJson(json['user']),
+        user = json['user'] is String || json['user'] == null ? json['user'] : BasicUser.fromJson(json['user']),
         rating = json['rating'],
         title = json['title'],
         content = json['content'],
-        createdAt = DateTime.parse(json['created_at']),
-        updatedAt = DateTime.parse(json['updated_at']);
+        createdAt = json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
+        updatedAt = json['created_at'] != null ? DateTime.parse(json['updated_at']) : null;
 
   Map<String, dynamic> toJson({bool patch = false}) {
     final Map<String, dynamic> data = {

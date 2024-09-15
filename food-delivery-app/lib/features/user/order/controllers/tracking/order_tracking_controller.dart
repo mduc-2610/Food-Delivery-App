@@ -111,15 +111,13 @@ class OrderTrackingController extends GetxController {
   Future<void> handleIncomingMessage(String message) async {
     $print("CUSTOM: $message");
     final decodedMessage = json.decode(message);
-    if (decodedMessage["delivery_request"] != null) {
-      if (delivererSocket == null) {
-        currentDeliveryRequest = DeliveryRequest.fromJson(decodedMessage["delivery_request"]);
-        currentDelivery = Delivery.fromJson(currentDeliveryRequest?.delivery);
-        deliverer.value = await APIService<Deliverer>().retrieve(currentDelivery?.deliverer ?? '');
-        delivererSocket = SocketService<Deliverer>(handleIncomingMessage: delivererIncomingMessage);
-        delivererSocket?.connect(id: currentDelivery?.deliverer);
-        await addMarkers(currentDelivery);
-      }
+    if (decodedMessage["delivery_request"] != null && delivererSocket == null) {
+      currentDeliveryRequest = DeliveryRequest.fromJson(decodedMessage["delivery_request"]);
+      currentDelivery = currentDeliveryRequest?.delivery;
+      deliverer.value = await APIService<Deliverer>().retrieve(currentDelivery?.deliverer ?? '');
+      delivererSocket = SocketService<Deliverer>(handleIncomingMessage: delivererIncomingMessage);
+      delivererSocket?.connect(id: currentDelivery?.deliverer);
+      await addMarkers(currentDelivery);
       update();
     }
   }

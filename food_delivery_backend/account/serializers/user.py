@@ -7,7 +7,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from account.models import (
-    User, OTP, Location,
+    User, OTP, UserLocation,
     Profile, Setting
 )
 
@@ -18,9 +18,9 @@ from utils.regex_validators import phone_regex, password_regex
 from utils.function import get_related_url 
 from utils.serializers import CustomRelatedModelSerializer
 
-class LocationSerializer(serializers.ModelSerializer):
+class UserLocationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Location
+        model = UserLocation
 
         fields = ['id', 'address', 'latitude', 'longitude', 'name', 'user', 'is_selected']
 
@@ -63,9 +63,8 @@ class UserSerializer(CustomRelatedModelSerializer):
     def get_selected_location(self, obj):
         if hasattr(obj, 'locations') :
             selected_location = obj.locations.filter(is_selected=True).first()
-            print(selected_location, pretty=True)
             if selected_location:
-                return LocationSerializer(selected_location).data
+                return UserLocationSerializer(selected_location).data
             return None
         return None
     

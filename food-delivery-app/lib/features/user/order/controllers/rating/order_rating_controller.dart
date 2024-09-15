@@ -40,15 +40,6 @@ class OrderRatingController extends GetxController with GetSingleTickerProviderS
   RxMap<Dish, dynamic> mapDishTextController = <Dish, dynamic>{}.obs;
 
   int currentTab = 0;
-
-  String? userId;
-  String? orderId;
-  String? delivererId;
-  String? restaurantId;
-  List<Dish> dishes = [];
-  User? user;
-  Deliverer? deliverer;
-  Restaurant? restaurant;
   bool isUpdated = false;
 
 
@@ -127,7 +118,6 @@ class OrderRatingController extends GetxController with GetSingleTickerProviderS
 
   void handleRating(int index) {
     ratingList[currentTab] = index + 1;
-    setTabRated(currentTab);
     update();
   }
 
@@ -163,6 +153,7 @@ class OrderRatingController extends GetxController with GetSingleTickerProviderS
   Future<void> handleSubmitReview() async {
     isUpdated = true;
     update();
+    setTabRated(currentTab);
 
     if(currentTab == 0) {
       final [statusCode, headers, data] = await APIService<Order>().update(order.value?.id, {

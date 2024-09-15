@@ -1,5 +1,5 @@
 # order/views.py
-from rest_framework import viewsets, response
+from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
 
 from order.models import Order, OrderCancellation
@@ -8,6 +8,7 @@ from order.serializers import OrderSerializer, CreateOrderSerializer
 
 from order.serializers import (
     DeliverySerializer, 
+    DeliveryRequestSerializer,
     DetailOrderSerializer,
     UpdateOrderSerializer,
     OrderCancellationSerializer, 
@@ -38,13 +39,18 @@ class OrderViewSet(DefaultGenericMixin, DynamicFilterMixin, OneRelatedViewSet, v
     @action(detail=True, methods=['POST'], url_path='create-delivery-and-request')
     def create_delivery_and_request(self, request, pk=None):
         order = self.get_object()
-        delivery, nearest_deliverer = order.create_delivery_and_request()
-        context = self.get_serializer_context()
+        result = order.create_delivery_and_request()
+        if result:
+            delivery_request, nearest_deliverer = result
+            context = self.get_serializer_context()
 
+            return response.Response({
+                'delivery_request': DeliveryRequestSerializer(delivery_request, context=context).data,
+                'nearest_deliverer': BasicDelivererSerializer(nearest_deliverer).data if nearest_deliverer else None
+            }, status=status.HTTP_201_CREATED)
         return response.Response({
-            'delivery': DeliverySerializer(delivery, context=context).data,
-            'nearest_deliverer': BasicDelivererSerializer(nearest_deliverer).data if nearest_deliverer else None
-        })
+            'message': "No delivery request created"
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 class OrderCancellationViewSet(DefaultGenericMixin, OneRelatedViewSet, viewsets.ModelViewSet):
     queryset = OrderCancellation.objects.all()

@@ -120,8 +120,8 @@ def load_order(
             else:
                 _restaurant = _cart.restaurant
                 _user = _cart.user
-                delivery_address = order.delivery_address()
-                if not delivery_address: continue
+                _delivery_address = order.delivery_address
+                if not _delivery_address: continue
 
                 delivery, created_delivery = Delivery.objects.get_or_create(
                     order=order, 
@@ -132,9 +132,9 @@ def load_order(
                         'pickup_location': _restaurant.basic_info.street_address,
                         'pickup_latitude': _restaurant.basic_info.latitude,
                         'pickup_longitude': _restaurant.basic_info.longitude,
-                        'dropoff_location': delivery_address.address,
-                        'dropoff_latitude': delivery_address.latitude,
-                        'dropoff_longitude': delivery_address.longitude,
+                        'dropoff_location': _delivery_address.address,
+                        'dropoff_latitude': _delivery_address.latitude,
+                        'dropoff_longitude': _delivery_address.longitude,
                     }
                 )
             order_list.append(order)

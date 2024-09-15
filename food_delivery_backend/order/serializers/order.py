@@ -12,7 +12,7 @@ from review.models import (
 )
 from deliverer.models import Deliverer
 
-from account.serializers import LocationSerializer
+from account.serializers import UserLocationSerializer
 from utils.serializers import CustomRelatedModelSerializer
     
 class OrderCancellationSerializer(serializers.ModelSerializer):
@@ -28,7 +28,7 @@ class OrderCancellationSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     cancellation = OrderCancellationSerializer(read_only=True)
-    delivery_address = LocationSerializer(read_only=True)
+    delivery_address = UserLocationSerializer(read_only=True)
     
     class Meta:
         model = Order
@@ -80,7 +80,7 @@ class DetailOrderSerializer(CustomRelatedModelSerializer):
         from order.serializers.basic import BasicRestaurantCartSerializer
         self.one_related_serializer_class = {
             'cart': BasicRestaurantCartSerializer,
-            'delivery_address': LocationSerializer,
+            'delivery_address': UserLocationSerializer,
             'cancellation': OrderCancellationSerializer,
         }
     
@@ -102,14 +102,14 @@ class DetailOrderSerializer(CustomRelatedModelSerializer):
         if hasattr(obj, 'deliverer_review'):
             deliverer_review = obj.deliverer_review
             return DelivererReviewSerializer(deliverer_review, context=self.context).data
-        return None
+        return {}
 
     def get_restaurant_review(self, obj):
         from review.serializers import RestaurantReviewSerializer
         if hasattr(obj, 'restaurant_review'):
             restaurant_review = obj.restaurant_review
             return RestaurantReviewSerializer(restaurant_review, context=self.context).data
-        return None
+        return {}
 
     def get_deliverer(self, obj):
         from deliverer.serializers import BasicDelivererSerializer
@@ -177,7 +177,6 @@ class CreateOrderSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         # if condition:
-        from order.serializers import RestaurantCartSerializer2
         data = OrderSerializer(instance).data
         
         # from order.serializers import RestaurantCartSerializer

@@ -8,9 +8,11 @@ import 'package:food_delivery_app/common/widgets/dialogs/show_confirm_dialog.dar
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
 import 'package:food_delivery_app/features/deliverer/delivery/controllers/delivery/delivery_controller.dart';
+import 'package:food_delivery_app/features/personal/views/profile/profile.dart';
 import 'package:food_delivery_app/features/user/order/models/delivery.dart';
 import 'package:food_delivery_app/features/user/order/views/basket/widgets/order_card.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';
+import 'package:food_delivery_app/features/user/order/views/history/order_history_detail.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
@@ -48,7 +50,16 @@ class DeliveryCard extends StatelessWidget {
     }
     return GestureDetector(
       onTap: () {
-        // Get.to(() => DeliveryDetailView(delivery: delivery));
+        // showModalBottomSheet(
+        //   context: context,
+        //   isScrollControlled: true,
+        //   builder: (context) {
+        //     return OrderHistoryDeta
+        //   }
+        // )
+        Get.to(() => OrderHistoryDetailView(viewType: ViewType.deliverer,), arguments: {
+          "id": deliveryRequest?.delivery?.order?.id ?? delivery?.order?.id
+        });
       },
       child: Card(
         surfaceTintColor: Theme.of(context).appBarTheme.backgroundColor,

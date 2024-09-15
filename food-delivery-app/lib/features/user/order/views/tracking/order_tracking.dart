@@ -80,6 +80,7 @@ class _OrderTrackingViewState extends State<OrderTrackingView> {
                             isScrollControlled: true,
                             builder: (context) {
                               return OrderTracking(
+                                delivery: controller.currentDelivery,
                                 onCancel: controller.handleCancel,
                                 type: OrderTrackingType.user,
                                 controller: controller,

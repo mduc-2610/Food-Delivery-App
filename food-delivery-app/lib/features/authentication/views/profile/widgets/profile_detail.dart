@@ -83,7 +83,10 @@ class _ProfileDetailState extends State<ProfileDetail> {
   Widget _buildProfileForm() {
     return Column(
       children: [
-        ProfilePictureSelection(onPressed: controller!.handleAddImage),
+        ProfilePictureSelection(
+          onPressed: controller!.handleAddImage,
+          avatar: controller?.user?.profile?.avatar,
+        ),
         SizedBox(height: TSize.spaceBetweenSections),
         Obx(() => InternationalPhoneNumberInput(
           onInputChanged: null,

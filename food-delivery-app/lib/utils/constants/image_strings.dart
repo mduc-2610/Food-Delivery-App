@@ -24,6 +24,7 @@ class TImage {
 
   // Login
 
+  static String defaultAvatar = "https://via.placeholder.com/150";
   // Home
   static String hcFood1 = "assets/images/home/hc_food_1.png";
   static String eventBanner1 = "assets/images/home/event_banner_1.png";

@@ -8,15 +8,24 @@ import 'package:food_delivery_app/data/services/token_service.dart';
 import 'package:food_delivery_app/features/authentication/views/login/login.dart';
 import 'package:food_delivery_app/features/authentication/views/profile/widgets/profile_detail.dart';
 import 'package:food_delivery_app/features/personal/views/profile/widgets/personal_setting.dart';
-import 'package:food_delivery_app/features/user/personal/controller/personal_profile_controller.dart';
-import 'package:food_delivery_app/features/user/personal/views/profile/widgets/personal_setting_skeleton.dart';
-import 'package:food_delivery_app/features/user/personal/views/profile/widgets/profile_skeleton.dart';
+import 'package:food_delivery_app/features/personal/controllers/profile/personal_profile_controller.dart';
+import 'package:food_delivery_app/features/personal/views/profile/skeleton/personal_setting_skeleton.dart';
+import 'package:food_delivery_app/features/personal/views/profile/skeleton/profile_skeleton.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
+enum ViewType { user, deliverer, restaurant }
+
 class PersonalProfileView extends StatelessWidget {
+  final ViewType viewType;
+
+  const PersonalProfileView({
+    this.viewType = ViewType.user
+  });
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<PersonalProfileController>(
@@ -43,7 +52,9 @@ class PersonalProfileView extends StatelessWidget {
                           : ListTile(
                         contentPadding: EdgeInsets.zero,
                         leading: CircleAvatar(
-                          backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+                          child: Image.network(
+                            "${controller.user?.profile?.avatar ?? TImage.defaultAvatar}"
+                          ),
                         ),
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +112,9 @@ class PersonalProfileView extends StatelessWidget {
               SliverSizedBox(height: TSize.spaceBetweenItemsVertical),
               SliverToBoxAdapter(
                 child: MainWrapper(
-                  child: Obx(() => controller.isLoading.value ? PersonalSettingSkeleton() : PersonalSetting()),
+                  child: Obx(() => controller.isLoading.value
+                      ? PersonalSettingSkeleton()
+                      : PersonalSetting(viewType: viewType,)),
                 ),
               ),
             ],

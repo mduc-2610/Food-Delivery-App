@@ -49,14 +49,16 @@ class Order(models.Model):
     def total(self):
         return float(self.cart.total_price) + float(self.delivery_fee()) - float(self.discount)
     
+    @property
     def delivery_address(self):
         user = self.cart.user  
         selected_location = user.locations.filter(is_selected=True).first()
         return selected_location
 
     def delivery_fee(self):
-        delivery_address = self.delivery_address()
-        if not self.cart or not delivery_address:
+        print(self.delivery_address, pretty=True)
+        _delivery_address = self.delivery_address
+        if not self.cart or not _delivery_address:
             return decimal.Decimal('0.00')
 
         restaurant_coordinate = Point(
@@ -64,8 +66,8 @@ class Order(models.Model):
             float(self.cart.restaurant.basic_info.longitude)
         )
         user_coordinate = Point(
-            float(delivery_address.latitude),
-            float(delivery_address.longitude),
+            float(_delivery_address.latitude),
+            float(_delivery_address.longitude),
 
         )
         
@@ -83,11 +85,11 @@ class Order(models.Model):
     def create_delivery_and_request(self, create_delivery=False):
         restaurant = self.cart.restaurant
         user = self.cart.user
-        delivery_address = self.delivery_address()
+        _delivery_address = self.delivery_address
         self.status = "ACTIVE"
         self.save()
 
-        if not delivery_address:
+        if not _delivery_address:
             return
 
         delivery, created_delivery = Delivery.objects.get_or_create(
@@ -98,9 +100,9 @@ class Order(models.Model):
                 'pickup_location': restaurant.basic_info.street_address,
                 'pickup_latitude': restaurant.basic_info.latitude,
                 'pickup_longitude': restaurant.basic_info.longitude,
-                'dropoff_location': delivery_address.address,
-                'dropoff_latitude': delivery_address.latitude,
-                'dropoff_longitude': delivery_address.longitude,
+                'dropoff_location': _delivery_address.address,
+                'dropoff_latitude': _delivery_address.latitude,
+                'dropoff_longitude': _delivery_address.longitude,
             }
         )
         nearest_deliverer = DeliveryRequest._find_nearest_deliverer(delivery, Deliverer.objects.filter(is_active=True, is_occupied=False))
@@ -113,10 +115,9 @@ class Order(models.Model):
                     'status': 'PENDING'
                 }
             )
-        print(nearest_deliverer, pretty=True)
-
-        return delivery, nearest_deliverer
-
+            return delivery_request, nearest_deliverer
+        return None
+    
     def save(self, *args, **kwargs):
         if hasattr(self, 'cart') and hasattr(self.cart, 'user'):
             self.user = self.cart.user
@@ -124,7 +125,7 @@ class Order(models.Model):
         super(Order, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f"Order for {self.cart} with total {self.total()}"
+        return f"Order for {self.cart} with total"
 
 
 # @receiver(post_save, sender='order.Order')

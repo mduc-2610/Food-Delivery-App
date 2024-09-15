@@ -135,7 +135,7 @@ class DeliveryRequest(models.Model):
         self.deliverer.is_occupied = True
         self.deliverer.save(update_fields=['is_occupied'])
 
-        self._reassign_nearest_deliverers(action='accept')
+        # self._reassign_nearest_deliverers(action='accept')
 
     def _handle_declined_or_expired(self):
         self._reassign_nearest_deliverers(action='decline')

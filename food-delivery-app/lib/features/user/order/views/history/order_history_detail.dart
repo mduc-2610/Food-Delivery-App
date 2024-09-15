@@ -3,7 +3,8 @@ import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
 import 'package:food_delivery_app/common/widgets/misc/list_check.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
-import 'package:food_delivery_app/features/user/order/controllers/common/order_info.dart';
+import 'package:food_delivery_app/features/personal/views/profile/profile.dart';
+import 'package:food_delivery_app/features/user/order/controllers/common/order_info_controller.dart';
 import 'package:food_delivery_app/features/user/order/controllers/history/order_history_detail_controller.dart';
 import 'package:food_delivery_app/features/user/order/views/basket/widgets/order_card.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/order_info.dart';
@@ -13,6 +14,12 @@ import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:get/get.dart';
 
 class OrderHistoryDetailView extends StatelessWidget {
+  final ViewType viewType;
+
+  const OrderHistoryDetailView({
+    this.viewType = ViewType.user
+  });
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OrderHistoryDetailController>(
@@ -83,14 +90,16 @@ class OrderHistoryDetailView extends StatelessWidget {
                 ],
               ),
               ),
-            bottomNavigationBar: Obx(() =>
+            bottomNavigationBar:
+            viewType == ViewType.user
+            ? Obx(() =>
             controller.isLoading.value
                 ? OrderBottomNavigationBarSkeleton()
                 :  OrderBottomNavigationBar(
               order: controller.order,
               viewType: OrderViewType.history,
-            )
-            ),
+            ))
+            : null,
           );
       },
     );

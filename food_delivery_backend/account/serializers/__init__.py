@@ -1,5 +1,5 @@
 from .user import (
-    UserSerializer, SendOTPSerializer, OTPSerializer, LocationSerializer,
+    UserSerializer, SendOTPSerializer, OTPSerializer, UserLocationSerializer,
     VerifyOTPSerializer, LoginPasswordSerializer, SetPasswordSerializer
 )
 from .basic_user import BasicUserSerializer

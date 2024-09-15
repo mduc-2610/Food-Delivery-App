@@ -34,7 +34,7 @@ class OrderInfoController extends GetxController {
   }
 
   Future<void> initializeUser() async {
-    await controller?.initializeUser();
+    await controller?.initialize();
   }
 
   Future<void> onAddressTapped() async {

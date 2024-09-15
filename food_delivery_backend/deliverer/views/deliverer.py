@@ -15,12 +15,13 @@ from order.serializers import (
     DeliveryRequestSerializer,
 )
 from review.serializers import DelivererReviewSerializer
+from review.mixins import ReviewFilterMixin
 
 from utils.pagination import CustomPagination
 from utils.views import ManyRelatedViewSet
 from utils.mixins import DefaultGenericMixin
 
-class DelivererViewSet(DefaultGenericMixin, ManyRelatedViewSet):
+class DelivererViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewSet):
     queryset = Deliverer.objects.all()
     serializer_class = DelivererSerializer
     many_related_serializer_class = {

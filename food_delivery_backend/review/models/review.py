@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import Avg
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
+from django.apps import apps
 
 class Review(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
@@ -64,85 +65,50 @@ class DeliveryReview(Review):
     def __str__(self):
         return f"{self.user}'s review of {self.delivery}"
     
+def update_review_stats(instance, created=False, deleted=False):
+    if isinstance(instance, DishReview):
+        model_name = 'Dish'
+        related_field = 'dish'
+    elif isinstance(instance, RestaurantReview):
+        model_name = 'Restaurant'
+        related_field = 'restaurant'
+    elif isinstance(instance, DelivererReview):
+        model_name = 'Deliverer'
+        related_field = 'deliverer'
+    else:
+        raise ValueError("Unknown review type")
+
+    related_model = getattr(instance, related_field)
+    
+    if created:
+        related_model.total_reviews += 1
+    elif deleted:
+        related_model.total_reviews = max(0, related_model.total_reviews - 1)
+    
+    if instance.rating:
+        rating_key = str(int(instance.rating))
+        if created:
+            related_model.rating_counts[rating_key] = related_model.rating_counts.get(rating_key, 0) + 1
+        elif deleted:
+            related_model.rating_counts[rating_key] = max(0, related_model.rating_counts.get(rating_key, 0) - 1)
+
+    
+    Review = apps.get_model('review', f'{model_name}Review')
+    reviews = Review.objects.filter(**{related_field: related_model})
+    average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
+    related_model.rating = average_rating or 0  
+
+    related_model.save()
 
 @receiver(post_save, sender=DishReview)
-def update_dish_review_save(sender, instance, created, **kwargs):
-    dish = instance.dish
-    if created:
-        dish.total_reviews += 1
-    if instance.rating:
-        dish.rating_counts[str(int(instance.rating))] += 1
-
-    reviews = DishReview.objects.filter(dish=dish)
-    average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
-    dish.rating = average_rating
-    dish.save()
+@receiver(post_save, sender=RestaurantReview)
+@receiver(post_save, sender=DelivererReview)
+def update_review_save(sender, instance, created, **kwargs):
+    update_review_stats(instance, created=created)
 
 @receiver(post_delete, sender=DishReview)
-def update_dish_review_delete(sender, instance, **kwargs):
-    dish = instance.dish
-    dish.total_reviews -= 1
-    if instance.rating:
-        dish.rating_counts[str(int(instance.rating))] -= 1
-
-    reviews = DishReview.objects.filter(dish=dish)
-    average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
-    dish.rating = average_rating
-    dish.save()
-
-"""
-"""
-
-@receiver(post_save, sender=RestaurantReview)
-def update_restaurant_review_save(sender, instance, created, **kwargs):
-    restaurant = instance.restaurant
-    if created:
-        restaurant.total_reviews += 1
-    if instance.rating:
-        restaurant.rating_counts[str(instance.rating)] += 1
-
-    reviews = RestaurantReview.objects.filter(restaurant=restaurant)
-    average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
-    restaurant.rating = average_rating
-    restaurant.save()
-
 @receiver(post_delete, sender=RestaurantReview)
-def update_restaurant_review_delete(sender, instance, **kwargs):
-    restaurant = instance.restaurant
-    restaurant.total_reviews -= 1
-    if instance.rating:
-        restaurant.rating_counts[str(instance.rating)] -= 1
-
-    reviews = RestaurantReview.objects.filter(restaurant=restaurant)
-    average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
-    restaurant.rating = average_rating
-    restaurant.save()
-
-"""
-"""
-
-@receiver(post_save, sender=DelivererReview)
-def update_deliverer_review_save(sender, instance, created, **kwargs):
-    deliverer = instance.deliverer
-    if created:
-        deliverer.total_reviews += 1
-    if instance.rating:
-        deliverer.rating_counts[str(instance.rating)] += 1
-
-    reviews = DelivererReview.objects.filter(deliverer=deliverer)
-    average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
-    deliverer.rating = average_rating
-    deliverer.save()
-
 @receiver(post_delete, sender=DelivererReview)
-def update_deliverer_review_delete(sender, instance, **kwargs):
-    deliverer = instance.deliverer
-    deliverer.total_reviews -= 1
-    if instance.rating:
-        deliverer.rating_counts[str(instance.rating)] -= 1
-
-    reviews = DelivererReview.objects.filter(deliverer=deliverer)
-    average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
-    deliverer.rating = average_rating
-    deliverer.save()
+def update_review_delete(sender, instance, **kwargs):
+    update_review_stats(instance, deleted=True)
 

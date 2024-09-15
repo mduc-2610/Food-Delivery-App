@@ -6,6 +6,7 @@ import "package:food_delivery_app/features/deliverer/delivery/views/delivery/del
 import "package:food_delivery_app/features/notification/views/notification.dart";
 import "package:food_delivery_app/features/deliverer/home/views/home/home.dart";
 import "package:food_delivery_app/features/restaurant/personal/views/profile/profile.dart";
+import "package:food_delivery_app/features/personal/views/profile/profile.dart";
 import "package:food_delivery_app/utils/constants/icon_strings.dart";
 import "package:food_delivery_app/utils/constants/sizes.dart";
 import "package:get/get.dart";
@@ -23,9 +24,9 @@ class _DelivererMenuRedirectionState extends State<DelivererMenuRedirection> {
   Widget build(BuildContext context) {
     List<Widget> viewList = [
       HomeView(),
-      DeliveryScreen(),
+      DeliveryView(),
       NotificationView(),
-      ProfileView(),
+      PersonalProfileView(viewType: ViewType.deliverer,),
     ];
     final MenuBarController controller = Get.put(MenuBarController(ls: viewList), tag: "Deliverer");
     return CMenuBar(
@@ -41,7 +42,7 @@ class _DelivererMenuRedirectionState extends State<DelivererMenuRedirection> {
             iconSize: TSize.iconXl,
             elevation: 0,
             onTap: () {
-              Get.to(() => DeliveryScreen());
+              Get.to(() => DeliveryView());
             },
             backgroundColor: Colors.transparent,
           ),

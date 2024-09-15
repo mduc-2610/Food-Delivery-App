@@ -77,6 +77,15 @@ class DelivererConsumer(AsyncWebsocketConsumer):
             # 'polyline_index': message.get('polyline_index'),
         }))
 
+    async def notify_new_request(self, event):
+        message = event['message']
+        print("RECEIVE FLAG: ", message.get('flag'), pretty=True)
+        await self.send(text_data=json.dumps({
+            'flag': message.get('flag'),
+            'delivery_request': message.get('delivery_request'),
+            'nearest_deliverer': message.get('nearest_deliverer'),
+        }))
+
     @database_sync_to_async
     def set_deliverer_active_status(self, is_active):
         try:

@@ -8,7 +8,7 @@ from django.contrib.auth.hashers import make_password
 
 from account.models import (
     User, OTP,
-    Profile, Location, 
+    Profile, UserLocation, 
     Setting, SecuritySetting 
 )
 from restaurant.models import *
@@ -46,19 +46,26 @@ def run(mode=None, *args):
     available_deliverers = Deliverer.objects.filter(is_active=True, is_occupied=False)
     print(restaurant)
     
-    result = _find_nearest_deliverer(restaurant, available_deliverers)
-    if result:
-        print(f"Deliverer ID: {result.id}")
-        print(f"User: {result.user.id} - {result.user.phone_number} - {result.user.profile.name}")
+    # result = _find_nearest_deliverer(restaurant, available_deliverers)
+    # if result:
+    #     print(f"Deliverer ID: {result.id}")
+    #     print(f"User: {result.user.id} - {result.user.phone_number} - {result.user.profile.name}")
 
     result = DeliveryRequest.objects.all().order_by('-created_at').first()
     if result:
+        latest_order = result.delivery.order
         print('Total price', result.delivery.order.total_price(), pretty=True)
         result = result.deliverer
         print(f"Deliverer ID: {result.id}")
         print(f"User: {result.user.id} - {result.user.phone_number} - {result.user.profile.name}")
-    order = Order.objects.get(id="330550f8-5e16-49af-ac32-150b1d366d0f")
-    print(order.status)
+
+        latest_request_from_deliverer = result.requests.all()[0]
+        _order = latest_request_from_deliverer.delivery.order
+        print(_order, latest_order, pretty=True, sep="\n")
+
+    x = (1, 2)
+    a, b = x
+    print(a, b, pretty=True)
     # print([1][0:])
     # users = Profile.objects.all()
     # for user in users:

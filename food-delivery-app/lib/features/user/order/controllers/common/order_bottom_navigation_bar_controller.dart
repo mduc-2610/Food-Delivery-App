@@ -1,9 +1,10 @@
 import 'package:food_delivery_app/common/widgets/dialogs/show_confirm_dialog.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/features/authentication/models/deliverer/deliverer.dart';
+import 'package:food_delivery_app/features/user/food/views/restaurant/restaurant_detail.dart';
 import 'package:food_delivery_app/features/user/menu_redirection.dart';
 import 'package:food_delivery_app/features/user/order/controllers/basket/order_basket_controller.dart';
-import 'package:food_delivery_app/features/user/order/controllers/common/order_info.dart';
+import 'package:food_delivery_app/features/user/order/controllers/common/order_info_controller.dart';
 import 'package:food_delivery_app/features/user/order/controllers/history/order_history_detail_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/delivery.dart';
 import 'package:food_delivery_app/features/user/order/views/location/order_location.dart';
@@ -37,7 +38,9 @@ class OrderBottomNavigationBarController extends GetxController {
 
   Future<void> reorder() async {
     if (order?.status == "COMPLETED") {
-      print("Reordering...");
+      Get.to(() => RestaurantDetailView(), arguments: {
+        "id": order?.restaurant?.id
+      });
     }
   }
 
@@ -52,14 +55,15 @@ class OrderBottomNavigationBarController extends GetxController {
         final [statusCode, headers, data] = await APIService<Order>(
           endpoint: 'order/order/${order?.id}/create-delivery-and-request',
         ).create({}, noBearer: true, noFromJson: true);
-        final delivery = Delivery.fromJson(data["delivery"]);
-        // final nearestDeliverer = Deliverer.fromJson(data["nearest_deliverer"]);
-        await Get.to(() => OrderTrackingView(), arguments: {
-          'id': delivery.order.id,
-        });
-        await controller.initialize();
-
-        $print("GET BACK ${controller.order?.status}");
+        if(statusCode == 200 || statusCode == 201) {
+          final deliveryRequest = DeliveryRequest.fromJson(data["delivery_request"]);
+          final nearestDeliverer = Deliverer.fromJson(data["nearest_deliverer"]);
+          await Get.to(() => OrderTrackingView(), arguments: {
+            'id': deliveryRequest.delivery.order.id,
+          });
+          await controller.initialize();
+          $print("GET BACK ${controller.order?.status}");
+        }
 
       }
       onAccept();
@@ -72,21 +76,33 @@ class OrderBottomNavigationBarController extends GetxController {
         final [statusCode, headers, data] = await APIService<Order>(
           endpoint: 'order/order/${order?.id}/create-delivery-and-request',
         ).create({}, noBearer: true, noFromJson: true);
-        final delivery = Delivery.fromJson(data["delivery"]);
-        Get.offAll(UserMenuRedirection());
-        showConfirmDialog(
-          context,
-          title: "Successfully ordered",
-          description: "You can track your order in order history",
-          onAccept: () {
-            Get.to(() => OrderTrackingView(), arguments: {
-              'id': delivery.order.id,
+        if(statusCode == 200 || statusCode == 201) {
+          final deliveryRequest = DeliveryRequest.fromJson(data["delivery_request"]);
+          final nearestDeliverer = Deliverer.fromJson(data["nearest_deliverer"]);
+          if(controller is OrderBasketController) {
+            $print("add flag");
+            controller.orderSocket.add({
+              "flag": "new_delivery_request",
+              "deliverer_id": nearestDeliverer.id,
+              "delivery_request": deliveryRequest,
+              "nearest_deliverer": nearestDeliverer,
             });
-          },
-          accept: "Check",
-          decline: "Later",
-          declineButtonColor: TColor.secondary
-        );
+          }
+          Get.offAll(UserMenuRedirection());
+          showConfirmDialog(
+            context,
+            title: "Successfully ordered",
+            description: "You can track your order in order history",
+            onAccept: () {
+              Get.to(() => OrderTrackingView(), arguments: {
+                'id': deliveryRequest.delivery.order.id,
+              });
+            },
+            accept: "Check",
+            decline: "Later",
+            declineButtonColor: TColor.secondary
+          );
+        }
       }
       showConfirmDialog(context, onAccept: onAccept,
         title: "Are you sure?",

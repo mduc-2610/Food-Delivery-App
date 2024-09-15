@@ -1,7 +1,7 @@
 import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/features/authentication/models/account/setting.dart';
 import 'package:get/get.dart';
-import 'package:food_delivery_app/features/user/personal/controller/personal_profile_controller.dart';
+import 'package:food_delivery_app/features/personal/controllers/profile/personal_profile_controller.dart';
 
 class PersonalSecurityController extends GetxController {
   final PersonalProfileController _personalProfileController = PersonalProfileController.instance;

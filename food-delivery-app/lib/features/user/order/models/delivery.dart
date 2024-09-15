@@ -72,6 +72,10 @@ class Delivery {
     return LatLng(dropOffLatitude, dropOffLongitude);
   }
 
+  String get formatEstimatedDeliveryTime {
+    return THelperFunction.formatTime(estimatedDeliveryTime ?? DateTime.now());
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -101,6 +105,7 @@ class DeliveryRequest {
   final String? id;
   final dynamic deliverer;
   final dynamic delivery;
+  final dynamic user;
   final String? status;
   final DateTime? expiredAt;
   final DateTime? createdAt;
@@ -114,6 +119,7 @@ class DeliveryRequest {
     this.id,
     this.deliverer,
     this.delivery,
+    this.user,
     this.status,
     this.expiredAt,
     this.createdAt,
@@ -132,6 +138,9 @@ class DeliveryRequest {
         delivery = json['delivery'] == null || json['delivery'] is String
             ? json['delivery']
             : Delivery.fromJson(json['delivery']),
+        user = json['user'] == null || json['user'] is String
+            ? json['user']
+            : BasicUser.fromJson(json['user']),
         status = json['status'],
         expiredAt = json['expired_at'] != null ? DateTime.parse(json['expired_at']) : null,
         createdAt = DateTime.parse(json['created_at']),

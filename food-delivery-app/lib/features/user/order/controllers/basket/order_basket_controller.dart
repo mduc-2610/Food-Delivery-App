@@ -2,6 +2,7 @@
 import 'package:food_delivery_app/common/controllers/list/food_list_controller.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/data/services/user_service.dart';
+import 'package:food_delivery_app/data/socket_services/socket_service.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/features/user/food/controllers/restaurant/restaurant_detail_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
@@ -14,14 +15,25 @@ class OrderBasketController extends GetxController {
   static OrderBasketController get instance => Get.find();
   final restaurantDetailController = RestaurantDetailController.instance;
   final foodListController = FoodListController.instance;
+  SocketService? orderSocket;
 
   Rx<bool> isLoading = true.obs;
   Order? order;
+
   @override
   void onInit() {
     super.onInit();
+    orderSocket = SocketService<Order>();
+    orderSocket?.connect();
     initialize();
   }
+
+  @override
+  void onClose() {
+    orderSocket?.disconnect();
+    super.onClose();
+  }
+
 
   Future<void> initialize() async {
     isLoading.value = true;

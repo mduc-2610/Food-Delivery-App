@@ -107,7 +107,7 @@ class OTP(models.Model):
     def __str__(self):
         return f"{self.user} - {self.code}"
     
-class Location(models.Model):
+class UserLocation(models.Model):
     id = models.UUIDField(db_index=True, primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey("account.User", on_delete=models.CASCADE, related_name="locations")
     name = models.TextField(max_length=200, blank=True, null=True, default="Home")

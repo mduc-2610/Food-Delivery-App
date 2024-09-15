@@ -90,6 +90,10 @@ class THelperFunction {
     return DateFormat(format).format(date);
   }
 
+  static String formatTime(DateTime date, { String format = 'HH:mm:ss' }) {
+    return DateFormat(format).format(date);
+  }
+
   static DateTime? parseDateNormalize(String? dateStr) {
     if (dateStr == null) return null;
 

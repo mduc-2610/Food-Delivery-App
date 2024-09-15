@@ -9,19 +9,23 @@ import 'package:food_delivery_app/features/personal/views/security/personal_secu
 import 'package:food_delivery_app/features/personal/views/term_of_service/personal_term_of_service.dart';
 import 'package:food_delivery_app/features/user/order/views/location/order_location.dart';
 import 'package:food_delivery_app/features/user/payment/views/payment/payment_list.dart';
-import 'package:food_delivery_app/features/user/personal/controller/personal_profile_controller.dart';
+import 'package:food_delivery_app/features/personal/controllers/profile/personal_profile_controller.dart';
+import 'package:food_delivery_app/features/personal/views/profile/profile.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
+
 class PersonalSetting extends StatefulWidget {
   final List<String> exclude;
   final List<String> include;
+  final ViewType viewType;
 
   const PersonalSetting({
     super.key,
     this.exclude = const [],
     this.include = const [],
+    this.viewType = ViewType.user,
   });
 
   @override
@@ -53,6 +57,17 @@ class _PersonalSettingState extends State<PersonalSetting> {
     final setting = _personalProfileController.setting;
     return Column(
       children: [
+        if(widget.viewType == ViewType.deliverer)...[
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(Icons.delivery_dining_rounded),
+            title: Text('Register information'),
+            trailing: Icon(TIcon.arrowForward),
+            onTap: () {
+              Get.to(OrderLocationSelectView());
+            },
+          ),
+        ],
         if (shouldInclude('location')) ...[
           ListTile(
             contentPadding: EdgeInsets.zero,

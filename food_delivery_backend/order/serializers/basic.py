@@ -6,12 +6,12 @@ from order.models import (
     RestaurantCart,
 )
 
-from account.serializers import LocationSerializer
+from account.serializers import UserLocationSerializer
 from order.serializers.cart import RestaurantCartDishSerializer
 from restaurant.serializers import BasicRestaurantSerializer
 
 class BasicOrderSerializer(serializers.ModelSerializer):
-    delivery_address = LocationSerializer(read_only=True)
+    delivery_address = UserLocationSerializer(read_only=True)
 
     class Meta:
         model = Order
