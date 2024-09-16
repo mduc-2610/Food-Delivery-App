@@ -51,7 +51,7 @@ class _OrderHistoryViewState extends State<OrderHistoryView> {
                   return ListView.builder(
                     controller: controller.scrollController,
                     itemCount: controller.isLoading.value
-                        ? 5
+                        ? 6
                         : controller.orders.length,
                     itemBuilder: (context, index) {
                       if (controller.isLoading.value) {
@@ -74,7 +74,7 @@ class _OrderHistoryViewState extends State<OrderHistoryView> {
 class OrderHistoryListSkeleton extends StatelessWidget {
   final int length;
   const OrderHistoryListSkeleton({
-    this.length = 5,
+    this.length = 10,
     super.key
   });
 
@@ -82,7 +82,7 @@ class OrderHistoryListSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        childCount: 5,
+        childCount: length,
             (context, index) {
           return OrderHistoryCardSkeleton();
         },

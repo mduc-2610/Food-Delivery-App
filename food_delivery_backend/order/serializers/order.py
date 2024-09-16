@@ -80,7 +80,7 @@ class DetailOrderSerializer(CustomRelatedModelSerializer):
         from order.serializers.basic import BasicRestaurantCartSerializer
         self.one_related_serializer_class = {
             'cart': BasicRestaurantCartSerializer,
-            'delivery_address': UserLocationSerializer,
+            # 'delivery_address': UserLocationSerializer,
             'cancellation': OrderCancellationSerializer,
         }
     
@@ -89,6 +89,7 @@ class DetailOrderSerializer(CustomRelatedModelSerializer):
     restaurant_review = serializers.SerializerMethodField()
     deliverer = serializers.SerializerMethodField()
     restaurant = serializers.SerializerMethodField()
+    delivery_address = UserLocationSerializer(read_only=True)
     
     def get_dish_reviews(self, obj):
         from review.serializers import DishReviewSerializer
@@ -134,6 +135,7 @@ class DetailOrderSerializer(CustomRelatedModelSerializer):
             'promotion', 
             'dish_reviews',
             'deliverer_review',
+            'delivery_address',
             'restaurant_review',
             'delivery_fee', 
             'discount', 

@@ -65,6 +65,6 @@ class OrderLocationController extends GetxController {
           ), patch: true
       );
     }
-    Get.back();
+    Get.back(result: true);
   }
 }

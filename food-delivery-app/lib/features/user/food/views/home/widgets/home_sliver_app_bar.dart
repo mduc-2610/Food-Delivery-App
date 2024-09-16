@@ -37,7 +37,9 @@ class HomeSliverAppBar extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  "Select your location  ",
+                  "${_controller.user?.selectedLocation?.address ?? "Select your location  "}",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.primary),
                 ),
                 Icon(TIcon.arrowForward, size: TSize.iconSm, color: TColor.primary,),

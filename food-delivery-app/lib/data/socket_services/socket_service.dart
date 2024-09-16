@@ -8,8 +8,8 @@ class SocketService<T> {
   WebSocketChannel? _channel;
   final String? endpoint;
   String? incomingMessage;
-  Function(String)? handleIncomingMessage; // Can be either Future<void> or normal void function
-  bool _isConnected = false; // Connection state flag
+  Function(String)? handleIncomingMessage;
+  bool _isConnected = false;
 
   SocketService({
     this.endpoint,
@@ -36,7 +36,7 @@ class SocketService<T> {
     _channel = WebSocketChannel.connect(Uri.parse(serviceUrl));
     $print("CONNECT to $serviceUrl");
 
-    _isConnected = true; // Mark as connected
+    _isConnected = true;
 
     _channel?.stream.listen(
           (message) async {
@@ -54,16 +54,16 @@ class SocketService<T> {
       },
       onError: (error) {
         $print('WebSocket error: $error');
-        _isConnected = false; // Mark as disconnected on error
+        _isConnected = false;
       },
       onDone: () {
         $print('WebSocket connection closed');
-        _isConnected = false; // Mark as disconnected when the connection closes
+        _isConnected = false;
       },
     );
   }
 
-  bool get isConnected => _isConnected; // Getter to check connection status
+  bool get isConnected => _isConnected;
 
   void add(dynamic data) {
     if (data != null) {
@@ -74,7 +74,7 @@ class SocketService<T> {
   void disconnect() {
     if (_channel != null) {
       $print("DISCONNECT");
-      _isConnected = false; // Mark as disconnected when disconnecting manually
+      _isConnected = false;
       _channel?.sink.close();
     }
   }

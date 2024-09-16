@@ -115,7 +115,7 @@ class APIConstant {
       case UserSecuritySetting:
         return 'account/security-setting';
       case UserLocation:
-        return 'account/location';
+        return 'account/user-location';
       case Me:
         return 'account/user/me';
 
