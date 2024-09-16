@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/data/services/token_service.dart';
-import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/features/authentication/models/auth/token.dart';
 import 'package:food_delivery_app/features/authentication/views/login/login.dart';
+import 'package:food_delivery_app/features/deliverer/registration/views/first/registration_first_step.dart';
+import 'package:food_delivery_app/features/deliverer/registration/views/registration_step.dart';
+import 'package:food_delivery_app/features/restaurant/registration/views/registration_tab.dart';
 import 'package:food_delivery_app/features/user/menu_redirection.dart';
 import 'package:food_delivery_app/features/user/order/views/location/widgets/location.dart';
 import 'package:food_delivery_app/main.reflectable.dart';
@@ -61,7 +62,7 @@ class _MyAppState extends State<MyApp> {
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
       themeMode: ThemeMode.light,
-      home: page,
+      home: RegistrationStepView(),
     );
   }
 }

@@ -26,6 +26,10 @@ class BaseMessage {
     this.latitude,
     this.longitude,
     this.createdAt,
+    /*
+      Retrieve, List will be BaseVideo and BaseImage
+      Create, Update(patch) will be XFile and toFormData will be MultipartFile
+    */
     this.images = const [],
     this.videos = const [],
   });
