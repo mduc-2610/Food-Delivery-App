@@ -45,7 +45,7 @@ def load_restaurant(
         restaurant_list = load_normal_model(
             model_class=Restaurant,
             max_items=max_restaurants,
-            attributes={"user": lambda: user_list.pop(random.randint(0, len(user_list) - 1))},
+            attributes={"user": lambda: user_list.pop(random.randint(0, len(user_list) - 1))} if action == "delete" else {},
             action=action
         )    
 
@@ -131,8 +131,8 @@ def load_restaurant(
                 "email": fake.email(),
                 "phone_number": generate_phone_number(),
                 "other_phone_number": generate_phone_number(),
-                "id_front_image": fake.image_url(),
-                "id_back_image": fake.image_url(),
+                "citizen_identification_front": fake.image_url(),
+                "citizen_identification_back": fake.image_url(),
                 "business_registration_image": fake.image_url()
             }
             representative = None

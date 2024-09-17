@@ -1,12 +1,15 @@
+import 'package:dio/dio.dart';
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 
 @reflector
 @jsonSerializable
 class DelivererOtherInfo {
   final String? occupation;
   final String? details;
-  final String? judicialRecord;
+  final dynamic judicialRecord;
 
   DelivererOtherInfo({
     this.occupation,
@@ -23,8 +26,18 @@ class DelivererOtherInfo {
     return {
       'occupation': occupation,
       'details': details,
-      'judicial_record': judicialRecord,
+      'judicial_record': judicialRecord is XFile ? judicialRecord.path : judicialRecord,
     };
+  }
+
+  Future<MultipartFile?> get multiPartJudicialRecord => THelperFunction.convertXToMultipartFile(judicialRecord, mediaType: 'jpeg');
+
+  Future<FormData> toFormData() async {
+    return FormData.fromMap({
+      'occupation': occupation,
+      'details': details,
+      'judicial_record': await multiPartJudicialRecord,
+    });
   }
 
   @override

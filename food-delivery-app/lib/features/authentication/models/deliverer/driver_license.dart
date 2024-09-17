@@ -7,66 +7,61 @@ import 'package:image_picker/image_picker.dart';
 @reflector
 @jsonSerializable
 class DelivererDriverLicense {
-  final dynamic licenseFront;
-  final dynamic licenseBack;
+  final dynamic driverLicenseFront;
+  final dynamic driverLicenseBack;
+  final dynamic motorcycleRegistrationCertificateFront;
+  final dynamic motorcycleRegistrationCertificateBack;
   final String? vehicleType;
   final String? licensePlate;
-  final String? registrationCertificate;
 
   DelivererDriverLicense({
-    this.licenseFront,
-    this.licenseBack,
+    this.driverLicenseFront,
+    this.driverLicenseBack,
+    this.motorcycleRegistrationCertificateFront,
+    this.motorcycleRegistrationCertificateBack,
     this.vehicleType,
     this.licensePlate,
-    this.registrationCertificate,
   });
 
   DelivererDriverLicense.fromJson(Map<String, dynamic> json)
-      : licenseFront = json['license_front'],
-        licenseBack = json['license_back'],
+      : driverLicenseFront = json['driver_license_front'],
+        driverLicenseBack = json['driver_license_back'],
+        motorcycleRegistrationCertificateFront = json['motorcycle_registration_certificate_front'],
+        motorcycleRegistrationCertificateBack = json['motorcycle_registration_certificate_back'],
         vehicleType = json['vehicle_type'],
-        licensePlate = json['license_plate'],
-        registrationCertificate = json['registration_certificate'];
+        licensePlate = json['license_plate'];
 
   Map<String, dynamic> toJson() {
     return {
-      'license_front': licenseFront is XFile ? licenseFront.path : licenseFront,
-      'license_back': licenseBack is XFile ? licenseBack.path : licenseBack,
+      'driver_license_front': driverLicenseFront is XFile ? driverLicenseFront.path : driverLicenseFront,
+      'driver_license_back': driverLicenseBack is XFile ? driverLicenseBack.path : driverLicenseBack,
+      'motorcycle_registration_certificate_front': motorcycleRegistrationCertificateFront is XFile ? motorcycleRegistrationCertificateFront.path : motorcycleRegistrationCertificateFront,
+      'motorcycle_registration_certificate_back': motorcycleRegistrationCertificateBack is XFile ? motorcycleRegistrationCertificateBack.path : motorcycleRegistrationCertificateBack,
       'vehicle_type': vehicleType,
       'license_plate': licensePlate,
-      'registration_certificate': registrationCertificate,
     };
   }
 
-  Future<MultipartFile?> get multiPartLicenseFront async {
-    if (licenseFront is XFile) {
-      return MultipartFile.fromFile(
-        (licenseFront as XFile).path,
-        filename: (licenseFront as XFile).name,
-        contentType: MediaType('image', 'jpeg'),
-      );
-    }
-    return null;
-  }
+  Future<MultipartFile?> get multiPartDriverLicenseFront
+    => THelperFunction.convertXToMultipartFile(driverLicenseFront, mediaType: 'jpeg');
 
-  Future<MultipartFile?> get multiPartLicenseBack async {
-    if (licenseBack is XFile) {
-      return MultipartFile.fromFile(
-        (licenseBack as XFile).path,
-        filename: (licenseBack as XFile).name,
-        contentType: MediaType('image', 'jpeg'),
-      );
-    }
-    return null;
-  }
+  Future<MultipartFile?> get multiPartDriverLicenseBack
+    => THelperFunction.convertXToMultipartFile(driverLicenseBack, mediaType: 'jpeg');
+
+  Future<MultipartFile?> get multiPartRegistrationCertificateFront
+    => THelperFunction.convertXToMultipartFile(motorcycleRegistrationCertificateFront, mediaType: 'jpeg');
+
+  Future<MultipartFile?> get multiPartRegistrationCertificateBack
+    => THelperFunction.convertXToMultipartFile(motorcycleRegistrationCertificateBack, mediaType: 'jpeg');
 
   Future<FormData> toFormData() async {
     return FormData.fromMap({
       'vehicle_type': vehicleType,
       'license_plate': licensePlate,
-      'registration_certificate': registrationCertificate,
-      'license_front': await multiPartLicenseFront,
-      'license_back': await multiPartLicenseBack,
+      'driver_license_front': await multiPartDriverLicenseFront,
+      'driver_license_back': await multiPartDriverLicenseBack,
+      'motorcycle_registration_certificate_front': await multiPartRegistrationCertificateFront,
+      'motorcycle_registration_certificate_back': await multiPartRegistrationCertificateBack,
     });
   }
 

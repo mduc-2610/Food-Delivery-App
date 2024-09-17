@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
       themeMode: ThemeMode.light,
-      home: RegistrationStepView(),
+      home: RegistrationTabView(),
     );
   }
 }

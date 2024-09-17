@@ -6,8 +6,17 @@ class DetailInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = DetailInfo
         fields = [
-            'id', 'restaurant', 'keywords', 'description', 'avatar_image', 
-            'cover_image', 'facade_image', 'restaurant_type', 'cuisine', 
-            'specialty_dishes', 'serving_times', 'target_audience', 
+            'id', 
+            'restaurant', 
+            'keywords', 
+            'description', 
+            'avatar_image', 
+            'cover_image', 
+            'facade_image', 
+            'restaurant_type', 
+            'cuisine', 
+            'specialty_dishes', 
+            'serving_times', 
+            'target_audience', 
             'purpose'
         ]

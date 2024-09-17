@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 
 @reflector
 @jsonSerializable
@@ -7,9 +10,9 @@ class RestaurantDetailInfo {
   final Map<String, dynamic>? openingHours;
   final String? keywords;
   final String? description;
-  final String? avatarImage;
-  final String? coverImage;
-  final String? facadeImage;
+  final dynamic avatarImage;
+  final dynamic coverImage;
+  final dynamic facadeImage;
   final String? restaurantType;
   final String? cuisine;
   final String? specialtyDishes;
@@ -54,9 +57,9 @@ class RestaurantDetailInfo {
       'opening_hours': openingHours,
       'keywords': keywords,
       'description': description,
-      'avatar_image': avatarImage,
-      'cover_image': coverImage,
-      'facade_image': facadeImage,
+      'avatar_image': avatarImage is XFile ? avatarImage.path : avatarImage,
+      'cover_image': coverImage is XFile ? coverImage.path : coverImage,
+      'facade_image': facadeImage is XFile ? facadeImage.path : facadeImage,
       'restaurant_type': restaurantType,
       'cuisine': cuisine,
       'specialty_dishes': specialtyDishes,
@@ -65,6 +68,33 @@ class RestaurantDetailInfo {
       'restaurant_category': restaurantCategory,
       'purpose': purpose,
     };
+  }
+
+  Future<MultipartFile?> get multiPartAvatarImage
+    => THelperFunction.convertXToMultipartFile(avatarImage, mediaType: 'jpeg');
+
+  Future<MultipartFile?> get multiPartCoverImage
+    => THelperFunction.convertXToMultipartFile(coverImage, mediaType: 'jpeg');
+
+  Future<MultipartFile?> get multiPartFacadeImage
+    => THelperFunction.convertXToMultipartFile(facadeImage, mediaType: 'jpeg');
+
+  Future<FormData> toFormData() async {
+    return FormData.fromMap({
+      'opening_hours': openingHours,
+      'keywords': keywords,
+      'description': description,
+      'avatar_image': await multiPartAvatarImage,
+      'cover_image': await multiPartCoverImage,
+      'facade_image': await multiPartFacadeImage,
+      'restaurant_type': restaurantType,
+      'cuisine': cuisine,
+      'specialty_dishes': specialtyDishes,
+      'serving_times': servingTimes,
+      'target_audience': targetAudience,
+      'restaurant_category': restaurantCategory,
+      'purpose': purpose,
+    });
   }
 
   @override

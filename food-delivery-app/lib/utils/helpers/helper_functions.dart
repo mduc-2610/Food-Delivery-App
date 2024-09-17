@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart' as dio;
+import 'package:http_parser/http_parser.dart';
 import 'package:food_delivery_app/common/widgets/bars/snack_bar.dart';
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/constants/enums.dart';
-import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:reflectable/mirrors.dart';
 import 'package:stack_trace/stack_trace.dart';
-import 'package:flutter/material.dart';
 
 class THelperFunction {
   static Color? getColor(String value) {
@@ -92,6 +92,22 @@ class THelperFunction {
 
   static String formatTime(DateTime date, { String format = 'HH:mm:ss' }) {
     return DateFormat(format).format(date);
+  }
+
+  static Future<dio.MultipartFile?> convertXToMultipartFile(dynamic file,
+      {
+        String? mediaType
+      }) async {
+    if (file is XFile) {
+      return dio.MultipartFile.fromFile(
+        file.path,
+        filename: file.name,
+        contentType: (mediaType != null)
+            ? MediaType('image', mediaType)
+            : null,
+      );
+    }
+    return null;
   }
 
   static DateTime? parseDateNormalize(String? dateStr) {

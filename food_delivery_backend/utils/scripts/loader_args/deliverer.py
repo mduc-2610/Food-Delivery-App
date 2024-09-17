@@ -98,11 +98,12 @@ def load_deliverer(
             model_class=DriverLicense,
             max_items=0,
             attributes={
-                "license_front": lambda: fake.image_url(),
-                "license_back": lambda: fake.image_url(),
+                "driver_license_front": lambda: fake.image_url(),
+                "driver)license_back": lambda: fake.image_url(),
+                "motorcycle_registration_certificate_front": lambda: fake.image_url(),
+                "motorcycle_registration_certificate_back": lambda: fake.image_url(),
                 "vehicle_type": lambda: fake.word(),
                 "license_plate": lambda: fake.license_plate(),
-                "registration_certificate": lambda: fake.image_url()
             },
             oto_field='deliverer',
             oto_objects=deliverer_list,
