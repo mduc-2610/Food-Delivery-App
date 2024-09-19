@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 class DottedBorder extends StatelessWidget {
   final Color color;
@@ -7,7 +9,7 @@ class DottedBorder extends StatelessWidget {
 
   const DottedBorder({
     Key? key,
-    required this.color,
+    this.color = TColor.secondary,
     required this.strokeWidth,
     required this.child,
   }) : super(key: key);
@@ -16,7 +18,8 @@ class DottedBorder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: color, width: strokeWidth, style: BorderStyle.solid),
+        border: Border.all(color: color, width: strokeWidth, style: BorderStyle.solid, ),
+        borderRadius: BorderRadius.circular(TSize.borderRadiusSm),
       ),
       child: child,
     );

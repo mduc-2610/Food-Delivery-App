@@ -12,7 +12,6 @@ class RegistrationDetailInfo extends StatefulWidget {
 }
 
 class _RegistrationDetailInfoState extends State<RegistrationDetailInfo> {
-  // Status of each day (open or closed)
   Map<String, bool> isOpen = {
     'Chủ Nhật': true,
     'Thứ 2': true,
@@ -23,7 +22,6 @@ class _RegistrationDetailInfoState extends State<RegistrationDetailInfo> {
     'Thứ 7': true,
   };
 
-  // Store opening and closing times
   Map<String, TimeOfDayRange> operatingHours = {
     'Chủ Nhật': TimeOfDayRange(start: TimeOfDay(hour: 9, minute: 0), end: TimeOfDay(hour: 22, minute: 0)),
     'Thứ 2': TimeOfDayRange(start: TimeOfDay(hour: 9, minute: 0), end: TimeOfDay(hour: 22, minute: 0)),
@@ -121,9 +119,9 @@ class _RegistrationDetailInfoState extends State<RegistrationDetailInfo> {
             child: isOpen[day]!
                 ? Row(
               children: [
-                _buildTimePicker(day, true), // Opening time
+                _buildTimePicker(day, true),
                 Text(' - '),
-                _buildTimePicker(day, false), // Closing time
+                _buildTimePicker(day, false),
               ],
             )
                 : Text('Đóng cửa', style: TextStyle(color: Colors.grey)),
@@ -133,7 +131,6 @@ class _RegistrationDetailInfoState extends State<RegistrationDetailInfo> {
     );
   }
 
-  // Time picker for opening or closing time
   Widget _buildTimePicker(String day, bool isStartTime) {
     TimeOfDay time = isStartTime ? operatingHours[day]!.start : operatingHours[day]!.end;
 

@@ -61,6 +61,7 @@ dependencies:
   flutter_polyline_points: ^2.1.0
   loading_progress_indicator: any
   geolocator: ^9.0.1
+  photo_view: ^0.14.0
 
   # Icons
   iconsax: ^0.0.8
