@@ -6,25 +6,23 @@ import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:get/get.dart';
 import 'package:food_delivery_app/common/widgets/buttons/small_button.dart';
 import 'package:food_delivery_app/common/widgets/registration/dotted_border.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:photo_view/photo_view.dart';
-import 'package:photo_view/photo_view_gallery.dart';
 
 class RegistrationDocumentField extends StatelessWidget {
   final String label;
   final bool isSingleImage;
   final int crossAxisCount;
-  final VoidCallback onTapAdd;
+  late final RegistrationDocumentFieldController controller;
 
   RegistrationDocumentField({
     Key? key,
     required this.label,
-    required this.onTapAdd,
     this.isSingleImage = true,
     this.crossAxisCount = 3,
-  }) : super(key: key);
+    RegistrationDocumentFieldController? controller
+  }) {
+    this.controller = controller ?? Get.put(RegistrationDocumentFieldController());
+  }
 
-  final RegistrationDocumentFieldController controller = Get.put(RegistrationDocumentFieldController());
   @override
   Widget build(BuildContext context) {
     return Padding(

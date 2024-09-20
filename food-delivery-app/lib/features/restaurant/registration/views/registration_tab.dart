@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/features/restaurant/registration/views/widgets/registration_basic_info.dart';
-import 'package:food_delivery_app/features/restaurant/registration/views/widgets/registration_bottom_navigation_bar.dart';
+import 'package:food_delivery_app/common/widgets/registration/registration_bottom_navigation_bar.dart';
 import 'package:food_delivery_app/features/restaurant/registration/views/widgets/registration_detail_info.dart';
 import 'package:food_delivery_app/features/restaurant/registration/views/widgets/registration_email_login.dart';
 import 'package:food_delivery_app/features/restaurant/registration/views/widgets/registration_menu_delivery.dart';
@@ -38,7 +38,6 @@ class RegistrationTabView extends StatelessWidget {
             RegistrationPayment()
           ],
         ),
-        bottomNavigationBar: RegistrationBottomNavigationBar(),
       ),
     );
   }

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/features/deliverer/registration/views/first/widgets/registration_activity_info.dart';
 import 'package:food_delivery_app/features/deliverer/registration/views/first/widgets/registration_basic_info.dart';
-import 'package:food_delivery_app/features/deliverer/registration/views/first/widgets/registration_bottom_navigation_bar.dart';
 import 'package:food_delivery_app/features/deliverer/registration/views/first/widgets/registration_driver_license.dart';
 import 'package:food_delivery_app/features/deliverer/registration/views/first/widgets/registration_emergency_contact.dart';
 import 'package:food_delivery_app/features/deliverer/registration/views/first/widgets/registration_other_info.dart';
@@ -69,7 +68,6 @@ class RegistrationFirstStepView extends StatelessWidget {
             RegistrationOtherInfo()
           ],
         ),
-        bottomNavigationBar: RegistrationBottomNavigationBar(),
       ),
     );
   }

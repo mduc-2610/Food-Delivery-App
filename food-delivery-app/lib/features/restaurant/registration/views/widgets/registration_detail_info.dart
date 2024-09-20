@@ -1,102 +1,88 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/features/restaurant/registration/controllers/registration_detail_info.dart';
+import 'package:get/get.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/registration/registration_bottom_navigation_bar.dart';
 import 'package:food_delivery_app/common/widgets/registration/registration_document_field.dart';
 import 'package:food_delivery_app/common/widgets/registration/registration_text_field.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
-import 'package:food_delivery_app/utils/device/device_utility.dart';
-import 'package:get/get.dart';
 
-class RegistrationDetailInfo extends StatefulWidget {
-  @override
-  _RegistrationDetailInfoState createState() => _RegistrationDetailInfoState();
-}
-
-class _RegistrationDetailInfoState extends State<RegistrationDetailInfo> {
-  Map<String, bool> isOpen = {
-    'Chủ Nhật': true,
-    'Thứ 2': true,
-    'Thứ 3': false,
-    'Thứ 4': true,
-    'Thứ 5': true,
-    'Thứ 6': true,
-    'Thứ 7': true,
-  };
-
-  Map<String, TimeOfDayRange> operatingHours = {
-    'Chủ Nhật': TimeOfDayRange(start: TimeOfDay(hour: 9, minute: 0), end: TimeOfDay(hour: 22, minute: 0)),
-    'Thứ 2': TimeOfDayRange(start: TimeOfDay(hour: 9, minute: 0), end: TimeOfDay(hour: 22, minute: 0)),
-    'Thứ 3': TimeOfDayRange(start: TimeOfDay(hour: 9, minute: 0), end: TimeOfDay(hour: 22, minute: 0)),
-    'Thứ 4': TimeOfDayRange(start: TimeOfDay(hour: 9, minute: 0), end: TimeOfDay(hour: 22, minute: 0)),
-    'Thứ 5': TimeOfDayRange(start: TimeOfDay(hour: 9, minute: 0), end: TimeOfDay(hour: 22, minute: 0)),
-    'Thứ 6': TimeOfDayRange(start: TimeOfDay(hour: 9, minute: 0), end: TimeOfDay(hour: 22, minute: 0)),
-    'Thứ 7': TimeOfDayRange(start: TimeOfDay(hour: 9, minute: 0), end: TimeOfDay(hour: 22, minute: 0)),
-  };
-
+class RegistrationDetailInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(RegistrationDetailInfoController());
+
     return Scaffold(
       body: MainWrapper(
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: TSize.spaceBetweenItemsVertical,),
-          
-              Text(
-                "*Thông tin quán - Chi Tiết",
-                style: Get.textTheme.titleSmall?.copyWith(color: Colors.red),
-              ),
-              MainWrapper(
-                child: Column(
-                  children: isOpen.keys.map((day) {
-                    return _buildDayRow(day);
-                  }).toList(),
+          child: Form(
+            key: controller.formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: TSize.spaceBetweenItemsVertical),
+
+                Text(
+                  "*Thông tin quán - Chi Tiết",
+                  style: Get.textTheme.titleSmall?.copyWith(color: Colors.red),
                 ),
-              ),
-          
-              RegistrationTextField(
-                label: 'Tu khoa tim kiem',
-                onChanged: (x) {},
-              ),
-              SizedBox(height: TSize.spaceBetweenItemsVertical),
-          
-              RegistrationTextField(
-                label: 'Mieu ta ve quan',
-                onChanged: (x) {},
-                maxLines: 5,
-                maxLength: 156,
-              ),
-              SizedBox(height: TSize.spaceBetweenItemsVertical),
+                MainWrapper(
+                  child: Column(
+                    children: controller.isOpen.keys.map((day) {
+                      return _buildDayRow(controller, day);
+                    }).toList(),
+                  ),
+                ),
 
-              RegistrationDocumentField(
-                label: "Anh dai dien quan",
-                onTapAdd: () {
-                },
-              ),
-              SizedBox(height: TSize.spaceBetweenItemsVertical),
+                // Text Fields
+                RegistrationTextField(
+                  label: 'Từ khóa tìm kiếm',
+                  controller: controller.keywordController,
+                ),
+                SizedBox(height: TSize.spaceBetweenItemsVertical),
 
-              RegistrationDocumentField(
-                label: "Anh bia",
-                onTapAdd: () {
-                },
-              ),
-              SizedBox(height: TSize.spaceBetweenItemsVertical),
+                RegistrationTextField(
+                  label: 'Miêu tả về quán',
+                  controller: controller.descriptionController,
+                  maxLines: 5,
+                  maxLength: 156,
+                ),
+                SizedBox(height: TSize.spaceBetweenItemsVertical),
 
-              RegistrationDocumentField(
-                label: "Anh mat tien quan",
-                onTapAdd: () {
-                },
-              ),
-              SizedBox(height: TSize.spaceBetweenItemsVertical),
+                // Document Upload Fields
+                RegistrationDocumentField(
+                  label: "Ảnh đại diện quán",
+                  controller: controller.avatarImageController,
+                ),
+                SizedBox(height: TSize.spaceBetweenItemsVertical),
 
-            ],
+                RegistrationDocumentField(
+                  label: "Ảnh bìa",
+                  controller: controller.coverImageController,
+                ),
+                SizedBox(height: TSize.spaceBetweenItemsVertical),
+
+                RegistrationDocumentField(
+                  label: "Ảnh mặt tiền quán",
+                  controller: controller.frontViewController,
+                ),
+              ],
+            ),
           ),
         ),
+      ),
+      bottomNavigationBar: RegistrationBottomNavigationBar(
+        onSave: () {
+          // Save logic here
+        },
+        onContinue: () {
+          // Continue logic here
+        },
       ),
     );
   }
 
-  Widget _buildDayRow(String day) {
+  Widget _buildDayRow(RegistrationDetailInfoController controller, String day) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -105,55 +91,48 @@ class _RegistrationDetailInfoState extends State<RegistrationDetailInfo> {
             flex: 2,
             child: Text(day, style: TextStyle(fontSize: 16)),
           ),
-          Switch(
-            value: isOpen[day]!,
+          Obx(() => Switch(
+            value: controller.isOpen[day]!.value,
             onChanged: (value) {
-              setState(() {
-                isOpen[day] = value;
-              });
+              controller.isOpen[day]!.value = value;
             },
-          ),
+          )),
           SizedBox(width: TSize.spaceBetweenItemsHorizontal),
           Expanded(
             flex: 3,
-            child: isOpen[day]!
+            child: Obx(() => controller.isOpen[day]!.value
                 ? Row(
               children: [
-                _buildTimePicker(day, true),
+                _buildTimePicker(controller, day, true),
                 Text(' - '),
-                _buildTimePicker(day, false),
+                _buildTimePicker(controller, day, false),
               ],
             )
                 : Text('Đóng cửa', style: TextStyle(color: Colors.grey)),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildTimePicker(String day, bool isStartTime) {
-    TimeOfDay time = isStartTime ? operatingHours[day]!.start : operatingHours[day]!.end;
+  Widget _buildTimePicker(RegistrationDetailInfoController controller, String day, bool isStartTime) {
+    final time = isStartTime
+        ? controller.operatingHours[day]!.value.start
+        : controller.operatingHours[day]!.value.end;
 
     return InkWell(
       onTap: () async {
         TimeOfDay? pickedTime = await showTimePicker(
-          context: context,
+          context: Get.context!,
           initialTime: time,
         );
         if (pickedTime != null) {
-          setState(() {
-            if (isStartTime) {
-              operatingHours[day] = TimeOfDayRange(
-                start: pickedTime,
-                end: operatingHours[day]!.end,
-              );
-            } else {
-              operatingHours[day] = TimeOfDayRange(
-                start: operatingHours[day]!.start,
-                end: pickedTime,
-              );
-            }
-          });
+          if (isStartTime) {
+            controller.setOperatingHours(day, pickedTime, controller.operatingHours[day]!.value.end);
+          } else {
+            controller.setOperatingHours(day, controller.operatingHours[day]!.value.start, pickedTime);
+          }
         }
       },
       child: Container(
@@ -163,18 +142,10 @@ class _RegistrationDetailInfoState extends State<RegistrationDetailInfo> {
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
-          time.format(context),
+          time.format(Get.context!),
           style: TextStyle(fontSize: 16),
         ),
       ),
     );
   }
-}
-
-// A simple helper class to store start and end times
-class TimeOfDayRange {
-  final TimeOfDay start;
-  final TimeOfDay end;
-
-  TimeOfDayRange({required this.start, required this.end});
 }

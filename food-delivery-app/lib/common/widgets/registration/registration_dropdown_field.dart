@@ -7,6 +7,7 @@ class RegistrationDropdownField extends StatelessWidget {
   final List<String> items;
   final void Function(String?) onChanged;
   final String hintText;
+  final String? value;
 
   const RegistrationDropdownField({
     Key? key,
@@ -14,6 +15,7 @@ class RegistrationDropdownField extends StatelessWidget {
     required this.items,
     required this.onChanged,
     this.hintText = 'Chọn',
+    this.value,
   }) : super(key: key);
 
   @override
@@ -42,6 +44,7 @@ class RegistrationDropdownField extends StatelessWidget {
               child: Text(item),
             ))
                 .toList(),
+            value: (items.contains(value)) ? value : null, // Ensure value is valid
             onChanged: onChanged,
           ),
         ],

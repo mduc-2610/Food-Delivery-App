@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/utils/validators/validators.dart';
 import 'package:get/get.dart';
 
 class RegistrationTextField extends StatefulWidget {
   final String label;
   final String hintText;
-  final void Function(String) onChanged;
   final int maxLines;
   final int? maxLength;
-  final TextEditingController? controller;
+  final TextEditingController controller;
+  final String? Function(String?)? validator;
 
   RegistrationTextField({
     Key? key,
     required this.label,
-    required this.onChanged,
+    required this.controller,
     this.hintText = "Nhập",
     this.maxLines = 1,
     this.maxLength,
-    this.controller,
+    this.validator,
   }) : super(key: key);
 
   @override
@@ -24,7 +25,28 @@ class RegistrationTextField extends StatefulWidget {
 }
 
 class _RegistrationTextFieldState extends State<RegistrationTextField> {
-  int inputLength = 0;
+  late int inputLength;
+  String? Function(String?)? validator;
+
+  @override
+  void initState() {
+    super.initState();
+    validator = widget.validator ?? TValidator.validateTextField;
+    inputLength = widget.controller.text.length;
+    widget.controller.addListener(_updateInputLength);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_updateInputLength);
+    super.dispose();
+  }
+
+  void _updateInputLength() {
+    setState(() {
+      inputLength = widget.controller.text.length;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,19 +63,13 @@ class _RegistrationTextFieldState extends State<RegistrationTextField> {
           TextFormField(
             controller: widget.controller,
             decoration: InputDecoration(
-              counterText: (widget.maxLength != null) ? "${inputLength}/${widget.maxLength}" : "",
+              counterText: (widget.maxLength != null) ? "$inputLength/${widget.maxLength}" : "",
               border: OutlineInputBorder(),
-              hintText: "${widget.hintText}",
+              hintText: widget.hintText,
             ),
-            onChanged: (value) {
-              // Update the input length
-              setState(() {
-                inputLength = value.length;
-              });
-              widget.onChanged(value);
-            },
             maxLines: widget.maxLines,
             maxLength: widget.maxLength,
+            validator: validator,
           ),
         ],
       ),

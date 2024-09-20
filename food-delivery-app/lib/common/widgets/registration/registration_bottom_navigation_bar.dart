@@ -5,7 +5,14 @@ import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 class RegistrationBottomNavigationBar extends StatelessWidget {
-  const RegistrationBottomNavigationBar({super.key});
+  final VoidCallback onSave;
+  final VoidCallback onContinue;
+
+  const RegistrationBottomNavigationBar({
+    required this.onSave,
+    required this.onContinue,
+    super.key
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +25,7 @@ class RegistrationBottomNavigationBar extends StatelessWidget {
               children: [
                 Expanded(
                   child: MainButton(
-                    onPressed: () {},
+                    onPressed: onSave,
                     text: "Luu",
                     backgroundColor: TColor.secondary,
                     borderColor: TColor.secondary,
@@ -27,7 +34,7 @@ class RegistrationBottomNavigationBar extends StatelessWidget {
                 SizedBox(width: 16),
                 Expanded(
                   child: MainButton(
-                    onPressed: () {},
+                    onPressed: onContinue,
                     text: "Tiep theo",
                   ),
                 )
