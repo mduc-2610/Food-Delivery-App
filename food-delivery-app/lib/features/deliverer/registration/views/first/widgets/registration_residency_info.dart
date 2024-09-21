@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/registration/registration_bottom_navigation_bar.dart';
+import 'package:food_delivery_app/common/widgets/registration/registration_dropdown_field.dart';
 import 'package:food_delivery_app/common/widgets/registration/registration_text_field.dart';
 import 'package:food_delivery_app/features/deliverer/registration/controllers/first/registration_residency_info.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,7 @@ class RegistrationResidencyInfo extends StatelessWidget {
             Obx(() => _buildTaxNumberSection(controller)),
             RegistrationTextField(
               label: "Email",
-              controller: TextEditingController(),
+              controller: controller.emailController,
             ),
             const SizedBox(height: 20),
           ],
@@ -58,17 +59,36 @@ class RegistrationResidencyInfo extends StatelessWidget {
                 style: TextStyle(color: Colors.black, fontSize: 14),
               ),
               CupertinoSwitch(
-                value: controller.isSameAsCCCD.value,
-                onChanged: controller.toggleIsSameAsCCCD,
+                value: controller.isSameAsCI.value,
+                onChanged: controller.toggleIsSameAsCI,
               ),
             ],
           ),
           const SizedBox(height: 16),
-          if (!controller.isSameAsCCCD.value) ...[
-            _buildTextField('Tỉnh/Thành phố', controller.cityController),
-            _buildTextField('Quận/Huyện', controller.districtController),
-            _buildTextField('Phường/Xã', controller.wardController),
-            _buildTextField('Địa chỉ', controller.addressController),
+          if (!controller.isSameAsCI.value) ...[
+            Obx(() => RegistrationDropdownField(
+              label: 'Tỉnh/Thành phố thường trú (trên CCCD)',
+              onChanged: controller.setResidentCity,
+              value: controller.city.value,
+              items: ["Hà Nội", "TP.HCM", "Đà Nẵng"],
+            )),
+            Obx(() => RegistrationDropdownField(
+              label: 'Quận/Huyện thường trú (trên CCCD)',
+              onChanged: controller.setResidentDistrict,
+              value: controller.district.value,
+              items: ["Quận 1", "Quận 2", "Quận 3"],
+            )),
+            Obx(() => RegistrationDropdownField(
+              label: 'Phường/Xã thường trú (trên CCCD)',
+              onChanged: controller.setResidentWard,
+              value: controller.ward.value,
+              items: ["Phường 1", "Phường 2", "Phường 3"],
+            )),
+            RegistrationTextField(
+              hintText: "0 / 255",
+              label: "Địa chỉ thường trú (trên CCCD)",
+              controller: controller.addressController,
+            ),
           ]
         ],
       ),

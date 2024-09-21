@@ -7,7 +7,7 @@ def other_info_image_upload_path(instance, filename):
     deliverer = instance.deliverer
     now = timezone.now()
     return os.path.join(
-        'deliverer'
+        'deliverer',
         'judicial_record',
         now.strftime("%Y/%m/%d"), 
         str(deliverer.id), 

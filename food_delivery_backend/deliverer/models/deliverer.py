@@ -3,6 +3,10 @@ import uuid
 import random
 from django.db import models
 from django.conf import settings
+from utils.function import (
+    generate_latitude, 
+    generate_longitude,
+)
 
 def default_rating_counts(): 
     return {
@@ -50,6 +54,9 @@ class Deliverer(models.Model):
             raise AttributeError(f"{attr} is not a valid attribute")
 
     def save(self, *args, **kwargs):
+        if not self.current_latitude or not self.current_longitude:
+            self.current_latitude = generate_latitude()
+            self.current_longitude = generate_longitude()
         if not self.avatar:
             deliverer_avatar_folder_path = os.path.join(settings.MEDIA_ROOT, "avatar/deliverer")
 

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
@@ -7,7 +9,8 @@ import 'package:image_picker/image_picker.dart';
 @reflector
 @jsonSerializable
 class RestaurantDetailInfo {
-  final Map<String, dynamic>? openingHours;
+  String? restaurant;
+  final Map<String, dynamic>? operatingHours;
   final String? keywords;
   final String? description;
   final dynamic avatarImage;
@@ -22,7 +25,8 @@ class RestaurantDetailInfo {
   final String? purpose;
 
   RestaurantDetailInfo({
-    this.openingHours,
+    this.restaurant,
+    this.operatingHours,
     this.keywords,
     this.description,
     this.avatarImage,
@@ -38,7 +42,8 @@ class RestaurantDetailInfo {
   });
 
   RestaurantDetailInfo.fromJson(Map<String, dynamic> json)
-      : openingHours = json['opening_hours'],
+      : restaurant = json['restaurant'],
+        operatingHours = json['operating_hours'] ,
         keywords = json['keywords'],
         description = json['description'],
         avatarImage = json['avatar_image'],
@@ -52,9 +57,21 @@ class RestaurantDetailInfo {
         restaurantCategory = json['restaurant_category'],
         purpose = json['purpose'];
 
-  Map<String, dynamic> toJson() {
-    return {
-      'opening_hours': openingHours,
+  Map<String, dynamic> get convertOperatingHours {
+    Map<String, dynamic> json = {};
+    operatingHours?.forEach((day, ranges) {
+      json[day] = ranges.map((range) => {
+        'open': '${range.start.hour.toString().padLeft(2, '0')}:${range.start.minute.toString().padLeft(2, '0')}',
+        'close': '${range.end.hour.toString().padLeft(2, '0')}:${range.end.minute.toString().padLeft(2, '0')}',
+      }).toList();
+    });
+    return json;
+  }
+
+  Map<String, dynamic> toJson({bool patch = false}) {
+    final data = {
+      'restaurant': restaurant,
+      'operating_hours': jsonEncode(convertOperatingHours),
       'keywords': keywords,
       'description': description,
       'avatar_image': avatarImage is XFile ? avatarImage.path : avatarImage,
@@ -68,20 +85,27 @@ class RestaurantDetailInfo {
       'restaurant_category': restaurantCategory,
       'purpose': purpose,
     };
+
+    if (patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
   }
 
   Future<MultipartFile?> get multiPartAvatarImage
-    => THelperFunction.convertXToMultipartFile(avatarImage, mediaType: 'jpeg');
+    => THelperFunction.convertXToMultipartFile(avatarImage);
 
   Future<MultipartFile?> get multiPartCoverImage
-    => THelperFunction.convertXToMultipartFile(coverImage, mediaType: 'jpeg');
+    => THelperFunction.convertXToMultipartFile(coverImage);
 
   Future<MultipartFile?> get multiPartFacadeImage
-    => THelperFunction.convertXToMultipartFile(facadeImage, mediaType: 'jpeg');
+    => THelperFunction.convertXToMultipartFile(facadeImage);
 
-  Future<FormData> toFormData() async {
-    return FormData.fromMap({
-      'opening_hours': openingHours,
+  Future<FormData> toFormData({bool patch = false}) async {
+    final data = {
+      'restaurant': restaurant,
+      'operating_hours': jsonEncode(convertOperatingHours),
       'keywords': keywords,
       'description': description,
       'avatar_image': await multiPartAvatarImage,
@@ -94,8 +118,15 @@ class RestaurantDetailInfo {
       'target_audience': targetAudience,
       'restaurant_category': restaurantCategory,
       'purpose': purpose,
-    });
+    };
+
+    if (patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return FormData.fromMap(data);
   }
+
 
   @override
   String toString() {

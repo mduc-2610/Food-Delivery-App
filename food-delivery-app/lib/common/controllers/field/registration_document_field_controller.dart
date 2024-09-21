@@ -12,14 +12,21 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 class RegistrationDocumentFieldController extends GetxController {
-  final RxList<XFile> selectedImages = <XFile>[].obs;
+  final RxList<dynamic> selectedImages = <dynamic>[].obs;
   final ImagePickerService _imagePickerService = ImagePickerService();
 
-  Future<void> pickImages({ bool isSingleImage = true }) async {
-    final List<XFile> pickedImages = await _imagePickerService.pickImages(
+  RegistrationDocumentFieldController({List<String?>? databaseImages}) {
+    if (databaseImages != null && databaseImages.isNotEmpty && !databaseImages.contains(null)) {
+      selectedImages.addAll(databaseImages);
+    }
+  }
+
+  Future<void> pickImages({bool isSingleImage = true}) async {
+    final List<dynamic> pickedImages = await _imagePickerService.pickImages(
       maxImages: isSingleImage ? 1 : 10,
     );
     if (isSingleImage) {
+      selectedImages.clear();
       selectedImages.assignAll(pickedImages);
     } else {
       selectedImages.addAll(pickedImages);
@@ -27,13 +34,14 @@ class RegistrationDocumentFieldController extends GetxController {
         selectedImages.removeRange(10, selectedImages.length);
       }
     }
+    $print("Pick image: ${selectedImages}");
   }
 
   void removeImage(int index) {
     selectedImages.removeAt(index);
   }
 
-  void viewImageDetail({ int index = 0}) {
+  void viewImageDetail({int index = 0}) {
     showDialog(
       context: Get.context!,
       useSafeArea: false,
@@ -45,3 +53,4 @@ class RegistrationDocumentFieldController extends GetxController {
     );
   }
 }
+

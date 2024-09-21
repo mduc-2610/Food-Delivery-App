@@ -9,7 +9,11 @@ from rest_framework.decorators import action
 from deliverer.models import Deliverer
 
 from account.serializers import BasicUserSerializer
-from deliverer.serializers import DelivererSerializer, DetailDelivererSerializer
+from deliverer.serializers import (
+    DelivererSerializer,
+    DetailDelivererSerializer,
+    CreateDelivererSerializer,
+)
 from order.serializers import (
     DeliverySerializer, 
     DeliveryRequestSerializer,
@@ -26,6 +30,7 @@ class DelivererViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewSe
     serializer_class = DelivererSerializer
     many_related_serializer_class = {
         'retrieve': DetailDelivererSerializer,
+        'create': CreateDelivererSerializer,
         'reviewed_by_users': BasicUserSerializer,
         'deliveries': DeliverySerializer,
         'deliverer_reviews': DelivererReviewSerializer,

@@ -5,10 +5,10 @@ import 'package:food_delivery_app/common/widgets/registration/registration_dropd
 import 'package:food_delivery_app/features/restaurant/registration/controllers/registration_payment.dart';
 import 'package:get/get.dart';
 
-class RegistrationPayment extends StatelessWidget {
+class RegistrationPaymentInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(RegistrationPaymentController());
+    final controller = Get.put(RegistrationPaymentInfoController());
 
     return Scaffold(
       body: Padding(
@@ -31,7 +31,7 @@ class RegistrationPayment extends StatelessWidget {
             SizedBox(height: 16),
             RegistrationTextField(
               label: 'Số CMND',
-              controller: controller.idController,
+              controller: controller.citizenIdentificationController,
               hintText: 'Nhập số CMND',
               maxLines: 1,
             ),
@@ -57,10 +57,8 @@ class RegistrationPayment extends StatelessWidget {
                 'NH Công thương Viet Nam (Vietinbank)',
                 'NH Đầu tư và Phát triển Viet Nam (BIDV)',
               ],
-              value: controller.selectedBank.value,
-              onChanged: (String? value) {
-                controller.selectedBank.value = value!;
-              },
+              value: controller.bank.value,
+              onChanged: controller.setBank
             )),
             SizedBox(height: 16),
             Obx(() => RegistrationDropdownField(
@@ -71,10 +69,8 @@ class RegistrationPayment extends StatelessWidget {
                 'Đà Nẵng',
                 'Cần Thơ',
               ],
-              value: controller.selectedCity.value,
-              onChanged: (String? value) {
-                controller.selectedCity.value = value;
-              },
+              value: controller.city.value,
+              onChanged: controller.setCity,
             )),
             SizedBox(height: 16),
             Obx(() => RegistrationDropdownField(
@@ -84,10 +80,8 @@ class RegistrationPayment extends StatelessWidget {
                 'Chi nhánh B',
                 'Chi nhánh C',
               ],
-              value: controller.selectedBranch.value,
-              onChanged: (String? value) {
-                controller.selectedBranch.value = value;
-              },
+              value: controller.branch.value,
+              onChanged: controller.setBranch,
             )),
           ],
         ),

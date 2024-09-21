@@ -265,6 +265,21 @@ class THelperFunction {
     return formattedString;
   }
 
+  static String formatChoice(String x, { bool reverse = false }) {
+    if(!reverse) {
+      return x.split(RegExp(r'[^a-zA-Z0-9]+'))
+          .where((part) => part.isNotEmpty)
+          .map((word) => word.toUpperCase())
+          .join("_") ?? "";
+    }
+    return x.split('_')
+        .map((word) => word.isNotEmpty
+        ? word[0].toUpperCase() + word.substring(1).toLowerCase()
+        : word)
+        .join(' ') ?? "";
+  }
+
+
   static String formatNumber(int number) {
     if (number >= 1000000000) {
       return (number / 1000000000).toStringAsFixed(1).replaceAll(RegExp(r'\.0$'), '') + 'b';

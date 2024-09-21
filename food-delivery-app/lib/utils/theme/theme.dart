@@ -10,6 +10,7 @@ import 'package:food_delivery_app/utils/theme/custom_themes/floating_action_butt
 import 'package:food_delivery_app/utils/theme/custom_themes/list_tile_theme.dart';
 import 'package:food_delivery_app/utils/theme/custom_themes/progress_indicator_theme.dart';
 import 'package:food_delivery_app/utils/theme/custom_themes/radio_theme.dart';
+import 'package:food_delivery_app/utils/theme/custom_themes/snackbar_theme.dart';
 import 'package:food_delivery_app/utils/theme/custom_themes/switch_theme.dart';
 import 'package:food_delivery_app/utils/theme/custom_themes/tab_bar_theme.dart';
 import 'package:food_delivery_app/utils/theme/custom_themes/text_button_theme.dart';
@@ -42,6 +43,7 @@ class TAppTheme {
     tabBarTheme: TTabBarTheme.tabBarTheme,
     listTileTheme: TListTileTheme.listTileTheme,
     progressIndicatorTheme: TProgressIndicator.progressIndicatorTheme,
+    snackBarTheme: TSnackBarTheme.snackBarTheme,
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -66,5 +68,6 @@ class TAppTheme {
     tabBarTheme: TTabBarTheme.tabBarTheme,
     listTileTheme: TListTileTheme.listTileTheme,
     progressIndicatorTheme: TProgressIndicator.progressIndicatorTheme,
+    snackBarTheme: TSnackBarTheme.snackBarTheme,
   );
 }

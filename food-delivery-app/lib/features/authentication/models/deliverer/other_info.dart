@@ -7,38 +7,57 @@ import 'package:image_picker/image_picker.dart';
 @reflector
 @jsonSerializable
 class DelivererOtherInfo {
+  String? deliverer;
   final String? occupation;
   final String? details;
   final dynamic judicialRecord;
 
   DelivererOtherInfo({
+    this.deliverer,
     this.occupation,
     this.details,
     this.judicialRecord,
   });
 
   DelivererOtherInfo.fromJson(Map<String, dynamic> json)
-      : occupation = json['occupation'],
+      : deliverer = json['deliverer'],
+        occupation = json['occupation'],
         details = json['details'],
         judicialRecord = json['judicial_record'];
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson({bool patch = false}) {
+    final Map<String, dynamic> data = {
+      'deliverer': deliverer,
       'occupation': occupation,
       'details': details,
       'judicial_record': judicialRecord is XFile ? judicialRecord.path : judicialRecord,
     };
+
+    if (patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
   }
+
 
   Future<MultipartFile?> get multiPartJudicialRecord => THelperFunction.convertXToMultipartFile(judicialRecord, mediaType: 'jpeg');
 
-  Future<FormData> toFormData() async {
-    return FormData.fromMap({
+  Future<FormData> toFormData({bool patch = false}) async {
+    final data = {
+      'deliverer': deliverer,
       'occupation': occupation,
       'details': details,
       'judicial_record': await multiPartJudicialRecord,
-    });
+    };
+
+    if (patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return FormData.fromMap(data);
   }
+
 
   @override
   String toString() {

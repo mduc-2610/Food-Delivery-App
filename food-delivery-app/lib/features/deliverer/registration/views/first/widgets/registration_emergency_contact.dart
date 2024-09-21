@@ -26,7 +26,7 @@ class RegistrationEmergencyContact extends StatelessWidget {
               RegistrationTextField(
                 hintText: "Vo chong",
                 label: 'Mối quan hệ',
-                controller: controller.relationController,
+                controller: controller.relationshipController,
               ),
               SizedBox(height: 16),
               RegistrationTextField(

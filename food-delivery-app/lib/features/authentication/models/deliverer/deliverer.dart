@@ -18,7 +18,7 @@ class Deliverer {
   final dynamic user;
   final DelivererBasicInfo? basicInfo;
   final DelivererResidencyInfo? residencyInfo;
-  final DelivererDriverLicense? driverLicenseAndVehicle;
+  final DelivererDriverLicense? driverLicense;
   final DelivererOtherInfo? otherInfo;
   final DelivererAddress? address;
   final DelivererOperationInfo? operationInfo;
@@ -41,7 +41,7 @@ class Deliverer {
     this.user,
     this.basicInfo,
     this.residencyInfo,
-    this.driverLicenseAndVehicle,
+    this.driverLicense,
     this.otherInfo,
     this.address,
     this.operationInfo,
@@ -65,7 +65,7 @@ class Deliverer {
         user = json['user'] == null || json['user'] is String ? json['user'] : User.fromJson(json['user']),
         basicInfo = json['basic_info'] != null ? DelivererBasicInfo.fromJson(json['basic_info']) : null,
         residencyInfo = json['residency_info'] != null ? DelivererResidencyInfo.fromJson(json['residency_info']) : null,
-        driverLicenseAndVehicle = json['driver_license_and_vehicle'] != null ? DelivererDriverLicense.fromJson(json['driver_license_and_vehicle']) : null,
+        driverLicense = json['driver_license'] != null ? DelivererDriverLicense.fromJson(json['driver_license']) : null,
         otherInfo = json['other_info'] != null ? DelivererOtherInfo.fromJson(json['other_info']) : null,
         address = json['address'] != null ? DelivererAddress.fromJson(json['address']) : null,
         operationInfo = json['operation_info'] != null ? DelivererOperationInfo.fromJson(json['operation_info']) : null,
@@ -99,7 +99,7 @@ class Deliverer {
       'user': user?.toJson(),
       'basic_info': basicInfo?.toJson(),
       'residency_info': residencyInfo?.toJson(),
-      'driver_license_and_vehicle': driverLicenseAndVehicle?.toJson(),
+      'driver_license': driverLicense?.toJson(),
       'other_info': otherInfo?.toJson(),
       'address': address?.toJson(),
       'operation_info': operationInfo?.toJson(),

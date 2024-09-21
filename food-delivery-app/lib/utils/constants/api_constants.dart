@@ -22,6 +22,7 @@ import 'package:food_delivery_app/features/authentication/models/restaurant/basi
 import 'package:food_delivery_app/features/authentication/models/restaurant/detail_info.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/menu_delivery.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/operating_hour.dart';
+import 'package:food_delivery_app/features/authentication/models/restaurant/payment_info.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/representative.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
 import 'package:food_delivery_app/features/notification/models/message.dart';
@@ -67,7 +68,7 @@ Future<String> getLocalIpAddress() async {
 }
 
 class APIConstant {
-  static const String ip = "192.168.1.8";
+  static const String ip = "192.168.1.7";
   static const String tSecretAPIKey = "";
   // static const baseUrl = 'http://10.0.2.2:8000/api';
   // static const baseUrl = 'http://192.168.1.8:8000/api'; // VANSAU
@@ -132,6 +133,8 @@ class APIConstant {
         return 'restaurant/operating-hour';
       case RestaurantRepresentative:
         return 'restaurant/representative';
+      case RestaurantPaymentInfo:
+        return 'restaurant/payment-info';
 
       ///DELIVERER
       case Deliverer:

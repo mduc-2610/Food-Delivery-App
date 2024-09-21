@@ -6,6 +6,10 @@ class BasicDelivererSerializer(serializers.ModelSerializer):
     class Meta:
         model = Deliverer
         fields = [
-            'id', 'basic_info', 'rating', 'total_reviews', 'avatar'
+            'id', 
+            'basic_info', 
+            'rating', 
+            'total_reviews', 
+            'avatar'
         ]
         depth = 1

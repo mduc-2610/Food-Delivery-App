@@ -31,6 +31,7 @@ class RegistrationOtherInfo extends StatelessWidget {
           ),
           RegistrationDocumentField(
             label: "Lý lịch tư pháp",
+            controller: controller.judicialRecordController,
           ),
         ],
       ),

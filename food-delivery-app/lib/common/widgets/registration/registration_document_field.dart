@@ -18,7 +18,7 @@ class RegistrationDocumentField extends StatelessWidget {
     required this.label,
     this.isSingleImage = true,
     this.crossAxisCount = 3,
-    RegistrationDocumentFieldController? controller
+    RegistrationDocumentFieldController? controller,
   }) {
     this.controller = controller ?? Get.put(RegistrationDocumentFieldController());
   }
@@ -61,14 +61,22 @@ class RegistrationDocumentField extends StatelessWidget {
   }
 
   Widget _buildSingleImageView() {
+    dynamic image = controller.selectedImages.first;
     return GestureDetector(
       onTap: () => controller.viewImageDetail(),
       child: Stack(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(TSize.borderRadiusSm),
-            child: Image.file(
-              File(controller.selectedImages.first.path),
+            child: image is String
+                ? Image.network( // Display from URL
+              image,
+              height: 100,
+              width: 100,
+              fit: BoxFit.cover,
+            )
+                : Image.file( // Display from local file
+              File(image.path),
               height: 100,
               width: 100,
               fit: BoxFit.cover,
@@ -115,14 +123,22 @@ class RegistrationDocumentField extends StatelessWidget {
   }
 
   Widget _buildImageTile(int index) {
+    dynamic image = controller.selectedImages[index];
     return InkWell(
       onTap: () => controller.viewImageDetail(index: index),
       child: Stack(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(TSize.borderRadiusSm),
-            child: Image.file(
-              File(controller.selectedImages[index].path),
+            child: image is String
+                ? Image.network( // Display from URL
+              image,
+              height: 120,
+              width: 120,
+              fit: BoxFit.cover,
+            )
+                : Image.file( // Display from local file
+              File(image.path),
               height: 120,
               width: 120,
               fit: BoxFit.cover,

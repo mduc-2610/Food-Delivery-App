@@ -7,9 +7,10 @@ class OperationInfo(models.Model):
     )
     deliverer = models.OneToOneField("deliverer.Deliverer", on_delete=models.CASCADE, related_name="operation_info", null=True)
     city = models.CharField(max_length=100)
-    operation_type = models.CharField(max_length=50, choices=OPERATION_CHOICE)
-    operational_area = models.CharField(max_length=255)
-    operational_time = models.CharField(max_length=255)
+    driver_type = models.CharField(max_length=50, choices=OPERATION_CHOICE)
+    area = models.CharField(max_length=255)
+    time = models.CharField(max_length=255)
+    hub = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.city}, {self.operation_type}"
+        return f"{self.city}, {self.driver_type}"

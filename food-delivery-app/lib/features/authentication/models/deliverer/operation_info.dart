@@ -4,32 +4,54 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 @reflector
 @jsonSerializable
 class DelivererOperationInfo {
+  String? deliverer;
   final String? city;
-  final String? operationType;
-  final String? operationalArea;
-  final String? operationalTime;
+  final String? driverType;
+  final String? area;
+  final String? time;
+  final String? hub;
 
   DelivererOperationInfo({
+    this.deliverer,
     this.city,
-    this.operationType,
-    this.operationalArea,
-    this.operationalTime,
+    this.driverType,
+    this.area,
+    this.time,
+    this.hub
   });
 
   DelivererOperationInfo.fromJson(Map<String, dynamic> json)
-      : city = json['city'],
-        operationType = json['operation_type'],
-        operationalArea = json['operational_area'],
-        operationalTime = json['operational_time'];
+      : deliverer = json['deliverer'],
+        city = json['city'],
+        driverType = json['driver_type'],
+        area = json['area'],
+        time = json['time'],
+        hub = json['hub'];
 
-  Map<String, dynamic> toJson() {
-    return {
-      'city': city,
-      'operation_type': operationType,
-      'operational_area': operationalArea,
-      'operational_time': operationalTime,
-    };
+  String get convertDriverType {
+    if(driverType?.toLowerCase().contains("hub") ?? false) {
+      return "HUB";
+    }
+    return "PART_TIME";
   }
+
+  Map<String, dynamic> toJson({bool patch = false}) {
+    final Map<String, dynamic> data = {
+      'deliverer': deliverer,
+      'city': city,
+      'driver_type': convertDriverType,
+      'area': area,
+      'time': time,
+      'hub': hub,
+    };
+
+    if (patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
+  }
+
 
   @override
   String toString() {

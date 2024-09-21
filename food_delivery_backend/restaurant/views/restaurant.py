@@ -2,7 +2,10 @@ from rest_framework import viewsets
 
 from restaurant.models import Restaurant, RestaurantCategory
 from restaurant.serializers import (
-    RestaurantSerializer, DetailRestaurantSerializer, RestaurantCategorySerializer
+    RestaurantSerializer, 
+    CreateRestaurantSerializer,
+    DetailRestaurantSerializer, 
+    RestaurantCategorySerializer,
 )
 from account.serializers import BasicUserSerializer
 from food.serializers import DishSerializer, DishCategorySerializer
@@ -21,6 +24,7 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewS
     pagination_class = CustomPagination
     many_related_serializer_class = {
         'retrieve': DetailRestaurantSerializer,
+        'create': CreateRestaurantSerializer,
         'promotions': PromotionSerializer,
         'reviewed_by_users': BasicUserSerializer,
         'dishes': DishSerializer,

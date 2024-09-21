@@ -1,80 +1,112 @@
-import 'package:flutter/cupertino.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:food_delivery_app/data/services/api_service.dart';
+import 'package:food_delivery_app/features/authentication/models/restaurant/representative.dart';
+import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
 import 'package:food_delivery_app/common/controllers/field/registration_document_field_controller.dart';
+import 'package:food_delivery_app/features/restaurant/registration/controllers/registration_tab_controller.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
 class RegistrationRepresentativeInfoController extends GetxController {
   static RegistrationRepresentativeInfoController get instance => Get.find();
 
-  // Document Controllers
-  final frontIdController = Get.put(RegistrationDocumentFieldController(), tag: "frontId");
-  final backIdController = Get.put(RegistrationDocumentFieldController(), tag: "backId");
-  final businessLicenseController = Get.put(RegistrationDocumentFieldController(), tag: "businessLicense");
+  final formKey = GlobalKey<FormState>();
+  final registrationTabController = RegistrationTabController.instance;
+  Restaurant? restaurant;
+  RestaurantRepresentative? representative;
 
-  // Text Controllers
+  final registrationType = 'Individual'.obs;
   final fullNameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
-  final idNumberController = TextEditingController();
+  final otherPhoneController = TextEditingController();
   final taxCodeController = TextEditingController();
+  final citizenIdentificationController = TextEditingController();
+  late RegistrationDocumentFieldController citizenIdentificationFrontController;
+  late RegistrationDocumentFieldController citizenIdentificationBackController;
+  late RegistrationDocumentFieldController businessRegistrationImageController;
 
-  // Form validation key
-  final formKey = GlobalKey<FormState>();
+  RegistrationRepresentativeInfoController() {
+    restaurant = registrationTabController.restaurant;
+    representative = restaurant?.representative;
 
-  // Validation methods
-  String? validateFullName(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Tên đầy đủ không được để trống';
+    if (representative != null) {
+      registrationType.value = THelperFunction.formatChoice(representative?.registrationType ?? "", reverse: true);
+      fullNameController.text = representative?.fullName ?? '';
+      emailController.text = representative?.email ?? '';
+      phoneController.text = representative?.phoneNumber ?? '';
+      otherPhoneController.text = representative?.otherPhoneNumber ?? '';
+      taxCodeController.text = representative?.taxCode ?? '';
+      citizenIdentificationController.text = representative?.citizenIdentification ?? '';
     }
-    return null;
+
+    citizenIdentificationFrontController = Get.put(RegistrationDocumentFieldController(
+        databaseImages: [representative?.citizenIdentificationFront]
+    ), tag: "citizenIdentificationFront");
+
+    citizenIdentificationBackController = Get.put(RegistrationDocumentFieldController(
+        databaseImages: [representative?.citizenIdentificationBack]
+    ), tag: "citizenIdentificationBack");
+
+    businessRegistrationImageController = Get.put(RegistrationDocumentFieldController(
+        databaseImages: [representative?.businessRegistrationImage]
+    ), tag: "businessRegistrationImage");
   }
 
-  String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Email không được để trống';
+  void setRegistrationType(String? value) => registrationType.value = value ?? '';
+
+  Future<void> onCallApi() async {
+    final representativeData = RestaurantRepresentative(
+      registrationType: registrationType.value,
+      fullName: fullNameController.text,
+      email: emailController.text,
+      phoneNumber: phoneController.text,
+      otherPhoneNumber: otherPhoneController.text,
+      taxCode: taxCodeController.text,
+      citizenIdentification: citizenIdentificationController.text,
+      citizenIdentificationFront: citizenIdentificationFrontController.selectedImages[0],
+      citizenIdentificationBack: citizenIdentificationBackController.selectedImages[0],
+      businessRegistrationImage: businessRegistrationImageController.selectedImages[0],
+    );
+    $print("RESTAURANT:$restaurant");
+    if (restaurant != null && representative != null) {
+      $print(representativeData.toJson(patch: true));
+      final [statusCode, headers, data] = await APIService<RestaurantRepresentative>(dio: Dio())
+          .update(restaurant?.id ?? "", representativeData, isFormData: true, patch: true);
+      $print([statusCode, headers, data]);
+    } else {
+      if (restaurant == null) {
+        var [statusCode, headers, data] = await APIService<Restaurant>()
+            .create({"user": registrationTabController.user?.id});
+        $print([statusCode, headers, data]);
+        if (statusCode == 200 || statusCode == 201) {
+          restaurant = data;
+          registrationTabController.restaurant = data;
+        }
+      }
+      representativeData.restaurant = restaurant?.id;
+      $print(representativeData?.toJson());
+      final [statusCode, headers, data] = await APIService<RestaurantRepresentative>(dio: Dio())
+          .create(representativeData, isFormData: true);
+      print([statusCode, headers, data]);
     }
-    final regex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-    if (!regex.hasMatch(value)) {
-      return 'Email không hợp lệ';
-    }
-    return null;
   }
 
-  String? validatePhone(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Số điện thoại không được để trống';
-    }
-    final regex = RegExp(r'^\d{10}$');
-    if (!regex.hasMatch(value)) {
-      return 'Số điện thoại không hợp lệ';
-    }
-    return null;
-  }
-
-  String? validateIdNumber(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Số CMND không được để trống';
-    }
-    if (value.length < 9) {
-      return 'Số CMND không hợp lệ';
-    }
-    return null;
-  }
-
-  String? validateTaxCode(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Mã số thuế không được để trống';
-    }
-    return null;
-  }
-
-  // Method to validate form and return a boolean indicating if it's valid
-  bool validateForm() {
+  void onSave() async {
+    await onCallApi();
     if (formKey.currentState?.validate() ?? false) {
-      // If form is valid, save the current state
       formKey.currentState?.save();
-      return true;
     }
-    return false;
+  }
+
+  void onContinue() async {
+    await onCallApi();
+    if (formKey.currentState?.validate() ?? false) {
+      formKey.currentState?.save();
+      registrationTabController.setTab();
+      print("Continuing with representative info...");
+    }
   }
 
   @override
@@ -82,8 +114,7 @@ class RegistrationRepresentativeInfoController extends GetxController {
     fullNameController.dispose();
     emailController.dispose();
     phoneController.dispose();
-    idNumberController.dispose();
-    taxCodeController.dispose();
+    otherPhoneController.dispose();
     super.onClose();
   }
 }

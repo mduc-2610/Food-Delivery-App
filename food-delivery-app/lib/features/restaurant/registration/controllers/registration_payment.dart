@@ -1,27 +1,106 @@
-import 'package:get/get.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/data/services/api_service.dart';
+import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
+import 'package:food_delivery_app/features/authentication/models/restaurant/payment_info.dart';
+import 'package:food_delivery_app/features/restaurant/registration/controllers/registration_tab_controller.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
+import 'package:get/get.dart';
 
-class RegistrationPaymentController extends GetxController {
-  // Text controllers
-  final emailController = TextEditingController();
-  final phoneController = TextEditingController();
-  final idController = TextEditingController();
+class RegistrationPaymentInfoController extends GetxController {
+  static RegistrationPaymentInfoController get instance => Get.find();
+
+  final formKey = GlobalKey<FormState>();
+  final registrationStepController = RegistrationTabController.instance;
+  Restaurant? restaurant;
+  RestaurantPaymentInfo? paymentInfo;
+
   final accountNameController = TextEditingController();
   final accountNumberController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
+  final citizenIdentificationController = TextEditingController();
+  final bank = ''.obs;
+  final branch = ''.obs;
+  final city = ''.obs;
 
-  // Dropdown values
-  final selectedBank = 'NH Ngoại thương Viet Nam (Vietcombank)'.obs;
-  final selectedCity = RxnString();
-  final selectedBranch = RxnString();
+  RegistrationPaymentInfoController() {
+    restaurant = registrationStepController.restaurant;
+    paymentInfo = restaurant?.paymentInfo;
 
-  // On Save and Continue actions
-  void onSave() {
-    // Implement save logic
-    print('Payment details saved.');
+    if (paymentInfo != null) {
+      accountNameController.text = paymentInfo?.accountName ?? '';
+      accountNumberController.text = paymentInfo?.accountNumber ?? '';
+      emailController.text = paymentInfo?.email ?? '';
+      phoneController.text = paymentInfo?.phoneNumber ?? '';
+      citizenIdentificationController.text = paymentInfo?.citizenIdentification ?? '';
+      bank.value = paymentInfo?.bank ?? '';
+      branch.value = paymentInfo?.branch ?? '';
+      city.value = paymentInfo?.city ?? '';
+    }
   }
 
-  void onContinue() {
-    // Implement continue logic
-    print('Proceeding with payment registration...');
+  void setBank(String? value) => bank.value = value ?? '';
+  void setBranch(String? value) => branch.value = value ?? '';
+  void setCity(String? value) => city.value = value ?? '';
+
+  Future<void> onCallApi() async {
+    final paymentInfoData = RestaurantPaymentInfo(
+      accountName: accountNameController.text,
+      accountNumber: accountNumberController.text,
+      email: emailController.text,
+      phoneNumber: phoneController.text,
+      citizenIdentification: citizenIdentificationController.text,
+      bank: bank.value,
+      branch: branch.value,
+      city: city.value,
+    );
+
+    if (paymentInfo != null) {
+      final [statusCode, headers, data] = await APIService<RestaurantPaymentInfo>()
+          .update(registrationStepController.restaurant?.id ?? "", paymentInfoData, patch: true);
+      print([statusCode, headers, data]);
+    } else {
+      if (restaurant == null) {
+        var [statusCode, headers, data] = await APIService<Restaurant>()
+            .create({"user": registrationStepController.user?.id});
+        print([statusCode, headers, data]);
+        if (statusCode == 200 || statusCode == 201) {
+          restaurant = data;
+          registrationStepController.restaurant = data;
+        }
+      }
+      paymentInfoData.restaurant = restaurant?.id;
+      final [statusCode, headers, data] = await APIService<RestaurantPaymentInfo>()
+          .create(paymentInfoData);
+      print([statusCode, headers, data]);
+    }
+  }
+
+  void onSave() async {
+      await onCallApi();
+    if (formKey.currentState?.validate() ?? false) {
+      formKey.currentState?.save();
+      print('Saving Payment Info');
+    }
+  }
+
+  void onContinue() async {
+    await onCallApi();
+    if (formKey.currentState?.validate() ?? false) {
+      formKey.currentState?.save();
+      registrationStepController.setTab();
+      print('Continuing to next step');
+    }
+  }
+
+  @override
+  void onClose() {
+    accountNameController.dispose();
+    accountNumberController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    citizenIdentificationController.dispose();
+    super.onClose();
   }
 }

@@ -42,3 +42,12 @@ class DetailDelivererSerializer(CustomRelatedModelSerializer):
             'id', 'user', 'avatar', 'rating', 'total_reviews', 'rating_counts', 'is_active', 'is_occupied', 'current_latitude', 'current_longitude',
         )
         # depth = 1
+
+class CreateDelivererSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Deliverer
+        fields = ['user',]
+        read_only_fields = ['id',]
+
+    def to_representation(self, instance):
+        return DetailDelivererSerializer(instance, context=self.context).data

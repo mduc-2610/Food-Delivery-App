@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/features/deliverer/registration/views/first/registration_first_step.dart';
 import 'package:food_delivery_app/features/notification/views/notification.dart';
 import 'package:food_delivery_app/features/personal/controllers/profile/theme_controller.dart';
 import 'package:food_delivery_app/features/personal/views/about_app/personal_about_app.dart';
@@ -7,6 +8,7 @@ import 'package:food_delivery_app/features/personal/views/invite/personal_invite
 import 'package:food_delivery_app/features/personal/views/privacy_policy/personal_privacy_policy.dart';
 import 'package:food_delivery_app/features/personal/views/security/personal_security.dart';
 import 'package:food_delivery_app/features/personal/views/term_of_service/personal_term_of_service.dart';
+import 'package:food_delivery_app/features/restaurant/registration/views/registration_tab.dart';
 import 'package:food_delivery_app/features/user/order/views/location/order_location.dart';
 import 'package:food_delivery_app/features/user/payment/views/payment/payment_list.dart';
 import 'package:food_delivery_app/features/personal/controllers/profile/personal_profile_controller.dart';
@@ -57,17 +59,26 @@ class _PersonalSettingState extends State<PersonalSetting> {
     final setting = _personalProfileController.setting;
     return Column(
       children: [
-        if(widget.viewType == ViewType.deliverer)...[
+        // if(widget.viewType == ViewType.deliverer)...[
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: Icon(Icons.delivery_dining_rounded),
-            title: Text('Register information'),
+            title: Text('Deliverer register information'),
             trailing: Icon(TIcon.arrowForward),
             onTap: () {
-              Get.to(OrderLocationSelectView());
+              Get.to(RegistrationFirstStepView());
             },
           ),
-        ],
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: Icon(Icons.restaurant),
+          title: Text('Restaurant register information'),
+          trailing: Icon(TIcon.arrowForward),
+          onTap: () {
+            Get.to(RegistrationTabView());
+          },
+        ),
+        // ],
         if (shouldInclude('location')) ...[
           ListTile(
             contentPadding: EdgeInsets.zero,

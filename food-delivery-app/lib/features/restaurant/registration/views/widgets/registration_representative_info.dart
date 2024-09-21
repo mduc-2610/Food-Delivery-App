@@ -16,7 +16,6 @@ class _RegistrationRepresentativeInfoState extends State<RegistrationRepresentat
 
   final controller = Get.put(RegistrationRepresentativeInfoController());
 
-  String selectedRegister = "Cá nhân";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,16 +23,12 @@ class _RegistrationRepresentativeInfoState extends State<RegistrationRepresentat
         padding: const EdgeInsets.all(TSize.spaceBetweenItemsVertical),
         child: ListView(
           children: [
-            RegistrationTypeOption(
+            Obx(() => RegistrationTypeOption(
               label: 'Đăng ký dưới danh nghĩa:',
-              types: ['Cá nhân', 'Công ty/Chuỗi'],
-              selectedType: selectedRegister,
-              onChanged: (newType) {
-                setState(() {
-                  selectedRegister = newType;
-                });
-              },
-            ),
+              types: ['Individual', 'Restaurant Chain'],
+              selectedType: controller.registrationType.value,
+              onChanged: controller.setRegistrationType
+            )),
             SizedBox(height: TSize.spaceBetweenItemsVertical),
 
             RegistrationTextField(
@@ -55,26 +50,32 @@ class _RegistrationRepresentativeInfoState extends State<RegistrationRepresentat
             SizedBox(height: TSize.spaceBetweenItemsVertical),
 
             RegistrationTextField(
+              label: 'Số điện thoại khac',
+              controller: controller.otherPhoneController,
+            ),
+            SizedBox(height: TSize.spaceBetweenItemsVertical),
+
+            RegistrationTextField(
               label: 'Số CMND',
-              controller: controller.idNumberController,
+              controller: controller.citizenIdentificationController,
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical),
 
             RegistrationDocumentField(
               label: "Ảnh chụp mặt trước CMND",
-              controller: controller.frontIdController,
+              controller: controller.citizenIdentificationFrontController,
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical),
 
             RegistrationDocumentField(
               label: "Ảnh chụp mặt sau CMND",
-              controller: controller.backIdController,
+              controller: controller.citizenIdentificationBackController,
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical),
 
             RegistrationDocumentField(
               label: "Đăng ký kinh doanh",
-              controller: controller.businessLicenseController,
+              controller: controller.businessRegistrationImageController,
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical),
 
@@ -87,12 +88,8 @@ class _RegistrationRepresentativeInfoState extends State<RegistrationRepresentat
         ),
       ),
       bottomNavigationBar: RegistrationBottomNavigationBar(
-        onSave: () {
-          // Implement save logic
-        },
-        onContinue: () {
-          // Implement continue logic
-        },
+        onSave: controller.onSave,
+        onContinue: controller.onContinue,
       ),
     );
   }

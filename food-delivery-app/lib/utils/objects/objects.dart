@@ -5,4 +5,9 @@ class TimeOfDayRange {
   final TimeOfDay end;
 
   TimeOfDayRange({required this.start, required this.end});
+
+  @override
+  String toString() {
+    return "${start} - ${end}";
+  }
 }

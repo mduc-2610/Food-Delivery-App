@@ -19,10 +19,10 @@ class _RegistrationMenuDeliveryState extends State<RegistrationMenuDelivery> {
         padding: const EdgeInsets.all(TSize.spaceBetweenItemsVertical),
         child: ListView(
           children: [
-            Obx(() => RegistrationDocumentField(
+            RegistrationDocumentField(
               label: "Ảnh chụp menu",
               controller: controller.menuImageController,
-            )),
+            ),
             SizedBox(height: TSize.spaceBetweenItemsVertical),
           ],
         ),

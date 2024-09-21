@@ -11,6 +11,7 @@ from restaurant.serializers.basic_info import BasicInfoSerializer
 from restaurant.serializers.detail_info import DetailInfoSerializer
 from restaurant.serializers.menu_delivery import MenuDeliverySerializer
 from restaurant.serializers.representative import RepresentativeSerializer
+from restaurant.serializers.payment_info import PaymentInfoSerializer
 from order.serializers.owned_promotion import (
     RestaurantPromotionSerializer
 )
@@ -61,8 +62,9 @@ class DetailRestaurantSerializer(CustomRelatedModelSerializer):
 
         self.one_related_serializer_class = {
             'basic_info': BasicInfoSerializer,
-            'representative': RepresentativeSerializer,
             'detail_info': DetailInfoSerializer,
+            'payment_info': PaymentInfoSerializer,
+            'representative': RepresentativeSerializer,
             'menu_delivery': MenuDeliverySerializer,
         }
         self.many_related_serializer_class = {
@@ -75,10 +77,33 @@ class DetailRestaurantSerializer(CustomRelatedModelSerializer):
             # 'owned_promotions': RestaurantPromotionSerializer,
             # 'user_reviews': RestaurantReviewSerializer
         }
+    distance_from_user = serializers.SerializerMethodField()
+
+    def get_distance_from_user(self, obj):
+        request = self.context.get('request')
+        if request and hasattr(request, 'user') and hasattr(request.user, 'locations'):
+            user_location = request.user.locations.filter(is_selected=True).first()
+            if user_location and hasattr(obj, 'basic_info'):
+                return obj.basic_info.get_distance_from_user(user_location)
+        return None
     
     class Meta:
         model = Restaurant
-        exclude = ['user', 'promotions', 'categories']
+        exclude = [
+            'user', 
+            'promotions', 
+            'categories',
+        ]
+
+
+class CreateRestaurantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Restaurant
+        fields = ['user',]
+        read_only_fields = ['id',]
+
+    def to_representation(self, instance):
+        return DetailRestaurantSerializer(instance, context=self.context).data
 
 class RestaurantCategorySerializer(serializers.ModelSerializer):
     class Meta:

@@ -4,7 +4,8 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 @reflector
 @jsonSerializable
 class DelivererResidencyInfo {
-  final bool? isSameAsCi;
+  String? deliverer;
+  final bool? isSameAsCI;
   final String? city;
   final String? district;
   final String? ward;
@@ -13,7 +14,8 @@ class DelivererResidencyInfo {
   final String? email;
 
   DelivererResidencyInfo({
-    this.isSameAsCi,
+    this.deliverer,
+    this.isSameAsCI,
     this.city,
     this.district,
     this.ward,
@@ -23,7 +25,8 @@ class DelivererResidencyInfo {
   });
 
   DelivererResidencyInfo.fromJson(Map<String, dynamic> json)
-      : isSameAsCi = json['is_same_as_ci'],
+      : deliverer = json['deliverer'],
+        isSameAsCI = json['is_same_as_ci'],
         city = json['city'],
         district = json['district'],
         ward = json['ward'],
@@ -31,9 +34,10 @@ class DelivererResidencyInfo {
         taxCode = json['tax_code'],
         email = json['email'];
 
-  Map<String, dynamic> toJson() {
-    return {
-      'is_same_as_ci': isSameAsCi,
+  Map<String, dynamic> toJson({bool patch = false}) {
+    final data = {
+      'deliverer': deliverer,
+      'is_same_as_ci': isSameAsCI,
       'city': city,
       'district': district,
       'ward': ward,
@@ -41,7 +45,14 @@ class DelivererResidencyInfo {
       'tax_code': taxCode,
       'email': email,
     };
+
+    if (patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
   }
+
 
   @override
   String toString() {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/validators/validators.dart';
 import 'package:get/get.dart';
 
 class RegistrationDropdownField extends StatelessWidget {
@@ -46,6 +47,7 @@ class RegistrationDropdownField extends StatelessWidget {
                 .toList(),
             value: (items.contains(value)) ? value : null, // Ensure value is valid
             onChanged: onChanged,
+            validator: TValidator.validateTextField,
           ),
         ],
       ),

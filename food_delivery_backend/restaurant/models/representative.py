@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.db import models
 
 def upload_path(instance, filename, folder):
-    restaurant = instance.deliverer
+    restaurant = instance.restaurant
     now = timezone.now()
     return os.path.join(
         'restaurant',
@@ -21,8 +21,8 @@ def business_registration_image_upload_path(instance, filename):
 
 class Representative(models.Model):
     REGISTRATION_CHOICES = (
-        ('Cá nhân', 'Cá nhân'),
-        ('Công ty/Chuỗi', 'Công ty/Chuỗi')
+        ('INDIVIDUAL', 'Cá nhân'),
+        ('RESTAURANT_CHAIN', 'Công ty/Chuỗi')
     )
     restaurant = models.OneToOneField('restaurant.Restaurant', on_delete=models.CASCADE, related_name='representative')
     registration_type = models.CharField(max_length=255, choices=REGISTRATION_CHOICES)
@@ -30,6 +30,8 @@ class Representative(models.Model):
     email = models.EmailField()
     phone_number = models.CharField(max_length=15)
     other_phone_number = models.CharField(max_length=15, blank=True, null=True)
+    tax_code = models.CharField(max_length=20, default="")
+    citizen_identification = models.CharField(max_length=20, default="")
     citizen_identification_front = models.ImageField(upload_to=citizen_identification_image_upload_path)
     citizen_identification_back = models.ImageField(upload_to=citizen_identification_image_upload_path)
     business_registration_image = models.ImageField(upload_to=business_registration_image_upload_path, blank=True, null=True)

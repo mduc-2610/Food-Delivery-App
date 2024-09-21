@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/controllers/field/registration_document_field_controller.dart';
 import 'package:food_delivery_app/common/widgets/buttons/small_button.dart';
 import 'package:food_delivery_app/common/widgets/registration/registration_bottom_navigation_bar.dart';
 import 'package:food_delivery_app/common/widgets/registration/registration_document_field.dart';
@@ -17,29 +18,29 @@ class RegistrationDriverLicense extends StatelessWidget {
         children: [
           RegistrationDocumentField(
             label: "Giấy phép Lái xe (mặt trước)",
-            controller: controller.frontLicense,
+            controller: controller.frontLicenseController,
           ),
           RegistrationDocumentField(
             label: "Giấy phép Lái xe (mặt sau)",
-            controller: controller.backLicense,
+            controller: controller.backLicenseController,
           ),
           Obx(() => RegistrationDropdownField(
             label: "Dòng xe",
-            items: ["Select", "Vehicle 1", "Vehicle 2"],
+            items: ["Vehicle 1", "Vehicle 2"],
             value: controller.vehicleType.value,
             onChanged: controller.setVehicleType,
           )),
           RegistrationTextField(
             label: "Biển số xe",
-            controller: TextEditingController(),
+            controller: controller.licensePlateController,
           ),
           RegistrationDocumentField(
             label: "Chứng nhận đăng ký xe mô tô, gắn máy (mặt trước)",
-            controller: controller.frontRegistration,
+            controller: controller.frontRegistrationController,
           ),
           RegistrationDocumentField(
             label: "Chứng nhận đăng ký xe mô tô, gắn máy (mặt sau)",
-            controller: controller.backRegistration,
+            controller: controller.backRegistrationController,
           ),
         ],
       ),

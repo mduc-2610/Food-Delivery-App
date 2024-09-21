@@ -19,6 +19,7 @@ class RegistrationBasicInfo extends StatelessWidget {
           child: ListView(
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: RegistrationTextField(
@@ -31,7 +32,7 @@ class RegistrationBasicInfo extends StatelessWidget {
                   Expanded(
                     child: Obx(() => RegistrationDropdownField(
                       label: 'Loại',
-                      items: ["", "Type 1", "Type 2"],
+                      items: ["Type 1", "Type 2"],
                       value: controller.shopType.value,
                       onChanged: controller.setShopType,
                     )),
@@ -57,7 +58,7 @@ class RegistrationBasicInfo extends StatelessWidget {
 
               Obx(() => RegistrationDropdownField(
                 label: 'Thành phố',
-                items: ["", "City 1", "City 2"],
+                items: ["City 1", "City 2"],
                 value: controller.city.value,
                 onChanged: controller.setCity,
               )),
@@ -65,7 +66,7 @@ class RegistrationBasicInfo extends StatelessWidget {
 
               Obx(() => RegistrationDropdownField(
                 label: 'Quận',
-                items: ["", "District 1", "District 2"],
+                items: ["District 1", "District 2"],
                 value: controller.district.value,
                 onChanged: controller.setDistrict,
               )),
@@ -73,7 +74,7 @@ class RegistrationBasicInfo extends StatelessWidget {
 
               RegistrationTextField(
                 label: 'Số nhà và Đường/Phố',
-                controller: controller.houseStreetController,
+                controller: controller.streetAddressController,
                 validator: (value) => value!.isEmpty ? 'Please enter house and street' : null,
               ),
               SizedBox(height: TSize.spaceBetweenItemsVertical),

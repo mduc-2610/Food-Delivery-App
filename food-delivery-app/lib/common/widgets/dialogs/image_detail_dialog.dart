@@ -1,13 +1,11 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-
 class ImageDetailDialog extends StatelessWidget {
-  final List<XFile> images;
+  final List<dynamic> images;
   final int initialIndex;
 
   const ImageDetailDialog({
@@ -29,7 +27,7 @@ class ImageDetailDialog extends StatelessWidget {
               itemCount: images.length,
               builder: (context, index) {
                 return PhotoViewGalleryPageOptions(
-                  imageProvider: FileImage(File(images[index].path)),
+                  imageProvider: _getImageProvider(images[index]),
                   minScale: PhotoViewComputedScale.contained,
                   maxScale: PhotoViewComputedScale.covered * 2,
                   heroAttributes: PhotoViewHeroAttributes(tag: "image_$index"),
@@ -63,5 +61,14 @@ class ImageDetailDialog extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  ImageProvider _getImageProvider(dynamic image) {
+    if (image is XFile) {
+      return FileImage(File(image.path));
+    } else if (image is String) {
+      return NetworkImage(image);
+    }
+    throw Exception("Unsupported image type");
   }
 }

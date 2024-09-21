@@ -4,6 +4,7 @@ import 'package:food_delivery_app/features/authentication/models/account/user.da
 import 'package:food_delivery_app/features/authentication/models/restaurant/basic_info.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/detail_info.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/menu_delivery.dart';
+import 'package:food_delivery_app/features/authentication/models/restaurant/payment_info.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/representative.dart';
 import 'package:food_delivery_app/features/user/food/models/food/category.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
@@ -19,6 +20,7 @@ class Restaurant {
   final RestaurantRepresentative? representative;
   final RestaurantDetailInfo? detailInfo;
   final RestaurantMenuDelivery? menuDelivery;
+  final RestaurantPaymentInfo? paymentInfo;
   final List<DishCategory> categories;
   final dynamic dishes;
   final double rating;
@@ -32,8 +34,9 @@ class Restaurant {
     this.id,
     this.user,
     this.basicInfo,
-    this.representative,
     this.detailInfo,
+    this.paymentInfo,
+    this.representative,
     this.menuDelivery,
     this.dishes = const [],
     this.categories = const [],
@@ -52,6 +55,7 @@ class Restaurant {
         representative = json['representative'] != null ? RestaurantRepresentative.fromJson(json['representative']) : null,
         detailInfo = json['detail_info'] != null ? RestaurantDetailInfo.fromJson(json['detail_info']) : null,
         menuDelivery = json['menu_delivery'] != null ? RestaurantMenuDelivery.fromJson(json['menu_delivery']) : null,
+        paymentInfo = json['payment_info'] != null ? RestaurantPaymentInfo.fromJson(json['payment_info']) : null,
         // promotions = json['promotions'] != null
         //     ? (json['promotions'] as List).map((item) => RestaurantPromotion.fromJson(item)).toList()
         //     : null

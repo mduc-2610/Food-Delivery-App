@@ -160,7 +160,7 @@ class APIService<T> {
     return _handleRequest<dynamic>((Token? token) async {
       final uri = url(id: id);
       final requestData = isFormData
-          ? await data.toFormData()
+          ? await data.toFormData(patch: patch)
           : (data is Map<String, dynamic>) ? data : data.toJson(patch: patch);
       $print(requestData);
       if (dio != null) {

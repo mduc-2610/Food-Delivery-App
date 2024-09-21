@@ -2,11 +2,11 @@
 from rest_framework import serializers
 from deliverer.models import DriverLicense
 
-class DriverLicenseSerializer(serializers.ModelSerializer):
+class BaseDriverLicenseSerializer(serializers.ModelSerializer):
     class Meta:
         model = DriverLicense
         fields = [
-            'id', 
+            'id',
             'deliverer', 
             'driver_license_front', 
             'driver_license_back', 
@@ -15,3 +15,11 @@ class DriverLicenseSerializer(serializers.ModelSerializer):
             'motorcycle_registration_certificate_front',
             'motorcycle_registration_certificate_back'
         ]
+        read_only_fields = ['id']
+
+class DriverLicenseSerializer(BaseDriverLicenseSerializer):
+    pass  
+
+class UpdateDriverLicenseSerializer(BaseDriverLicenseSerializer):
+    class Meta(BaseDriverLicenseSerializer.Meta):
+        read_only_fields = ['id', 'deliverer']  
