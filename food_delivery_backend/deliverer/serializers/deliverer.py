@@ -39,7 +39,17 @@ class DetailDelivererSerializer(CustomRelatedModelSerializer):
     class Meta:
         model = Deliverer
         fields = (
-            'id', 'user', 'avatar', 'rating', 'total_reviews', 'rating_counts', 'is_active', 'is_occupied', 'current_latitude', 'current_longitude',
+            'id', 
+            'user', 
+            'avatar', 
+            'rating', 
+            'total_reviews', 
+            'rating_counts', 
+            'is_active', 
+            'is_occupied', 
+            'current_latitude', 
+            'current_longitude',
+            'is_certified',
         )
         # depth = 1
 

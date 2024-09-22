@@ -41,7 +41,16 @@ class Deliverer(models.Model):
     total_requests = models.IntegerField(default=0, blank=True, null=True)
     accepted_requests = models.IntegerField(default=0, blank=True, null=True)
     delivery_requests = models.ManyToManyField("order.Delivery", through="order.DeliveryRequest", related_name="delivery_requests")
-    
+
+    @property
+    def is_certified(self):
+        return hasattr(self, 'basic_info') \
+            and hasattr(self, 'residency_info') \
+            and hasattr(self, 'operation_info') \
+            and hasattr(self, 'other_info') \
+            and hasattr(self, 'driver_license') \
+            and hasattr(self, 'emergency_contact')
+
     def update_acceptance_rate(self):
         if self.total_requests > 0:
             self.acceptance_rate = self.accepted_requests / self.total_requests

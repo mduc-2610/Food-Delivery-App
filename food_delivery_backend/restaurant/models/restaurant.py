@@ -22,6 +22,7 @@ class Restaurant(models.Model):
 
     avg_price = models.DecimalField(max_digits=9, decimal_places=2, default=0.00, blank=True, null=True)
 
+    @property
     def is_certified(self):
         return hasattr(self, 'basic_info') \
             and hasattr(self, 'detail_info') \

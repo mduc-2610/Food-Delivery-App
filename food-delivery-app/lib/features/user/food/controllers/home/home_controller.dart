@@ -26,6 +26,7 @@ class HomeController extends GetxController {
     user = await UserService.getUser();
     await Future.delayed(Duration(milliseconds: TTime.init));
     update();
+    $print("RESTAURANT ${user?.restaurant} - DELIVERER: ${user?.deliverer}");
     isLoading.value = false;
   }
 

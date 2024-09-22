@@ -33,7 +33,8 @@ MODEL_MAP = {
     'representative_info': RepresentativeInfo,
     'operating_hour': OperatingHour,
     'restaurant': Restaurant,
-    'restaurant_category': RestaurantCategory
+    'restaurant_category': RestaurantCategory,
+    'payment_info': PaymentInfo,
 }
 
 @script_runner(MODEL_MAP)
@@ -76,6 +77,7 @@ def load_restaurant(
                 basic_info = BasicInfo.objects.get(restaurant__id=restaurant.id)
                 basic_info = update_attr(basic_info, **basic_info_data)
             print(f"\tSuccessfully created Basic Info: {basic_info}")
+
     if DetailInfo in models_to_update:
         for restaurant in map_queryset.get(Restaurant):
             detail_info_data = {
@@ -158,19 +160,21 @@ def load_restaurant(
     if PaymentInfo in models_to_update:
         for restaurant in map_queryset.get(Restaurant):
             payment_info_data = {
-                "restaurant": restaurant,
                 "email": fake.email(),
                 "phone_number": generate_phone_number(),
                 "citizen_identification": fake.unique.random_number(digits=12, fix_len=True),
-                "account_name": restaurant.basic_info.name,  
+                "account_name": restaurant.basic_info.name if hasattr(restaurant, 'basic_info') else fake.company(),  
                 "account_number": str(fake.unique.random_number(digits=10)),
                 "bank": fake.company(),  
-                "city": restaurant.basic_info.city,
+                "city": restaurant.basic_info.city if hasattr(restaurant, 'basic_info') else fake.city(),
                 "branch": fake.street_name()  
             }
 
             payment_info = None
             if action == "delete":
+                payment_info_data.update({
+                    'restaurant': restaurant
+                })
                 payment_info = PaymentInfo.objects.create(**payment_info_data)
             else:
                 payment_info = PaymentInfo.objects.get(restaurant__id=restaurant.id)

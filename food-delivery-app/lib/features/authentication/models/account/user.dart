@@ -29,6 +29,8 @@ class User {
   final UserLocation? selectedLocation;
   final String? deliverer;
   final String? restaurant;
+  final bool isCertifiedDeliverer;
+  final bool isCertifiedRestaurant;
 
   User({
     this.id,
@@ -52,6 +54,8 @@ class User {
     this.selectedLocation,
     this.deliverer,
     this.restaurant,
+    this.isCertifiedDeliverer = false,
+    this.isCertifiedRestaurant = false,
   });
 
   User.fromJson(Map<String, dynamic> json)
@@ -75,7 +79,9 @@ class User {
         locations = json['locations'],
         selectedLocation = json['selected_location'] != null ? UserLocation.fromJson(json['selected_location']) : null,
         deliverer = json['deliverer'],
-        restaurant = json['restaurant']
+        restaurant = json['restaurant'],
+        isCertifiedDeliverer = json['is_certified_deliverer'] ?? false,
+        isCertifiedRestaurant = json['is_certified_restaurant'] ?? false
   ;
 
   Map<String, dynamic> toJson({bool patch = false}) {

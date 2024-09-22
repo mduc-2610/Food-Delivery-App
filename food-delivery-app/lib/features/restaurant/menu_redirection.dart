@@ -3,9 +3,9 @@ import "package:food_delivery_app/common/widgets/bars/menu_bar.dart";
 import "package:food_delivery_app/common/widgets/cards/circle_icon_card.dart";
 import "package:food_delivery_app/features/notification/views/notification.dart";
 import "package:food_delivery_app/features/restaurant/food/views/add/food_add.dart";
+import "package:food_delivery_app/features/restaurant/food/views/manage/food_manage.dart";
+import "package:food_delivery_app/features/restaurant/home/views/home/home.dart";
 import "package:food_delivery_app/features/restaurant/personal/views/profile/profile.dart";
-import 'package:food_delivery_app/features/restaurant/food/views/list/food_list.dart';
-import 'package:food_delivery_app/features/restaurant/home/views/home/home.dart';
 import "package:food_delivery_app/utils/constants/colors.dart";
 import "package:food_delivery_app/utils/constants/icon_strings.dart";
 import "package:food_delivery_app/utils/constants/sizes.dart";
@@ -22,6 +22,7 @@ class _RestaurantMenuRedirectionState extends State<RestaurantMenuRedirection> {
   @override
   Widget build(BuildContext context) {
     return CMenuBar(
+      tag: "restaurant",
       iconList: [
         {
           "icon": TIcon.home,
@@ -57,7 +58,7 @@ class _RestaurantMenuRedirectionState extends State<RestaurantMenuRedirection> {
       ],
       viewList: [
         HomeView(),
-        FoodView(),
+        FoodManageView(),
         FoodAddView(),
         NotificationView(),
         ProfileView(),

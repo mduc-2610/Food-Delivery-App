@@ -39,7 +39,7 @@ class HomeView extends StatelessWidget {
                       MainWrapper(
                         child: Row(
                           children: [
-                            if(menuController.user?.deliverer != null)...[
+                            if(controller.user?.isCertifiedDeliverer ?? false)...[
                               SmallButton(
                                 text: "Shipper",
                                 onPressed: () {
@@ -49,7 +49,7 @@ class HomeView extends StatelessWidget {
                             ],
                             SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
 
-                            if(menuController.user?.restaurant != null)...[
+                            if(controller.user?.isCertifiedRestaurant ?? false)...[
                               SmallButton(
                                 text: "Restaurant",
                                 onPressed: () {

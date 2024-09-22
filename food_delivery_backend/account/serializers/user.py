@@ -70,7 +70,23 @@ class UserSerializer(CustomRelatedModelSerializer):
     
     class Meta:
         model = User
-        fields = ['id', 'deliverer', 'restaurant', 'selected_location', 'phone_number', 'email', 'is_registration_verified', 'is_active', 'is_staff', 'is_superuser', 'date_joined', 'last_login', 'restaurant_cart']
+        fields = [
+            'id', 
+            'is_certified_deliverer',   
+            'is_certified_restaurant',
+            'deliverer', 
+            'restaurant', 
+            'selected_location', 
+            'phone_number', 
+            'email', 
+            'is_registration_verified', 
+            'is_active', 
+            'is_staff', 
+            'is_superuser', 
+            'date_joined', 
+            'last_login', 
+            'restaurant_cart',
+        ]
 
 class OTPSerializer(serializers.ModelSerializer):
     class Meta:

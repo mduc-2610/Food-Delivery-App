@@ -35,6 +35,7 @@ class Deliverer {
   final String? avatar;
   final bool isActive;
   final bool isOccupied;
+  final bool isCertified;
 
   Deliverer({
     this.id,
@@ -58,6 +59,7 @@ class Deliverer {
     this.avatar,
     this.isActive = false,
     this.isOccupied = false,
+    this.isCertified = false,
   });
 
   Deliverer.fromJson(Map<String, dynamic> json)
@@ -81,7 +83,8 @@ class Deliverer {
         currentLongitude = THelperFunction.formatDouble(json['current_longitude']),
         avatar = json['avatar'],
         isActive = json['is_active'] ?? false,
-        isOccupied = json['is_occupied'] ?? false
+        isOccupied = json['is_occupied'] ?? false,
+        isCertified = json['is_certified'] ?? false
   ;
 
   LatLng get currentCoordinate {

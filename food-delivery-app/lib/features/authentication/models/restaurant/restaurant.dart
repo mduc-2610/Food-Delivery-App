@@ -28,6 +28,7 @@ class Restaurant {
   final int? totalReviews;
   final String? restaurantReviews;
   final Map<String, dynamic> ratingCounts;
+  final bool isCertified;
   // final List<RestaurantPromotion>? promotions;
 
   Restaurant({
@@ -45,6 +46,7 @@ class Restaurant {
     this.totalReviews,
     this.restaurantReviews,
     this.ratingCounts = const {},
+    this.isCertified = false,
     // required this.promotions,
   });
 
@@ -67,7 +69,8 @@ class Restaurant {
         avgPrice = THelperFunction.formatDouble(json['avg_price']),
         totalReviews = json['total_reviews'],
         restaurantReviews = json['restaurant_reviews'],
-        ratingCounts = json['rating_counts'] ?? {}
+        ratingCounts = json['rating_counts'] ?? {},
+        isCertified = json['is_certified'] ?? false
         ;
 
 

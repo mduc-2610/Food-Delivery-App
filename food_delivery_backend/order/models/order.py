@@ -2,7 +2,7 @@ import uuid
 import decimal
 
 from django.db import models
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
 
 from order.models import RestaurantCart, Delivery, DeliveryRequest
@@ -133,6 +133,21 @@ class Order(models.Model):
 #     if instance.status == 'ACTIVE':
 #         create_delivery_and_requests(instance, create_delivery=True)
 
+@receiver(post_save, sender='order.Order')
+def update_dish_total_orders_on_complete(sender, instance, **kwargs):
+    if instance.status == "COMPLETED":
+        for cart_dish in instance.cart.dishes.all():
+            dish = cart_dish.dish
+            dish.total_orders += 1
+            dish.save()
+
+@receiver(post_delete, sender='order.Order')
+def update_dish_total_orders_on_delete(sender, instance, **kwargs):
+    if instance.status == "COMPLETED":
+        for cart_dish in instance.cart.dishes.all():
+            dish = cart_dish.dish
+            dish.total_orders -= 1
+            dish.save()
 
 @receiver(post_save, sender='order.Order')
 def broadcast_to_deliverers(sender, instance, **kwargs):

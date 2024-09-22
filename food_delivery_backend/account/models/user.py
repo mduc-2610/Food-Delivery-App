@@ -73,6 +73,14 @@ class User(AbstractBaseUser):
     liked_dish_reviews = models.ManyToManyField("review.DishReview", through="review.DishReviewLike", related_name=LIKE_RELATED_NAME)
 
     carts = models.ManyToManyField('restaurant.Restaurant', through = 'order.RestaurantCart', related_name='users')
+    
+    @property
+    def is_certified_deliverer(self):
+        return self.deliverer.is_certified if hasattr(self, 'deliverer') else False
+
+    @property
+    def is_certified_restaurant(self):
+        return self.restaurant.is_certified if hasattr(self, 'restaurant') else False
 
     def __getitem__(self, attr):
         if hasattr(self, attr):

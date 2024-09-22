@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/features/user/menu_redirection.dart';
+import 'package:get/get.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
+import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
+import 'package:food_delivery_app/common/widgets/buttons/small_button.dart';
 import 'package:food_delivery_app/common/widgets/misc/head_with_action.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/misc/sliver_main_wrapper.dart';
@@ -10,6 +15,7 @@ import 'package:food_delivery_app/features/restaurant/home/views/home/widgets/pr
 import 'package:food_delivery_app/features/restaurant/home/views/common/widgets/revenue_chart.dart';
 import 'package:food_delivery_app/features/restaurant/home/views/home/widgets/review_summary.dart';
 import 'package:food_delivery_app/common/widgets/cards/food_card.dart';
+import 'package:food_delivery_app/utils/constants/emojis.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/hardcode/hardcode.dart';
@@ -18,14 +24,30 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CAppBar(
+        title: "Welcome back ${TEmoji.smilingFaceWithHeart}",
+        noLeading: true,
+      ),
       body: CustomScrollView(
           slivers: [
-            HomeSliverAppBar(),
+            // HomeSliverAppBar(),
+
 
             SliverToBoxAdapter(
               child: MainWrapper(
                 child: Column(
                   children: [
+                    Row(
+                      children: [
+                        SmallButton(
+                          paddingHorizontal: 12,
+                          onPressed: () { Get.offAll(() => UserMenuRedirection()); },
+                          text: "User",
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: TSize.spaceBetweenItemsVertical,),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [

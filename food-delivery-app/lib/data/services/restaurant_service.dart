@@ -18,18 +18,15 @@ class RestaurantService {
     Restaurant? restaurant;
     final user = await APIService<User>(endpoint: 'account/user/me',
       pagination: false, ).list(single: true);
-    if(getUser) {
       try {
         $print(user?.restaurant);
-        restaurant = await APIService<Restaurant>().retrieve(user?.restaurant ?? '');
-        return [user, restaurant];
+        restaurant = await APIService<Restaurant>(queryParams: queryParams ?? '').retrieve(user?.restaurant ?? '');
+        return (getUser) ? [user, restaurant] : restaurant;
       }
       catch(e) {
         $print(user?.restaurant);
         $print("NOT FOUND RESTAURANT");
-        return [user, null];
+        return (getUser) ? [user, null] : restaurant;
       }
-    }
-    return restaurant;
   }
 }

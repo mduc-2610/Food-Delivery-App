@@ -26,6 +26,7 @@ class Dish(models.Model):
     rating = models.DecimalField(max_digits=3, decimal_places=1, default=0, blank=True, null=True)
     total_reviews = models.IntegerField(default=0, blank=True, null=True)
     total_likes = models.IntegerField(default=0, blank=True, null=True)
+    total_orders = models.IntegerField(default=0, blank=True, null=True)
     rating_counts = models.JSONField(default=default_rating_counts, blank=True, null=True)
 
     def __getitem__(self, attr):
