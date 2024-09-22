@@ -94,35 +94,35 @@ def load_food(
                             )
                 print(f"\tSuccessfully created or updated Dish: {dish}, {dish.image}\n")
 
-    if DishReview in models_to_update:
-        user_list = list(User.objects.all())
-        load_intermediate_model(
-            model_class=DishReview,
-            primary_field='dish',
-            related_field='user',
-            primary_objects=dish_list,
-            related_objects=user_list,
-            max_items=max_reviews_per_dish,
-            attributes={
-                'rating': lambda: fake.random_int(min=1, max=5),
-                'title': lambda: fake.sentence(nb_words=6),
-                'content': lambda: fake.text(max_nb_chars=200)
-            },
-            action=action
-        )
+    # if DishReview in models_to_update:
+    #     user_list = list(User.objects.all())
+    #     load_intermediate_model(
+    #         model_class=DishReview,
+    #         primary_field='dish',
+    #         related_field='user',
+    #         primary_objects=dish_list,
+    #         related_objects=user_list,
+    #         max_items=max_reviews_per_dish,
+    #         attributes={
+    #             'rating': lambda: fake.random_int(min=1, max=5),
+    #             'title': lambda: fake.sentence(nb_words=6),
+    #             'content': lambda: fake.text(max_nb_chars=200)
+    #         },
+    #         action=action
+    #     )
 
-    if DishReviewLike in models_to_update:
-        user_list = list(User.objects.all())
-        review_list = map_queryset.get(DishReview)
-        load_intermediate_model(
-            model_class=DishReviewLike,
-            primary_field='review',
-            related_field='user',
-            primary_objects=review_list,
-            related_objects=user_list,
-            max_items=max_review_likes_per_dish,
-            action=action,
-        )
+    # if DishReviewLike in models_to_update:
+    #     user_list = list(User.objects.all())
+    #     review_list = map_queryset.get(DishReview)
+    #     load_intermediate_model(
+    #         model_class=DishReviewLike,
+    #         primary_field='review',
+    #         related_field='user',
+    #         primary_objects=review_list,
+    #         related_objects=user_list,
+    #         max_items=max_review_likes_per_dish,
+    #         action=action,
+    #     )
 
     if DishLike in models_to_update:
         user_list = list(User.objects.all())

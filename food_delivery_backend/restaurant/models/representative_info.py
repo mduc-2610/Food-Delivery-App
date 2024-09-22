@@ -14,17 +14,17 @@ def upload_path(instance, filename, folder):
     )
 
 def citizen_identification_image_upload_path(instance, filename):
-    return upload_path(instance, filename, 'representative')
+    return upload_path(instance, filename, 'representative_info')
 
 def business_registration_image_upload_path(instance, filename):
     return upload_path(instance, filename, 'business_registration')
 
-class Representative(models.Model):
+class RepresentativeInfo(models.Model):
     REGISTRATION_CHOICES = (
-        ('INDIVIDUAL', 'Cá nhân'),
-        ('RESTAURANT_CHAIN', 'Công ty/Chuỗi')
+        ('INDIVIDUAL', 'Individual'),
+        ('RESTAURANT_CHAIN', 'Restaurant Chain')
     )
-    restaurant = models.OneToOneField('restaurant.Restaurant', on_delete=models.CASCADE, related_name='representative')
+    restaurant = models.OneToOneField('restaurant.Restaurant', on_delete=models.CASCADE, related_name='representative_info')
     registration_type = models.CharField(max_length=255, choices=REGISTRATION_CHOICES)
     full_name = models.CharField(max_length=255)
     email = models.EmailField()

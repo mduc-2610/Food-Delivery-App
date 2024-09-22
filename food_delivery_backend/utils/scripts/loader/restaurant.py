@@ -6,7 +6,7 @@ from account.models import User
 from food.models import Dish, DishCategory
 from restaurant.models import (
     BasicInfo, DetailInfo, MenuDelivery,
-    Representative, OperatingHour, Restaurant, RestaurantCategory
+    RepresentativeInfo, OperatingHour, Restaurant, RestaurantCategory
 )
 
 from utils.function import (
@@ -27,7 +27,7 @@ def load_restaurant(
 ):
     model_list = [
         BasicInfo, DetailInfo, MenuDelivery,
-        Representative, OperatingHour, Restaurant, RestaurantCategory
+        RepresentativeInfo, OperatingHour, Restaurant, RestaurantCategory
     ]
     
     for model in model_list:
@@ -102,7 +102,7 @@ def load_restaurant(
             "id_back_image": fake.image_url(),
             "business_registration_image": fake.image_url()
         }
-        representative = Representative.objects.create(**representative_data)
+        representative = RepresentativeInfo.objects.create(**representative_data)
         print(f"\tSuccessfully created Representative: {representative}")
 
         days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]

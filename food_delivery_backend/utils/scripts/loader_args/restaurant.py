@@ -5,8 +5,14 @@ from django.db import transaction
 from account.models import User
 from food.models import Dish, DishCategory
 from restaurant.models import (
-    BasicInfo, DetailInfo, MenuDelivery,
-    Representative, OperatingHour, Restaurant, RestaurantCategory
+    BasicInfo, 
+    DetailInfo, 
+    PaymentInfo,
+    MenuDelivery,
+    RepresentativeInfo, 
+    OperatingHour, 
+    Restaurant, 
+    RestaurantCategory
 )
 from utils.function import (
     load_intermediate_model, 
@@ -24,7 +30,7 @@ MODEL_MAP = {
     'basic_info': BasicInfo,
     'detail_info': DetailInfo,
     'menu_delivery': MenuDelivery,
-    'representative': Representative,
+    'representative_info': RepresentativeInfo,
     'operating_hour': OperatingHour,
     'restaurant': Restaurant,
     'restaurant_category': RestaurantCategory
@@ -123,14 +129,17 @@ def load_restaurant(
                 menu_delivery = MenuDelivery.objects.get(restaurant__id=restaurant.id)
                 menu_delivery = update_attr(menu_delivery, ** menu_delivery_data)
             print(f"\tSuccessfully created Menu Delivery: {menu_delivery}")
-    if Representative in models_to_update:
+
+    if RepresentativeInfo in models_to_update:
         for restaurant in map_queryset.get(Restaurant):
             representative_data = {
-                "registration_type": fake.random_element(elements=('Cá nhân', 'Công ty/Chuỗi')),
+                "registration_type": fake.random_element(elements=('INDIVIDUAL', 'RESTAURANT_CHAIN')),
                 "full_name": fake.name(),
                 "email": fake.email(),
                 "phone_number": generate_phone_number(),
                 "other_phone_number": generate_phone_number(),
+                "tax_code": str(fake.random_int(min=100000, max=9999999)),
+                "citizen_identification": str(fake.random_int(min=1000000000, max=9999999999)),
                 "citizen_identification_front": fake.image_url(),
                 "citizen_identification_back": fake.image_url(),
                 "business_registration_image": fake.image_url()
@@ -140,11 +149,34 @@ def load_restaurant(
                 representative_data.update({
                     'restaurant': restaurant
                 })
-                representative = Representative.objects.create(**representative_data)
+                representative = RepresentativeInfo.objects.create(**representative_data)
             else:
-                representative = Representative.objects.get(restaurant__id=restaurant.id)
+                representative = RepresentativeInfo.objects.get(restaurant__id=restaurant.id)
                 representative = update_attr(representative, ** representative_data)
             print(f"\tSuccessfully created Representative: {representative}")
+    
+    if PaymentInfo in models_to_update:
+        for restaurant in map_queryset.get(Restaurant):
+            payment_info_data = {
+                "restaurant": restaurant,
+                "email": fake.email(),
+                "phone_number": generate_phone_number(),
+                "citizen_identification": fake.unique.random_number(digits=12, fix_len=True),
+                "account_name": restaurant.basic_info.name,  
+                "account_number": str(fake.unique.random_number(digits=10)),
+                "bank": fake.company(),  
+                "city": restaurant.basic_info.city,
+                "branch": fake.street_name()  
+            }
+
+            payment_info = None
+            if action == "delete":
+                payment_info = PaymentInfo.objects.create(**payment_info_data)
+            else:
+                payment_info = PaymentInfo.objects.get(restaurant__id=restaurant.id)
+                payment_info = update_attr(payment_info, **payment_info_data)
+            print(f"\tSuccessfully created/updated Payment Info: {payment_info}")
+
     if RestaurantCategory in models_to_update:
         load_intermediate_model(
             model_class=RestaurantCategory,

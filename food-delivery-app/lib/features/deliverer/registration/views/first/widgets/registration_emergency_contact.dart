@@ -19,19 +19,19 @@ class RegistrationEmergencyContact extends StatelessWidget {
             children: <Widget>[
               RegistrationTextField(
                 hintText: "Nguyen Thi B",
-                label: 'Tên',
+                label: 'Name',
                 controller: controller.nameController,
               ),
               SizedBox(height: 16),
               RegistrationTextField(
-                hintText: "Vo chong",
-                label: 'Mối quan hệ',
+                hintText: "Spouse",
+                label: 'Relationship',
                 controller: controller.relationshipController,
               ),
               SizedBox(height: 16),
               RegistrationTextField(
                 hintText: "+84858189821",
-                label: 'Số điện thoại',
+                label: 'Phone Number',
                 controller: controller.phoneController,
               ),
             ],

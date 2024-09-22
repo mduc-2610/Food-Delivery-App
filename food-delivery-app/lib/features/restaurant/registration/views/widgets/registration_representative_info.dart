@@ -13,7 +13,6 @@ class RegistrationRepresentativeInfo extends StatefulWidget {
 }
 
 class _RegistrationRepresentativeInfoState extends State<RegistrationRepresentativeInfo> {
-
   final controller = Get.put(RegistrationRepresentativeInfoController());
 
   @override
@@ -24,15 +23,15 @@ class _RegistrationRepresentativeInfoState extends State<RegistrationRepresentat
         child: ListView(
           children: [
             Obx(() => RegistrationTypeOption(
-              label: 'Đăng ký dưới danh nghĩa:',
-              types: ['Individual', 'Restaurant Chain'],
-              selectedType: controller.registrationType.value,
-              onChanged: controller.setRegistrationType
+                label: 'Register as:',
+                types: ['Individual', 'Restaurant Chain'],
+                selectedType: controller.registrationType.value,
+                onChanged: controller.setRegistrationType
             )),
             SizedBox(height: TSize.spaceBetweenItemsVertical),
 
             RegistrationTextField(
-              label: 'Tên đầy đủ người đại diện',
+              label: 'Full Name of Representative',
               controller: controller.fullNameController,
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical),
@@ -44,43 +43,43 @@ class _RegistrationRepresentativeInfoState extends State<RegistrationRepresentat
             SizedBox(height: TSize.spaceBetweenItemsVertical),
 
             RegistrationTextField(
-              label: 'Số điện thoại',
+              label: 'Phone Number',
               controller: controller.phoneController,
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical),
 
             RegistrationTextField(
-              label: 'Số điện thoại khac',
+              label: 'Alternate Phone Number',
               controller: controller.otherPhoneController,
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical),
 
             RegistrationTextField(
-              label: 'Số CMND',
+              label: 'Citizen ID Number',
               controller: controller.citizenIdentificationController,
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical),
 
             RegistrationDocumentField(
-              label: "Ảnh chụp mặt trước CMND",
+              label: "Citizen ID Front Image",
               controller: controller.citizenIdentificationFrontController,
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical),
 
             RegistrationDocumentField(
-              label: "Ảnh chụp mặt sau CMND",
+              label: "Citizen ID Back Image",
               controller: controller.citizenIdentificationBackController,
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical),
 
             RegistrationDocumentField(
-              label: "Đăng ký kinh doanh",
+              label: "Business Registration",
               controller: controller.businessRegistrationImageController,
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical),
 
             RegistrationTextField(
-              label: 'Mã số thuế',
+              label: 'Tax Code',
               controller: controller.taxCodeController,
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical),

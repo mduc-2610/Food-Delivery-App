@@ -99,7 +99,7 @@ def load_deliverer(
             max_items=0,
             attributes={
                 "driver_license_front": lambda: fake.image_url(),
-                "driver)license_back": lambda: fake.image_url(),
+                "driver_license_back": lambda: fake.image_url(),
                 "motorcycle_registration_certificate_front": lambda: fake.image_url(),
                 "motorcycle_registration_certificate_back": lambda: fake.image_url(),
                 "vehicle_type": lambda: fake.word(),
@@ -132,9 +132,10 @@ def load_deliverer(
             max_items=0,
             attributes={
                 "city": lambda: fake.city(),
-                "operation_type": lambda: fake.random_element(elements=['HUB', 'PART_TIME']),
-                "operational_area": lambda: fake.street_address(),
-                "operational_time": lambda: "9:00-18:00"
+                "driver_type": lambda: fake.random_element(elements=['HUB', 'PART_TIME']),
+                "area": lambda: fake.street_address(),
+                "time": lambda: "9:00-18:00",
+                "hub": lambda: fake.city()
             },
             oto_field='deliverer',
             oto_objects=deliverer_list,

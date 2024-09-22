@@ -17,29 +17,29 @@ class RegistrationDriverLicense extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         children: [
           RegistrationDocumentField(
-            label: "Giấy phép Lái xe (mặt trước)",
+            label: "Driver's License (Front)",
             controller: controller.frontLicenseController,
           ),
           RegistrationDocumentField(
-            label: "Giấy phép Lái xe (mặt sau)",
+            label: "Driver's License (Back)",
             controller: controller.backLicenseController,
           ),
           Obx(() => RegistrationDropdownField(
-            label: "Dòng xe",
+            label: "Vehicle Type",
             items: ["Vehicle 1", "Vehicle 2"],
             value: controller.vehicleType.value,
             onChanged: controller.setVehicleType,
           )),
           RegistrationTextField(
-            label: "Biển số xe",
+            label: "License Plate",
             controller: controller.licensePlateController,
           ),
           RegistrationDocumentField(
-            label: "Chứng nhận đăng ký xe mô tô, gắn máy (mặt trước)",
+            label: "Motorcycle Registration Certificate (Front)",
             controller: controller.frontRegistrationController,
           ),
           RegistrationDocumentField(
-            label: "Chứng nhận đăng ký xe mô tô, gắn máy (mặt sau)",
+            label: "Motorcycle Registration Certificate (Back)",
             controller: controller.backRegistrationController,
           ),
         ],

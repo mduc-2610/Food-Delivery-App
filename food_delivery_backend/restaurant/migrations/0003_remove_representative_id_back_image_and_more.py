@@ -2,7 +2,7 @@
 
 import restaurant.models.detail_info
 import restaurant.models.menu_delivery
-import restaurant.models.representative
+import restaurant.models.representative_info
 from django.db import migrations, models
 
 
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
             name="citizen_identification_back",
             field=models.ImageField(
                 default="",
-                upload_to=restaurant.models.representative.citizen_identification_image_upload_path,
+                upload_to=restaurant.models.representative_info.citizen_identification_image_upload_path,
             ),
             preserve_default=False,
         ),
@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
             name="citizen_identification_front",
             field=models.ImageField(
                 default="",
-                upload_to=restaurant.models.representative.citizen_identification_image_upload_path,
+                upload_to=restaurant.models.representative_info.citizen_identification_image_upload_path,
             ),
             preserve_default=False,
         ),
@@ -72,7 +72,7 @@ class Migration(migrations.Migration):
             field=models.ImageField(
                 blank=True,
                 null=True,
-                upload_to=restaurant.models.representative.business_registration_image_upload_path,
+                upload_to=restaurant.models.representative_info.business_registration_image_upload_path,
             ),
         ),
     ]

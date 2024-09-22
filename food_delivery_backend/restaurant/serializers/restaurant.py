@@ -10,7 +10,7 @@ from restaurant.models import Restaurant, RestaurantCategory
 from restaurant.serializers.basic_info import BasicInfoSerializer
 from restaurant.serializers.detail_info import DetailInfoSerializer
 from restaurant.serializers.menu_delivery import MenuDeliverySerializer
-from restaurant.serializers.representative import RepresentativeSerializer
+from restaurant.serializers.representative_info import RepresentativeInfoSerializer
 from restaurant.serializers.payment_info import PaymentInfoSerializer
 from order.serializers.owned_promotion import (
     RestaurantPromotionSerializer
@@ -64,7 +64,7 @@ class DetailRestaurantSerializer(CustomRelatedModelSerializer):
             'basic_info': BasicInfoSerializer,
             'detail_info': DetailInfoSerializer,
             'payment_info': PaymentInfoSerializer,
-            'representative': RepresentativeSerializer,
+            'representative_info': RepresentativeInfoSerializer,
             'menu_delivery': MenuDeliverySerializer,
         }
         self.many_related_serializer_class = {

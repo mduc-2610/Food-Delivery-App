@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/features/restaurant/registration/controllers/registration_detail_info.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
-import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
-import 'package:food_delivery_app/utils/objects/objects.dart';
 import 'package:get/get.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/registration/registration_bottom_navigation_bar.dart';
@@ -27,7 +25,7 @@ class RegistrationDetailInfo extends StatelessWidget {
                 SizedBox(height: TSize.spaceBetweenItemsVertical),
 
                 Text(
-                  "*Thông tin quán - Chi Tiết",
+                  "*Restaurant Information - Details",
                   style: Get.textTheme.titleSmall?.copyWith(color: Colors.red),
                 ),
                 MainWrapper(
@@ -40,13 +38,13 @@ class RegistrationDetailInfo extends StatelessWidget {
 
                 // Text Fields
                 RegistrationTextField(
-                  label: 'Từ khóa tìm kiếm',
+                  label: 'Search Keywords',
                   controller: controller.keywordController,
                 ),
                 SizedBox(height: TSize.spaceBetweenItemsVertical),
 
                 RegistrationTextField(
-                  label: 'Miêu tả về quán',
+                  label: 'Restaurant Description',
                   controller: controller.descriptionController,
                   maxLines: 5,
                   maxLength: 156,
@@ -54,56 +52,56 @@ class RegistrationDetailInfo extends StatelessWidget {
                 SizedBox(height: TSize.spaceBetweenItemsVertical),
 
                 RegistrationTextField(
-                  label: 'Loại nhà hàng',
+                  label: 'Restaurant Type',
                   controller: controller.restaurantTypeController,
                 ),
                 SizedBox(height: TSize.spaceBetweenItemsVertical),
 
                 RegistrationTextField(
-                  label: 'Ẩm thực',
+                  label: 'Cuisine',
                   controller: controller.cuisineController,
                 ),
                 SizedBox(height: TSize.spaceBetweenItemsVertical),
 
                 RegistrationTextField(
-                  label: 'Món đặc trưng',
+                  label: 'Specialty Dishes',
                   controller: controller.specialtyDishesController,
                 ),
                 SizedBox(height: TSize.spaceBetweenItemsVertical),
 
                 RegistrationTextField(
-                  label: 'Thời gian phục vụ',
+                  label: 'Serving Times',
                   controller: controller.servingTimesController,
                 ),
                 SizedBox(height: TSize.spaceBetweenItemsVertical),
 
                 RegistrationTextField(
-                  label: 'Đối tượng khách hàng',
+                  label: 'Target Audience',
                   controller: controller.targetAudienceController,
                 ),
                 SizedBox(height: TSize.spaceBetweenItemsVertical),
 
                 RegistrationTextField(
-                  label: 'Mục đích',
+                  label: 'Purpose',
                   controller: controller.purposeController,
                 ),
                 SizedBox(height: TSize.spaceBetweenItemsVertical),
 
                 // Document Upload Fields
                 RegistrationDocumentField(
-                  label: "Ảnh đại diện quán",
+                  label: "Restaurant Avatar",
                   controller: controller.avatarImageController,
                 ),
                 SizedBox(height: TSize.spaceBetweenItemsVertical),
 
                 RegistrationDocumentField(
-                  label: "Ảnh bìa",
+                  label: "Cover Image",
                   controller: controller.coverImageController,
                 ),
                 SizedBox(height: TSize.spaceBetweenItemsVertical),
 
                 RegistrationDocumentField(
-                  label: "Ảnh mặt tiền quán",
+                  label: "Facade Image",
                   controller: controller.facadeImageController,
                 ),
               ],
@@ -142,7 +140,7 @@ class RegistrationDetailInfo extends StatelessWidget {
                 _buildTimePicker(controller, day, false),
               ],
             )
-                : Text('Đóng cửa', style: TextStyle(color: Colors.grey)),
+                : Text('Closed', style: TextStyle(color: Colors.grey)),
             ),
           ),
         ],

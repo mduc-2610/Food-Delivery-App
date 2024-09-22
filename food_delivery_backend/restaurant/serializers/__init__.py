@@ -19,9 +19,9 @@ from .menu_delivery import (
     MenuDeliverySerializer,
     UpdateMenuDeliverySerializer,
 )
-from .representative import (
-    RepresentativeSerializer,
-    UpdateRepresentativeSerializer,
+from .representative_info import (
+    RepresentativeInfoSerializer,
+    UpdateRepresentativeInfoSerializer,
 ) 
 from .payment_info import (
     PaymentInfoSerializer,

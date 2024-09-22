@@ -1,5 +1,6 @@
 from django.db import models
 from utils.objects import Point, Distance
+
 class BasicInfo(models.Model):
     restaurant = models.OneToOneField("restaurant.Restaurant", on_delete=models.CASCADE, related_name='basic_info')
     name = models.CharField(max_length=255)

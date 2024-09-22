@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
-import 'package:food_delivery_app/features/authentication/models/restaurant/representative.dart';
+import 'package:food_delivery_app/features/authentication/models/restaurant/representative_info.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
 import 'package:food_delivery_app/common/controllers/field/registration_document_field_controller.dart';
 import 'package:food_delivery_app/features/restaurant/registration/controllers/registration_tab_controller.dart';
@@ -14,7 +14,7 @@ class RegistrationRepresentativeInfoController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final registrationTabController = RegistrationTabController.instance;
   Restaurant? restaurant;
-  RestaurantRepresentative? representative;
+  RestaurantRepresentativeInfo? representativeInfo;
 
   final registrationType = 'Individual'.obs;
   final fullNameController = TextEditingController();
@@ -29,35 +29,35 @@ class RegistrationRepresentativeInfoController extends GetxController {
 
   RegistrationRepresentativeInfoController() {
     restaurant = registrationTabController.restaurant;
-    representative = restaurant?.representative;
+    representativeInfo = restaurant?.representativeInfo;
 
-    if (representative != null) {
-      registrationType.value = THelperFunction.formatChoice(representative?.registrationType ?? "", reverse: true);
-      fullNameController.text = representative?.fullName ?? '';
-      emailController.text = representative?.email ?? '';
-      phoneController.text = representative?.phoneNumber ?? '';
-      otherPhoneController.text = representative?.otherPhoneNumber ?? '';
-      taxCodeController.text = representative?.taxCode ?? '';
-      citizenIdentificationController.text = representative?.citizenIdentification ?? '';
+    if (representativeInfo != null) {
+      registrationType.value = THelperFunction.formatChoice(representativeInfo?.registrationType ?? "", reverse: true);
+      fullNameController.text = representativeInfo?.fullName ?? '';
+      emailController.text = representativeInfo?.email ?? '';
+      phoneController.text = representativeInfo?.phoneNumber ?? '';
+      otherPhoneController.text = representativeInfo?.otherPhoneNumber ?? '';
+      taxCodeController.text = representativeInfo?.taxCode ?? '';
+      citizenIdentificationController.text = representativeInfo?.citizenIdentification ?? '';
     }
 
     citizenIdentificationFrontController = Get.put(RegistrationDocumentFieldController(
-        databaseImages: [representative?.citizenIdentificationFront]
+        databaseImages: [representativeInfo?.citizenIdentificationFront]
     ), tag: "citizenIdentificationFront");
 
     citizenIdentificationBackController = Get.put(RegistrationDocumentFieldController(
-        databaseImages: [representative?.citizenIdentificationBack]
+        databaseImages: [representativeInfo?.citizenIdentificationBack]
     ), tag: "citizenIdentificationBack");
 
     businessRegistrationImageController = Get.put(RegistrationDocumentFieldController(
-        databaseImages: [representative?.businessRegistrationImage]
+        databaseImages: [representativeInfo?.businessRegistrationImage]
     ), tag: "businessRegistrationImage");
   }
 
   void setRegistrationType(String? value) => registrationType.value = value ?? '';
 
   Future<void> onCallApi() async {
-    final representativeData = RestaurantRepresentative(
+    final representativeInfoData = RestaurantRepresentativeInfo(
       registrationType: registrationType.value,
       fullName: fullNameController.text,
       email: emailController.text,
@@ -70,10 +70,10 @@ class RegistrationRepresentativeInfoController extends GetxController {
       businessRegistrationImage: businessRegistrationImageController.selectedImages[0],
     );
     $print("RESTAURANT:$restaurant");
-    if (restaurant != null && representative != null) {
-      $print(representativeData.toJson(patch: true));
-      final [statusCode, headers, data] = await APIService<RestaurantRepresentative>(dio: Dio())
-          .update(restaurant?.id ?? "", representativeData, isFormData: true, patch: true);
+    if (restaurant != null && representativeInfo != null) {
+      $print(representativeInfoData.toJson(patch: true));
+      final [statusCode, headers, data] = await APIService<RestaurantRepresentativeInfo>(dio: Dio())
+          .update(restaurant?.id ?? "", representativeInfoData, isFormData: true, patch: true);
       $print([statusCode, headers, data]);
     } else {
       if (restaurant == null) {
@@ -85,10 +85,10 @@ class RegistrationRepresentativeInfoController extends GetxController {
           registrationTabController.restaurant = data;
         }
       }
-      representativeData.restaurant = restaurant?.id;
-      $print(representativeData?.toJson());
-      final [statusCode, headers, data] = await APIService<RestaurantRepresentative>(dio: Dio())
-          .create(representativeData, isFormData: true);
+      representativeInfoData.restaurant = restaurant?.id;
+      $print(representativeInfoData?.toJson());
+      final [statusCode, headers, data] = await APIService<RestaurantRepresentativeInfo>(dio: Dio())
+          .create(representativeInfoData, isFormData: true);
       print([statusCode, headers, data]);
     }
   }
@@ -105,7 +105,7 @@ class RegistrationRepresentativeInfoController extends GetxController {
     if (formKey.currentState?.validate() ?? false) {
       formKey.currentState?.save();
       registrationTabController.setTab();
-      print("Continuing with representative info...");
+      print("Continuing with representativeInfo info...");
     }
   }
 

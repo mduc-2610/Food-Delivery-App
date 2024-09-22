@@ -20,7 +20,7 @@ class _RegistrationMenuDeliveryState extends State<RegistrationMenuDelivery> {
         child: ListView(
           children: [
             RegistrationDocumentField(
-              label: "Ảnh chụp menu",
+              label: "Menu Image",
               controller: controller.menuImageController,
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical),

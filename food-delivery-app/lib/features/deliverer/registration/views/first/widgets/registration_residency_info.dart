@@ -47,7 +47,7 @@ class RegistrationResidencyInfo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Địa chỉ tạm trú',
+            'Temporary Address',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
@@ -55,7 +55,7 @@ class RegistrationResidencyInfo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'Giống địa chỉ trên CCCD',
+                'Same as the address on the ID card',
                 style: TextStyle(color: Colors.black, fontSize: 14),
               ),
               CupertinoSwitch(
@@ -67,26 +67,26 @@ class RegistrationResidencyInfo extends StatelessWidget {
           const SizedBox(height: 16),
           if (!controller.isSameAsCI.value) ...[
             Obx(() => RegistrationDropdownField(
-              label: 'Tỉnh/Thành phố thường trú (trên CCCD)',
+              label: 'City of Residence (on ID card)',
               onChanged: controller.setResidentCity,
               value: controller.city.value,
               items: ["Hà Nội", "TP.HCM", "Đà Nẵng"],
             )),
             Obx(() => RegistrationDropdownField(
-              label: 'Quận/Huyện thường trú (trên CCCD)',
+              label: 'District of Residence (on ID card)',
               onChanged: controller.setResidentDistrict,
               value: controller.district.value,
-              items: ["Quận 1", "Quận 2", "Quận 3"],
+              items: ["District 1", "District 2", "District 3"],
             )),
             Obx(() => RegistrationDropdownField(
-              label: 'Phường/Xã thường trú (trên CCCD)',
+              label: 'Ward of Residence (on ID card)',
               onChanged: controller.setResidentWard,
               value: controller.ward.value,
-              items: ["Phường 1", "Phường 2", "Phường 3"],
+              items: ["Ward 1", "Ward 2", "Ward 3"],
             )),
             RegistrationTextField(
               hintText: "0 / 255",
-              label: "Địa chỉ thường trú (trên CCCD)",
+              label: "Permanent Address (on ID card)",
               controller: controller.addressController,
             ),
           ]
@@ -110,12 +110,12 @@ class RegistrationResidencyInfo extends StatelessWidget {
             controller: controller,
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
-              hintText: 'Nhập $label',
+              hintText: 'Enter $label',
             ),
             maxLength: maxLength,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Vui lòng nhập $label';
+                return 'Please enter $label';
               }
               return null;
             },
@@ -130,13 +130,13 @@ class RegistrationResidencyInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildFormField2(
-          'Bạn có mã số thuế TNCN hay không?',
-          'Có',
+          'Do you have a personal tax number?',
+          'Yes',
           controller.hasTaxNumber.value,
           controller.toggleHasTaxNumber,
         ),
         if (controller.hasTaxNumber.value)
-          _buildTextField('Mã số thuế', controller.taxNumberController),
+          _buildTextField('Tax Number', controller.taxNumberController),
       ],
     );
   }

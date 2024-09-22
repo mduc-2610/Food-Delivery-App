@@ -23,7 +23,7 @@ class RegistrationBasicInfo extends StatelessWidget {
                 children: [
                   Expanded(
                     child: RegistrationTextField(
-                      label: 'Tên quán',
+                      label: 'Shop Name',
                       controller: controller.shopNameController,
                       validator: (value) => value!.isEmpty ? 'Please enter shop name' : null,
                     ),
@@ -31,7 +31,7 @@ class RegistrationBasicInfo extends StatelessWidget {
                   SizedBox(width: 10),
                   Expanded(
                     child: Obx(() => RegistrationDropdownField(
-                      label: 'Loại',
+                      label: 'Type',
                       items: ["Type 1", "Type 2"],
                       value: controller.shopType.value,
                       onChanged: controller.setShopType,
@@ -40,7 +40,7 @@ class RegistrationBasicInfo extends StatelessWidget {
                   SizedBox(width: 10),
                   Expanded(
                     child: RegistrationTextField(
-                      label: 'Đường/phố',
+                      label: 'Street',
                       controller: controller.streetController,
                       validator: (value) => value!.isEmpty ? 'Please enter street' : null,
                     ),
@@ -50,14 +50,14 @@ class RegistrationBasicInfo extends StatelessWidget {
               SizedBox(height: TSize.spaceBetweenItemsVertical),
 
               RegistrationTextField(
-                label: 'Số điện thoại liên hệ',
+                label: 'Contact Phone',
                 controller: controller.contactPhoneController,
                 validator: (value) => value!.isEmpty ? 'Please enter contact phone' : null,
               ),
               SizedBox(height: TSize.spaceBetweenItemsVertical),
 
               Obx(() => RegistrationDropdownField(
-                label: 'Thành phố',
+                label: 'City',
                 items: ["City 1", "City 2"],
                 value: controller.city.value,
                 onChanged: controller.setCity,
@@ -65,7 +65,7 @@ class RegistrationBasicInfo extends StatelessWidget {
               SizedBox(height: TSize.spaceBetweenItemsVertical),
 
               Obx(() => RegistrationDropdownField(
-                label: 'Quận',
+                label: 'District',
                 items: ["District 1", "District 2"],
                 value: controller.district.value,
                 onChanged: controller.setDistrict,
@@ -73,16 +73,15 @@ class RegistrationBasicInfo extends StatelessWidget {
               SizedBox(height: TSize.spaceBetweenItemsVertical),
 
               RegistrationTextField(
-                label: 'Số nhà và Đường/Phố',
+                label: 'House Number and Street',
                 controller: controller.streetAddressController,
                 validator: (value) => value!.isEmpty ? 'Please enter house and street' : null,
               ),
               SizedBox(height: TSize.spaceBetweenItemsVertical),
 
               ElevatedButton(
-                onPressed: () {
-                },
-                child: Text('Kiểm tra trên bản đồ'),
+                onPressed: () {},
+                child: Text('Check on Map'),
               ),
             ],
           ),

@@ -1,10 +1,10 @@
 # representatives/serializers.py
 from rest_framework import serializers
-from restaurant.models import Representative
+from restaurant.models import RepresentativeInfo
 
-class BasicRepresentativeSerializer(serializers.ModelSerializer):
+class BasicRepresentativeInfoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Representative
+        model = RepresentativeInfo
         fields = [
             'id', 
             'restaurant', 
@@ -21,9 +21,9 @@ class BasicRepresentativeSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id']
 
-class RepresentativeSerializer(BasicRepresentativeSerializer):
+class RepresentativeInfoSerializer(BasicRepresentativeInfoSerializer):
     pass
 
-class UpdateRepresentativeSerializer(BasicRepresentativeSerializer):
-    class Meta(BasicRepresentativeSerializer.Meta):
+class UpdateRepresentativeInfoSerializer(BasicRepresentativeInfoSerializer):
+    class Meta(BasicRepresentativeInfoSerializer.Meta):
         read_only_fields = ['id', 'restaurant']

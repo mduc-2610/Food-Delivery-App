@@ -19,18 +19,18 @@ class RegistrationOtherInfo extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         children: [
           Obx(() => RegistrationDropdownField(
-            label: "Nghề nghiệp",
-            items: ["Nhân viên văn phòng", "Tài xế", "Kỹ sư"],
+            label: "Occupation",
+            items: ["Office Worker", "Driver", "Engineer"],
             onChanged: controller.setOccupation,
             value: controller.occupation.value,
           )),
           RegistrationTextField(
-            label: "Chi tiết",
-            hintText: "Tập vụ",
+            label: "Details",
+            hintText: "Part-time",
             controller: controller.detailsController,
           ),
           RegistrationDocumentField(
-            label: "Lý lịch tư pháp",
+            label: "Criminal Record",
             controller: controller.judicialRecordController,
           ),
         ],

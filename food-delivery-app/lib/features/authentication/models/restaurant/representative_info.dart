@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 @reflector
 @jsonSerializable
-class RestaurantRepresentative {
+class RestaurantRepresentativeInfo {
   String? restaurant;
   final String? registrationType;
   final String? fullName;
@@ -19,7 +19,7 @@ class RestaurantRepresentative {
   final dynamic citizenIdentificationBack;
   final dynamic businessRegistrationImage;
 
-  RestaurantRepresentative({
+  RestaurantRepresentativeInfo({
     this.restaurant,
     this.registrationType,
     this.fullName,
@@ -33,7 +33,7 @@ class RestaurantRepresentative {
     this.businessRegistrationImage,
   });
 
-  RestaurantRepresentative.fromJson(Map<String, dynamic> json)
+  RestaurantRepresentativeInfo.fromJson(Map<String, dynamic> json)
       : restaurant = json['restaurant'],
         registrationType = json['registration_type'],
         fullName = json['full_name'],

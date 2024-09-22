@@ -5,7 +5,7 @@ import 'package:food_delivery_app/features/authentication/models/restaurant/basi
 import 'package:food_delivery_app/features/authentication/models/restaurant/detail_info.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/menu_delivery.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/payment_info.dart';
-import 'package:food_delivery_app/features/authentication/models/restaurant/representative.dart';
+import 'package:food_delivery_app/features/authentication/models/restaurant/representative_info.dart';
 import 'package:food_delivery_app/features/user/food/models/food/category.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
 import 'package:food_delivery_app/features/user/food/models/review/review.dart';
@@ -17,7 +17,7 @@ class Restaurant {
   final String? id;
   final String? user;
   final RestaurantBasicInfo? basicInfo;
-  final RestaurantRepresentative? representative;
+  final RestaurantRepresentativeInfo? representativeInfo;
   final RestaurantDetailInfo? detailInfo;
   final RestaurantMenuDelivery? menuDelivery;
   final RestaurantPaymentInfo? paymentInfo;
@@ -36,7 +36,7 @@ class Restaurant {
     this.basicInfo,
     this.detailInfo,
     this.paymentInfo,
-    this.representative,
+    this.representativeInfo,
     this.menuDelivery,
     this.dishes = const [],
     this.categories = const [],
@@ -52,7 +52,7 @@ class Restaurant {
       : id = json['id'],
         user = json['user'],
         basicInfo = json['basic_info'] != null ? RestaurantBasicInfo.fromJson(json['basic_info']) : null,
-        representative = json['representative'] != null ? RestaurantRepresentative.fromJson(json['representative']) : null,
+        representativeInfo = json['representative_info'] != null ? RestaurantRepresentativeInfo.fromJson(json['representative_info']) : null,
         detailInfo = json['detail_info'] != null ? RestaurantDetailInfo.fromJson(json['detail_info']) : null,
         menuDelivery = json['menu_delivery'] != null ? RestaurantMenuDelivery.fromJson(json['menu_delivery']) : null,
         paymentInfo = json['payment_info'] != null ? RestaurantPaymentInfo.fromJson(json['payment_info']) : null,
@@ -76,7 +76,7 @@ class Restaurant {
       'id': id,
       'user': user,
       'basic_info': basicInfo?.toJson(),
-      'representative': representative?.toJson(),
+      'representative_info': representativeInfo?.toJson(),
       'detail_info': detailInfo?.toJson(),
       'menu_delivery': menuDelivery?.toJson(),
       // 'promotions': promotions?.map((promo) => promo.toJson()).toList(),

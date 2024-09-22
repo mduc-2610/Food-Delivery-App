@@ -4,7 +4,6 @@ import 'package:food_delivery_app/common/widgets/registration/registration_dropd
 import 'package:food_delivery_app/common/widgets/registration/registration_type_option.dart';
 import 'package:food_delivery_app/features/deliverer/registration/controllers/first/registration_operation_info.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
-import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:get/get.dart';
 
 class RegistrationOperationInfo extends StatelessWidget {
@@ -22,13 +21,13 @@ class RegistrationOperationInfo extends StatelessWidget {
                 padding: EdgeInsets.all(16),
                 children: [
                   Obx(() => RegistrationDropdownField(
-                    label: 'Tỉnh/Thành phố hoạt động',
+                    label: 'City of Operation',
                     onChanged: controller.setSelectedCity,
                     value: controller.city.value,
                     items: ["Hà Nội", "TP.HCM", "Đà Nẵng"],
                   )),
                   Obx(() => RegistrationTypeOption(
-                    label: 'Loại hình hoạt động',
+                    label: 'Type of Operation',
                     types: ['Hub', 'Part-time'],
                     selectedType: controller.driverType.value,
                     onChanged: controller.setDriverType,
@@ -41,20 +40,20 @@ class RegistrationOperationInfo extends StatelessWidget {
                     items: ["HUB 1", "HUB 2", "HUB 3"],
                   )),
                   Obx(() => RegistrationDropdownField(
-                    label: 'Khu vực hoạt động',
+                    label: 'Operational Area',
                     onChanged: controller.setSelectedArea,
                     value: controller.area.value,
-                    items: ["Khu vực 1", "Khu vực 2", "Khu vực 3"],
+                    items: ["Area 1", "Area 2", "Area 3"],
                   )),
                   Obx(() => RegistrationDropdownField(
-                    label: 'Thời gian hoạt động',
+                    label: 'Operational Time',
                     onChanged: controller.setSelectedTime,
                     value: controller.time.value,
-                    items: ["Sáng", "Chiều", "Tối"],
+                    items: ["Morning", "Afternoon", "Evening"],
                   )),
                   SizedBox(height: TSize.spaceBetweenItemsVertical),
                   Text(
-                    'Thêm khu vực hoạt động mong muốn (tối đa 3)',
+                    'Add desired operational areas (up to 3)',
                     style: TextStyle(color: Colors.blue),
                   ),
                 ],

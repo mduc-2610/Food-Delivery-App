@@ -23,7 +23,7 @@ import 'package:food_delivery_app/features/authentication/models/restaurant/deta
 import 'package:food_delivery_app/features/authentication/models/restaurant/menu_delivery.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/operating_hour.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/payment_info.dart';
-import 'package:food_delivery_app/features/authentication/models/restaurant/representative.dart';
+import 'package:food_delivery_app/features/authentication/models/restaurant/representative_info.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
 import 'package:food_delivery_app/features/notification/models/message.dart';
 import 'package:food_delivery_app/features/notification/models/room.dart';
@@ -131,7 +131,7 @@ class APIConstant {
         return 'restaurant/menu-delivery';
       case RestaurantOperatingHour:
         return 'restaurant/operating-hour';
-      case RestaurantRepresentative:
+      case RestaurantRepresentativeInfo:
         return 'restaurant/representative';
       case RestaurantPaymentInfo:
         return 'restaurant/payment-info';

@@ -85,6 +85,7 @@ def load_review(
     Dish is different because
     User rate food through order but that order contain many foods
     """
+    
     if DishReview in models_to_update:
         dishes = list(Dish.objects.all())
         users = list(User.objects.all())
