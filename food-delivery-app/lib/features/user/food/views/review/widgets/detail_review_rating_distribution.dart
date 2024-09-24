@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/bars/rating_bar.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
@@ -12,7 +14,7 @@ class DetailReviewRatingDistribution extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int totalReviews = item?.totalReviews ?? 1;
+    final int totalReviews = item?.totalReviews;
     final Map<String, dynamic> ratingCounts = item?.ratingCounts ?? {};
 
     return Column(
@@ -20,7 +22,7 @@ class DetailReviewRatingDistribution extends StatelessWidget {
         for (int i = 5; i >= 1; i--)...[
           CRatingBar(
             prefixText: "(${THelperFunction.formatNumber(ratingCounts[i.toString()])}) ${i.toString()}",
-            value: (ratingCounts[i.toString()] ?? 0) / totalReviews,
+            value: (ratingCounts[i.toString()] ?? 0) / max(totalReviews, 1),
           ),
         ]
       ],

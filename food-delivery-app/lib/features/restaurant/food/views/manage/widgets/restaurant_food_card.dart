@@ -1,25 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/bars/separate_bar.dart';
+import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
+import 'package:food_delivery_app/features/restaurant/food/views/detail/food_detail.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
+import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
-class RestaurantFoodCard extends StatelessWidget {
+class RestaurantFoodCard extends StatefulWidget {
   final Dish? dish;
+  final Function()? onEdit;
+  final Function()? onToggleDisable;
 
   const RestaurantFoodCard({
-    this.dish,
+    required this.dish,
+    this.onEdit,
+    this.onToggleDisable,
     super.key
   });
 
   @override
+  State<RestaurantFoodCard> createState() => _RestaurantFoodCardState();
+}
+
+class _RestaurantFoodCardState extends State<RestaurantFoodCard> {
+  bool isDisabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isDisabled = widget.dish?.isDisabled ?? false;
+
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
+      onTap: () {
+        Get.to(() => FoodDetailView(), arguments: {
+          "id": widget.dish?.id
+        });
+      },
       child: Container(
         width: TDeviceUtil.getScreenWidth(),
         child: Card(
@@ -27,18 +54,35 @@ class RestaurantFoodCard extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(TSize.borderRadiusLg),
+              color: widget.dish?.isDisabled == true? Colors.grey[300] : null,
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
-                  child: Image.asset(
-                    "${TImage.hcBurger1 ?? dish?.image}",
-                    width: TSize.imageThumbSize + 30,
-                    height: TSize.imageThumbSize + 30,
-                    fit: BoxFit.cover,
-                  ),
+                Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
+                      child: Image.asset(
+                         TImage.hcBurger1,
+                        width: TSize.imageThumbSize + 30,
+                        height: TSize.imageThumbSize + 30,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    if (widget.dish?.isDisabled == true)
+                      Positioned.fill(
+                        child: Container(
+                          color: Colors.black.withOpacity(0.5),
+                          child: Center(
+                            child: Text(
+                              'DISABLED',
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
                 SizedBox(width: TSize.spaceBetweenItemsHorizontal),
 
@@ -48,7 +92,7 @@ class RestaurantFoodCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${dish?.name ?? "Burger"}",
+                        "${widget.dish?.name ?? ''}",
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       Row(
@@ -57,7 +101,7 @@ class RestaurantFoodCard extends StatelessWidget {
                           SvgPicture.asset(TIcon.fillStar),
                           SizedBox(width: TSize.spaceBetweenItemsSm),
                           Text(
-                            "${dish?.rating ?? 0}",
+                            "${widget.dish?.rating}",
                             style: Theme.of(context).textTheme.titleLarge?.copyWith(color: TColor.star),
                           ),
                           SizedBox(width: TSize.spaceBetweenItemsHorizontal),
@@ -70,7 +114,7 @@ class RestaurantFoodCard extends StatelessWidget {
                           ),
                           SizedBox(width: TSize.spaceBetweenItemsSm),
                           Text(
-                            "${dish?.totalLikes ?? 0}",
+                            "${widget.dish?.totalLikes}",
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
@@ -79,33 +123,90 @@ class RestaurantFoodCard extends StatelessWidget {
 
                       Row(
                         children: [
+                          Icon(Icons.shopping_cart, color: TColor.primary,),
                           Text(
-                            "£${dish?.originalPrice ?? 0}",
+                            "Orders: ${widget.dish?.totalOrders}",
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                color: TColor.textDesc,
-                                decoration: TextDecoration.lineThrough,
-                                decorationThickness: 2,
-                                decorationColor: TColor.textDesc
+                                color: TColor.primary,
+                                fontWeight: FontWeight.bold
                             ),
                           ),
                         ],
                       ),
+                      SizedBox(height: TSize.spaceBetweenItemsMd),
 
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "£${dish?.discountPrice ?? 0}",
-                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.primary),
+                          Row(
+                            children: [
+                              Text(
+                                "£${widget.dish?.originalPrice}",
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    color: TColor.textDesc,
+                                    decoration: TextDecoration.lineThrough,
+                                    decorationThickness: 2,
+                                    decorationColor: TColor.textDesc
+                                ),
+                              ),
+                              SizedBox(width: TSize.spaceBetweenItemsMd),
+                              Text(
+                                "£${widget.dish?.discountPrice}",
+                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.primary),
+                              ),
+                            ],
                           ),
-                          Spacer(),
 
                         ],
                       )
                     ],
                   ),
                 ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    PopupMenuButton<String>(
+                      icon: CircleIconCard(
+                        icon: Icons.more_horiz,
+                        // color: TColor.primary,
+                      ),
+                      onSelected: (String result) {
+                        if (result == 'edit') {
+                          widget.onEdit?.call();
+                        } else if (result == 'toggle') {
+                          setState(() {
+                            isDisabled = !isDisabled;
+                            $print(isDisabled);
+                          });
+                          widget.onToggleDisable?.call();
+                        }
+                      },
+                      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                        PopupMenuItem<String>(
+                          value: 'toggle',
+                          child: Text(
+                            isDisabled == true ? 'Enable' : 'Disable',
+                            style: Get.theme.textTheme.bodyMedium,
+                          ),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'edit',
+                          child: Text(
+                            'Edit Information',
+                            style: Get.theme.textTheme.bodyMedium,
+                          ),
+                        ),
+                      ],
+                    ),
+                    // SizedBox(height: TSize.spaceBetweenItemsMd),
+                    StatusChip(
+                      status: isDisabled == false ? "ACTIVE" : "CANCELLED",
+                      text: isDisabled == false ? "ACTIVE" : "DISABLED",
+                    ),
+                  ],
+                )
               ],
             ),
           ),

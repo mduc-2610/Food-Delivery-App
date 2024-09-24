@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 class CRatingBar extends StatelessWidget {
   final String? prefixText;
   final double value;
   const CRatingBar({
     this.prefixText,
-    required this.value,
+    this.value = 0,
     super.key,
   });
 

@@ -92,28 +92,34 @@ class ReviewController<T> extends GetxController with SingleGetTickerProviderMix
 
 class FoodDetailReviewController extends ReviewController<Dish> {
   static FoodDetailReviewController get instance => Get.find();
-  final _foodDetailController = FoodDetailController.instance;
+  // final _foodDetailController = FoodDetailController.instance;
+
+  final item;
+  FoodDetailReviewController({required this.item});
 
   @override
   void onInit() {
     super.onInit();
     initialize(
-      item: _foodDetailController.dish!,
-      reviewsUrl: _foodDetailController.dish!.dishReviews!,
+      item: item,
+      reviewsUrl: item!.dishReviews!,
     );
   }
 }
 
 class RestaurantDetailReviewController extends ReviewController<Restaurant> {
   static RestaurantDetailReviewController get instance => Get.find();
-  final _restaurantDetailController = RestaurantDetailController.instance;
+  // final _restaurantDetailController = RestaurantDetailController.instance;
+
+  final item;
+  RestaurantDetailReviewController({required this.item});
 
   @override
   void onInit() {
     super.onInit();
     initialize(
-      item: _restaurantDetailController.restaurant!,
-      reviewsUrl: _restaurantDetailController.restaurant!.restaurantReviews!,
+      item: item,
+      reviewsUrl: item!.restaurantReviews!,
     );
   }
 }
@@ -121,14 +127,17 @@ class RestaurantDetailReviewController extends ReviewController<Restaurant> {
 
 class DelivererDetailReviewController extends ReviewController<Deliverer> {
   static DelivererDetailReviewController get instance => Get.find();
-  final _delivererDetailController = DelivererHomeController.instance;
+  // final _delivererDetailController = DelivererHomeController.instance;
+
+  final item;
+  DelivererDetailReviewController({required this.item});
 
   @override
   void onInit() {
     super.onInit();
     initialize(
-      item: _delivererDetailController.deliverer!,
-      reviewsUrl: _delivererDetailController.deliverer?.delivererReviews!,
+      item: item,
+      reviewsUrl: item?.delivererReviews!,
     );
   }
 }

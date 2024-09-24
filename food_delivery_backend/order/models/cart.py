@@ -28,7 +28,7 @@ class RestaurantCart(models.Model):
 class RestaurantCartDish(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
     cart = models.ForeignKey("order.RestaurantCart", related_name='dishes', on_delete=models.CASCADE)
-    dish = models.ForeignKey("food.Dish", on_delete=models.CASCADE)
+    dish = models.ForeignKey("food.Dish", related_name='in_carts_or_orders', on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     discount_price = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)

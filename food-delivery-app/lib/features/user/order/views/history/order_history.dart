@@ -35,11 +35,11 @@ class _OrderHistoryViewState extends State<OrderHistoryView> {
                   MainWrapper(
                     rightMargin: 0,
                     child: FilterBar(
-                      filters: ["All", "Active", "Completed", "Pending", "Cancelled", "5", "4", "3", "2", "1"],
-                      exclude: ["All", "Active", "Completed", "Pending", "Cancelled"],
+                      controller: controller.filterBarController,
+                      filters: ["All", "Active", "Completed", "Cancelled", "5", "4", "3", "2", "1"],
+                      exclude: ["All", "Active", "Completed", "Cancelled"],
                       suffixIconStr: TIcon.unearnedStar,
                       suffixIconStrClicked: TIcon.fillStar,
-                      onTap: controller.fetchFilterOrder,
                     ),
                   ),
                   SizedBox(height: TSize.spaceBetweenItemsVertical),

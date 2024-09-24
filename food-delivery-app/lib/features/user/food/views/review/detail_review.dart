@@ -18,24 +18,28 @@ enum ReviewType { food, restaurant, deliverer }
 
 class DetailReviewView extends StatelessWidget {
   final ReviewType reviewType;
+  final item;
 
-  DetailReviewView({this.reviewType = ReviewType.food});
+  DetailReviewView({
+    this.reviewType = ReviewType.food,
+    required this.item,
+  });
 
   dynamic getBuilder({builder}) {
     switch(reviewType) {
       case ReviewType.restaurant:
         return GetBuilder<RestaurantDetailReviewController>(
-          init: RestaurantDetailReviewController(),
+          init: RestaurantDetailReviewController(item: item),
           builder: builder,
         );
       case ReviewType.deliverer:
         return GetBuilder<DelivererDetailReviewController>(
-          init: DelivererDetailReviewController(),
+          init: DelivererDetailReviewController(item: item),
           builder: builder,
         );
       default:
         return GetBuilder<FoodDetailReviewController>(
-          init: FoodDetailReviewController(),
+          init: FoodDetailReviewController(item: item),
           builder: builder,
         );
     }
@@ -46,7 +50,6 @@ class DetailReviewView extends StatelessWidget {
     return getBuilder(
       builder: (controller) {
         final item = controller.item;
-        $print(item);
         return Obx(() => controller.isPageLoading.value
             ? DetailReviewViewSkeleton()
             : Scaffold(

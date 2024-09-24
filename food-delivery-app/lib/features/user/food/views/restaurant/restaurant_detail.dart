@@ -53,7 +53,10 @@ class RestaurantDetailView extends StatelessWidget {
                             ),
                             InkWell(
                               onTap: () {
-                                Get.to(() => DetailReviewView(reviewType: ReviewType.restaurant,));
+                                Get.to(() => DetailReviewView(
+                                  reviewType: ReviewType.restaurant,
+                                  item: restaurant,
+                                ));
                               },
                               child: Row(
                                 children: [

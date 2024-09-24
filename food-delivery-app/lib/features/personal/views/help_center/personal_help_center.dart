@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 
 class PersonalHelpCenterView extends StatelessWidget {
   final PersonalHelpCenterController controller = Get.put(PersonalHelpCenterController());
-  final FilterBarController _filterBarController = Get.put(FilterBarController("General"));
+  final FilterBarController _filterBarController = Get.put(FilterBarController("General", (_) async {}));
 
   @override
   Widget build(BuildContext context) {

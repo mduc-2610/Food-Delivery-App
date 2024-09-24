@@ -15,10 +15,13 @@ class Dish {
   final double? rating;
   final int? totalReviews;
   final int? totalLikes;
+  final int? totalOrders;
+  final bool? isDisabled;
   final String? categoryId;
   final String? dishReviews;
   final Map<String, dynamic> ratingCounts;
   final List<DishOption> options;
+  final String? inCartsOrOrders;
 
   Dish({
     this.id,
@@ -30,10 +33,13 @@ class Dish {
     this.rating,
     this.totalReviews,
     this.totalLikes,
+    this.totalOrders,
+    this.isDisabled,
     this.categoryId,
     this.dishReviews,
     this.ratingCounts = const {},
     this.options = const [],
+    this.inCartsOrOrders,
   });
 
   Dish.fromJson(Map<String, dynamic> json)
@@ -46,17 +52,21 @@ class Dish {
         rating = THelperFunction.formatDouble(json['rating']),
         totalReviews = json['total_reviews'],
         totalLikes = json['total_likes'],
+        totalOrders = json['total_orders'],
+        isDisabled = json['is_disabled'],
         categoryId = json['category'],
         dishReviews = json['dish_reviews'],
         ratingCounts = json['rating_counts'] ?? {},
-        options = json['options'] != null ? json['options'] is List ? (json['options'] as List).map((instance) => DishOption.fromJson(instance)).toList() : [] : [];
+        options = json['options'] != null ? json['options'] is List ? (json['options'] as List).map((instance) => DishOption.fromJson(instance)).toList() : [] : [],
+        inCartsOrOrders = json['in_carts_or_orders']
+  ;
 
   String get formattedName {
     return THelperFunction.formatName(name ?? "");
   }
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson({ bool patch = false }) {
+    Map<String, dynamic> data = {
       'id': id,
       'name': name,
       'description': description,
@@ -64,10 +74,17 @@ class Dish {
       'discount_price': discountPrice,
       'image': image,
       'rating': rating,
+      'is_disabled': isDisabled,
       'total_reviews': totalReviews,
       'total_likes': totalLikes,
       'category': categoryId,
     };
+
+    if(patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
   }
 
   String get formatTotalReviews {

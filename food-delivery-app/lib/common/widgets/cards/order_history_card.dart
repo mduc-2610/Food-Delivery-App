@@ -22,27 +22,36 @@ class OrderHistoryCard extends StatelessWidget {
   final RestaurantCart? restaurantCart;
   final Order? order;
   final bool noMargin;
+  final VoidCallback? onTap;
 
   const OrderHistoryCard({
     Key? key,
     this.restaurantCart,
     this.order,
     this.noMargin = false,
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final Order? currentOrder = order ?? restaurantCart?.order;
-    final controller = OrderHistoryController.instance;
+    var controller;
+    try {
+      controller = OrderHistoryController.instance;
+    }
+    catch(e) {
+
+    }
     return GestureDetector(
-      onTap: () async {
+      onTap: onTap ?? () async {
         // $print("INITIALIZE");
         final result = (await Get.to(() => OrderHistoryDetailView(), arguments: {
           'id': order?.id
           })) as Map<String, Order?>;
         final _order = result["order"];
         if(_order?.status != order?.status) {
-          await controller.initialize();
+          if(controller != null)
+            await controller.initialize();
         }
 
       },

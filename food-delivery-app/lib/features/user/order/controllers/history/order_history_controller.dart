@@ -25,7 +25,7 @@ class OrderHistoryController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    filterBarController = Get.put(FilterBarController(_filterDefault));
+    filterBarController = Get.put(FilterBarController(_filterDefault, fetchFilterOrder));
     _filterDefault = filterBarController.selectedFilter.value;
     scrollController.addListener(_scrollListener);
     initialize();

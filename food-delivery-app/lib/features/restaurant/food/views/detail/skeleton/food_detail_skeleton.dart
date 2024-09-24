@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/widgets/cards/order_history_card.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
 import 'package:food_delivery_app/features/user/food/views/detail/skeleton/food_detail_bottom_app_bar_skeleton.dart';
 import 'package:food_delivery_app/features/user/food/views/detail/skeleton/food_detail_sliver_app_bar_skeleton.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
-class DetailViewSkeleton extends StatelessWidget {
-  const DetailViewSkeleton({Key? key}) : super(key: key);
+class FoodDetailSkeleton extends StatelessWidget {
+  const FoodDetailSkeleton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +25,7 @@ class DetailViewSkeleton extends StatelessWidget {
                   SizedBox(height: TSize.spaceBetweenItemsVertical),
                   BoxSkeleton(height: 30, width: 80),
                   SizedBox(height: TSize.spaceBetweenItemsVertical),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      BoxSkeleton(height: 30, width: 80),
-                      BoxSkeleton(height: 30, width: 30),
-                    ],
-                  ),
+                  BoxSkeleton(height: 30, width: 80),
                   SizedBox(height: TSize.spaceBetweenItemsVertical),
 
                   Row(
@@ -48,29 +43,21 @@ class DetailViewSkeleton extends StatelessWidget {
                   BoxSkeleton(height: 30, width: double.infinity),
                   SizedBox(height: TSize.spaceBetweenItemsVertical),
 
-                  for (int i = 0; i < 3; i++) ...[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        BoxSkeleton(height: 20, width: 100),
-                        Row(
-                          children: [
-                            BoxSkeleton(height: 20, width: 60),
-                            SizedBox(width: TSize.spaceBetweenItemsHorizontal),
-                            BoxSkeleton(height: 24, width: 24),
-                          ],
-                        )
-                      ],
-                    ),
-                    SizedBox(height: TSize.spaceBetweenItemsVertical),
-                  ],
+
                 ],
               ),
             ),
           ),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              for (int i = 0; i < 3; i++) ...[
+                OrderHistoryCardSkeleton(),
+                SizedBox(height: TSize.spaceBetweenItemsVertical),
+              ],
+            ]),
+          )
         ],
       ),
-      bottomNavigationBar: FoodDetailBottomAppBarSkeleton(),
     );
   }
 }

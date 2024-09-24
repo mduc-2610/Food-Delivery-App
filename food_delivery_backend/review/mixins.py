@@ -31,7 +31,9 @@ class ReviewFilterMixin:
                 except:
                     star_filter = star_filter
             if star_filter:
-                if star_filter == 'positive':
+                if star_filter == 'all':
+                    return _queryset(instance, filter_kwargs)
+                elif star_filter == 'positive':
                     return _queryset(instance, filter_kwargs) \
                         .filter(rating__gte=3)
                 elif star_filter == 'negative':
@@ -45,4 +47,4 @@ class ReviewFilterMixin:
             else:
                 return _queryset(instance, filter_kwargs)
             
-        return super().get_object()
+        return super().get_object() if hasattr(super(), 'get_object') else None

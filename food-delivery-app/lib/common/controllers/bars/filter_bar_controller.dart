@@ -5,11 +5,12 @@ class FilterBarController extends GetxController {
   static FilterBarController get instance => Get.find();
 
   final Rx<String> selectedFilter;
+  final Future<void> Function(String) filterChangeCallback;
+  FilterBarController(String initialFilter, Future<void> Function(String) filterChangeCallback)
+      : selectedFilter = initialFilter.obs,
+        filterChangeCallback = filterChangeCallback;
 
-  FilterBarController(String initialFilter)
-      : selectedFilter = initialFilter.obs;
-
-  Future<void> onFilterChanged(String filter, Future<void> Function(String) filterChangeCallback) async {
+  Future<void> onFilterChanged(String filter) async {
     selectedFilter.value = filter;
     await filterChangeCallback(filter);
   }

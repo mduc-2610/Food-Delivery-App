@@ -22,7 +22,6 @@ class FoodManageController extends GetxController {
   }
 
   Future<void> initialize() async {
-    $print("INIT");
     isLoading.value = true;
     restaurant = await RestaurantService.getRestaurant();
     $print(restaurant);

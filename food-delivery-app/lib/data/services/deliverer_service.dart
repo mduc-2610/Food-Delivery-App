@@ -35,17 +35,14 @@ class DelivererService {
   static Future<dynamic> getDeliverer({ String? queryParams, bool getUser = false }) async {
     Deliverer? deliverer;
     final user = await APIService<User>(endpoint: 'account/user/me',
-        pagination: false, ).list(single: true);
-    if(getUser) {
-      try {
-        deliverer = await APIService<Deliverer>(queryParams: queryParams ?? "").retrieve(user?.deliverer ?? '');
-        return [user, deliverer];
-      }
-      catch(e) {
-        $print("NOT FOUND DELIVERER");
-        return [user, null];
-      }
+      pagination: false, ).list(single: true);
+    try {
+      deliverer = await APIService<Deliverer>(queryParams: queryParams ?? "").retrieve(user?.deliverer ?? '');
+      return (getUser) ? [user, deliverer] : deliverer;
     }
-    return deliverer;
+    catch(e) {
+      $print("NOT FOUND DELIVERER");
+      return (getUser) ? [user, null] : deliverer;
+    }
   }
 }

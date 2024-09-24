@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:food_delivery_app/utils/device/device_utility.dart';
 
 class FoodManageSkeleton extends StatelessWidget {
   const FoodManageSkeleton({Key? key}) : super(key: key);
@@ -46,36 +47,110 @@ class FoodManageSkeleton extends StatelessWidget {
   }
 
   Widget _buildSkeletonCard() {
-    return Container(
-      height: 120,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          BoxSkeleton(
-            width: 100,
-            height: 100,
-            borderRadius: TSize.borderRadiusMd,
-          ),
-          SizedBox(width: TSize.spaceBetweenItemsHorizontal),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Card(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(TSize.borderRadiusLg),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            BoxSkeleton(
+              height: TSize.imageThumbSize + 30,
+              width: TSize.imageThumbSize + 30,
+              borderRadius: TSize.borderRadiusMd,
+            ),
+            SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BoxSkeleton(
+                    height: 20,
+                    width: TDeviceUtil.getScreenWidth() * 0.5,
+                  ),
+                  SizedBox(height: TSize.spaceBetweenItemsSm),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      BoxSkeleton(
+                        height: TSize.iconSm,
+                        width: TSize.iconSm,
+                      ),
+                      SizedBox(width: TSize.spaceBetweenItemsSm),
+                      BoxSkeleton(
+                        height: 20,
+                        width: TDeviceUtil.getScreenWidth() * 0.1,
+                      ),
+                      SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                      BoxSkeleton(
+                        height: TSize.iconSm,
+                        width: TSize.iconSm,
+                      ),
+                      SizedBox(width: TSize.spaceBetweenItemsSm),
+                      BoxSkeleton(
+                        height: 20,
+                        width: TDeviceUtil.getScreenWidth() * 0.1,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: TSize.spaceBetweenItemsSm),
+                  Row(
+                    children: [
+                      BoxSkeleton(
+                        height: TSize.iconSm,
+                        width: TSize.iconSm,
+                      ),
+                      SizedBox(width: TSize.spaceBetweenItemsSm),
+                      BoxSkeleton(
+                        height: 20,
+                        width: TDeviceUtil.getScreenWidth() * 0.2,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: TSize.spaceBetweenItemsMd),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          BoxSkeleton(
+                            height: 20,
+                            width: TDeviceUtil.getScreenWidth() * 0.1,
+                          ),
+                          SizedBox(width: TSize.spaceBetweenItemsMd),
+                          BoxSkeleton(
+                            height: 20,
+                            width: TDeviceUtil.getScreenWidth() * 0.1,
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                BoxSkeleton(width: 120, height: 20),
-                BoxSkeleton(width: 80, height: 15),
-                BoxSkeleton(width: 50, height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    BoxSkeleton(width: 60, height: 20),
-                    BoxSkeleton(width: 40, height: 40, borderRadius: 20), // Circle
-                  ],
+                BoxSkeleton(
+                  height: TSize.iconLg,
+                  width: TSize.iconLg,
+                  borderRadius: TSize.borderRadiusCircle,
+                ),
+                SizedBox(height: TSize.spaceBetweenItemsMd),
+                BoxSkeleton(
+                  height: 20,
+                  width: TDeviceUtil.getScreenWidth() * 0.2,
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

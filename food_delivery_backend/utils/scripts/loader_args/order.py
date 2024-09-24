@@ -122,21 +122,21 @@ def load_order(
                 _user = _cart.user
                 _delivery_address = order.delivery_address
                 if not _delivery_address: continue
-
-                delivery, created_delivery = Delivery.objects.get_or_create(
-                    order=order, 
-                    user=_user,
-                    restaurant=_restaurant,
-                    deliverer=random.choice(deliverers),
-                    defaults={
-                        'pickup_location': _restaurant.basic_info.street_address,
-                        'pickup_latitude': _restaurant.basic_info.latitude,
-                        'pickup_longitude': _restaurant.basic_info.longitude,
-                        'dropoff_location': _delivery_address.address,
-                        'dropoff_latitude': _delivery_address.latitude,
-                        'dropoff_longitude': _delivery_address.longitude,
-                    }
-                )
+                if hasattr(_restaurant, 'basic_info'):
+                    delivery, created_delivery = Delivery.objects.get_or_create(
+                        order=order, 
+                        user=_user,
+                        restaurant=_restaurant,
+                        deliverer=random.choice(deliverers),
+                        defaults={
+                            'pickup_location': _restaurant.basic_info.street_address,
+                            'pickup_latitude': _restaurant.basic_info.latitude,
+                            'pickup_longitude': _restaurant.basic_info.longitude,
+                            'dropoff_location': _delivery_address.address,
+                            'dropoff_latitude': _delivery_address.latitude,
+                            'dropoff_longitude': _delivery_address.longitude,
+                        }
+                    )
             order_list.append(order)
             print(f"\tSuccessfully created Order: {order}")
 

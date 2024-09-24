@@ -64,7 +64,10 @@ class HomeView extends StatelessWidget {
                                 title: "Reviews",
                                 actionText: "See all reviews",
                                 onActionTap: () {
-                                  Get.to(() => DetailReviewView(reviewType: ReviewType.deliverer));
+                                  Get.to(() => DetailReviewView(
+                                    reviewType: ReviewType.deliverer,
+                                    item: controller.deliverer,
+                                  ));
                                 },
                               ),
                               Row(

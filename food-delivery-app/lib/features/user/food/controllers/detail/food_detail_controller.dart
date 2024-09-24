@@ -45,6 +45,6 @@ class FoodDetailController extends GetxController {
 
 
   void getToFoodReview() {
-    Get.to(() => DetailReviewView());
+    Get.to(() => DetailReviewView(item: dish,));
   }
 }

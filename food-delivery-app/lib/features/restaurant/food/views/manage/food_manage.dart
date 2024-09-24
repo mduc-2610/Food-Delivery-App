@@ -15,7 +15,6 @@ class FoodManageView extends StatelessWidget {
     return GetBuilder<FoodManageController>(
       init: FoodManageController(),
       builder: (controller) {
-      $print("INIT MANAGE");
         return Obx(() {
           return
             (controller.isLoading.value)
@@ -30,7 +29,7 @@ class FoodManageView extends StatelessWidget {
                   tabAlignment: TabAlignment.start,
                   isScrollable: true,
                   tabs: [
-                    Tab(text: 'Alllll'),
+                    Tab(text: 'All'),
                     ...controller.categories.map((category) => Tab(text: category.name)),
                   ],
                 ),
@@ -54,7 +53,7 @@ class FoodManageView extends StatelessWidget {
     return ListView.separated(
       padding: EdgeInsets.all(TSize.spaceBetweenItemsSm),
       itemCount: dishes.length,
-      separatorBuilder: (context, index) => SizedBox(height: TSize.spaceBetweenItemsVertical),
+      separatorBuilder: (context, index) => SizedBox(height: 0),
       itemBuilder: (context, index) => RestaurantFoodCard(dish: dishes[index]),
     );
   }

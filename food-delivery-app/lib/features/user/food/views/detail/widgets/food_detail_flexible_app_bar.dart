@@ -33,21 +33,21 @@ class FoodDetailFlexibleAppBar extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(
-          top: TSize.xl,
-          right: 0,
-          child: MainWrapper(
-            child: Row(
-              children: [
-                AppBarScrollBehavior(
-                  child: CircleIconCard(
-                    iconStr: TIcon.cart,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        // Positioned(
+        //   top: TSize.xl,
+        //   right: 0,
+        //   child: MainWrapper(
+        //     child: Row(
+        //       children: [
+        //         AppBarScrollBehavior(
+        //           child: CircleIconCard(
+        //             iconStr: TIcon.cart,
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
         MainWrapper(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -57,8 +57,8 @@ class FoodDetailFlexibleAppBar extends StatelessWidget {
                 child: Container(
                   margin: EdgeInsets.only(top: TSize.verticalCenterAppBar),
                   child: CircleIconCard(
-                    elevation: TSize.iconCardElevation,
-                    iconStr: TIcon.cart,
+                    iconSize: TSize.iconSm,
+                    iconStr: TIcon.heart,
                   ),
                 ),
               ),

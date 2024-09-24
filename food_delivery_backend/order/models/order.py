@@ -56,7 +56,7 @@ class Order(models.Model):
         return selected_location
 
     def delivery_fee(self):
-        print(self.delivery_address, pretty=True)
+        # print(self.delivery_address, pretty=True)
         _delivery_address = self.delivery_address
         if not self.cart or not _delivery_address:
             return decimal.Decimal('0.00')
@@ -89,7 +89,7 @@ class Order(models.Model):
         self.status = "ACTIVE"
         self.save()
 
-        if not _delivery_address:
+        if not _delivery_address or not hasattr(restaurant, 'basic_info'):
             return
 
         delivery, created_delivery = Delivery.objects.get_or_create(
@@ -141,13 +141,15 @@ def update_dish_total_orders_on_complete(sender, instance, **kwargs):
             dish.total_orders += 1
             dish.save()
 
-@receiver(post_delete, sender='order.Order')
-def update_dish_total_orders_on_delete(sender, instance, **kwargs):
-    if instance.status == "COMPLETED":
-        for cart_dish in instance.cart.dishes.all():
-            dish = cart_dish.dish
-            dish.total_orders -= 1
-            dish.save()
+# @receiver(post_delete, sender='order.Order')
+# def update_dish_total_orders_on_delete(sender, instance, **kwargs):
+#     if instance.status == "COMPLETED":
+#         for cart_dish in instance.cart.dishes.all():
+#             dish = cart_dish.dish
+#             if dish.total_orders > 0:
+#                 dish.total_orders -= 1
+#             else: dish.total_orders = 0
+#             dish.save()
 
 @receiver(post_save, sender='order.Order')
 def broadcast_to_deliverers(sender, instance, **kwargs):

@@ -6,7 +6,12 @@ from rest_framework.decorators import action
 from food.models import Dish
 
 from account.serializers import BasicUserSerializer
-from food.serializers import DishSerializer, DetailDishSerializer, DishLikeSerializer
+from food.serializers import (
+    DishSerializer, 
+    DetailDishSerializer, 
+    DishLikeSerializer,
+    DishInCartOrOrderSerializer
+)
 from review.serializers import DishReviewSerializer, DishReviewLikeSerializer
 
 from review.mixins import ReviewFilterMixin
@@ -29,6 +34,7 @@ class DishViewSet(DefaultGenericMixin, ManyRelatedViewSet, ReviewFilterMixin):
         'reviewed_by_users': BasicUserSerializer,
         'likes': DishLikeSerializer,
         'dish_reviews': DishReviewSerializer,
+        'in_carts_or_orders': DishInCartOrOrderSerializer,
     }   
     # many_related = {
     #     'liked_by_users': {

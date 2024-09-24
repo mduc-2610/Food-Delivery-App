@@ -17,30 +17,30 @@ class FilterBar extends StatelessWidget {
   final Color? suffixIconColor;
   final Color? suffixIconColorClicked;
   final List<String> exclude;
-  final Future<void> Function(String) onTap;
+  final FilterBarController controller;
 
   const FilterBar({
     Key? key,
     required this.filters,
-    required this.onTap,
     this.suffixIconStr,
     this.suffixIconStrClicked,
     this.suffixIcon,
     this.suffixIconColor,
     this.suffixIconColorClicked,
     this.exclude = const [],
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final FilterBarController _controller = Get.find();
+    // final FilterBarController _controller = FilterBarController("all", onTap);
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: filters.map((filter) {
           return Obx(() {
-            final bool isSelected = _controller.selectedFilter.value == filter;
+            final bool isSelected = controller.selectedFilter.value == filter;
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: TSize.xs),
               child: ChoiceChip(
@@ -82,7 +82,7 @@ class FilterBar extends StatelessWidget {
                 selected: isSelected,
                 onSelected: (selected) {
                   if (selected) {
-                    _controller.onFilterChanged(filter, onTap);
+                    controller.onFilterChanged(filter);
                   }
                 },
                 selectedColor: TColor.primary,

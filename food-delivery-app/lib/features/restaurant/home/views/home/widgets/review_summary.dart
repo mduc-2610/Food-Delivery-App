@@ -16,7 +16,7 @@ class ReviewsSummary extends StatelessWidget {
           title: "Reviews",
           actionText: "See all reviews",
           onActionTap: () {
-            Get.to(() => DetailReviewView());
+            // Get.to(() => DetailReviewView());
           }
         ),
         Row(
