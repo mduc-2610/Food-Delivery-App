@@ -1,4 +1,10 @@
 from .category import DishCategory
-from .dish import Dish
+from .dish import (
+    Dish, 
+    DishImage,
+)
 from .dish_like import DishLike
-from .option import DishOption, DishOptionItem
+from .option import (
+    DishOption,
+    DishOptionItem
+)

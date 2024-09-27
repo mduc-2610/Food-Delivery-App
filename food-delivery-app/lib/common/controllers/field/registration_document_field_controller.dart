@@ -12,29 +12,33 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 class RegistrationDocumentFieldController extends GetxController {
+  int maxLength = 1;
   final RxList<dynamic> selectedImages = <dynamic>[].obs;
   final ImagePickerService _imagePickerService = ImagePickerService();
 
-  RegistrationDocumentFieldController({List<String?>? databaseImages}) {
+  RegistrationDocumentFieldController({
+    List<dynamic>? databaseImages,
+    int? maxLength,
+  }) {
     if (databaseImages != null && databaseImages.isNotEmpty && !databaseImages.contains(null)) {
       selectedImages.addAll(databaseImages);
     }
+    this.maxLength = maxLength ?? 1;
   }
 
-  Future<void> pickImages({bool isSingleImage = true}) async {
+  Future<void> pickImages() async {
     final List<dynamic> pickedImages = await _imagePickerService.pickImages(
-      maxImages: isSingleImage ? 1 : 10,
+      maxImages: maxLength,
     );
-    if (isSingleImage) {
+    if (maxLength == 1) {
       selectedImages.clear();
       selectedImages.assignAll(pickedImages);
     } else {
       selectedImages.addAll(pickedImages);
-      if (selectedImages.length > 10) {
-        selectedImages.removeRange(10, selectedImages.length);
+      if (selectedImages.length > maxLength) {
+        selectedImages.removeRange(maxLength, selectedImages.length);
       }
     }
-    $print("Pick image: ${selectedImages}");
   }
 
   void removeImage(int index) {

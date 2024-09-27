@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/bars/separate_bar.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
+import 'package:food_delivery_app/features/restaurant/food/controllers/manage/food_manage_controller.dart';
+import 'package:food_delivery_app/features/restaurant/food/views/add/food_add.dart';
 import 'package:food_delivery_app/features/restaurant/food/views/detail/food_detail.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';
@@ -30,19 +32,11 @@ class RestaurantFoodCard extends StatefulWidget {
 }
 
 class _RestaurantFoodCardState extends State<RestaurantFoodCard> {
-  bool isDisabled = false;
-
-  @override
-  void initState() {
-    super.initState();
-    isDisabled = widget.dish?.isDisabled ?? false;
-
-  }
-
   @override
   Widget build(BuildContext context) {
+    $print(widget?.dish?.isDisabled);
     return InkWell(
-      onTap: () {
+      onTap: () async {
         Get.to(() => FoodDetailView(), arguments: {
           "id": widget.dish?.id
         });
@@ -176,22 +170,20 @@ class _RestaurantFoodCardState extends State<RestaurantFoodCard> {
                         if (result == 'edit') {
                           widget.onEdit?.call();
                         } else if (result == 'toggle') {
-                          setState(() {
-                            isDisabled = !isDisabled;
-                            $print(isDisabled);
-                          });
                           widget.onToggleDisable?.call();
                         }
                       },
                       itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                         PopupMenuItem<String>(
+                          onTap: widget.onToggleDisable,
                           value: 'toggle',
                           child: Text(
-                            isDisabled == true ? 'Enable' : 'Disable',
+                            widget.dish?.isDisabled == true ? 'Enable' : 'Disable',
                             style: Get.theme.textTheme.bodyMedium,
                           ),
                         ),
                         PopupMenuItem<String>(
+                          onTap: widget.onEdit,
                           value: 'edit',
                           child: Text(
                             'Edit Information',
@@ -202,8 +194,8 @@ class _RestaurantFoodCardState extends State<RestaurantFoodCard> {
                     ),
                     // SizedBox(height: TSize.spaceBetweenItemsMd),
                     StatusChip(
-                      status: isDisabled == false ? "ACTIVE" : "CANCELLED",
-                      text: isDisabled == false ? "ACTIVE" : "DISABLED",
+                      status: widget.dish?.isDisabled == false ? "ACTIVE" : "CANCELLED",
+                      text: widget.dish?.isDisabled == false ? "ACTIVE" : "DISABLED",
                     ),
                   ],
                 )

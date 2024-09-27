@@ -10,7 +10,7 @@ class CustomRelatedModelSerializer(serializers.ModelSerializer):
         super().__init__(*args, **kwargs)
         self.detail = self.context.get('detail', True)
         self.request = self.context.get('request')
-        self.query_params = self.request.query_params
+        self.query_params = self.request.query_params if hasattr(self.request, 'query_params') else {}
         self.separator = self.query_params.get('separator', ',')
         self.model = self.Meta.model
         self.endpoint = '-'.join([x.lower() for x in self.model.__name__.split(' ')])

@@ -9,6 +9,7 @@ class RegistrationTextField extends StatefulWidget {
   final int? maxLength;
   final TextEditingController controller;
   final String? Function(String?)? validator;
+  final TextInputType? keyboardType;
 
   RegistrationTextField({
     Key? key,
@@ -18,6 +19,7 @@ class RegistrationTextField extends StatefulWidget {
     this.maxLines = 1,
     this.maxLength,
     this.validator,
+    this.keyboardType = TextInputType.text,
   }) : super(key: key);
 
   @override
@@ -70,6 +72,7 @@ class _RegistrationTextFieldState extends State<RegistrationTextField> {
             maxLines: widget.maxLines,
             maxLength: widget.maxLength,
             validator: validator,
+            keyboardType: widget.keyboardType,
           ),
         ],
       ),

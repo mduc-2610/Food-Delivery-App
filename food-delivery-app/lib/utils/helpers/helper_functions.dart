@@ -110,6 +110,31 @@ class THelperFunction {
     return null;
   }
 
+  static Future<List<dynamic>> convertListToMultipartFile(
+      List<dynamic> files, {
+        String? mediaType,
+        bool getStrUrl = false,
+      }) async {
+    List<dio.MultipartFile?> multipartFiles = [];
+    List<String> imageUrls = [];
+
+    for (var file in files) {
+      dio.MultipartFile? multipartFile = await convertXToMultipartFile(file, mediaType: mediaType);
+      if (multipartFile != null) {
+        multipartFiles.add(multipartFile);
+      } else if (file is String) {
+        imageUrls.add(file);
+      }
+    }
+
+    if (getStrUrl) {
+      return [multipartFiles, imageUrls];
+    } else {
+      return multipartFiles;
+    }
+  }
+
+
   static DateTime? parseDateNormalize(String? dateStr) {
     if (dateStr == null) return null;
 
@@ -239,13 +264,27 @@ class THelperFunction {
     while (classMirror != null) {
       classMirror.declarations.forEach((key, value) {
         if (value is VariableMirror) {
-          attributes[value.simpleName] = instanceMirror.invokeGetter(value.simpleName);
+          var attributeValue = instanceMirror.invokeGetter(value.simpleName);
+
+          // Check if the value is of type XFile
+          if (attributeValue is XFile) {
+            attributes[value.simpleName] = 'XFile: ${attributeValue.path}';
+          }
+          // Check if the value is of type MultipartFile
+          else if (attributeValue is MultipartFile) {
+            attributes[value.simpleName] = 'MultipartFile: ${attributeValue.filename}, Content-Type: ${attributeValue.contentType}';
+          }
+          // Handle other types as needed
+          else {
+            attributes[value.simpleName] = attributeValue;
+          }
         }
       });
       classMirror = classMirror.superclass;
     }
 
-    return _generate(className, attributes, prettyPrint: false) + '\n' + _generate(className, attributes, prettyPrint: true);
+    return _generate(className, attributes, prettyPrint: false) + '\n' +
+        _generate(className, attributes, prettyPrint: true);
   }
 
   static String _generate(String className, Map<String, dynamic> attributes, {bool prettyPrint = false}) {
@@ -295,10 +334,20 @@ class THelperFunction {
   static double formatDouble(dynamic number) {
     if(number != null) {
       if(number is String) {
-        return double.parse(number);
+        try {
+          return double.parse(number);
+        }
+        catch(e) {
+          return 0.0;
+        }
       }
       else if(number is int) {
-        return number.toDouble();
+        try {
+          return number.toDouble();
+        }
+        catch(e) {
+          return 0.0;
+        }
       }
       return number;
     }

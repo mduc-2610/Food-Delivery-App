@@ -5,21 +5,18 @@ import 'package:food_delivery_app/features/restaurant/food/views/manage/skeleton
 import 'package:food_delivery_app/features/restaurant/food/views/manage/widgets/restaurant_food_card.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
-import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
 class FoodManageView extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return GetBuilder<FoodManageController>(
       init: FoodManageController(),
       builder: (controller) {
         return Obx(() {
-          return
-            (controller.isLoading.value)
-            ? FoodManageSkeleton()
-            : DefaultTabController(
+          return (controller.isLoading.value)
+              ? FoodManageSkeleton()
+              : DefaultTabController(
             length: controller.categories.length + 1,
             child: Scaffold(
               appBar: CAppBar(
@@ -36,10 +33,9 @@ class FoodManageView extends StatelessWidget {
               ),
               body: TabBarView(
                 children: [
-                  _buildFoodList(controller.dishes),
+                  Obx(() => _buildFoodList(controller.dishes, controller)),
                   ...controller.categories.map((category) =>
-                      _buildFoodList(controller.mapCategory[category.name] ?? [])
-                  ),
+                      Obx(() => _buildFoodList(controller.mapCategory[category.name] ?? [], controller))),
                 ],
               ),
             ),
@@ -49,12 +45,16 @@ class FoodManageView extends StatelessWidget {
     );
   }
 
-  Widget _buildFoodList(List<Dish> dishes) {
+  Widget _buildFoodList(List<Dish> dishes, FoodManageController controller) {
     return ListView.separated(
       padding: EdgeInsets.all(TSize.spaceBetweenItemsSm),
       itemCount: dishes.length,
-      separatorBuilder: (context, index) => SizedBox(height: 0),
-      itemBuilder: (context, index) => RestaurantFoodCard(dish: dishes[index]),
+      separatorBuilder: (context, index) => SizedBox(height: TSize.spaceBetweenItemsSm),
+      itemBuilder: (context, index) => RestaurantFoodCard(
+      dish: dishes[index],
+      onToggleDisable: () => controller.handleDisable(dishes[index]),
+      onEdit: () => controller.handleEditInformation(dishes[index]),
+    )
     );
   }
 }

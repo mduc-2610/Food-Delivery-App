@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 class RegistrationBasicInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(RegistrationBasicInfoController());
+    final controller = Get.put(RegistrationBasicInfoController(), tag: "deliverer");
 
     return Scaffold(
       body: Form(

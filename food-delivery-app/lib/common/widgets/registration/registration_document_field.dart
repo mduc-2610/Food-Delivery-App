@@ -9,19 +9,23 @@ import 'package:food_delivery_app/common/widgets/registration/dotted_border.dart
 
 class RegistrationDocumentField extends StatelessWidget {
   final String label;
-  final bool isSingleImage;
   final int crossAxisCount;
-  late final RegistrationDocumentFieldController controller;
+  final double buttonWidth;
+  final double? buttonHeight;
+  final double imageWidth;
+  final double? imageHeight;
+  final RegistrationDocumentFieldController controller;
 
-  RegistrationDocumentField({
+  const RegistrationDocumentField({
     Key? key,
     required this.label,
-    this.isSingleImage = true,
     this.crossAxisCount = 3,
-    RegistrationDocumentFieldController? controller,
-  }) {
-    this.controller = controller ?? Get.put(RegistrationDocumentFieldController());
-  }
+    this.buttonWidth = 120,
+    this.buttonHeight,
+    this.imageWidth = 120,
+    this.imageHeight,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +46,8 @@ class RegistrationDocumentField extends StatelessWidget {
               SmallButton(
                 onPressed: () {},
                 text: "Xem ví dụ",
+                width: buttonWidth,
+                height: buttonHeight,
               ),
             ],
           )
@@ -51,9 +57,9 @@ class RegistrationDocumentField extends StatelessWidget {
   }
 
   Widget _buildImageSection() {
-    if (isSingleImage && controller.selectedImages.isNotEmpty) {
+    if (controller.maxLength == 1 && controller.selectedImages.isNotEmpty) {
       return _buildSingleImageView();
-    } else if (!isSingleImage) {
+    } else if (controller.maxLength > 1) {
       return _buildMultiImageGrid();
     } else {
       return _buildAddImageButton();
@@ -69,16 +75,16 @@ class RegistrationDocumentField extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(TSize.borderRadiusSm),
             child: image is String
-                ? Image.network( // Display from URL
+                ? Image.network(
               image,
-              height: 100,
-              width: 100,
+              height: imageHeight ?? imageWidth,
+              width: imageWidth,
               fit: BoxFit.cover,
             )
-                : Image.file( // Display from local file
+                : Image.file(
               File(image.path),
-              height: 100,
-              width: 100,
+              height: imageHeight ?? imageWidth,
+              width: imageWidth,
               fit: BoxFit.cover,
             ),
           ),
@@ -103,22 +109,36 @@ class RegistrationDocumentField extends StatelessWidget {
   }
 
   Widget _buildMultiImageGrid() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: crossAxisCount,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-      ),
-      itemCount: controller.selectedImages.length + 1,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return _buildAddImageButton();
-        } else {
-          return _buildImageTile(index - 1);
-        }
-      },
+    return Column(
+      children: [
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+          ),
+          itemCount: controller.selectedImages.length < controller.maxLength
+              ? controller.selectedImages.length + 1
+              : controller.selectedImages.length,
+          itemBuilder: (context, index) {
+            if (index == controller.selectedImages.length &&
+                controller.selectedImages.length < controller.maxLength) {
+              return _buildAddImageButton();
+            } else {
+              return _buildImageTile(index);
+            }
+          },
+        ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Text(
+            "${controller.selectedImages.length}/${controller.maxLength}",
+            style: Get.textTheme.bodyLarge,
+          ),
+        )
+      ],
     );
   }
 
@@ -131,16 +151,16 @@ class RegistrationDocumentField extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(TSize.borderRadiusSm),
             child: image is String
-                ? Image.network( // Display from URL
+                ? Image.network(
               image,
-              height: 120,
-              width: 120,
+              height: imageHeight ?? imageWidth,
+              width: imageWidth,
               fit: BoxFit.cover,
             )
-                : Image.file( // Display from local file
+                : Image.file(
               File(image.path),
-              height: 120,
-              width: 120,
+              height: imageHeight ?? imageWidth,
+              width: imageWidth,
               fit: BoxFit.cover,
             ),
           ),
@@ -166,16 +186,19 @@ class RegistrationDocumentField extends StatelessWidget {
 
   Widget _buildAddImageButton() {
     return GestureDetector(
-      onTap: () => controller.pickImages(isSingleImage: isSingleImage),
+      onTap: () => controller.pickImages(),
       child: DottedBorder(
         strokeWidth: 2,
         color: TColor.disable,
         child: Container(
-          height: 100,
-          width: 100,
+          height: imageHeight ?? imageWidth,
+          width: imageWidth,
           color: Colors.grey.shade200,
           child: const Center(
-            child: Text("+ Thêm"),
+            child: Text(
+              "+ Thêm",
+              textAlign: TextAlign.left,
+            ),
           ),
         ),
       ),

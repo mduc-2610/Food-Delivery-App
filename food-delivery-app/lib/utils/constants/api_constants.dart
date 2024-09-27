@@ -68,7 +68,7 @@ Future<String> getLocalIpAddress() async {
 }
 
 class APIConstant {
-  static const String ip = "192.168.1.39";
+  static const String ip = "192.168.1.9";
   static const String tSecretAPIKey = "";
   // static const baseUrl = 'http://10.0.2.2:8000/api';
   // static const baseUrl = 'http://192.168.1.8:8000/api'; // VANSAU
@@ -233,6 +233,8 @@ class APIConstant {
         return 'food/dish-like';
       case Dish:
         return 'food/dish';
+      case DishImage:
+        return 'food/dish-image';
       default:
         return null;
     }

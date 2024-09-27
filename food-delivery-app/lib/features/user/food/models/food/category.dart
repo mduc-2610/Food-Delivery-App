@@ -24,8 +24,8 @@ class DishCategory {
       : id = json['id'],
         name = json['name'],
         description = json['description'],
-        createdAt = DateTime.parse(json['created_at']),
-        updatedAt = DateTime.parse(json['updated_at']),
+        createdAt = json['create_at'] != null ? DateTime.parse(json['created_at']) : null,
+        updatedAt = json['create_at'] != null ? DateTime.parse(json['updated_at']) : null,
         dishes = json['dishes'];
 
   Map<String, dynamic> toJson() {

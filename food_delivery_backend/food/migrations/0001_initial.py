@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
                     models.ImageField(
                         blank=True,
                         null=True,
-                        upload_to=food.models.dish.dish_image_path,
+                        upload_to=food.models.dish.image_upload_path,
                     ),
                 ),
                 (
