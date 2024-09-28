@@ -4,6 +4,7 @@ import decimal
 from django.db import models
 from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
+from django.utils import timezone
 
 from order.models import RestaurantCart, Delivery, DeliveryRequest
 from review.models import (
@@ -32,7 +33,7 @@ class Order(models.Model):
     discount = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="PENDING")
     rating = models.PositiveSmallIntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    created_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)        
     is_reviewed = models.BooleanField(default=False, null=True, blank=True)
     is_order_reviewed = models.BooleanField(default=False, null=True, blank=True)
@@ -119,6 +120,9 @@ class Order(models.Model):
         return None
     
     def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = timezone.now()
+
         if hasattr(self, 'cart') and hasattr(self.cart, 'user'):
             self.user = self.cart.user
         # self.cart.is_created_order = True

@@ -29,6 +29,8 @@ class Restaurant {
   final String? restaurantReviews;
   final Map<String, dynamic> ratingCounts;
   final bool isCertified;
+  final String? stats;
+  final String? deliveries;
   // final List<RestaurantPromotion>? promotions;
 
   Restaurant({
@@ -47,6 +49,8 @@ class Restaurant {
     this.restaurantReviews,
     this.ratingCounts = const {},
     this.isCertified = false,
+    this.stats,
+    this.deliveries,
     // required this.promotions,
   });
 
@@ -70,7 +74,9 @@ class Restaurant {
         totalReviews = json['total_reviews'],
         restaurantReviews = json['restaurant_reviews'],
         ratingCounts = json['rating_counts'] ?? {},
-        isCertified = json['is_certified'] ?? false
+        isCertified = json['is_certified'] ?? false,
+        stats = json['stats'],
+        deliveries = json['deliveries']
         ;
 
 

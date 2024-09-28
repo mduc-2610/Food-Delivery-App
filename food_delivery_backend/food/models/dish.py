@@ -43,8 +43,8 @@ class Dish(models.Model):
     total_likes = models.IntegerField(default=0, blank=True, null=True)
     total_orders = models.IntegerField(default=0, blank=True, null=True)
 
-    class Meta:
-        ordering = ['-created_at']
+    # class Meta:
+    #     ordering = ['-created_at']
         
     def __getitem__(self, attr):
         if hasattr(self, attr):

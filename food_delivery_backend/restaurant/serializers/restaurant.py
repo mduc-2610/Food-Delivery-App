@@ -21,6 +21,8 @@ from order.serializers.promotion import PromotionSerializer
 
 from utils.serializers import CustomRelatedModelSerializer
 from utils.pagination import CustomPagination
+from  utils.function import get_related_url_3
+
 
 class RestaurantSerializer(CustomRelatedModelSerializer):
     def __init__(self, *args, **kwargs):
@@ -85,6 +87,7 @@ class DetailRestaurantSerializer(CustomRelatedModelSerializer):
             # 'user_reviews': RestaurantReviewSerializer
         }
     distance_from_user = serializers.SerializerMethodField()
+    stats = serializers.SerializerMethodField()
 
     def get_distance_from_user(self, obj):
         request = self.context.get('request')
@@ -93,6 +96,15 @@ class DetailRestaurantSerializer(CustomRelatedModelSerializer):
             if user_location and hasattr(obj, 'basic_info'):
                 return obj.basic_info.get_distance_from_user(user_location)
         return None
+    
+    def get_stats(self, obj):
+        request = self.context.get('request')
+        return get_related_url_3(
+            request=request,
+            obj=obj,
+            action='stats',
+            detail=True
+        )
     
     class Meta:
         model = Restaurant

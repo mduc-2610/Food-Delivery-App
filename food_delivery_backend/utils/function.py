@@ -4,6 +4,9 @@ import builtins
 import inspect
 import math
 import sys
+import random
+from datetime import datetime, timedelta
+
 
 from django.apps import apps
 
@@ -353,6 +356,23 @@ def get_related_url_2(request, model, obj, field, type='one'):
         # print(uri, pretty=True)
         return uri
     return None
+
+def get_related_url_3(request, obj, action, detail=False):
+    if request:
+        return request.build_absolute_uri(
+            f"/api/{obj._meta.app_label}/{camel_to_snake(obj._meta.model.__name__)}/" + f"{obj.id}/{action}" if detail else f"{action}/{obj.id}"
+        )
+    return None
+
+def generate_random_time_in_year(year=None):
+    if year is None:
+        year = datetime.now().year  
+
+    start_date = datetime(year, 1, 1)
+    end_date = datetime(year + 1, 1, 1)  
+    random_timestamp = start_date + (end_date - start_date) * random.random()
+    
+    return random_timestamp
 
 def custom_print(*messages, **options):
     current_frame = inspect.currentframe()

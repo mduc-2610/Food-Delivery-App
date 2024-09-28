@@ -329,16 +329,17 @@ class DeliveryCard extends StatelessWidget {
 
 class DeliveryCardSkeleton extends StatelessWidget {
   final bool noMargin;
+  final bool isTracking;
 
   const DeliveryCardSkeleton({
     Key? key,
     this.noMargin = false,
+    this.isTracking = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: noMargin ? EdgeInsets.zero : EdgeInsets.all(TSize.md),
       surfaceTintColor: Theme.of(context).appBarTheme.backgroundColor,
       elevation: TSize.cardElevation,
       child: Padding(
@@ -346,66 +347,118 @@ class DeliveryCardSkeleton extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSkeletonDeliveryInfo(),
+            _buildDeliveryInfoSkeleton(),
             SizedBox(height: TSize.spaceBetweenItemsVertical),
-            _buildSkeletonLocationInfo(),
+            _buildLocationInfoSkeleton(),
             SizedBox(height: TSize.spaceBetweenItemsVertical),
-            _buildSkeletonStatusAndTimeInfo(),
+            _buildStatusAndTimeInfoSkeleton(),
+            SizedBox(height: TSize.spaceBetweenItemsVertical),
+            if (isTracking) _buildButtonsSkeleton(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSkeletonDeliveryInfo() {
+  Widget _buildDeliveryInfoSkeleton() {
     return Row(
       children: [
-        BoxSkeleton(width: 100, height: 20),
-        Spacer(),
-        BoxSkeleton(width: 60, height: 20),
+        BoxSkeleton(height: 24, width: 24),
+        SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+        Expanded(
+          child: BoxSkeleton(height: 24, width: double.infinity),
+        ),
       ],
     );
   }
 
-  Widget _buildSkeletonLocationInfo() {
+  Widget _buildLocationInfoSkeleton() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            BoxSkeleton(width: 20, height: 20),
-            SizedBox(width: TSize.spaceBetweenItemsHorizontal / 2),
-            BoxSkeleton(width: 150, height: 20),
+            BoxSkeleton(height: 24, width: 24),
+            SizedBox(width: TSize.spaceBetweenItemsMd),
+            Expanded(
+              child: BoxSkeleton(height: 20, width: double.infinity),
+            ),
           ],
         ),
-        SizedBox(height: TSize.spaceBetweenItemsVertical / 2),
+        SizedBox(height: TSize.spaceBetweenItemsSm),
         Row(
           children: [
-            BoxSkeleton(width: 20, height: 20),
-            SizedBox(width: TSize.spaceBetweenItemsHorizontal / 2),
-            BoxSkeleton(width: 150, height: 20),
+            BoxSkeleton(height: 24, width: 24),
+            SizedBox(width: TSize.spaceBetweenItemsMd),
+            Expanded(
+              child: BoxSkeleton(height: 20, width: double.infinity),
+            ),
           ],
+        ),
+        SizedBox(height: TSize.spaceBetweenItemsSm),
+        Row(
+          children: [
+            BoxSkeleton(height: 24, width: 24),
+            SizedBox(width: TSize.spaceBetweenItemsMd),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BoxSkeleton(height: 20, width: double.infinity),
+                  SizedBox(height: TSize.spaceBetweenItemsSm),
+                  BoxSkeleton(height: 20, width: double.infinity),
+                ],
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: TSize.spaceBetweenItemsSm),
+        BoxSkeleton(height: 32, width: 100),
+      ],
+    );
+  }
+
+  Widget _buildStatusAndTimeInfoSkeleton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        BoxSkeleton(height: 80, width: 80),
+        SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BoxSkeleton(height: 20, width: 100),
+              SizedBox(height: TSize.spaceBetweenItemsSm),
+              BoxSkeleton(height: 24, width: 150),
+              SizedBox(height: TSize.spaceBetweenItemsSm),
+              BoxSkeleton(height: 24, width: 100),
+              SizedBox(height: TSize.spaceBetweenItemsSm),
+              BoxSkeleton(height: 20, width: 120),
+            ],
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildSkeletonStatusAndTimeInfo() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildButtonsSkeleton() {
+    return Column(
       children: [
-        BoxSkeleton(width: 80, height: 20),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+        Row(
           children: [
-            BoxSkeleton(width: 120, height: 20),
-            SizedBox(height: TSize.spaceBetweenItemsVertical / 2),
-            BoxSkeleton(width: 120, height: 20),
+            Expanded(
+              child: BoxSkeleton(height: 40, width: double.infinity),
+            ),
+            SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+            Expanded(
+              child: BoxSkeleton(height: 40, width: double.infinity),
+            ),
           ],
         ),
+        SizedBox(height: TSize.spaceBetweenItemsVertical),
+        BoxSkeleton(height: 40, width: double.infinity),
       ],
     );
   }
 }
-
-

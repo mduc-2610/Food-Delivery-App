@@ -17,7 +17,9 @@ from utils.function import (
     load_intermediate_model, 
     load_normal_model,
     load_one_to_many_model,
-    generate_latitude, generate_longitude
+    generate_random_time_in_year,
+    generate_latitude, 
+    generate_longitude,
 )
 from utils.decorators import script_runner
 
@@ -44,7 +46,7 @@ def load_order(
     max_promotions_per_restaurant=50, 
     max_promotions_per_user=40,
     max_deliveries_per_deliverer=100,
-    max_restaurant_carts_per_user=20,
+    max_restaurant_carts_per_user=150,
     max_dishes_per_restaurant_cart=10,
     models_to_update=None,
     map_queryset=None,
@@ -112,7 +114,8 @@ def load_order(
                 "promotion": random.choice(promotion_list) if random.choice([True, False]) and not promotion_list else None,
                 "discount":  random.uniform(0, 10),
                 "status": random.choice(['ACTIVE', 'CANCELLED', 'COMPLETED', 'PENDING']),
-                "rating": random.randint(0, 5)
+                "rating": random.randint(0, 5),
+                'created_at': generate_random_time_in_year(),
             }
             order = Order.objects.create(**order_data)
             if order.status == 'ACTIVE':

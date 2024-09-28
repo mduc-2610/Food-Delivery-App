@@ -47,6 +47,7 @@ class OrderSerializer(serializers.ModelSerializer):
             'total', 
             'status', 
             'rating',
+            'created_at',
             'is_reviewed', 'is_order_reviewed', 'is_dish_reviewed', 'is_deliverer_reviewed', 'is_restaurant_reviewed'
         ]
         read_only_fields = ['total']

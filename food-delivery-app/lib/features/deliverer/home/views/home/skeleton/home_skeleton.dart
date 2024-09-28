@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
+import 'package:food_delivery_app/features/deliverer/home/views/home/widgets/delivery_card.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 
@@ -40,7 +41,14 @@ class HomeViewSkeleton extends StatelessWidget {
               SizedBox(height: TSize.spaceBetweenItemsVertical),
               _buildSkeletonOrderHistoryHeader(),
               SizedBox(height: TSize.spaceBetweenItemsVertical),
-              _buildSkeletonOrderHistoryList(),
+              Column(
+                children: List.generate(5, (index) => Column(
+                  children: [
+                    DeliveryCardSkeleton(),
+                    SizedBox(height: TSize.spaceBetweenItemsVertical),
+                  ],
+                ),),
+              )
             ],
           ),
         ),
@@ -74,8 +82,8 @@ class HomeViewSkeleton extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        BoxSkeleton(width: 150, height: 20),
-        BoxSkeleton(width: 150, height: 20),
+        BoxSkeleton(width: 120, height: 20),
+        BoxSkeleton(width: 150, height: 30),
       ],
     );
   }
