@@ -3,18 +3,18 @@ import 'package:food_delivery_app/data/services/restaurant_service.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
 import 'package:food_delivery_app/features/restaurant/home/models/stats.dart';
 import 'package:food_delivery_app/features/user/order/models/delivery.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/constants/times.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
-enum TimeRange { yearly, monthly, daily }
 
 class RestaurantHomeController extends GetxController {
   static RestaurantHomeController get instance => Get.find();
 
   Rx<bool> isLoading = true.obs;
   Restaurant? restaurant;
-  StatsResponse? statsResponse;
+  Rx<StatsResponse?> statsResponse = (null as StatsResponse?).obs;
   List<Delivery> deliveries = [];
 
   Rx<TimeRange> timeRange = TimeRange.yearly.obs;
@@ -31,13 +31,14 @@ class RestaurantHomeController extends GetxController {
   Future<void> initialize() async {
     isLoading.value = true;
     restaurant = await RestaurantService.getRestaurant();
+    deliveries = await APIService<Delivery>(fullUrl: restaurant?.deliveries ?? '').list();
     await fetchStats();
     isLoading.value = false;
   }
 
   Future<void> fetchStats() async {
     String queryParams = _buildQueryParams();
-    statsResponse = await APIService<StatsResponse>(
+    statsResponse.value = await APIService<StatsResponse>(
       fullUrl: restaurant?.stats ?? '',
       queryParams: queryParams,
     ).list(single: true);

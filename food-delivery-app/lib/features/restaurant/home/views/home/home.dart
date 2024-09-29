@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/features/deliverer/home/views/home/widgets/delivery_card.dart';
-import 'package:food_delivery_app/features/restaurant/home/views/common/widgets/revenue_chart.dart';
+import 'package:food_delivery_app/features/restaurant/home/views/common/widgets/revenue_stats.dart';
 import 'package:food_delivery_app/features/restaurant/home/views/home/skeleton/home_skeleton.dart';
 import 'package:food_delivery_app/features/user/menu_redirection.dart';
 import 'package:food_delivery_app/utils/constants/emojis.dart';
@@ -91,7 +91,9 @@ class HomeView extends StatelessWidget {
                       ),
                       SizedBox(height: TSize.spaceBetweenItemsVertical),
 
-                      RevenueChart(),
+                      RevenueStats(
+                        controller: RestaurantHomeController.instance,
+                      ),
                       SizedBox(height: TSize.spaceBetweenItemsVertical),
                     ],
                   ),

@@ -1,12 +1,16 @@
+import pytz
+from datetime import datetime, timedelta
+from datetime import timedelta
+
+from django.utils import timezone
+from django.db.models import Count, Sum
+
 from rest_framework import (
     response,
     viewsets,
     status,
 )
 from rest_framework.decorators import action
-
-from django.db.models import Count, Sum
-from django.db.models.functions import TruncDay, TruncMonth, TruncYear
 
 from restaurant.models import Restaurant, RestaurantCategory
 from order.models import Order
@@ -30,22 +34,13 @@ from order.serializers import (
 from review.serializers import RestaurantReviewSerializer
 from review.mixins import ReviewFilterMixin
 
+from order.mixins import DeliveryFilterMixin
 from utils.views import ManyRelatedViewSet
 from utils.pagination import CustomPagination
 from utils.mixins import DefaultGenericMixin
 
 
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from django.db.models import Sum, Count
-from django.db.models.functions import TruncMonth, TruncYear
-from django.utils import timezone
-from datetime import timedelta
-import pytz
-from datetime import datetime, timedelta
-
-
-class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewSet):
+class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, DeliveryFilterMixin, ManyRelatedViewSet):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
     pagination_class = CustomPagination
@@ -75,6 +70,8 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewS
     def get_object(self):
         if self.action == 'restaurant_reviews':
             return ReviewFilterMixin.get_object(self)
+        elif self.action == 'deliveries':
+            return DeliveryFilterMixin.get_object(self)
         return super().get_object()
 
     def get_serializer_context(self):
@@ -85,6 +82,14 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewS
     
     @action(detail=True, methods=['get'])
     def stats(self, request, pk=None):
+        """
+            GET /restaurants/{id}/stats/?time_range=daily
+            GET /restaurants/{id}/stats/?time_range=daily&day=2024-04-25
+            GET /restaurants/{id}/stats/?time_range=monthly
+            GET /restaurants/{id}/stats/?time_range=monthly&month=2024-04
+            GET /restaurants/{id}/stats/?time_range=yearly
+            GET /restaurants/{id}/stats/?time_range=yearly&year=2023
+        """
         try:
             restaurant = self.get_object()
             time_range = request.query_params.get('time_range', 'daily').lower()
@@ -111,7 +116,7 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewS
                     try:
                         selected_day = datetime.strptime(day, "%Y-%m-%d").date()
                     except ValueError:
-                        return Response({"error": "Invalid day format. Use YYYY-MM-DD."}, status=status.HTTP_400_BAD_REQUEST)
+                        return response.Response({"error": "Invalid day format. Use YYYY-MM-DD."}, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     selected_day = now.date()
                 start_date = datetime.combine(selected_day, datetime.min.time()).replace(tzinfo=tz)
@@ -122,7 +127,7 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewS
                     try:
                         selected_month = datetime.strptime(month, "%Y-%m").date()
                     except ValueError:
-                        return Response({"error": "Invalid month format. Use YYYY-MM."}, status=status.HTTP_400_BAD_REQUEST)
+                        return response.Response({"error": "Invalid month format. Use YYYY-MM."}, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     selected_month = now.replace(day=1).date()
                 start_date = datetime.combine(selected_month, datetime.min.time()).replace(tzinfo=tz)
@@ -137,13 +142,13 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewS
                     try:
                         selected_year = int(year)
                     except ValueError:
-                        return Response({"error": "Invalid year format. Use YYYY."}, status=status.HTTP_400_BAD_REQUEST)
+                        return response.Response({"error": "Invalid year format. Use YYYY."}, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     selected_year = now.year
                 start_date = datetime(selected_year, 1, 1, tzinfo=tz)
                 end_date = datetime(selected_year + 1, 1, 1, tzinfo=tz)
             else:
-                return Response({"error": "Invalid time range. Choose from 'daily', 'monthly', 'yearly'."}, status=status.HTTP_400_BAD_REQUEST)
+                return response.Response({"error": "Invalid time range. Choose from 'daily', 'monthly', 'yearly'."}, status=status.HTTP_400_BAD_REQUEST)
 
             orders = orders.filter(created_at__range=(start_date, end_date))
 
@@ -166,17 +171,19 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewS
             elif time_range == 'yearly':
                 stats = self._generate_filtered_yearly_stats(orders, start_date, end_date)
             else:
-                return Response({"error": "Invalid time range"}, status=status.HTTP_400_BAD_REQUEST)
+                return response.Response({"error": "Invalid time range"}, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response(stats)
+            return response.Response(stats)
 
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return response.Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def _generate_filtered_monthly_stats(self, orders, start_date, end_date):
         daily_stats = []
         current_date = start_date
-
+        overall_total_revenue = 0
+        overall_total_orders = 0
+        overall_total_cancelled = 0
         while current_date < end_date:
             next_day = current_date + timedelta(days=1)
             
@@ -184,23 +191,41 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewS
                 created_at__range=(current_date, next_day)
             )
 
+            total_orders = day_orders.count()
+            cancelled_orders = day_orders.filter(status="CANCELED").count()
+            total_revenue = day_orders.aggregate(Sum('cart__total_price'))['cart__total_price__sum'] or 0
+            
+            overall_total_revenue += total_revenue
+            overall_total_orders += total_orders
+            overall_total_cancelled += cancelled_orders
+
             daily_stats.append({
                 'day': current_date.strftime('%Y-%m-%d'),
-                'total_orders': day_orders.count(),
-                'total_sales': day_orders.aggregate(Sum('cart__total_price'))['cart__total_price__sum'] or 0,
+                'total_orders': total_orders,
+                'total_revenue': total_revenue,
+                'cancelled_orders': cancelled_orders,
+                'cancel_rate': (cancelled_orders / total_orders) * 100 if total_orders > 0 else 0,
+                'average_order_value': total_revenue / total_orders if total_orders > 0 else 0,
             })
 
             current_date = next_day
 
         return {
             'type': 'monthly_filtered',
+            'overall_total_revenue': overall_total_revenue,
+            'overall_total_orders': overall_total_orders,
+            'overall_total_cancelled': overall_total_cancelled,
+            'overall_cancel_rate': (overall_total_cancelled / overall_total_orders) * 100 if overall_total_orders > 0 else 0,
+            'overall_average_order_value': overall_total_revenue / overall_total_orders if overall_total_orders > 0 else 0,
             'data': daily_stats
         }
 
     def _generate_filtered_yearly_stats(self, orders, start_date, end_date):
         monthly_stats = []
         current_date = start_date
-
+        overall_total_revenue = 0
+        overall_total_orders = 0
+        overall_total_cancelled = 0
         while current_date < end_date:
             if current_date.month == 12:
                 next_month = current_date.replace(year=current_date.year + 1, month=1, day=1)
@@ -211,16 +236,32 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewS
                 created_at__range=(current_date, next_month)
             )
 
+            total_orders = month_orders.count()
+            cancelled_orders = month_orders.filter(status="CANCELED").count()
+            total_revenue = month_orders.aggregate(Sum('cart__total_price'))['cart__total_price__sum'] or 0
+            
+            overall_total_revenue += total_revenue
+            overall_total_orders += total_orders
+            overall_total_cancelled += cancelled_orders
+
             monthly_stats.append({
                 'month': current_date.strftime('%Y-%m'),
-                'total_orders': month_orders.count(),
-                'total_sales': month_orders.aggregate(Sum('cart__total_price'))['cart__total_price__sum'] or 0,
+                'total_orders': total_orders,
+                'total_revenue': total_revenue,
+                'cancelled_orders': cancelled_orders,
+                'cancel_rate': (cancelled_orders / total_orders) * 100 if total_orders > 0 else 0,
+                'average_order_value': total_revenue / total_orders if total_orders > 0 else 0,
             })
 
             current_date = next_month
 
         return {
             'type': 'yearly_filtered',
+            'overall_total_revenue': overall_total_revenue,
+            'overall_total_orders': overall_total_orders,
+            'overall_total_cancelled': overall_total_cancelled,
+            'overall_cancel_rate': (overall_total_cancelled / overall_total_orders) * 100 if overall_total_orders > 0 else 0,
+            'overall_average_order_value': overall_total_revenue / overall_total_orders if overall_total_orders > 0 else 0,
             'data': monthly_stats
         }
 
@@ -229,6 +270,9 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewS
         hourly_stats = []
         current_time = start_date
 
+        overall_total_revenue = 0
+        overall_total_orders = 0
+        overall_total_cancelled = 0
         while current_time < end_date:
             next_hour = current_time + timedelta(hours=1)
 
@@ -239,16 +283,32 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, ManyRelatedViewS
             local_time = current_time.astimezone(tz)
             next_local_time = next_hour.astimezone(tz)
 
+            total_orders = hour_orders.count()
+            cancelled_orders = hour_orders.filter(status="CANCELED").count()
+            total_revenue = hour_orders.aggregate(Sum('cart__total_price'))['cart__total_price__sum'] or 0
+            
+            overall_total_revenue += total_revenue
+            overall_total_orders += total_orders
+            overall_total_cancelled += cancelled_orders
+
             hourly_stats.append({
                 'time_range': f"{local_time.strftime('%Y-%m-%d %H:%M')} - {next_local_time.strftime('%Y-%m-%d %H:%M')}",
-                'total_orders': hour_orders.count(),
-                'total_sales': hour_orders.aggregate(Sum('cart__total_price'))['cart__total_price__sum'] or 0,
+                'total_orders': total_orders,
+                'total_revenue': total_revenue,
+                'cancelled_orders': cancelled_orders,
+                'cancel_rate': (cancelled_orders / total_orders) * 100 if total_orders > 0 else 0,
+                'average_order_value': total_revenue / total_orders if total_orders > 0 else 0,
             })
 
             current_time = next_hour
 
         return {
             'type': 'daily',
+            'overall_total_revenue': overall_total_revenue,
+            'overall_total_orders': overall_total_orders,
+            'overall_total_cancelled': overall_total_cancelled,
+            'overall_cancel_rate': (overall_total_cancelled / overall_total_orders) * 100 if overall_total_orders > 0 else 0,
+            'overall_average_order_value': overall_total_revenue / overall_total_orders if overall_total_orders > 0 else 0,
             'data': hourly_stats
         }
 
