@@ -36,9 +36,9 @@ class CreateReviewLikeSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['user'] = BasicUserSerializer(instance.user).data
-        from review.serializers import DishReviewSerializer
-        data['review'] = DishReviewSerializer(instance.review, context=self.context).data
+        # data['user'] = BasicUserSerializer(instance.user).data
+        # from review.serializers import DishReviewSerializer
+        # data['review'] = DishReviewSerializer(instance.review, context=self.context).data
         return data
     
 class CreateDishReviewLikeSerializer(CreateReviewLikeSerializer):

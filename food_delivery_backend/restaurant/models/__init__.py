@@ -4,4 +4,8 @@ from .payment_info import PaymentInfo
 from .representative_info import RepresentativeInfo
 from .menu_delivery import MenuDelivery
 from .operating_hour import OperatingHour
-from .restaurant import Restaurant, RestaurantCategory
+from .restaurant import (
+    Restaurant,
+    RestaurantCategory,
+    RestaurantLike,
+)

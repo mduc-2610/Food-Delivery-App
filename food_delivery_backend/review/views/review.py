@@ -20,7 +20,10 @@ from review.serializers import (
 
 from utils.pagination import CustomPagination
 from utils.views import ManyRelatedViewSet
-from utils.mixins import DefaultGenericMixin
+from utils.mixins import (
+    DefaultGenericMixin,
+    ForeignKeyFilterMixin,
+)
 
 class DishReviewViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     queryset = DishReview.objects.all()

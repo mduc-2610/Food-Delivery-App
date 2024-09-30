@@ -1,6 +1,7 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
+import 'package:get/get.dart';
 
 @reflector
 class Review {
@@ -11,7 +12,10 @@ class Review {
   final String? content;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  late Rx<bool> isLiked;
+  late Rx<int> totalLikes;
 
+  // Constructor
   Review({
     this.id,
     this.user,
@@ -20,17 +24,33 @@ class Review {
     this.content,
     this.createdAt,
     this.updatedAt,
-  });
+    int? totalLikes,
+    bool? isLiked,
+  }) {
+    this.isLiked = (isLiked ?? false).obs;
+    this.totalLikes = (totalLikes ?? 0).obs;
+  }
 
+  // From JSON constructor
   Review.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        user = json['user'] is String || json['user'] == null ? json['user'] : BasicUser.fromJson(json['user']),
+        user = (json['user'] is String || json['user'] == null)
+            ? null
+            : BasicUser.fromJson(json['user']),
         rating = json['rating'],
         title = json['title'],
         content = json['content'],
-        createdAt = json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
-        updatedAt = json['created_at'] != null ? DateTime.parse(json['updated_at']) : null;
+        createdAt = json['created_at'] != null
+            ? DateTime.parse(json['created_at'])
+            : null,
+        updatedAt = json['updated_at'] != null
+            ? DateTime.parse(json['updated_at'])
+            : null,
+        isLiked = Rx<bool>(json['is_liked'] ?? false),
+        totalLikes = Rx<int>(json['total_likes'] ?? 0)
+  ;
 
+  // Convert to JSON
   Map<String, dynamic> toJson({bool patch = false}) {
     final Map<String, dynamic> data = {
       'id': id,
@@ -68,6 +88,8 @@ class DishReview extends Review {
     String? content,
     DateTime? createdAt,
     DateTime? updatedAt,
+    int? totalLikes,
+    bool? isLiked,
     this.dish,
   }) : super(
     id: id,
@@ -77,6 +99,8 @@ class DishReview extends Review {
     content: content,
     createdAt: createdAt,
     updatedAt: updatedAt,
+    totalLikes: totalLikes ?? 0,
+    isLiked: isLiked ?? false,
   );
 
   DishReview.fromJson(Map<String, dynamic> json)
@@ -115,6 +139,8 @@ class DelivererReview extends Review {
     String? content,
     DateTime? createdAt,
     DateTime? updatedAt,
+    int? totalLikes,
+    bool? isLiked,
     this.deliverer,
   }) : super(
     id: id,
@@ -124,6 +150,8 @@ class DelivererReview extends Review {
     content: content,
     createdAt: createdAt,
     updatedAt: updatedAt,
+    totalLikes: totalLikes ?? 0,
+    isLiked: isLiked ?? false,
   );
 
   DelivererReview.fromJson(Map<String, dynamic> json)
@@ -162,6 +190,8 @@ class RestaurantReview extends Review {
     String? content,
     DateTime? createdAt,
     DateTime? updatedAt,
+    int? totalLikes,
+    bool? isLiked,
     this.restaurant,
   }) : super(
     id: id,
@@ -171,6 +201,8 @@ class RestaurantReview extends Review {
     content: content,
     createdAt: createdAt,
     updatedAt: updatedAt,
+    totalLikes: totalLikes ?? 0,
+    isLiked: isLiked ?? false,
   );
 
   RestaurantReview.fromJson(Map<String, dynamic> json)
@@ -209,6 +241,8 @@ class DeliveryReview extends Review {
     String? content,
     DateTime? createdAt,
     DateTime? updatedAt,
+    int? totalLikes,
+    bool? isLiked,
     this.delivery,
   }) : super(
     id: id,
@@ -218,6 +252,8 @@ class DeliveryReview extends Review {
     content: content,
     createdAt: createdAt,
     updatedAt: updatedAt,
+    totalLikes: totalLikes ?? 0,
+    isLiked: isLiked ?? false,
   );
 
   DeliveryReview.fromJson(Map<String, dynamic> json)

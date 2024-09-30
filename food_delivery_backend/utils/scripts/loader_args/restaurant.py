@@ -12,7 +12,8 @@ from restaurant.models import (
     RepresentativeInfo, 
     OperatingHour, 
     Restaurant, 
-    RestaurantCategory
+    RestaurantCategory,
+    RestaurantLike,
 )
 from utils.function import (
     load_intermediate_model, 
@@ -35,13 +36,15 @@ MODEL_MAP = {
     'restaurant': Restaurant,
     'restaurant_category': RestaurantCategory,
     'payment_info': PaymentInfo,
+    'restaurant_like': RestaurantLike,
 }
 
 @script_runner(MODEL_MAP)
 @transaction.atomic
 def load_restaurant(
     max_restaurants=50,
-    max_restaurant_category_dishes=8,
+    max_dishes_per_category=8,
+    max_likes_per_restaurant=30,
     max_categories_per_restaurant=3,
     models_to_update=None,
     map_queryset=None,
@@ -192,11 +195,22 @@ def load_restaurant(
             action=action
         )
 
+    if RestaurantLike in models_to_update:
+        load_intermediate_model(
+            model_class=RestaurantLike,
+            primary_field='restaurant',
+            related_field='user',
+            primary_objects=map_queryset.get(Restaurant),
+            related_objects=list(User.objects.all()),
+            max_items=max_likes_per_restaurant,
+            action=action
+        )
+
     # if Dish in models_to_update:
         for restaurant in map_queryset.get(Restaurant):
             for category in restaurant.categories.all():
                 tmp = list(category.dishes.all())
-                for _ in range(random.randint(1, max_restaurant_category_dishes)):
+                for _ in range(random.randint(2, max_dishes_per_category)):
                     if not tmp:
                         break
                     max_loop = 100

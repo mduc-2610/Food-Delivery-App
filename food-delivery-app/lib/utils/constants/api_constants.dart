@@ -135,6 +135,8 @@ class APIConstant {
         return 'restaurant/representative';
       case RestaurantPaymentInfo:
         return 'restaurant/payment-info';
+      case RestaurantLike:
+        return 'restaurant/restaurant-like';
 
       ///DELIVERER
       case Deliverer:

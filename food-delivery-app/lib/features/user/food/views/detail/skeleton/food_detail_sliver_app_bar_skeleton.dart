@@ -21,7 +21,7 @@ class FoodDetailSliverAppBarSkeleton extends StatelessWidget {
         background: Stack(
           children: [
             BoxSkeleton(
-              height: 250,
+              height: 270,
               width: TDeviceUtil.getScreenWidth(),
             ),
             Positioned(

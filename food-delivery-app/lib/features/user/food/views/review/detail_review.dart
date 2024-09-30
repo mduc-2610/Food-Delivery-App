@@ -30,16 +30,19 @@ class DetailReviewView extends StatelessWidget {
       case ReviewType.restaurant:
         return GetBuilder<RestaurantDetailReviewController>(
           init: RestaurantDetailReviewController(item: item),
+          tag: "restaurant",
           builder: builder,
         );
       case ReviewType.deliverer:
         return GetBuilder<DelivererDetailReviewController>(
           init: DelivererDetailReviewController(item: item),
+          tag: "deliverer",
           builder: builder,
         );
       default:
         return GetBuilder<FoodDetailReviewController>(
           init: FoodDetailReviewController(item: item),
+          tag: "food",
           builder: builder,
         );
     }

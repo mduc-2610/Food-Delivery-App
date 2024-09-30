@@ -43,6 +43,7 @@ class RestaurantDetailController extends GetxController with SingleGetTickerProv
   Future<void> initializeRestaurant() async {
     user = await UserService.getUser(queryParams: "restaurant=${restaurantId}");
     restaurant = await APIService<Restaurant>().retrieve(restaurantId ?? "");
+    isLiked.value = restaurant?.isLiked ?? false;
     categories = restaurant?.categories ?? [];
     await loadDishes();
     await Future.delayed(Duration(milliseconds: TTime.init));
@@ -73,6 +74,71 @@ class RestaurantDetailController extends GetxController with SingleGetTickerProv
 
   void getToFoodDetail() {
     Get.to(() => FoodDetailView());
+  }
+  Rx<bool> isLiked = false.obs;
+  Future<void> toggleLike() async {
+    if (isLiked.value) {
+      await unlikeRestaurant();
+    } else {
+      await likeRestaurant();
+    }
+    update();
+  }
+
+  Future<void> likeRestaurant() async {
+    try {
+      final currentUser = user;
+      if (currentUser == null || currentUser.id == null) {
+        Get.snackbar('Error', 'User not found.');
+        return;
+      }
+
+      final like = RestaurantLike(
+        restaurant: restaurantId,
+        user: currentUser.id,
+      );
+      $print(like);
+      final createdLike = await APIService<RestaurantLike>().create(like.toJson());
+
+      if (createdLike != null) {
+        isLiked.value = true;
+        restaurant?.totalLikes += 1;
+        // Get.snackbar('Success', 'You have liked this restaurant.');
+      } else {
+        // Get.snackbar('Error', 'Failed to like the restaurant.');
+      }
+    } catch (e) {
+      // Get.snackbar('Error', 'An error occurred while liking the restaurant.');
+    }
+  }
+
+  Future<void> unlikeRestaurant() async {
+    try {
+      final currentUser = user;
+      if (currentUser == null || currentUser.id == null) {
+        // Get.snackbar('Error', 'User not found.');
+        return;
+      }
+
+      final likes = await APIService<RestaurantLike>(queryParams: 'user=${currentUser.id}&restaurant=${restaurantId}').list();
+
+      if (likes.isNotEmpty) {
+        final like = likes.first;
+
+        final success = await APIService<RestaurantLike>().delete(like.id!);
+        if (success) {
+          isLiked.value = false;
+          restaurant?.totalLikes -= 1;
+          // Get.snackbar('Success', 'You have unliked this restaurant.');
+        } else {
+          // Get.snackbar('Error', 'Failed to unlike the restaurant.');
+        }
+      } else {
+        // Get.snackbar('Error', 'Like entry not found.');
+      }
+    } catch (e) {
+      // Get.snackbar('Error', 'An error occurred while unliking the restaurant.');
+    }
   }
 }
 

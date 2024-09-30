@@ -3,6 +3,7 @@ from rest_framework import serializers
 from food.models import (
     Dish,
     DishImage,
+    DishLike,
 )
 
 from account.serializers import UserSerializer
@@ -23,7 +24,8 @@ class DishImageSerializer(serializers.ModelSerializer):
 class DishSerializer(serializers.ModelSerializer):
     images = DishImageSerializer(many=True, read_only=True)
     category = serializers.SerializerMethodField()
-    
+    is_liked = serializers.SerializerMethodField()
+
     def get_category(self, obj):
         if hasattr(obj, 'category'):
             return DishCategorySerializer(obj.category, context={
@@ -31,6 +33,11 @@ class DishSerializer(serializers.ModelSerializer):
                 'detail': False,
             }).data
         return None
+    
+    def get_is_liked(self, obj):
+        return obj.is_liked(
+            request=self.context.get('request')
+        )
 
     class Meta:
         model = Dish
@@ -48,6 +55,7 @@ class DishSerializer(serializers.ModelSerializer):
             'total_orders',
             'is_disabled',
             'images',
+            'is_liked',
         ]
 
 class DetailDishSerializer(CustomRelatedModelSerializer):
@@ -63,6 +71,7 @@ class DetailDishSerializer(CustomRelatedModelSerializer):
         }
     category = serializers.SerializerMethodField()
     images = DishImageSerializer(many=True, read_only=True)
+    is_liked = serializers.SerializerMethodField()
     
     def get_category(self, obj):
         if hasattr(obj, 'category'):
@@ -71,6 +80,11 @@ class DetailDishSerializer(CustomRelatedModelSerializer):
                 'detail': False,
             }).data
         return None
+    
+    def get_is_liked(self, obj):
+        return obj.is_liked(
+            request=self.context.get('request')
+        )
     
     class Meta:
         model = Dish

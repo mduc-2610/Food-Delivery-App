@@ -12,7 +12,8 @@ from utils.serializers import CustomRelatedModelSerializer
 class ReviewSerializer(CustomRelatedModelSerializer):
     user = BasicUserSerializer()
     order = serializers.PrimaryKeyRelatedField(queryset=Order.objects.all())
-    
+    is_liked = serializers.SerializerMethodField()
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.one_related_serializer_class = {
@@ -21,9 +22,25 @@ class ReviewSerializer(CustomRelatedModelSerializer):
         self.many_related_serializer_class = {
             # 'liked_by_users': UserAbbrSerializer,
         }
+
+    def get_is_liked(self, obj):
+        return obj.is_liked(
+            request=self.context.get('request'),
+        )
     
     class Meta:
-        fields = ['id', 'user', 'rating', 'title', 'content', 'created_at', 'updated_at', 'order']
+        fields = [
+            'id', 
+            'user', 
+            'rating', 
+            'title', 
+            'content', 
+            'created_at', 
+            'updated_at', 
+            'order', 
+            'total_likes', 
+            'is_liked',
+        ]
 
 class DishReviewSerializer(ReviewSerializer):
     class Meta(ReviewSerializer.Meta):

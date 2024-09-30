@@ -1,6 +1,10 @@
 from rest_framework import serializers
 
-from restaurant.models import Restaurant, RestaurantCategory
+from restaurant.models import (
+    Restaurant,
+    RestaurantCategory,
+    RestaurantLike,
+)
 
 # from restaurant.serializers import (
 #     BasicInfoSerializer, RepresentativeSerializer,
@@ -34,6 +38,7 @@ class RestaurantSerializer(CustomRelatedModelSerializer):
 
     dishes = serializers.SerializerMethodField()
     distance_from_user = serializers.SerializerMethodField()
+    is_liked = serializers.SerializerMethodField()
 
     def get_dishes(self, obj):
         queryset = obj.dishes.all()
@@ -51,6 +56,11 @@ class RestaurantSerializer(CustomRelatedModelSerializer):
                 return obj.basic_info.get_distance_from_user(user_location)
         return None
 
+    def get_is_liked(self, obj):
+        return obj.is_liked(
+            request=self.context.get('request'),
+        )
+
     class Meta:
         model = Restaurant
         fields = [
@@ -60,8 +70,10 @@ class RestaurantSerializer(CustomRelatedModelSerializer):
             'dishes', 
             'rating', 
             'total_reviews', 
+            'total_likes',
             'avg_price',
             'is_certified',
+            'is_liked',
         ]
         depth = 1
     
@@ -86,8 +98,10 @@ class DetailRestaurantSerializer(CustomRelatedModelSerializer):
             # 'owned_promotions': RestaurantPromotionSerializer,
             # 'user_reviews': RestaurantReviewSerializer
         }
+
     distance_from_user = serializers.SerializerMethodField()
     stats = serializers.SerializerMethodField()
+    is_liked = serializers.SerializerMethodField()
 
     def get_distance_from_user(self, obj):
         request = self.context.get('request')
@@ -104,6 +118,11 @@ class DetailRestaurantSerializer(CustomRelatedModelSerializer):
             obj=obj,
             action='stats',
             detail=True
+        )
+
+    def get_is_liked(self, obj):
+        return obj.is_liked(
+            request=self.context.get('request'),
         )
     
     class Meta:
@@ -128,3 +147,9 @@ class RestaurantCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = RestaurantCategory
         fields = '__all__'
+
+class RestaurantLikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RestaurantLike
+        fields = "__all__"
+        read_only_fields = ['id', 'created_at',]

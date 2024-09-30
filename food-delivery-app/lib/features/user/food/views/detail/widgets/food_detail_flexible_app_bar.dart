@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar_scroll_behavior.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/features/user/food/controllers/detail/food_detail_controller.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
@@ -12,6 +13,7 @@ class FoodDetailFlexibleAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = FoodDetailController.instance;
     return Stack(
       children: [
         AppBarScrollBehavior(
@@ -25,8 +27,12 @@ class FoodDetailFlexibleAppBar extends StatelessWidget {
               children: [
                 AppBarScrollBehavior(
                   child: CircleIconCard(
+                    onTap: () {
+                      controller.toggleLike();
+                    },
                     iconSize: TSize.iconSm,
-                    iconStr: TIcon.heart,
+                    iconStr: controller.isLiked.value ? TIcon.fillHeart : TIcon.heart,
+                    elevation: TSize.cardElevation,
                   ),
                 ),
               ],
@@ -57,8 +63,12 @@ class FoodDetailFlexibleAppBar extends StatelessWidget {
                 child: Container(
                   margin: EdgeInsets.only(top: TSize.verticalCenterAppBar),
                   child: CircleIconCard(
+                    onTap: () {
+                      controller.toggleLike();
+                    },
                     iconSize: TSize.iconSm,
-                    iconStr: TIcon.heart,
+                    iconStr: controller.isLiked.value ? TIcon.fillHeart : TIcon.heart,
+                    elevation: TSize.cardElevation,
                   ),
                 ),
               ),

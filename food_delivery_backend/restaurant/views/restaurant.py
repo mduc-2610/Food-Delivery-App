@@ -12,7 +12,11 @@ from rest_framework import (
 )
 from rest_framework.decorators import action
 
-from restaurant.models import Restaurant, RestaurantCategory
+from restaurant.models import (
+    Restaurant,
+    RestaurantCategory,
+    RestaurantLike,
+)
 from order.models import Order
 
 from restaurant.serializers import (
@@ -20,6 +24,7 @@ from restaurant.serializers import (
     CreateRestaurantSerializer,
     DetailRestaurantSerializer, 
     RestaurantCategorySerializer,
+    RestaurantLikeSerializer,
 )
 from account.serializers import BasicUserSerializer
 from food.serializers import (
@@ -37,7 +42,10 @@ from review.mixins import ReviewFilterMixin
 from order.mixins import DeliveryFilterMixin
 from utils.views import ManyRelatedViewSet
 from utils.pagination import CustomPagination
-from utils.mixins import DefaultGenericMixin
+from utils.mixins import (
+    DefaultGenericMixin,
+    ForeignKeyFilterMixin,
+)
 
 
 class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, DeliveryFilterMixin, ManyRelatedViewSet):
@@ -326,6 +334,12 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, DeliveryFilterMi
 class RestaurantCategoryViewSet(viewsets.ModelViewSet):
     queryset = RestaurantCategory.objects.all()
     serializer_class = RestaurantCategorySerializer
+
+class RestaurantLikeViewSet(ForeignKeyFilterMixin, viewsets.ModelViewSet):
+    queryset = RestaurantLike.objects.all()
+    serializer_class = RestaurantLikeSerializer
+    pagination_class = CustomPagination
+
 
 # first request
 # implement a param if time_range is daily a query_params to define which day (default=this day)

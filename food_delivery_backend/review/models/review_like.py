@@ -1,5 +1,7 @@
 import uuid
 from django.db import models
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 
 class ReviewLike(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
@@ -7,7 +9,7 @@ class ReviewLike(models.Model):
 
     class Meta:
         abstract = True
-        unique_together = ('user', 'review')
+        # unique_together = ('user', 'review')
         ordering = ('-created_at',)
 
     def __str__(self):
@@ -40,3 +42,28 @@ class DeliveryReviewLike(ReviewLike):
 
     def __str__(self):
         return f"{self.user} liked the delivery review: {self.review}"
+
+def update_total_likes(instance, created=False, deleted=False):
+    review = instance.review
+    if created:
+        review.total_likes += 1
+    elif deleted:
+        review.total_likes = max(0, review.total_likes - 1)
+    
+    review.save()
+
+# Receiver for likes being saved
+@receiver(post_save, sender=DishReviewLike)
+@receiver(post_save, sender=RestaurantReviewLike)
+@receiver(post_save, sender=DelivererReviewLike)
+@receiver(post_save, sender=DeliveryReviewLike)
+def update_like_save(sender, instance, created, **kwargs):
+    update_total_likes(instance, created=created)
+
+# Receiver for likes being deleted
+@receiver(post_delete, sender=DishReviewLike)
+@receiver(post_delete, sender=RestaurantReviewLike)
+@receiver(post_delete, sender=DelivererReviewLike)
+@receiver(post_delete, sender=DeliveryReviewLike)
+def update_like_delete(sender, instance, **kwargs):
+    update_total_likes(instance, deleted=True)

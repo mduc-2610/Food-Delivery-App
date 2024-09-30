@@ -201,8 +201,8 @@ class APIService<T> {
     });
   }
 
-  Future<void> delete(String id, { bool noBearer = false }) async {
-    return _handleRequest<void>((Token? token) async {
+  Future<bool> delete(String id, { bool noBearer = false }) async {
+    return _handleRequest<bool>((Token? token) async {
       final url_ = url(id: id);
       $print(url_);
       if (dio != null) {
@@ -214,6 +214,9 @@ class APIService<T> {
         if (response.statusCode != 204) {
           throw DioError(requestOptions: response.requestOptions, response: response);
         }
+        else {
+          return true;
+        }
       } else {
         final response = await http.delete(
           Uri.parse(url_),
@@ -222,6 +225,9 @@ class APIService<T> {
 
         if (response.statusCode != 204) {
           throw Exception('Failed to delete object: ${response.statusCode}');
+        }
+        else {
+          return true;
         }
       }
     });

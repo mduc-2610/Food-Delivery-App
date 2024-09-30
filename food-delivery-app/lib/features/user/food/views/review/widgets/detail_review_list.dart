@@ -82,6 +82,30 @@ class DetailReviewList extends StatelessWidget {
                         ),
                       ],
                     ),
+                    SizedBox(height: TSize.spaceBetweenItemsVertical),
+
+                    // Like button and total likes section
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            controller.toggleLike(review);
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                review.isLiked.value ? Icons.thumb_up : Icons.thumb_up_alt_outlined,
+                                color: review.isLiked.value ? Colors.blue : Colors.grey,
+                              ),
+                              SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                              Text("${review.totalLikes.value}"),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+
                     SizedBox(height: TSize.spaceBetweenSections),
                   ],
                 );

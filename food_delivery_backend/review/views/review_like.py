@@ -14,9 +14,16 @@ from review.serializers import (
 )
 
 from utils.pagination import CustomPagination
-from utils.mixins import DefaultGenericMixin
+from utils.mixins import (
+    DefaultGenericMixin,
+    ForeignKeyFilterMixin,
+)
 
-class DishReviewLikeViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
+class DishReviewLikeViewSet(
+    DefaultGenericMixin,
+    ForeignKeyFilterMixin,
+    viewsets.ModelViewSet
+):
     queryset = DishReviewLike.objects.all()
     serializer_class = DishReviewLikeSerializer
     pagination_class = CustomPagination
@@ -24,7 +31,11 @@ class DishReviewLikeViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
         'create': CreateDishReviewLikeSerializer,
     }
 
-class RestaurantReviewLikeViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
+class RestaurantReviewLikeViewSet(
+    DefaultGenericMixin,
+    ForeignKeyFilterMixin,
+    viewsets.ModelViewSet
+):
     queryset = RestaurantReviewLike.objects.all()
     serializer_class = RestaurantReviewLikeSerializer
     pagination_class = CustomPagination
@@ -32,7 +43,11 @@ class RestaurantReviewLikeViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
         'create': CreateRestaurantReviewLikeSerializer,
     }
 
-class DelivererReviewLikeViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
+class DelivererReviewLikeViewSet(
+    DefaultGenericMixin,
+    ForeignKeyFilterMixin,
+    viewsets.ModelViewSet
+):
     queryset = DelivererReviewLike.objects.all()
     serializer_class = DelivererReviewLikeSerializer
     pagination_class = CustomPagination

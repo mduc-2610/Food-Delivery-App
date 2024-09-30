@@ -17,7 +17,7 @@ class Dish {
   final dynamic image;
   final double? rating;
   final int? totalReviews;
-  final int? totalLikes;
+  int totalLikes;
   final int? totalOrders;
   bool? isDisabled;
   final dynamic category;
@@ -27,6 +27,7 @@ class Dish {
   final String? inCartsOrOrders;
   final List<dynamic> images;
   final String? restaurant;
+  final bool isLiked;
 
   Dish({
     this.id,
@@ -37,7 +38,7 @@ class Dish {
     this.image,
     this.rating,
     this.totalReviews,
-    this.totalLikes,
+    this.totalLikes = 0,
     this.totalOrders,
     this.isDisabled,
     this.category,
@@ -47,6 +48,7 @@ class Dish {
     this.inCartsOrOrders,
     this.images = const [],
     this.restaurant,
+    this.isLiked = false,
   });
 
   Dish.fromJson(Map<String, dynamic> json)
@@ -59,7 +61,7 @@ class Dish {
         image = json['image'],
         rating = THelperFunction.formatDouble(json['rating']),
         totalReviews = json['total_reviews'],
-        totalLikes = json['total_likes'],
+        totalLikes = json['total_likes'] ?? 0,
         totalOrders = json['total_orders'],
         isDisabled = json['is_disabled'],
         category = json['category'] is String || json['category'] == null || json['category'] is List
@@ -68,7 +70,8 @@ class Dish {
         ratingCounts = json['rating_counts'] ?? {},
         options = json['options'] != null ? json['options'] is List ? (json['options'] as List).map((instance) => DishOption.fromJson(instance)).toList() : [] : [],
         inCartsOrOrders = json['in_carts_or_orders'],
-        images = json['images'] != null ? (json['images'] as List<dynamic>).map((instance) => DishImage.fromJson(instance)).toList() : []
+        images = json['images'] != null ? (json['images'] as List<dynamic>).map((instance) => DishImage.fromJson(instance)).toList() : [],
+        isLiked = json['is_liked'] ?? false
   ;
 
   String get formattedName {

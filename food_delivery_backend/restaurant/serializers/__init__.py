@@ -5,6 +5,7 @@ from .restaurant import (
     DetailRestaurantSerializer,
     CreateRestaurantSerializer, 
     RestaurantCategorySerializer,
+    RestaurantLikeSerializer,
 )
 
 from .basic_info import (

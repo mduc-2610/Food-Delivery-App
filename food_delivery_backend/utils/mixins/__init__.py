@@ -1,2 +1,3 @@
 from .default_generic import DefaultGenericMixin
 from .dynamic_filter import DynamicFilterMixin
+from .foreign_key_filter import ForeignKeyFilterMixin

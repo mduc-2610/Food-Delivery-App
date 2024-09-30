@@ -17,4 +17,5 @@ class CreateDishLikeSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = DishLike
-        fields = ['user', 'dish']
+        fields = ['id', 'user', 'dish', 'created_at']
+        read_only_fields = ['id', 'created_at']

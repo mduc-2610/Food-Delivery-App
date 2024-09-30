@@ -4,6 +4,14 @@ from django.db.models import Avg
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 from django.apps import apps
+from django.contrib.auth.models import AnonymousUser
+
+from review.models.review_like import (
+    DishReviewLike,
+    RestaurantReviewLike,
+    DelivererReviewLike,
+    DeliveryReviewLike,
+)
 
 class Review(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
@@ -12,6 +20,7 @@ class Review(models.Model):
     content = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    total_likes = models.IntegerField(default=0, blank=True, null=True)
 
     class Meta:
         abstract = True
@@ -24,10 +33,15 @@ class DishReview(Review):
     user = models.ForeignKey("account.User", related_name="dish_reviews", on_delete=models.CASCADE)
     dish = models.ForeignKey("food.Dish", related_name='dish_reviews', on_delete=models.CASCADE)
     order = models.ForeignKey("order.Order", related_name='dish_reviews', on_delete=models.CASCADE, blank=True, null=True)
-
+    
+    def is_liked(self, user=None, request=None):
+        _user = user if user else getattr(request, 'user') if hasattr(request, 'user') else None
+        if _user and not isinstance(_user, AnonymousUser):
+            return DishReviewLike.objects.filter(user=_user, review=self).exists()
+        return False
+    
     class Meta:
         unique_together = ['user', 'dish', 'order']
-
 
     def __str__(self):
         return f"{self.user}'s review of {self.dish}"
@@ -37,6 +51,12 @@ class DelivererReview(Review):
     deliverer = models.ForeignKey("deliverer.Deliverer", related_name='deliverer_reviews', on_delete=models.CASCADE, blank=True, null=True)
     order = models.OneToOneField("order.Order", related_name='deliverer_review', on_delete=models.CASCADE, blank=True, null=True)
 
+    def is_liked(self, user=None, request=None):
+        _user = user if user else getattr(request, 'user') if hasattr(request, 'user') else None
+        if _user and not isinstance(_user, AnonymousUser):
+            return DelivererReviewLike.objects.filter(user=_user, review=self).exists()
+        return False
+    
     class Meta:
         unique_together = ['user', 'deliverer', 'order']
 
@@ -48,6 +68,12 @@ class RestaurantReview(Review):
     restaurant = models.ForeignKey("restaurant.Restaurant", related_name='restaurant_reviews', on_delete=models.CASCADE)
     order = models.OneToOneField("order.Order", related_name='restaurant_review', on_delete=models.CASCADE, blank=True, null=True)
 
+    def is_liked(self, user=None, request=None):
+        _user = user if user else getattr(request, 'user') if hasattr(request, 'user') else None
+        if _user and not isinstance(_user, AnonymousUser):
+            return RestaurantReviewLike.objects.filter(user=_user, review=self).exists()
+        return False
+    
     class Meta:
         unique_together = ['user', 'restaurant', 'order']
 
@@ -59,6 +85,12 @@ class DeliveryReview(Review):
     delivery = models.ForeignKey("order.Delivery", related_name='delivery_reviews', on_delete=models.CASCADE)
     order = models.OneToOneField("order.Order", related_name='delivery_review', on_delete=models.CASCADE, blank=True, null=True)
 
+    def is_liked(self, user=None, request=None):
+        _user = user if user else getattr(request, 'user') if hasattr(request, 'user') else None
+        if _user and not isinstance(_user, AnonymousUser):
+            return DeliveryReviewLike.objects.filter(user=_user, review=self).exists()
+        return False
+    
     class Meta: 
         unique_together = ['user', 'delivery', 'order']
 
@@ -92,7 +124,7 @@ def update_review_stats(instance, created=False, deleted=False):
         elif deleted:
             related_model.rating_counts[rating_key] = max(0, related_model.rating_counts.get(rating_key, 0) - 1)
         
-        print(related_model, rating_key, related_model.rating_counts, pretty=True)
+        # print(related_model, rating_key, related_model.rating_counts, pretty=True)
 
     
     Review = apps.get_model('review', f'{model_name}Review')

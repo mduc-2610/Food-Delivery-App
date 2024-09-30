@@ -3,6 +3,8 @@ import os
 from django.db import models
 from django.utils import timezone
 
+from food.models.dish_like import DishLike
+
 def image_upload_path(instance, filename):
     dish = instance.dish if hasattr(instance, 'dish') else instance
     id = dish.id
@@ -45,6 +47,13 @@ class Dish(models.Model):
 
     # class Meta:
     #     ordering = ['-created_at']
+
+    def is_liked(self, user=None, request=None):
+        _user = user if user else getattr(request, 'user') if hasattr(request, 'user') else None
+        from django.contrib.auth.models import AnonymousUser
+        if _user and not isinstance(_user, AnonymousUser):
+            return DishLike.objects.filter(user=_user, dish=self).exists()
+        return False
         
     def __getitem__(self, attr):
         if hasattr(self, attr):

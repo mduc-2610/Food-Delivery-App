@@ -4,4 +4,8 @@ from .menu_delivery import MenuDeliveryViewSet
 from .operating_hour import OperatingHourViewSet
 from .representative_info import RepresentativeViewSet 
 from .payment_info import PaymentInfoViewSet
-from .restaurant import RestaurantViewSet, RestaurantCategoryViewSet
+from .restaurant import (
+    RestaurantViewSet,
+    RestaurantCategoryViewSet,
+    RestaurantLikeViewSet
+)

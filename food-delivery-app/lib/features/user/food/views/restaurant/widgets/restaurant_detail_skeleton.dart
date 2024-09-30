@@ -31,7 +31,7 @@ class RestaurantDetailSkeleton extends StatelessWidget {
                         SizedBox(height: TSize.spaceBetweenItemsSm),
                         Row(
                           children: [
-                            BoxSkeleton(height: 20, width: 100),
+                            BoxSkeleton(height: 20, width: 300),
                             Spacer(),
                             BoxSkeleton(height: 40, width: 40, borderRadius: 20),
                           ],

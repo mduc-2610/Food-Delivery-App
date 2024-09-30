@@ -67,6 +67,7 @@ class User(AbstractBaseUser):
     liked_posts = models.ManyToManyField("social.Post", through="social.PostLike", related_name=LIKE_RELATED_NAME)
     liked_comments = models.ManyToManyField("social.Comment", through="social.CommentLike", related_name=LIKE_RELATED_NAME)
     liked_dishes = models.ManyToManyField("food.Dish", through="food.DishLike", related_name=LIKE_RELATED_NAME)
+    liked_restaurants = models.ManyToManyField("restaurant.Restaurant", through="restaurant.RestaurantLike", related_name="liked_by_users")
     liked_delivery_reviews = models.ManyToManyField("review.DeliveryReview", through="review.DeliveryReviewLike", related_name=LIKE_RELATED_NAME)
     liked_deliverer_reviews = models.ManyToManyField("review.DelivererReview", through="review.DelivererReviewLike", related_name=LIKE_RELATED_NAME)
     liked_restaurant_reviews = models.ManyToManyField("review.RestaurantReview", through="review.RestaurantReviewLike", related_name=LIKE_RELATED_NAME)

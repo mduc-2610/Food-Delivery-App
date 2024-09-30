@@ -18,14 +18,16 @@ class ReviewLike {
 
   ReviewLike.fromJson(Map<String, dynamic> json)
     : id = json['id'],
-      user = BasicUser.fromJson(json['user']),
+      user = json['user'] == null || json['user'] is String || json['user'] is List
+        ? json['user']
+        : BasicUser.fromJson(json['user']),
       review = json['review'],
       createdAt = DateTime.parse(json['created_at']);
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'user': user,
+      'user': (user is BasicUser) ? user?.id : user,
       'review': review,
       'created_at': createdAt?.toIso8601String(),
     };

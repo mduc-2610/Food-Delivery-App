@@ -31,6 +31,8 @@ class Restaurant {
   final bool isCertified;
   final String? stats;
   final String? deliveries;
+  final bool isLiked;
+  int totalLikes;
   // final List<RestaurantPromotion>? promotions;
 
   Restaurant({
@@ -51,6 +53,8 @@ class Restaurant {
     this.isCertified = false,
     this.stats,
     this.deliveries,
+    this.isLiked = false,
+    this.totalLikes = 0,
     // required this.promotions,
   });
 
@@ -76,12 +80,14 @@ class Restaurant {
         ratingCounts = json['rating_counts'] ?? {},
         isCertified = json['is_certified'] ?? false,
         stats = json['stats'],
-        deliveries = json['deliveries']
+        deliveries = json['deliveries'],
+        isLiked = json['is_liked'] ?? false,
+        totalLikes = json['total_likes'] ?? 0
         ;
 
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson({ bool patch = false}) {
+    Map<String, dynamic> data = {
       'id': id,
       'user': user,
       'basic_info': basicInfo?.toJson(),
@@ -90,10 +96,57 @@ class Restaurant {
       'menu_delivery': menuDelivery?.toJson(),
       // 'promotions': promotions?.map((promo) => promo.toJson()).toList(),
     };
+
+    if(patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
   }
 
   String get formatTotalReviews {
     return THelperFunction.formatNumber(totalReviews ?? 0);
+  }
+
+  @override
+  String toString() {
+    return THelperFunction.formatToString(this);
+  }
+}
+
+@jsonSerializable
+@reflector
+class RestaurantLike {
+  final String? id;
+  final String? restaurant;
+  final String? user;
+  final DateTime? createdAt;
+
+  RestaurantLike({
+    this.id,
+    this.restaurant,
+    this.user,
+    this.createdAt,
+  });
+
+  RestaurantLike.fromJson(Map<String, dynamic> json)
+    : id = json['id'],
+      restaurant = json['restaurant'],
+      user = json['user'],
+      createdAt = json['createdAt'] != null ? DateTime.parse(json['created_at']) : null
+  ;
+
+  Map<String, dynamic> toJson({ bool patch = false}) {
+    Map<String, dynamic> data = {
+      'user': user,
+      'restaurant': restaurant,
+    };
+
+    if(patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
   }
 
   @override

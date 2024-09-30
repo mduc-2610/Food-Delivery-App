@@ -91,8 +91,11 @@ class RestaurantDetailView extends StatelessWidget {
                                   ),
                                   Spacer(),
                                   CircleIconCard(
+                                    onTap: () {
+                                      controller.toggleLike();
+                                    },
                                     iconSize: TSize.iconSm,
-                                    iconStr: TIcon.heart,
+                                    iconStr: controller.isLiked.value ? TIcon.fillHeart : TIcon.heart,
                                     elevation: TSize.cardElevation,
                                   ),
                                 ],

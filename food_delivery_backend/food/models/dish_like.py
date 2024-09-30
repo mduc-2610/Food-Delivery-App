@@ -12,6 +12,9 @@ class DishLike(models.Model):
 
     class Meta:
         unique_together = ('user', 'dish')
+        indexes = [
+            models.Index(fields=['user', 'dish']),
+        ]
         ordering = ['-created_at']  
 
     def __str__(self):
