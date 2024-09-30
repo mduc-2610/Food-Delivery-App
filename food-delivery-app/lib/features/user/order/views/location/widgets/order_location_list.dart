@@ -46,7 +46,7 @@ class LocationList extends StatelessWidget {
                         ),
                       ),
                       subtitle: Text(
-                        "${location?.addressController}",
+                        "${location?.address}",
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           color: controller.selectedIndex.value == index
                               ? Theme.of(context).textTheme.titleSmall?.color

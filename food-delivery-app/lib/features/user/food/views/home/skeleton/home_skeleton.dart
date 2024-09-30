@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/widgets/list/restaurant_list.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
 import 'package:food_delivery_app/features/user/food/views/home/skeleton/home_sliver_app_bar_skeleton.dart';
@@ -78,21 +79,23 @@ class HomeViewSkeleton extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: TSize.spaceBetweenSections),
-                      GridView.count(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        childAspectRatio: 13 / 16,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        children: List.generate(
-                          4,
-                              (index) => BoxSkeleton(height: 180, width: double.infinity),
-                        ),
-                      ),
+                      // GridView.count(
+                      //   crossAxisCount: 2,
+                      //   crossAxisSpacing: 10,
+                      //   mainAxisSpacing: 10,
+                      //   childAspectRatio: 13 / 16,
+                      //   shrinkWrap: true,
+                      //   physics: NeverScrollableScrollPhysics(),
+                      //   children: List.generate(
+                      //     4,
+                      //         (index) => BoxSkeleton(height: 180, width: double.infinity),
+                      //   ),
+                      // ),
+                      RestaurantListSkeleton()
                     ],
                   ),
                 ),
+
               ],
             ),
           ),

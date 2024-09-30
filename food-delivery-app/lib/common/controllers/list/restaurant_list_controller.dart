@@ -13,6 +13,13 @@ class RestaurantListController extends GetxController {
   var restaurants = [];
   final scrollController = ScrollController();
   final searchTextController = TextEditingController();
+  String? category;
+  String? searchResult;
+
+  RestaurantListController({
+    this.category,
+    this.searchResult,
+  });
 
   @override
   void onInit() {
@@ -25,7 +32,12 @@ class RestaurantListController extends GetxController {
 
   Future<void> initializeRestaurants({ bool loadMore = false, String? fullUrl, String? queryParams, bool isSearch = false }) async {
     if(!loadMore || _nextPage != null) {
-      final [_result, _info] = await APIService<Restaurant>(fullUrl: fullUrl ?? '', queryParams: queryParams ?? '').list(next: true);
+      String params =
+      (searchResult != null || queryParams != null || searchTextController.text != "")
+          ? "name=${(searchTextController.text != "") ? searchTextController.text : (searchResult ?? queryParams ?? '')}" : ""
+          + ((category != null) ? "${queryParams != null ? "&" : ""}category=$category" : "");
+      $print("PARAMS; $params");
+      final [_result, _info] = await APIService<Restaurant>(fullUrl: fullUrl ?? '', queryParams: params).list(next: true);
       if(!isSearch) {
         restaurants.addAll(_result);
       }else {
@@ -42,7 +54,8 @@ class RestaurantListController extends GetxController {
   }
 
   void onSearch() {
-    initializeRestaurants(queryParams: "name=${searchTextController.text}", isSearch: true);
+    $print("searchText: ${searchTextController.text}");
+    initializeRestaurants(queryParams: "${searchTextController.text}", isSearch: true);
     $print(restaurants.length);
   }
 

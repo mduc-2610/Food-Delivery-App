@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from datetime import timedelta
 
 from django.utils import timezone
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Q
 
 from rest_framework import (
     response,
@@ -60,12 +60,23 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, DeliveryFilterMi
             'pagination': False,
         }
     }
+    
     def get_queryset(self):
         queryset = super().get_queryset()
-        name = self.request.query_params.get('name')
+        params = self.request.query_params
+        name = params.get('name')
+        category = params.get('category')
+        dish_category = params.get('dish_category')
+
+        filter_kwargs = Q()
         if name:
-            queryset = queryset.filter(basic_info__name__icontains=name)
-        return queryset
+            filter_kwargs &= Q(basic_info__name__icontains=name)
+        if category:
+            filter_kwargs &= Q(categories__name__icontains=category.lower())
+        if dish_category:
+            filter_kwargs &= Q(dishes__category__name__icontains=dish_category.lower())
+
+        return queryset.filter(filter_kwargs).distinct()
     
     def get_object(self):
         if self.action == 'restaurant_reviews':

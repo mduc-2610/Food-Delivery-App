@@ -5,6 +5,20 @@ import 'package:food_delivery_app/utils/constants/image_strings.dart';
 
 class THardCode {
   THardCode._();
+  static  Map<String, Map<String, dynamic>> getCategory = {
+    'Burger': {'label': 'Burger', 'icon': TIcon.burger},
+    'Taco': {'label': 'Taco', 'icon': TIcon.taco},
+    'Burrito': {'label': 'Burrito', 'icon': TIcon.burrito},
+    'Drink': {'label': 'Drink', 'icon': TIcon.drink},
+    'Pizza': {'label': 'Pizza', 'icon': TIcon.pizza},
+    'Donut': {'label': 'Donut', 'icon': TIcon.donut},
+    'Salad': {'label': 'Salad', 'icon': TIcon.salad},
+    'Noodles': {'label': 'Noodles', 'icon': TIcon.noodles},
+    'Sandwich': {'label': 'Sandwich', 'icon': TIcon.sandwich},
+    'Pasta': {'label': 'Pasta', 'icon': TIcon.pasta},
+    'Ice Cream': {'label': 'Ice Cream', 'icon': TIcon.iceCream},
+    'More': {'label': 'More', 'icon': TIcon.moreHoriz},
+  };
 
   static List<Map<String, dynamic>> getOrderList() {
     return  [
