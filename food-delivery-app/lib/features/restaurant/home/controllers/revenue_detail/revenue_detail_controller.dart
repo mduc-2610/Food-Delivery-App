@@ -41,7 +41,6 @@ class RevenueDetailController extends GetxController with GetSingleTickerProvide
   }
 
   String? nextPage;
-
   Future<void> initialize({DateTime? date, bool reset = false}) async {
     if (reset) {
       isLoadingHistory.value = true;

@@ -21,12 +21,12 @@ class DelivererHomeController extends GetxController {
   static DelivererHomeController get instance => Get.find();
 
   final scrollController = ScrollController();
-  var isLoading = true.obs;
+  var isLoading = true.obs, isLoadingHistory = false.obs;
   var isOccupied = true.obs;
   Deliverer? deliverer;
   DeliveryRequest? currentDeliveryRequest;
   BasicUser? currentUserAccepted;
-  List<Delivery> deliveries = [];
+  RxList<Delivery> deliveries = <Delivery>[].obs;
   RxList<DeliveryRequest> deliveryRequests = <DeliveryRequest>[].obs;
   SocketService? delivererSocket;
   Rx<LatLng?> currentCoordinate = (null as LatLng?).obs;
@@ -56,35 +56,40 @@ class DelivererHomeController extends GetxController {
 
   void _scrollListener() {
     if(scrollController.position.pixels == scrollController.position.maxScrollExtent) {
-      $print(_nextPage);
       initialize(loadMore: true);
+      $print("$_nextPage \n ${deliveries.length}");
     }
   }
 
   Future<void> filterDeliveriesByDate(DateTime? date) async {
     selectedDate.value = date;
-    update();
 
-    if (date != null) {
-      final formattedDate = DateFormat('yyyy-MM-dd').format(date);
-      final [result, info] = await APIService<Delivery>(fullUrl: deliverer?.deliveries ?? '', queryParams: "date=$formattedDate").list();
-      deliveries = result;
-      _nextPage = info["next"];
-    } else {
-      await initialize(loadMore: false);
-    }
+    // if (date != null) {
+    //   final formattedDate = DateFormat('yyyy-MM-dd').format(date);
+    //   final [result, info] = await APIService<Delivery>(fullUrl: deliverer?.deliveries ?? '',).list();
+    //   deliveries = result;
+    //   _nextPage = info["next"];
+    // } else {
+      await initialize(loadMore: false, reset: true);
 
-    update();
   }
 
 
+
   String? _nextPage, _nextPage2;
-  Future<void> initialize({ bool loadMore = false }) async {
-    deliverer = await DelivererService.getDeliverer();
-    isOccupied.value = deliverer?.isOccupied ?? false;
-    delivererSocket = SocketService<Deliverer>(handleIncomingMessage: handleIncomingMessage);
-    delivererSocket?.connect(id: deliverer?.id);
+  Future<void> initialize({ bool loadMore = false, bool reset = false }) async {
+    if(delivererSocket == null) {
+      deliverer = await DelivererService.getDeliverer();
+      isOccupied.value = deliverer?.isOccupied ?? false;
+      delivererSocket = SocketService<Deliverer>(handleIncomingMessage: handleIncomingMessage);
+      delivererSocket?.connect(id: deliverer?.id);
+    }
     if (_nextPage != null || !loadMore) {
+      if (reset) {
+        isLoadingHistory.value = true;
+        _nextPage = null;
+        deliveries.value = [];
+      }
       var url = _nextPage ?? deliverer?.deliveries ?? '';
       if (selectedDate.value != null) {
         final formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate.value!);
@@ -92,11 +97,12 @@ class DelivererHomeController extends GetxController {
       }
       var [_result, info] = await APIService<Delivery>(fullUrl: url).list(next: true);
       if (!loadMore) {
-        deliveries = _result;
+        deliveries.value = _result;
       } else {
         deliveries.addAll(_result);
       }
       _nextPage = info["next"];
+      isLoadingHistory.value = false;
     }
     if(!loadMore) {
       await Future.delayed(Duration(milliseconds: TTime.init));
@@ -109,7 +115,7 @@ class DelivererHomeController extends GetxController {
       } else {
         deliveryRequests.addAll(_result);
       }
-      _nextPage = info["next"];
+      _nextPage2 = info["next"];
     }
     isLoading.value = false;
     update();

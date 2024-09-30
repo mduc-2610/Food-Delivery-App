@@ -144,17 +144,32 @@ class HomeView extends StatelessWidget {
                 //   primary: false,
                 //   shrinkWrap: true,
                 // ),
-                SingleChildScrollView(
+                Obx(() =>
+                (controller.isLoadingHistory.value)
+                    ? SingleChildScrollView(
                   child: Column(
                     children: [
-                      for(var deliveryRequest in controller.deliveryRequests)...[
-                        DeliveryCard(
-                          deliveryRequest: deliveryRequest,
-                          isTracking: false,
-                        )
+                      for(int i = 0; i < 5; i++)...[
+                        DeliveryCardSkeleton(),
+                        SizedBox(height: TSize.spaceBetweenItemsVertical),
                       ]
                     ],
                   ),
+                )
+                    :SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      for(var _delivery in controller.deliveries)...[
+                        DeliveryCard(
+                          // deliveryRequest: deliveryRequest,
+                          delivery: _delivery,
+                          isTracking: false,
+                        ),
+                        SizedBox(height: TSize.spaceBetweenItemsVertical),
+                      ]
+                    ],
+                  ),
+                )
                 )
             ),
           ),

@@ -91,6 +91,8 @@ def update_review_stats(instance, created=False, deleted=False):
             related_model.rating_counts[rating_key] = related_model.rating_counts.get(rating_key, 0) + 1
         elif deleted:
             related_model.rating_counts[rating_key] = max(0, related_model.rating_counts.get(rating_key, 0) - 1)
+        
+        print(related_model, rating_key, related_model.rating_counts, pretty=True)
 
     
     Review = apps.get_model('review', f'{model_name}Review')

@@ -27,7 +27,7 @@ class HomeView extends StatelessWidget {
             ? HomeViewSkeleton()
             : Scaffold(
           appBar: CAppBar(
-            title: "Welcome back ${TEmoji.smilingFaceWithHeart}!",
+            title: "Welcome back  ${controller.restaurant?.basicInfo?.name} ${TEmoji.smilingFaceWithHeart}!",
             noLeading: true,
           ),
           body: NestedScrollView(

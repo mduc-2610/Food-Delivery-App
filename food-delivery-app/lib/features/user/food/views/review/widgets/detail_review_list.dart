@@ -3,6 +3,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/misc/list_check.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/misc/sliver_sized_box.dart';
 import 'package:food_delivery_app/features/user/food/models/review/review.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
@@ -88,6 +89,8 @@ class DetailReviewList extends StatelessWidget {
               childCount: controller.reviews.length + 1, // +1 for loading indicator
             ),
           ),
+          SliverSizedBox(height: TSize.spaceBetweenSections,),
+          SliverSizedBox(height: TSize.spaceBetweenItemsVertical,),
         ],
       );
     });
