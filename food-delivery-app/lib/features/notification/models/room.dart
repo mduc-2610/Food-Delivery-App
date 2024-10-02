@@ -31,13 +31,20 @@ class DirectRoom {
       messages = json['messages'],
       latestMessage = json['latest_message'] != null ? DirectMessage.fromJson(json['latest_message']) : null;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson({ bool patch = false }) {
+    Map<String, dynamic> data = {
       'id': id,
       'name': name,
       'user1': user1,
       'user2': user2,
+      'latest_message': latestMessage,
     };
+
+    if(patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
   }
 
   @override

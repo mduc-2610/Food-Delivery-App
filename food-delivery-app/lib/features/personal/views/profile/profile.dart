@@ -12,12 +12,11 @@ import 'package:food_delivery_app/features/personal/controllers/profile/personal
 import 'package:food_delivery_app/features/personal/views/profile/skeleton/personal_setting_skeleton.dart';
 import 'package:food_delivery_app/features/personal/views/profile/skeleton/profile_skeleton.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
-
-enum ViewType { user, deliverer, restaurant }
 
 class PersonalProfileView extends StatelessWidget {
   final ViewType viewType;

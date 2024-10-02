@@ -7,6 +7,7 @@ import "package:food_delivery_app/features/notification/views/notification.dart"
 import "package:food_delivery_app/features/deliverer/home/views/home/home.dart";
 import "package:food_delivery_app/features/restaurant/personal/views/profile/profile.dart";
 import "package:food_delivery_app/features/personal/views/profile/profile.dart";
+import "package:food_delivery_app/utils/constants/enums.dart";
 import "package:food_delivery_app/utils/constants/icon_strings.dart";
 import "package:food_delivery_app/utils/constants/sizes.dart";
 import "package:get/get.dart";

@@ -10,6 +10,7 @@ import 'package:food_delivery_app/features/user/order/views/basket/widgets/order
 import 'package:food_delivery_app/features/user/order/views/common/widgets/order_info.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/order_bottom_navigation_bar.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:get/get.dart';
 

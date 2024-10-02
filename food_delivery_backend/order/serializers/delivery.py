@@ -6,8 +6,8 @@ from order.models import (
 
 from account.serializers.basic_user import BasicUserSerializer
 from restaurant.serializers.basic_restaurant import BasicRestaurantSerializer
+from deliverer.serializers.basic_deliverer import BasicDelivererSerializer
 from order.serializers.order import OrderSerializer
-
 from utils.serializers import CustomRelatedModelSerializer
 from utils.function import camel_to_snake
 
@@ -16,6 +16,7 @@ class DeliverySerializer(CustomRelatedModelSerializer):
     order = OrderSerializer(read_only=True)
     user = BasicUserSerializer(read_only=True)
     restaurant = BasicRestaurantSerializer(read_only=True)
+    # deliverer = BasicDelivererSerializer(read_only=True)
 
     class Meta:
         model = Delivery
@@ -26,6 +27,7 @@ class DeliverySerializer(CustomRelatedModelSerializer):
 class DeliveryRequestSerializer(serializers.ModelSerializer):
     delivery = serializers.SerializerMethodField()
     user = BasicUserSerializer(read_only=True)
+    # deliverer = BasicDelivererSerializer(read_only=True)
     accept = serializers.SerializerMethodField()
     decline = serializers.SerializerMethodField()
     complete = serializers.SerializerMethodField()

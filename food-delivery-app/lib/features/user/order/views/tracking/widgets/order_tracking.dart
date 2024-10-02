@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/features/notification/controllers/message_room_controller.dart';
+import 'package:food_delivery_app/features/notification/views/message_room.dart';
+import 'package:food_delivery_app/features/user/order/views/history/order_history_detail.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
+import 'package:get/get.dart';
 import 'package:food_delivery_app/common/widgets/animation/text_with_dot_animation.dart';
 import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
@@ -9,19 +15,20 @@ import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
-enum OrderTrackingType { deliverer, user }
 
 class OrderTracking extends StatelessWidget {
   final Delivery? delivery;
   final VoidCallback onCancel;
-  final OrderTrackingType type;
+  final ViewType viewType;
   final controller;
+  // DeliveryController
+  // OrderTrackingController
 
   const OrderTracking({
     this.delivery,
     required this.onCancel,
     this.controller,
-    this.type = OrderTrackingType.user
+    this.viewType = ViewType.user
   });
 
   @override
@@ -33,7 +40,7 @@ class OrderTracking extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            if(type == OrderTrackingType.user)...[
+            if(viewType == ViewType.user)...[
               Obx(() => _driverInfoCard(context, isFind: controller.deliverer.value == null,)),
               SizedBox(height: TSize.spaceBetweenSections,),
             ]
@@ -64,13 +71,17 @@ class OrderTracking extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'My order',
+                  'My ${viewType == ViewType.user ? "order" : "delivery"}',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 StatusChip(
                   status: 'ACTIVE',
                   text: 'Detail',
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(() => OrderHistoryDetailView(viewType: ViewType.deliverer,), arguments: {
+                      "id": delivery?.order is String ? delivery?.order : delivery?.order?.id
+                    });
+                  },
                   paddingHorizontal: 20,
                   paddingVertical: 5,
                 )
@@ -85,12 +96,12 @@ class OrderTracking extends StatelessWidget {
               child: MainButton(
                 onPressed: (forTrackingStage.trackingStage.value < 3)
                     ? onCancel
-                    : type == OrderTrackingType.user
+                    : viewType == ViewType.user
                     ? null
                     : () => controller.handleCompleteOrder(),
                 text: (forTrackingStage.trackingStage.value < 3)
                     ? 'Cancel Order'
-                    : type == OrderTrackingType.user
+                    : viewType == ViewType.user
                     ? 'Completed'
                     : 'Complete Order',
                 textColor: (forTrackingStage.trackingStage.value < 3)
@@ -201,7 +212,12 @@ class OrderTracking extends StatelessWidget {
             backgroundColor: Color(0xfffcd899),
             child: IconButton(
               icon: Icon(Icons.chat, color: TColor.dark),
-              onPressed: () {},
+              onPressed: () {
+                Get.to(() => MessageRoomView(), arguments: {
+                  "user1Id": "${delivery?.deliverer == null ? controller.deliverer?.user : delivery?.deliverer is String ? delivery?.deliverer : delivery?.deliverer?.user}",
+                  "user2Id": "${delivery?.user is String ? delivery?.user : delivery?.user?.id}",
+                });
+              },
             ),
           ),
           SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
@@ -237,10 +253,18 @@ class OrderTracking extends StatelessWidget {
           CircleAvatar(
             radius: 25,
             backgroundColor: Colors.orangeAccent.withOpacity(0.8),
-            child: Icon(
+            child:
+            (controller.deliverer.value?.avatar != null)
+                ? ClipRRect(
+              borderRadius: BorderRadius.circular(TSize.borderRadiusCircle),
+              child: Image.network(
+                  "${controller.deliverer.value?.avatar}"
+              ),
+            )
+                : Icon(
               Icons.person,
               color: Colors.white,
-            ),
+            )
           ),
           SizedBox(width: TSize.spaceBetweenItemsVertical),
           Expanded(
@@ -252,7 +276,7 @@ class OrderTracking extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${controller.deliverer.value.basicInfo.giveName} ${controller.deliverer.value.basicInfo.fullName}',
+                  '${controller.deliverer.value.basicInfo.fullName}',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Row(
@@ -271,7 +295,13 @@ class OrderTracking extends StatelessWidget {
               backgroundColor: Color(0xfffcd899),
               child: IconButton(
                 icon: Icon(Icons.chat, color: TColor.dark),
-                onPressed: () {},
+                onPressed: () {
+                  $print('abd');
+                  Get.to(() => MessageRoomView(viewType: ViewType.deliverer,), arguments: {
+                    "user1Id": "${delivery?.user is String ? delivery?.user : delivery?.user?.id}",
+                    "user2Id": "${controller.deliverer?.value.user}",
+                  });
+                },
               ),
             ),
             SizedBox(width: TSize.spaceBetweenItemsHorizontal,),

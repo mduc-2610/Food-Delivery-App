@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/dialogs/show_confirm_dialog.dart';
 import 'package:food_delivery_app/common/widgets/dialogs/show_success_dialog.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
+import 'package:food_delivery_app/features/authentication/models/deliverer/deliverer.dart';
 import 'package:food_delivery_app/features/deliverer/delivery/views/delivery/widgets/delivery_available_orders.dart';
 import 'package:food_delivery_app/features/deliverer/delivery/views/delivery/widgets/delivery_tracking_order.dart';
 import 'package:food_delivery_app/features/deliverer/home/controllers/home/home_controller.dart';
@@ -18,10 +19,12 @@ class DeliveryController extends GetxController {
   final delivererHomeController = DelivererHomeController.instance;
   late GoogleMapController _mapController;
   DeliveryRequest? curDeliveryRequest;
+  Deliverer? deliverer;
 
   @override
   void onInit() {
     super.onInit();
+    deliverer = delivererHomeController.deliverer;
   }
 
   void onMapCreated(GoogleMapController controller) async {

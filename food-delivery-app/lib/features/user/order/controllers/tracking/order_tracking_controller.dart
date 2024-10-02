@@ -223,26 +223,26 @@ class OrderTrackingController extends GetxController {
 
 
     if (trackingStage.value == 3) {
-      showSuccessDialog(
-          Get.context!,
-          accept: "Get back",
-          title: "Successfully delivered ${TEmoji.smilingFaceWithHeart}",
-          description: "Enjoy your meal ${TEmoji.faceSavoringFood}",
-          image: TImage.diaConfetti,
-          canPop: false,
-          onAccept: () async {
-            // if(currentDeliveryRequest != null) {
-            //   final [statusCode, headers, data] = await APIService<DeliveryRequest>(
-            //       fullUrl: currentDeliveryRequest?.complete ?? "").create({}, noBearer: true);
-            //   $print(data?.delivery);
-            //   $print(data?.delivery?.order);
-            // }
-            // else {
-            //   $print("NO UPDATE");
-            // }
-            Get.back();
-          }
-      );
+      // showSuccessDialog(
+      //     Get.context!,
+      //     accept: "Get back",
+      //     title: "Successfully delivered ${TEmoji.smilingFaceWithHeart}",
+      //     description: "Enjoy your meal ${TEmoji.faceSavoringFood}",
+      //     image: TImage.diaConfetti,
+      //     canPop: false,
+      //     onAccept: () async {
+      //       // if(currentDeliveryRequest != null) {
+      //       //   final [statusCode, headers, data] = await APIService<DeliveryRequest>(
+      //       //       fullUrl: currentDeliveryRequest?.complete ?? "").create({}, noBearer: true);
+      //       //   $print(data?.delivery);
+      //       //   $print(data?.delivery?.order);
+      //       // }
+      //       // else {
+      //       //   $print("NO UPDATE");
+      //       // }
+      //       Get.back();
+      //     }
+      // );
     }
 
     int index = polylineCoordinates.indexWhere((coordinate) => coordinate == currentPoint);

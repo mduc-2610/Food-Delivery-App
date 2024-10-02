@@ -6,6 +6,7 @@ import math
 import sys
 import random
 from datetime import datetime, timedelta
+from django.core.exceptions import ValidationError
 
 
 from django.apps import apps
@@ -161,9 +162,16 @@ def load_intermediate_model(
                     related_field: related_obj,
                     **{attr: transform_value(value) for attr, value in attributes.items()}
                 }
-                created_object = model_class.objects.create(**data)
-                created_objects.append(created_object)
-                print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
+                try:
+                    created_object = model_class.objects.create(**data)
+                    created_objects.append(created_object)
+                    print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
+                except ValidationError as e:
+                    print(f"\tFailed to create {model_class.__name__} due to validation error: {e}")
+                    continue  
+                except Exception as e:
+                    print(f"\tAn error occurred: {e}")
+                    continue
     else:
         if attributes:
             for instance in model_class.objects.all():
@@ -344,8 +352,7 @@ def get_related_url_2(request, model, obj, field, type='one'):
         view_name = field.name.replace('_', '-')
         related_model = field.model
         related_model_app_label = related_model._meta.app_label
-        
-        base_uri = f"{get_base_ip(request)}/api/{related_model_app_label}/{camel_to_snake(related_model.__name__, sep='_')}"
+        base_uri = f"{get_base_ip(request)}/api/{related_model_app_label}/{camel_to_snake(related_model.__name__, sep='-')}"
         uri = ""
         if type == "many":
             uri = f"{base_uri}/{obj.pk}/{view_name}"

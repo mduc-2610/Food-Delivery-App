@@ -38,6 +38,7 @@ class GroupMessage(BaseMessage):
 def update_room_latest_message(sender, instance, created, **kwargs):
     if created:
         room = instance.room
+        print('sdad', instance, room, pretty=True)
         room.latest_message = instance
         room.save(update_fields=['latest_message'])
 

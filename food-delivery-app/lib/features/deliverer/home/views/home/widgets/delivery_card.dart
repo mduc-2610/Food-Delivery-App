@@ -14,6 +14,7 @@ import 'package:food_delivery_app/features/user/order/views/basket/widgets/order
 import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';
 import 'package:food_delivery_app/features/user/order/views/history/order_history_detail.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';

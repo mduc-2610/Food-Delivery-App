@@ -9,6 +9,9 @@ class ReviewLike(models.Model):
 
     class Meta:
         abstract = True
+        indexes = [
+            models.Index(fields=['user', 'review']),
+        ]
         # unique_together = ('user', 'review')
         ordering = ('-created_at',)
 
@@ -52,7 +55,6 @@ def update_total_likes(instance, created=False, deleted=False):
     
     review.save()
 
-# Receiver for likes being saved
 @receiver(post_save, sender=DishReviewLike)
 @receiver(post_save, sender=RestaurantReviewLike)
 @receiver(post_save, sender=DelivererReviewLike)
@@ -60,7 +62,6 @@ def update_total_likes(instance, created=False, deleted=False):
 def update_like_save(sender, instance, created, **kwargs):
     update_total_likes(instance, created=created)
 
-# Receiver for likes being deleted
 @receiver(post_delete, sender=DishReviewLike)
 @receiver(post_delete, sender=RestaurantReviewLike)
 @receiver(post_delete, sender=DelivererReviewLike)

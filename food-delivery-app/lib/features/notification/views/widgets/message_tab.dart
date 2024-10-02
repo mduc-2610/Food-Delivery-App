@@ -33,7 +33,7 @@ class MessageTab extends StatelessWidget {
               MainWrapper(
                 child: ListTile(
                   onTap: () {
-                    Get.to(() => MessageRoom(), arguments: {
+                    Get.to(() => MessageRoomView(), arguments: {
                       'id': roomId
                     });
                   },

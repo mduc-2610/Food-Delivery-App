@@ -13,6 +13,7 @@ import 'package:food_delivery_app/features/user/order/views/location/order_locat
 import 'package:food_delivery_app/features/user/payment/views/payment/payment_list.dart';
 import 'package:food_delivery_app/features/personal/controllers/profile/personal_profile_controller.dart';
 import 'package:food_delivery_app/features/personal/views/profile/profile.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';

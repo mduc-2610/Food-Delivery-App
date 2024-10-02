@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/features/user/order/models/delivery.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:get/get.dart';
 import 'package:food_delivery_app/features/deliverer/delivery/controllers/delivery/delivery_controller.dart';
 import 'package:food_delivery_app/features/user/order/views/tracking/widgets/order_tracking.dart';
@@ -23,7 +24,7 @@ class DeliveryTrackingOrder extends StatelessWidget {
         Get.back();
       },
       controller: deliveryController,
-      type: OrderTrackingType.deliverer,
+      viewType: ViewType.deliverer,
     );
   }
 }

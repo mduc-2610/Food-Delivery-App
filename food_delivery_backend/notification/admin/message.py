@@ -19,13 +19,13 @@ class GroupVideoMessageInline(admin.StackedInline):
 
 class DirectMessageAdmin(admin.ModelAdmin):
     list_display = ('user', 'room', 'created_at')
-    search_fields = ('user__phone_number', 'room__name', 'content')
+    search_fields = ('user__phone_number', 'content')
     list_filter = ('created_at',)
     inlines = [DirectImageMessageInline, DirectVideoMessageInline]
 
 class GroupMessageAdmin(admin.ModelAdmin):
     list_display = ('user', 'room', 'created_at')
-    search_fields = ('user__phone_number', 'room__name', 'content')
+    search_fields = ('user__phone_number', 'content')
     list_filter = ('created_at',)
     inlines = [GroupImageMessageInline, GroupVideoMessageInline]
 

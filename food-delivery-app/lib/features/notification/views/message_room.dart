@@ -4,15 +4,23 @@ import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
 import 'package:food_delivery_app/features/notification/controllers/message_room_controller.dart';
 import 'package:food_delivery_app/features/notification/controllers/message_tab_controller.dart';
 import 'package:food_delivery_app/features/notification/models/message.dart';
+import 'package:food_delivery_app/features/personal/views/profile/profile.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
-class MessageRoom extends StatelessWidget {
+class MessageRoomView extends StatelessWidget {
+  final ViewType viewType;
+
+  const MessageRoomView({
+    this.viewType = ViewType.user
+  });
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: MessageRoomController(),
+      init: MessageRoomController(viewType: viewType),
       builder: (controller) {
         return Scaffold(
           appBar: CAppBar(

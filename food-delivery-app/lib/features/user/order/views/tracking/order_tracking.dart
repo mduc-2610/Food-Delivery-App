@@ -10,6 +10,7 @@ import 'package:food_delivery_app/features/user/order/models/delivery.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';
 import 'package:food_delivery_app/features/user/order/views/tracking/widgets/order_tracking.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
@@ -82,7 +83,7 @@ class _OrderTrackingViewState extends State<OrderTrackingView> {
                               return OrderTracking(
                                 delivery: controller.currentDelivery,
                                 onCancel: controller.handleCancel,
-                                type: OrderTrackingType.user,
+                                viewType: ViewType.user,
                                 controller: controller,
                               );
                             },
