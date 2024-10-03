@@ -19,6 +19,7 @@ class APIService<T> {
   final bool fullResponse;
   final bool allNoBearer;
   final Dio? dio;
+  final bool utf_8;
 
   APIService({
     this.endpoint,
@@ -29,7 +30,15 @@ class APIService<T> {
     this.fullResponse = false,
     this.allNoBearer = false,
     this.dio,
+    this.utf_8 = false,
   });
+
+  dynamic decodeMessage(response) {
+    if(utf_8 && dio == null) {
+      return json.decode(utf8.decode(response.bodyBytes));
+    }
+    return json.decode(response.body);
+  }
 
   T Function(Map<String, dynamic>) get fromJson {
     var classMirror = jsonSerializable.reflectType(T) as ClassMirror;
@@ -82,7 +91,7 @@ class APIService<T> {
           Uri.parse(url_),
           headers: await _getHeaders(token),
         );
-        return _handleResponse(json.decode(response.body), response.statusCode, next: next, pagination: pagination, single: single);
+        return _handleResponse(decodeMessage(response), response.statusCode, next: next, pagination: pagination, single: single);
       }
     });
   }
@@ -103,7 +112,8 @@ class APIService<T> {
           Uri.parse(url_),
           headers: await _getHeaders(token),
         );
-        return fromJson(json.decode(response.body));
+        final _x = json.decode(utf8.decode(response.bodyBytes));
+        return fromJson(decodeMessage(response));
       }
     });
   }
@@ -137,7 +147,7 @@ class APIService<T> {
           headers: await _getHeaders(token, noBearer: noBearer),
           body: json.encode(requestData),
         );
-        var jsonResponse = json.decode(response.body);
+        var jsonResponse = decodeMessage(response);
         if(!noFromJson) {
           fromJson = (fromJson != null) ? fromJson : this.fromJson;
           jsonResponse = fromJson?.call(jsonResponse);
@@ -189,7 +199,7 @@ class APIService<T> {
             ? await http.patch(Uri.parse(uri), headers: await _getHeaders(token, noBearer: noBearer), body: body)
             : await http.put(Uri.parse(uri), headers: await _getHeaders(token, noBearer: noBearer), body: body);
 
-        var jsonResponse = json.decode(response.body);
+        var jsonResponse = decodeMessage(response);
         if(!noFromJson) {
           fromJson = (fromJson != null) ? fromJson : this.fromJson;
           if (fromJson != null) {
@@ -255,7 +265,7 @@ class APIService<T> {
       );
 
       if (response.statusCode == 200) {
-        final jsonResponse = json.decode(response.body);
+        final jsonResponse = decodeMessage(response);
         token?.access = jsonResponse["access"] ?? "";
         await TokenService.saveToken(token!);
 

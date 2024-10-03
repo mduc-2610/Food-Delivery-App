@@ -20,7 +20,7 @@ class RestaurantService {
       pagination: false, ).list(single: true);
       try {
         $print(user?.restaurant);
-        restaurant = await APIService<Restaurant>(queryParams: queryParams ?? '').retrieve(user?.restaurant ?? '');
+        restaurant = await APIService<Restaurant>(queryParams: queryParams ?? '', utf_8: true).retrieve(user?.restaurant ?? '');
         return (getUser) ? [user, restaurant] : restaurant;
       }
       catch(e) {

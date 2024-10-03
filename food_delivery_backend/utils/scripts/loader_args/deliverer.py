@@ -16,6 +16,7 @@ from utils.function import (
     generate_longitude,
     update_attr
 )
+from utils.scripts.data import vietnam_location_data
 
 fake = Faker()
 
@@ -29,7 +30,6 @@ MODEL_MAP = {
     'residency_info': ResidencyInfo,
     'deliverer': Deliverer
 }
-
 @script_runner(MODEL_MAP)
 @transaction.atomic
 def load_deliverer(
@@ -56,15 +56,25 @@ def load_deliverer(
 
     if Address in models_to_update:
         deliverer_list = map_queryset.get(Deliverer)
+
+        def generate_address():
+            location = random.choice(vietnam_location_data)  
+            city = location["name"]
+            district_data = random.choice(location["districts"])  
+            district = district_data["name"]
+            ward = random.choice(district_data["communes"])  
+
+            return {
+                "city": city,
+                "district": district,
+                "ward": ward,
+                "detail_address": fake.street_address()
+            }
+
         load_normal_model(
             model_class=Address,
             max_items=0,
-            attributes={
-                "city": lambda: fake.city(),
-                "district": lambda: fake.state(),
-                "ward": lambda: fake.city_suffix(),
-                "detail_address": lambda: fake.street_address()
-            },
+            attributes=generate_address,  
             oto_field='deliverer',
             oto_objects=deliverer_list,
             action=action
@@ -72,21 +82,33 @@ def load_deliverer(
 
     if BasicInfo in models_to_update:
         deliverer_list = map_queryset.get(Deliverer)
+
+        def generate_basic_info_address():
+            location = lambda: random.choice(vietnam_location_data)  
+            location = location()
+            city = location["name"]
+            district_data = random.choice(location["districts"])  
+            district = district_data["name"]
+            ward = random.choice(district_data["communes"])  
+            home_town = ward
+
+            return {
+                "full_name": lambda: fake.name(),
+                "given_name": lambda: fake.first_name(),
+                "gender": lambda: fake.random_element(elements=('MALE', 'FEMALE')),
+                "date_of_birth": lambda: fake.date_of_birth(minimum_age=18, maximum_age=60),
+                "hometown": home_town,
+                "city": city,
+                "district": district,
+                "ward": ward,
+                "address": lambda: fake.street_address(),
+                "citizen_identification": lambda: fake.ssn()
+            }
+
         load_normal_model(
             model_class=BasicInfo,
             max_items=0,
-            attributes={
-                "full_name": lambda: fake.name(),
-                "given_name": lambda: fake.first_name(),
-                "gender": lambda: fake.random_element(elements=('MALE', 'FEMALE', 'OTHER')),
-                "date_of_birth": lambda: fake.date_of_birth(minimum_age=18, maximum_age=60),
-                "hometown": lambda: fake.city(),
-                "city": lambda: fake.city(),
-                "district": lambda: fake.state(),
-                "ward": lambda: fake.city_suffix(),
-                "address": lambda: fake.street_address(),
-                "citizen_identification": lambda: fake.ssn()
-            },
+            attributes=generate_basic_info_address,  
             oto_field='deliverer',
             oto_objects=deliverer_list,
             action=action
@@ -131,11 +153,11 @@ def load_deliverer(
             model_class=OperationInfo,
             max_items=0,
             attributes={
-                "city": lambda: fake.city(),
+                "city": random.choice(vietnam_location_data)["name"],
                 "driver_type": lambda: fake.random_element(elements=['HUB', 'PART_TIME']),
-                "area": lambda: fake.street_address(),
-                "time": lambda: "9:00-18:00",
-                "hub": lambda: fake.city()
+                "area": random.choice(['Area 1', 'Area 2', 'Area 3']),
+                "time": random.choice(['Morning', 'Afternoon', 'Evening']),
+                "hub": random.choice(['HUB 1', 'HUB 2', 'HUB 3', 'HUB 4'])
             },
             oto_field='deliverer',
             oto_objects=deliverer_list,
@@ -159,25 +181,39 @@ def load_deliverer(
 
     if ResidencyInfo in models_to_update:
         deliverer_list = map_queryset.get(Deliverer)
+
+        def generate_residency_address():
+            location = random.choice(vietnam_location_data)  
+            city = location["name"]
+            district_data = random.choice(location["districts"])  
+            district = district_data["name"]
+            ward = random.choice(district_data["communes"])  
+
+            return {
+                "is_same_as_ci": lambda: fake.boolean(),
+                "city": city,
+                "district": district,
+                "ward": ward,
+                "address": lambda: fake.street_address(),
+                "tax_code": lambda: fake.ssn(),
+                "email": lambda: fake.email()
+            }
+
         print("RESIDENCY INFO:")
         load_normal_model(
             model_class=ResidencyInfo,
             max_items=0,
-            attributes={
-                "is_same_as_ci": lambda: fake.boolean(),
-                "city": lambda: fake.city(),
-                "district": lambda: fake.state(),
-                "ward": lambda: fake.city_suffix(),
-                "address": lambda: fake.street_address(),
-                "tax_code": lambda: fake.ssn(),
-                "email": lambda: fake.email()
-            },
+            attributes=generate_residency_address,  
             oto_field='deliverer',
             oto_objects=deliverer_list,
             action=action
         )
 
     return [deliverer for deliverer in map_queryset.get(Deliverer)]
+
+def run(*args):
+    load_deliverer(*args)
+
 
 def run(*args):
     load_deliverer(*args)

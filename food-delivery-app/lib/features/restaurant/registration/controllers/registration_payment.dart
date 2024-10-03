@@ -11,7 +11,7 @@ class RegistrationPaymentInfoController extends GetxController {
   static RegistrationPaymentInfoController get instance => Get.find();
 
   final formKey = GlobalKey<FormState>();
-  final registrationStepController = RegistrationTabController.instance;
+  final registrationTabController = RegistrationTabController.instance;
   Restaurant? restaurant;
   RestaurantPaymentInfo? paymentInfo;
 
@@ -25,7 +25,7 @@ class RegistrationPaymentInfoController extends GetxController {
   final city = ''.obs;
 
   RegistrationPaymentInfoController() {
-    restaurant = registrationStepController.restaurant;
+    restaurant = registrationTabController.restaurant;
     paymentInfo = restaurant?.paymentInfo;
 
     if (paymentInfo != null) {
@@ -58,16 +58,16 @@ class RegistrationPaymentInfoController extends GetxController {
 
     if (paymentInfo != null) {
       final [statusCode, headers, data] = await APIService<RestaurantPaymentInfo>()
-          .update(registrationStepController.restaurant?.id ?? "", paymentInfoData, patch: true);
+          .update(registrationTabController.restaurant?.id ?? "", paymentInfoData, patch: true);
       print([statusCode, headers, data]);
     } else {
       if (restaurant == null) {
         var [statusCode, headers, data] = await APIService<Restaurant>()
-            .create({"user": registrationStepController.user?.id});
+            .create({"user": registrationTabController.user?.id});
         print([statusCode, headers, data]);
         if (statusCode == 200 || statusCode == 201) {
           restaurant = data;
-          registrationStepController.restaurant = data;
+          registrationTabController.restaurant = data;
         }
       }
       paymentInfoData.restaurant = restaurant?.id;
@@ -82,15 +82,16 @@ class RegistrationPaymentInfoController extends GetxController {
     if (formKey.currentState?.validate() ?? false) {
       formKey.currentState?.save();
       print('Saving Payment Info');
+      Get.snackbar("Success", "Information saved successfully");
     }
   }
 
   void onContinue() async {
     await onCallApi();
+    Get.snackbar("Success", "Information saved successfully");
     if (formKey.currentState?.validate() ?? false) {
       formKey.currentState?.save();
-      registrationStepController.setTab();
-      print('Continuing to next step');
+      registrationTabController.setTab();
     }
   }
 

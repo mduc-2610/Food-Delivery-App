@@ -30,7 +30,7 @@ class RegistrationOtherInfo extends StatelessWidget {
             controller: controller.detailsController,
           ),
           RegistrationDocumentField(
-            label: "Criminal Record",
+            label: "Judicial Record",
             controller: controller.judicialRecordController,
           ),
         ],

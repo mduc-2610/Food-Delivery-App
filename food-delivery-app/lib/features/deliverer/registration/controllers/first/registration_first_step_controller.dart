@@ -29,10 +29,12 @@ class RegistrationFirstStepController extends GetxController with GetSingleTicke
     deliverer = _deliverer;
     await Future.delayed(Duration(milliseconds: TTime.init));
     isLoading.value = false;
-    $print(deliverer?.driverLicense);
+    $print("HOME TOWN ${deliverer?.basicInfo}");
   }
 
   void setTab() {
-    tabController.animateTo(currentTab + 1);
+    if(tabController.index + 1 < tabController.length) {
+      tabController.animateTo(tabController.index + 1);
+    }
   }
 }

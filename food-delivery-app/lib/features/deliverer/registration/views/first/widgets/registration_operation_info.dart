@@ -4,6 +4,7 @@ import 'package:food_delivery_app/common/widgets/registration/registration_dropd
 import 'package:food_delivery_app/common/widgets/registration/registration_type_option.dart';
 import 'package:food_delivery_app/features/deliverer/registration/controllers/first/registration_operation_info.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:food_delivery_app/utils/hardcode/hardcode.dart';
 import 'package:get/get.dart';
 
 class RegistrationOperationInfo extends StatelessWidget {
@@ -24,7 +25,7 @@ class RegistrationOperationInfo extends StatelessWidget {
                     label: 'City of Operation',
                     onChanged: controller.setSelectedCity,
                     value: controller.city.value,
-                    items: ["Hà Nội", "TP.HCM", "Đà Nẵng"],
+                    items: THardCode.getVietnamLocation().map((ele) => ele["name"] as String).toList(),
                   )),
                   Obx(() => RegistrationTypeOption(
                     label: 'Type of Operation',

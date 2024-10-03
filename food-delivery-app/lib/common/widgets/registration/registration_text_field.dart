@@ -15,7 +15,7 @@ class RegistrationTextField extends StatefulWidget {
     Key? key,
     required this.label,
     required this.controller,
-    this.hintText = "Nhập",
+    this.hintText = "Enter",
     this.maxLines = 1,
     this.maxLength,
     this.validator,

@@ -133,14 +133,15 @@ class RegistrationDetailInfoController extends GetxController {
     if (formKey.currentState?.validate() ?? false) {
       formKey.currentState?.save();
       print('Saving Detail Info');
+      Get.snackbar("Success", "Information saved successfully");
     }
   }
 
   void onContinue() async {
     await onCallApi();
-    if (formKey.currentState?.validate() ?? false) {
       formKey.currentState?.save();
       registrationTabController.setTab();
+    if (formKey.currentState?.validate() ?? false) {
       print('Continuing to next step');
     }
   }

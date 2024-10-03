@@ -93,14 +93,15 @@ class RegistrationDriverLicenseController extends GetxController {
     await onCallApi();
     if (formKey.currentState?.validate() ?? false) {
       formKey.currentState?.save();
+      Get.snackbar("Success", "Information saved successfully");
     }
   }
 
   void onContinue() async {
     await onCallApi();
+    registrationFirstStepController.setTab();
     if (formKey.currentState?.validate() ?? false) {
       formKey.currentState?.save();
-      registrationFirstStepController.setTab();
       print("Continuing with driver license info...");
     }
   }

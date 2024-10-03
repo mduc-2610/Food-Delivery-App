@@ -15,7 +15,7 @@ class RegistrationDropdownField extends StatelessWidget {
     required this.label,
     required this.items,
     required this.onChanged,
-    this.hintText = 'Chọn',
+    this.hintText = 'Choose',
     this.value,
   }) : super(key: key);
 
@@ -42,7 +42,7 @@ class RegistrationDropdownField extends StatelessWidget {
             items: items
                 .map((item) => DropdownMenuItem<String>(
               value: item,
-              child: Text(item),
+              child: Text(item, maxLines: 1, overflow: TextOverflow.ellipsis,),
             ))
                 .toList(),
             value: (items.contains(value)) ? value : null, // Ensure value is valid

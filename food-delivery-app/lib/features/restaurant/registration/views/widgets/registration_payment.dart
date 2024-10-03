@@ -53,9 +53,9 @@ class RegistrationPaymentInfo extends StatelessWidget {
             Obx(() => RegistrationDropdownField(
               label: 'Bank Name',
               items: [
-                'Vietcombank (Foreign Trade Bank of Vietnam)',
-                'Vietinbank (Vietnam Industrial and Commercial Bank)',
-                'BIDV (Bank for Investment and Development of Vietnam)',
+                'Vietcombank',
+                'Vietinbank',
+                'BIDV',
               ],
               value: controller.bank.value,
               onChanged: controller.setBank,

@@ -37,7 +37,7 @@ class DelivererService {
     final user = await APIService<User>(endpoint: 'account/user/me',
       pagination: false, ).list(single: true);
     try {
-      deliverer = await APIService<Deliverer>(queryParams: queryParams ?? "").retrieve(user?.deliverer ?? '');
+      deliverer = await APIService<Deliverer>(queryParams: queryParams ?? "", utf_8: true).retrieve(user?.deliverer ?? '');
       return (getUser) ? [user, deliverer] : deliverer;
     }
     catch(e) {

@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['10.0.2.2', '172.16.1.15',
 
 AUTH_USER_MODEL = "account.User"
 # Application definition
+UNICODE_JSON = True
 
 INSTALLED_APPS = [
     'channels',

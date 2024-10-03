@@ -97,14 +97,16 @@ class RegistrationRepresentativeInfoController extends GetxController {
     await onCallApi();
     if (formKey.currentState?.validate() ?? false) {
       formKey.currentState?.save();
+      Get.snackbar("Success", "Information saved successfully");
     }
   }
 
   void onContinue() async {
     await onCallApi();
+    print('Continuing to next step');
+    registrationTabController.setTab();
     if (formKey.currentState?.validate() ?? false) {
       formKey.currentState?.save();
-      registrationTabController.setTab();
       print("Continuing with representativeInfo info...");
     }
   }

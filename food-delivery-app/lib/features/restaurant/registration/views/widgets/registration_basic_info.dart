@@ -23,28 +23,28 @@ class RegistrationBasicInfo extends StatelessWidget {
                 children: [
                   Expanded(
                     child: RegistrationTextField(
-                      label: 'Shop Name',
+                      label: 'Restaurant Name',
                       controller: controller.shopNameController,
-                      validator: (value) => value!.isEmpty ? 'Please enter shop name' : null,
+                      validator: (value) => value!.isEmpty ? 'Please enter restaurant name' : null,
                     ),
                   ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Obx(() => RegistrationDropdownField(
-                      label: 'Type',
-                      items: ["Type 1", "Type 2"],
-                      value: controller.shopType.value,
-                      onChanged: controller.setShopType,
-                    )),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: RegistrationTextField(
-                      label: 'Street',
-                      controller: controller.streetController,
-                      validator: (value) => value!.isEmpty ? 'Please enter street' : null,
-                    ),
-                  ),
+                  // SizedBox(width: 10),
+                  // Expanded(
+                  //   child: Obx(() => RegistrationDropdownField(
+                  //     label: 'Type',
+                  //     items: ["Type 1", "Type 2"],
+                  //     value: controller.shopType.value,
+                  //     onChanged: controller.setShopType,
+                  //   )),
+                  // ),
+                  // SizedBox(width: 10),
+                  // Expanded(
+                  //   child: RegistrationTextField(
+                  //     label: 'Street',
+                  //     controller: controller.streetController,
+                  //     validator: (value) => value!.isEmpty ? 'Please enter street' : null,
+                  //   ),
+                  // ),
                 ],
               ),
               SizedBox(height: TSize.spaceBetweenItemsVertical),
@@ -57,18 +57,18 @@ class RegistrationBasicInfo extends StatelessWidget {
               SizedBox(height: TSize.spaceBetweenItemsVertical),
 
               Obx(() => RegistrationDropdownField(
-                label: 'City',
-                items: ["City 1", "City 2"],
-                value: controller.city.value,
+                label: 'City of Residence (on ID card)',
                 onChanged: controller.setCity,
+                value: controller.city.value.isEmpty ? null : controller.city.value,
+                items: controller.cityOptions,
               )),
-              SizedBox(height: TSize.spaceBetweenItemsVertical),
-
               Obx(() => RegistrationDropdownField(
-                label: 'District',
-                items: ["District 1", "District 2"],
-                value: controller.district.value,
+                label: 'District of Residence (on ID card)',
                 onChanged: controller.setDistrict,
+                value: controller.district.value.isEmpty ? null : controller.district.value,
+                items: controller.districtOptions.isEmpty
+                    ? ["Select a city first"]
+                    : controller.districtOptions,
               )),
               SizedBox(height: TSize.spaceBetweenItemsVertical),
 

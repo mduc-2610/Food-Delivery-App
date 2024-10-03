@@ -83,6 +83,7 @@ class RegistrationOperationInfoController extends GetxController {
     if (formKey.currentState?.validate() ?? false) {
       formKey.currentState?.save();
       await onCallApi();
+      Get.snackbar("Success", "Information saved successfully");
     }
   }
 

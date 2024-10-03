@@ -3,6 +3,7 @@ from rest_framework import serializers
 from deliverer.models import BasicInfo
 
 class BaseBasicInfoSerializer(serializers.ModelSerializer):
+    gender = serializers.CharField(source="get_gender_display")
     class Meta:
         model = BasicInfo
         fields = [
@@ -23,6 +24,11 @@ class BaseBasicInfoSerializer(serializers.ModelSerializer):
 
 class BasicInfoSerializer(BaseBasicInfoSerializer):
     pass  
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        print(data, pretty=True)
+        return data
 
 class UpdateBasicInfoSerializer(BaseBasicInfoSerializer):
     class Meta(BaseBasicInfoSerializer.Meta):

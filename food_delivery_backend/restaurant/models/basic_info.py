@@ -1,5 +1,9 @@
 from django.db import models
 from utils.objects import Point, Distance
+from utils.function import (
+    generate_latitude,
+    generate_longitude,
+)
 
 class BasicInfo(models.Model):
     restaurant = models.OneToOneField("restaurant.Restaurant", on_delete=models.CASCADE, related_name='basic_info')
@@ -18,6 +22,12 @@ class BasicInfo(models.Model):
                 Point(location.latitude, location.longitude)
             )
         return None
+    
+    def save(self, *args, **kwargs):
+        if not self.latitude or not self.longitude:
+            self.latitude = generate_latitude()
+            self.longitude = generate_longitude()
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return f"{self.name} {self.phone_number} {self.city}"

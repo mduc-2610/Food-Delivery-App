@@ -23,6 +23,15 @@ class RegistrationResidencyInfo extends StatelessWidget {
             RegistrationTextField(
               label: "Email",
               controller: controller.emailController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your email';
+                }
+                if (!GetUtils.isEmail(value)) {
+                  return 'Please enter a valid email';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 20),
           ],
@@ -54,14 +63,16 @@ class RegistrationResidencyInfo extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Same as the address on the ID card',
-                style: TextStyle(color: Colors.black, fontSize: 14),
+              const Expanded(
+                child: Text(
+                  'Same as the address on the ID card',
+                  style: TextStyle(color: Colors.black, fontSize: 14),
+                ),
               ),
-              CupertinoSwitch(
+              Obx(() => CupertinoSwitch(
                 value: controller.isSameAsCI.value,
                 onChanged: controller.toggleIsSameAsCI,
-              ),
+              )),
             ],
           ),
           const SizedBox(height: 16),
@@ -69,25 +80,38 @@ class RegistrationResidencyInfo extends StatelessWidget {
             Obx(() => RegistrationDropdownField(
               label: 'City of Residence (on ID card)',
               onChanged: controller.setResidentCity,
-              value: controller.city.value,
-              items: ["Hà Nội", "TP.HCM", "Đà Nẵng"],
+              value: controller.city.value.isEmpty ? null : controller.city.value,
+              items: controller.cityOptions,
             )),
+            const SizedBox(height: 16),
             Obx(() => RegistrationDropdownField(
               label: 'District of Residence (on ID card)',
               onChanged: controller.setResidentDistrict,
-              value: controller.district.value,
-              items: ["District 1", "District 2", "District 3"],
+              value: controller.district.value.isEmpty ? null : controller.district.value,
+              items: controller.districtOptions.isEmpty
+                  ? ["Select a city first"]
+                  : controller.districtOptions,
             )),
+            const SizedBox(height: 16),
             Obx(() => RegistrationDropdownField(
               label: 'Ward of Residence (on ID card)',
               onChanged: controller.setResidentWard,
-              value: controller.ward.value,
-              items: ["Ward 1", "Ward 2", "Ward 3"],
+              value: controller.ward.value.isEmpty ? null : controller.ward.value,
+              items: controller.wardOptions.isEmpty
+                  ? ["Select a district first"]
+                  : controller.wardOptions,
             )),
+            const SizedBox(height: 16),
             RegistrationTextField(
               hintText: "0 / 255",
               label: "Permanent Address (on ID card)",
               controller: controller.addressController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your permanent address';
+                }
+                return null;
+              },
             ),
           ]
         ],

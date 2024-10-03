@@ -11,7 +11,7 @@ class ResidencyInfo(models.Model):
     email = models.EmailField()
 
     def save(self, *args, **kwargs):
-        if hasattr(self, 'deliverer') and self.is_same_as_ci:
+        if hasattr(self, 'deliverer') and hasattr(self.deliverer, 'basic_info') and self.is_same_as_ci :
             self.city = self.deliverer.basic_info.city
             self.district = self.deliverer.basic_info.district
             self.ward = self.deliverer.basic_info.ward

@@ -18,19 +18,19 @@ class RegistrationFirstStepView extends StatelessWidget {
       builder: (controller) {
         return Scaffold(
           appBar: CAppBar(
-            title: "Nộp giấy tờ",
+            title: 'Deliverer Registration',
             bottom: TabBar(
               controller: controller.tabController,
               // physics: NeverScrollableScrollPhysics(),
               isScrollable: true,
               tabAlignment: TabAlignment.start,
               tabs: [
-                Tab(child: Text("Thông tin cơ bản", style: Get.textTheme.bodyMedium)),
-                Tab(child: Text("Thông tin cư trú", style: Get.textTheme.bodyMedium)),
-                Tab(child: Text("Thông tin hoạt động", style: Get.textTheme.bodyMedium)),
-                Tab(child: Text("Lien he khan cap", style: Get.textTheme.bodyMedium)),
-                Tab(child: Text("Bang lai & phuong tien", style: Get.textTheme.bodyMedium)),
-                Tab(child: Text("Thong tin khac", style: Get.textTheme.bodyMedium)),
+                Tab(child: Text("Basic Information", style: Get.textTheme.bodyMedium)),
+                Tab(child: Text("Residency Information", style: Get.textTheme.bodyMedium)),
+                Tab(child: Text("Operation Information", style: Get.textTheme.bodyMedium)),
+                Tab(child: Text("Emergency Contact", style: Get.textTheme.bodyMedium)),
+                Tab(child: Text("Driver License", style: Get.textTheme.bodyMedium)),
+                Tab(child: Text("Other Information", style: Get.textTheme.bodyMedium)),
               ],
             ),
           ),

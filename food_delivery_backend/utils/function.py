@@ -72,14 +72,14 @@ def load_one_to_many_model(
                 update_attr(instance, **attributes)
                 print(f"\tSuccessfully update{instance}")
     return created_objects
-
+    
 def load_normal_model(
     model_class,
     max_items,
     oto_attribute={},
     oto_field=None,
     oto_objects=[],
-    attributes={}, 
+    attributes=None, 
     action="delete"
 ):
     created_objects = []
@@ -90,17 +90,21 @@ def load_normal_model(
     if action == "delete":    
         if oto_field and oto_objects:
             for oto_obj in oto_objects:
+                current_attributes = attributes() if callable(attributes) else attributes
+                
                 data = {
                     oto_field: oto_obj,
-                    **{attr: transform_value(value) for attr, value in attributes.items()},
+                    **{attr: transform_value(value) for attr, value in current_attributes.items()},
                 }
                 created_object, _ = model_class.objects.get_or_create(**data)
                 created_objects.append(created_object)
                 print(f"\tSuccessfully created {model_class.__name__}: {created_object}")
         else:  
             for _ in range(max_items):
+                current_attributes = attributes() if callable(attributes) else attributes
+                
                 data = {
-                    **{attr: transform_value(value) for attr, value in attributes.items()}
+                    **{attr: transform_value(value) for attr, value in current_attributes.items()}
                 }
                 if oto_attribute:
                     data.update(**{attr: transform_value(value) for attr, value in oto_attribute.items()})
@@ -110,8 +114,11 @@ def load_normal_model(
     else:
         if attributes:
             for instance in model_class.objects.all():
-                update_attr(instance, **attributes)
-                print(f"\tSuccessfully update{instance}")
+                current_attributes = attributes() if callable(attributes) else attributes
+                
+                update_attr(instance, **current_attributes)
+                print(f"\tSuccessfully updated {instance}")
+    
     return created_objects
 
 def load_intermediate_model(

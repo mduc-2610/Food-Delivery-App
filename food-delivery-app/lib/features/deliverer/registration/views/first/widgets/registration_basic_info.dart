@@ -29,12 +29,18 @@ class RegistrationBasicInfo extends StatelessWidget {
                     hintText: "A",
                     label: 'Given Name',
                     controller: controller.givenNameController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your given name';
+                      }
+                      return null;
+                    },
                   ),
                   Obx(() => RegistrationDropdownField(
                     label: 'Gender',
                     onChanged: controller.setGender,
-                    value: controller.gender.value,
-                    items: ["Male", "Female"],
+                    value: controller.gender.value.isEmpty ? null : controller.gender.value,
+                    items: controller.genderOptions,
                   )),
                   Obx(() => RegistrationDateField(
                     hintText: "Please select a date",
@@ -42,40 +48,70 @@ class RegistrationBasicInfo extends StatelessWidget {
                     selectedDate: controller.dateOfBirth.value,
                     onDateSelected: controller.setBirthDate,
                     controller: controller.dateController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please select your date of birth';
+                      }
+                      return null;
+                    },
+                  )),
+                  // Obx(() => RegistrationDropdownField(
+                  //   label: 'Hometown',
+                  //   onChanged: controller.setHometown,
+                  //   value: controller.hometown.value.isEmpty ? null : controller.hometown.value,
+                  //   items: controller.cityOptions,
+                  // )),
+                  Obx(() => RegistrationDropdownField(
+                    label: 'City of Residence (on ID card)',
+                    onChanged: controller.setCity,
+                    value: controller.city.value.isEmpty ? null : controller.city.value,
+                    items: controller.cityOptions,
+                  )),
+                  Obx(() => RegistrationDropdownField(
+                    label: 'District of Residence (on ID card)',
+                    onChanged: controller.setDistrict,
+                    value: controller.district.value.isEmpty ? null : controller.district.value,
+                    items: controller.districtOptions.isEmpty
+                        ? ["Select a city first"]
+                        : controller.districtOptions,
+                  )),
+                  Obx(() => RegistrationDropdownField(
+                    label: 'Ward of Residence (on ID card)',
+                    onChanged: controller.setWard,
+                    value: controller.ward.value.isEmpty ? null : controller.ward.value,
+                    items: controller.wardOptions.isEmpty
+                        ? ["Select a district first"]
+                        : controller.wardOptions,
                   )),
                   Obx(() => RegistrationDropdownField(
                     label: 'Hometown',
                     onChanged: controller.setHometown,
-                    value: controller.hometown.value,
-                    items: ["Hà Nội", "TP.HCM", "Đà Nẵng"],
-                  )),
-                  Obx(() => RegistrationDropdownField(
-                    label: 'City of Residence (on ID card)',
-                    onChanged: controller.setResidentCity,
-                    value: controller.city.value,
-                    items: ["Hà Nội", "TP.HCM", "Đà Nẵng"],
-                  )),
-                  Obx(() => RegistrationDropdownField(
-                    label: 'District of Residence (on ID card)',
-                    onChanged: controller.setResidentDistrict,
-                    value: controller.district.value,
-                    items: ["Quận 1", "Quận 2", "Quận 3"],
-                  )),
-                  Obx(() => RegistrationDropdownField(
-                    label: 'Ward of Residence (on ID card)',
-                    onChanged: controller.setResidentWard,
-                    value: controller.ward.value,
-                    items: ["Phường 1", "Phường 2", "Phường 3"],
+                    value: controller.hometown.value.isEmpty ? null : controller.hometown.value,
+                    items: controller.wardOptions.isEmpty
+                        ? ["Select a district first"]
+                        : controller.wardOptions,
                   )),
                   RegistrationTextField(
                     hintText: "0 / 255",
                     label: "Address of Residence (on ID card)",
                     controller: controller.addressController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your address';
+                      }
+                      return null;
+                    },
                   ),
                   RegistrationTextField(
                     hintText: "Enter",
                     label: "Citizen Identification Number (ID card)",
                     controller: controller.citizenIdentificationController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your ID card number';
+                      }
+                      return null;
+                    },
                   ),
                 ],
               ),

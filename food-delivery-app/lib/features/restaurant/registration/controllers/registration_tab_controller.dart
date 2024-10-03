@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 class RegistrationTabController extends GetxController with GetSingleTickerProviderStateMixin {
   static RegistrationTabController get instance => Get.find();
 
-  int currentTab = 0;
+  Rx<int> currentTab = 0.obs;
   Rx<bool> isLoading = true.obs;
   User? user;
   Restaurant? restaurant;
@@ -34,7 +34,9 @@ class RegistrationTabController extends GetxController with GetSingleTickerProvi
   }
 
   void setTab() {
-    tabController.animateTo(currentTab + 1);
-    currentTab += 1;
+    if(tabController.index + 1 < tabController.length) {
+      tabController.animateTo(tabController.index + 1);
+    }
+    // currentTab.value += 1;
   }
 }

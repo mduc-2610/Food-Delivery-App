@@ -68,16 +68,18 @@ class RegistrationOtherInfoController extends GetxController {
     await onCallApi();
     if (formKey.currentState?.validate() ?? false) {
       formKey.currentState?.save();
+      Get.snackbar("Success", "Information saved successfully");
     }
   }
 
   void onContinue() async {
     if (formKey.currentState?.validate() ?? false) {
       formKey.currentState?.save();
-      await onCallApi();
-      registrationFirstStepController.setTab();
       print("Continuing with other info...");
     }
+      await onCallApi();
+      registrationFirstStepController.setTab();
+      Get.snackbar("Success", "Information saved successfully");
   }
 
   @override

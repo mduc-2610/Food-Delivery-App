@@ -23,7 +23,11 @@ from utils.function import (
     generate_longitude, 
 )
 from utils.decorators import script_runner
-from utils.function import generate_phone_number, update_attr
+from utils.function import (
+    generate_phone_number,
+    update_attr,
+)
+from utils.scripts.data import vietnam_location_data
 
 fake = Faker()
 
@@ -38,6 +42,14 @@ MODEL_MAP = {
     'payment_info': PaymentInfo,
     'restaurant_like': RestaurantLike,
 }
+
+# Generate function for models with 'city' and 'district' attributes
+def generate_location_attributes():
+    location = random.choice(vietnam_location_data)
+    city = location["name"]
+    district_data = random.choice(location["districts"])
+    district = district_data["name"]
+    return city, district
 
 @script_runner(MODEL_MAP)
 @transaction.atomic
@@ -55,35 +67,39 @@ def load_restaurant(
         restaurant_list = load_normal_model(
             model_class=Restaurant,
             max_items=max_restaurants,
-            attributes={"user": lambda: user_list.pop(random.randint(0, len(user_list) - 1))} if action == "delete" else {},
+            attributes=lambda: {"user": user_list.pop(random.randint(0, len(user_list) - 1))} if action == "delete" else {},
             action=action
         )    
 
     if BasicInfo in models_to_update:
-        for restaurant in map_queryset.get(Restaurant):
-            basic_info_data = {
+        def generate_basic_info_attributes():
+            city, district = generate_location_attributes()
+            return {
                 "name": fake.company(),
                 "phone_number": generate_phone_number(),
-                "city": fake.city(),
-                "district": fake.state(),
+                "city": city,
+                "district": district,
                 "street_address": fake.street_address(),
                 "latitude": generate_latitude(),
                 "longitude": generate_longitude(),
             }
-            basic_info = None
-            if action == "delete":
-                basic_info_data.update({
-                    'restaurant': restaurant
-                })    
-                basic_info = BasicInfo.objects.create(**basic_info_data)
-            else:
-                basic_info = BasicInfo.objects.get(restaurant__id=restaurant.id)
-                basic_info = update_attr(basic_info, **basic_info_data)
-            print(f"\tSuccessfully created Basic Info: {basic_info}")
+
+        load_normal_model(
+            model_class=BasicInfo,
+            max_items=max_restaurants,
+            oto_field="restaurant",
+            oto_objects=map_queryset.get(Restaurant),
+            attributes=generate_basic_info_attributes,
+            action=action
+        )
 
     if DetailInfo in models_to_update:
-        for restaurant in map_queryset.get(Restaurant):
-            detail_info_data = {
+        load_normal_model(
+            model_class=DetailInfo,
+            max_items=max_restaurants,
+            oto_field="restaurant",
+            oto_objects=map_queryset.get(Restaurant),
+            attributes=lambda: {
                 "keywords": ", ".join(fake.words(nb=5, unique=True)),
                 "description": fake.text(max_nb_chars=200),
                 "avatar_image": fake.image_url(),
@@ -95,49 +111,27 @@ def load_restaurant(
                 "serving_times": fake.time(),
                 "target_audience": ", ".join(fake.words(nb=3, unique=True)),
                 "purpose": fake.word()
-            }
-            detail_info = None
-            if action == "delete":
-                detail_info_data.update({
-                    'restaurant': restaurant
-                })
-                detail_info = DetailInfo.objects.create(**detail_info_data)
-            else:
-                detail_info = DetailInfo.objects.get(restaurant__id=restaurant.id)
-                detail_info = update_attr(detail_info, **detail_info_data)
-            print(f"\tSuccessfully created Detail Info: {detail_info}")
-
-            if OperatingHour in models_to_update:
-                days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-                for day in days_of_week:
-                    operating_hour_data = {
-                        "detail_info": detail_info,
-                        "day_of_week": day,
-                        "open_time": fake.time_object(),
-                        "close_time": fake.time_object()
-                    }
-                    OperatingHour.objects.create(**operating_hour_data)
-                    print(f"\tSuccessfully created Operating Hour for {detail_info} on {day}")
+            },
+            action=action
+        )
 
     if MenuDelivery in models_to_update:
-        for restaurant in map_queryset.get(Restaurant):
-            menu_delivery_data = {
-                "menu_image": fake.image_url()
-            }
-            menu_delivery = None
-            if action == "delete":
-                menu_delivery_data.update({
-                    'restaurant': restaurant
-                })    
-                menu_delivery = MenuDelivery.objects.create(**menu_delivery_data)
-            else:
-                menu_delivery = MenuDelivery.objects.get(restaurant__id=restaurant.id)
-                menu_delivery = update_attr(menu_delivery, ** menu_delivery_data)
-            print(f"\tSuccessfully created Menu Delivery: {menu_delivery}")
+        load_normal_model(
+            model_class=MenuDelivery,
+            max_items=max_restaurants,
+            oto_field="restaurant",
+            oto_objects=map_queryset.get(Restaurant),
+            attributes=lambda: {"menu_image": fake.image_url()},
+            action=action
+        )
 
     if RepresentativeInfo in models_to_update:
-        for restaurant in map_queryset.get(Restaurant):
-            representative_data = {
+        load_normal_model(
+            model_class=RepresentativeInfo,
+            max_items=max_restaurants,
+            oto_field="restaurant",
+            oto_objects=map_queryset.get(Restaurant),
+            attributes=lambda: {
                 "registration_type": fake.random_element(elements=('INDIVIDUAL', 'RESTAURANT_CHAIN')),
                 "full_name": fake.name(),
                 "email": fake.email(),
@@ -148,18 +142,10 @@ def load_restaurant(
                 "citizen_identification_front": fake.image_url(),
                 "citizen_identification_back": fake.image_url(),
                 "business_registration_image": fake.image_url()
-            }
-            representative = None
-            if action == "delete":
-                representative_data.update({
-                    'restaurant': restaurant
-                })
-                representative = RepresentativeInfo.objects.create(**representative_data)
-            else:
-                representative = RepresentativeInfo.objects.get(restaurant__id=restaurant.id)
-                representative = update_attr(representative, ** representative_data)
-            print(f"\tSuccessfully created Representative: {representative}")
-    
+            },
+            action=action
+        )
+
     if PaymentInfo in models_to_update:
         for restaurant in map_queryset.get(Restaurant):
             payment_info_data = {
@@ -180,10 +166,13 @@ def load_restaurant(
                 })
                 payment_info = PaymentInfo.objects.create(**payment_info_data)
             else:
-                payment_info = PaymentInfo.objects.get(restaurant__id=restaurant.id)
-                payment_info = update_attr(payment_info, **payment_info_data)
-            print(f"\tSuccessfully created/updated Payment Info: {payment_info}")
-
+                try:
+                    payment_info = PaymentInfo.objects.get(restaurant__id=restaurant.id)
+                    payment_info = update_attr(payment_info, **payment_info_data)
+                    print(f"\tSuccessfully created/updated Payment Info: {payment_info}")
+                except:
+                    continue
+                
     if RestaurantCategory in models_to_update:
         load_intermediate_model(
             model_class=RestaurantCategory,
@@ -206,20 +195,5 @@ def load_restaurant(
             action=action
         )
 
-    # if Dish in models_to_update:
-        for restaurant in map_queryset.get(Restaurant):
-            for category in restaurant.categories.all():
-                tmp = list(category.dishes.all())
-                for _ in range(random.randint(2, max_dishes_per_category)):
-                    if not tmp:
-                        break
-                    max_loop = 100
-                    dish = random.choice(tmp)
-                    while dish.restaurant is None and max_loop:
-                        dish.restaurant = restaurant                
-                        dish = random.choice(tmp)
-                        max_loop -= 1
-                    dish.save()
-                    print(f"\tSuccessfully added Dish: {dish} to Restaurant: {restaurant}")
 def run(*args):
     load_restaurant(*args)

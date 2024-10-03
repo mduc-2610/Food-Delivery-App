@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
 import 'package:food_delivery_app/features/deliverer/registration/views/skeleton/registration_skeleton.dart';
 import 'package:food_delivery_app/features/restaurant/registration/controllers/registration_tab_controller.dart';
 import 'package:get/get.dart';
@@ -15,19 +16,25 @@ class RegistrationTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(RegistrationTabController());
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Đăng ký thông tin'),
+      appBar: CAppBar(
+        title: 'Restaurant Registration',
         bottom: TabBar(
           controller: controller.tabController,
           isScrollable: true,
           tabAlignment: TabAlignment.start,
           tabs: [
-            Tab(text: "Thông tin quán - Cơ bản"),
-            Tab(text: "Thông tin người đại diện"),
-            Tab(text: "Thông tin quán - Chi Tiết"),
-            Tab(text: "Menu giao hàng - Ảnh chụp menu"),
-            // Tab(text: "Đăng ký Ứng dụng Shopee Partner"),
-            Tab(text: "Đăng ký ví ShopeeFood Merchant Wallet"),
+            Tab(child: Text("Basic Information", style: Get.textTheme.bodyMedium)),
+            Tab(child: Text("Representative Information", style: Get.textTheme.bodyMedium)),
+            Tab(child: Text("Detail Information", style: Get.textTheme.bodyMedium)),
+            Tab(child: Text("Menu Delivery - Menu Image", style: Get.textTheme.bodyMedium)),
+            // Tab(child: Text("Shopee Partner", style: Get.textTheme.bodyMedium)),
+            Tab(child: Text("Wallet", style: Get.textTheme.bodyMedium)),
+            // Tab(text: "Basic Information",),
+            // Tab(text: "Representative Information",),
+            // Tab(text: "Detail Information",),
+            // Tab(text: "Menu Delivery - Menu Image",),
+            // // Tab(text: "Đăng ký Ứng dụng Shopee Partner"),
+            // Tab(text: "Wallet"),
           ],
         ),
       ),
