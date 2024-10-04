@@ -6,6 +6,8 @@ import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/registration/registration_document_field.dart';
 import 'package:food_delivery_app/common/widgets/registration/registration_text_field.dart';
 import 'package:food_delivery_app/common/widgets/registration/registration_dropdown_field.dart';
+import 'package:food_delivery_app/common/widgets/skeleton/skeleton_list.dart';
+import 'package:food_delivery_app/features/deliverer/registration/views/skeleton/registration_skeleton.dart';
 import 'package:food_delivery_app/features/restaurant/food/controllers/add/food_add_controller.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
@@ -22,7 +24,13 @@ class FoodAddView extends StatelessWidget {
       ),
       body:
       Obx(() => (controller.isLoading.value == true)
-          ? SizedBox()
+          ? MainWrapper(
+            child: SingleChildScrollView(
+              child: Column(
+                      children: List.generate(10, (_) => RegistrationSkeletonField(label: "")),
+                    ),
+            ),
+          )
           : Form(
         key: controller.formKey,
         child: ListView(

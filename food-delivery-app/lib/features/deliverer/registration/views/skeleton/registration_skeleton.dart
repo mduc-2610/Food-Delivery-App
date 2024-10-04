@@ -13,16 +13,16 @@ class RegistrationSkeleton extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                _buildSkeletonField('Họ và tên đệm'),
-                _buildSkeletonField('Tên'),
-                _buildSkeletonField('Giới tính'),
-                _buildSkeletonField('Ngày sinh'),
-                _buildSkeletonField('Quê quán'),
-                _buildSkeletonField('Tỉnh/Thành phố thường trú (trên CCCD)'),
-                _buildSkeletonField('Quận/Huyện thường trú (trên CCCD)'),
-                _buildSkeletonField('Phường/Xã thường trú (trên CCCD)'),
-                _buildSkeletonField('Địa chỉ thường trú (trên CCCD)'),
-                _buildSkeletonField('Số Căn cước công dân (CCCD)'),
+                RegistrationSkeletonField(label: 'Họ và tên đệm'),
+                RegistrationSkeletonField(label: 'Tên'),
+                RegistrationSkeletonField(label: 'Giới tính'),
+                RegistrationSkeletonField(label: 'Ngày sinh'),
+                RegistrationSkeletonField(label: 'Quê quán'),
+                RegistrationSkeletonField(label: 'Tỉnh/Thành phố thường trú (trên CCCD)'),
+                RegistrationSkeletonField(label: 'Quận/Huyện thường trú (trên CCCD)'),
+                RegistrationSkeletonField(label: 'Phường/Xã thường trú (trên CCCD)'),
+                RegistrationSkeletonField(label: 'Địa chỉ thường trú (trên CCCD)'),
+                RegistrationSkeletonField(label: 'Số Căn cước công dân (CCCD)'),
               ],
             ),
           ),
@@ -35,7 +35,18 @@ class RegistrationSkeleton extends StatelessWidget {
     );
   }
 
-  Widget _buildSkeletonField(String label) {
+}
+
+class RegistrationSkeletonField extends StatelessWidget {
+  const RegistrationSkeletonField({
+    super.key,
+    required this.label,
+  });
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Column(
