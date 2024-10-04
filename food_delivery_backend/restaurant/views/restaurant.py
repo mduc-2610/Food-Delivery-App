@@ -23,6 +23,7 @@ from restaurant.serializers import (
     RestaurantSerializer, 
     CreateRestaurantSerializer,
     DetailRestaurantSerializer, 
+    UpdateRestaurantSerializer,
     RestaurantCategorySerializer,
     RestaurantLikeSerializer,
 )
@@ -36,6 +37,7 @@ from order.serializers import (
     RestaurantPromotionSerializer,
     DeliverySerializer,    
 )
+from restaurant.serializers import CreateUpdateRestaurantCategorySerializer
 from review.serializers import RestaurantReviewSerializer
 from review.mixins import ReviewFilterMixin
 
@@ -55,12 +57,14 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, DeliveryFilterMi
     many_related_serializer_class = {
         'retrieve': DetailRestaurantSerializer,
         'create': CreateRestaurantSerializer,
+        'update': UpdateRestaurantSerializer,
         'promotions': PromotionSerializer,
         'reviewed_by_users': BasicUserSerializer,
         'dishes': DishSerializer,
         'restaurant_reviews': RestaurantReviewSerializer,
         'owned_promotions': RestaurantPromotionSerializer,
         'categories': DishCategorySerializer,
+        'restaurant_categories': RestaurantCategorySerializer,
         'deliveries': DeliverySerializer,
     }
     many_related = {
@@ -91,8 +95,17 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, DeliveryFilterMi
             return ReviewFilterMixin.get_object(self)
         elif self.action == 'deliveries':
             return DeliveryFilterMixin.get_object(self)
+        elif self.action == "restaurant_categories":
+            return self.filter_restaurant_categories()
         return super().get_object()
-
+    
+    def filter_restaurant_categories(self):
+        queryset = super().get_object()
+        is_disabled = self.request.query_params.get('is_disabled', None)
+        if is_disabled:
+            return queryset.filter(is_disabled=is_disabled)
+        return queryset
+    
     def get_serializer_context(self):
         context = super().get_serializer_context()
         if self.action == "list":
@@ -331,9 +344,22 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, DeliveryFilterMi
             'data': hourly_stats
         }
 
-class RestaurantCategoryViewSet(viewsets.ModelViewSet):
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
+
+class RestaurantCategoryViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
     queryset = RestaurantCategory.objects.all()
     serializer_class = RestaurantCategorySerializer
+    mapping_serializer_class = {
+        'create': CreateUpdateRestaurantCategorySerializer,
+        'update': CreateUpdateRestaurantCategorySerializer,
+    }
 
 class RestaurantLikeViewSet(ForeignKeyFilterMixin, viewsets.ModelViewSet):
     queryset = RestaurantLike.objects.all()

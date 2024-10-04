@@ -9,15 +9,15 @@ dish_categories = [
     {"name": "Pho", "image": "pho.png"},
     {"name": "Sandwich", "image": "sandwich.png"},
     {"name": "Pasta", "image": "pasta.png"},
-    {"name": "Ice Cream", "image": "icecream.png"},
+    {"name": "Ice Cream", "image": "ice_cream.png"},
     {"name": "Rice", "image": "rice.png"},
     {"name": "Takoyaki", "image": "takoyaki.png"},
     {"name": "Fruit", "image": "fruit.png"},
     {"name": "Hot Dog", "image": "hot_dog.png"},
-    {"name": "Goi Cuon", "image": "goicuon.png"},
+    {"name": "Goi Cuon", "image": "goi_cuon.png"},
     {"name": "Cookie", "image": "cookie.png"},
     {"name": "Pudding", "image": "pudding.png"},
-    {"name": "Banh Mi", "image": "banhmi.png"},
+    {"name": "Banh Mi", "image": "banh_mi.png"},
     {"name": "Dumpling", "image": "dumpling.png"},
 ]
 

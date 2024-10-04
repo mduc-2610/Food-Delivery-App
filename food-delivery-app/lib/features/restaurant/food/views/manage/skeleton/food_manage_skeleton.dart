@@ -17,11 +17,11 @@ class FoodManageSkeleton extends StatelessWidget {
           bottom: TabBar(
             tabAlignment: TabAlignment.start,
             isScrollable: true,
-            tabs: List.generate(3, (index) => _buildSkeletonTab()),
+            tabs: List.generate(5, (index) => _buildSkeletonTab()),
           ),
         ),
         body: TabBarView(
-          children: List.generate(3, (index) => _buildSkeletonList()),
+          children: List.generate(5, (index) => _buildSkeletonList()),
         ),
       ),
     );

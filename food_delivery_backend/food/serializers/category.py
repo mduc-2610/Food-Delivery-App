@@ -8,5 +8,5 @@ from utils.serializers import CustomRelatedModelSerializer
 class DishCategorySerializer(CustomRelatedModelSerializer):
     class Meta:
         model = DishCategory
-        fields = ['id', 'name', 'description', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'image']
     

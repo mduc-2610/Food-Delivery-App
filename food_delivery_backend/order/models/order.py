@@ -142,6 +142,8 @@ def update_dish_total_orders_on_complete(sender, instance, **kwargs):
     if instance.status == "COMPLETED":
         for cart_dish in instance.cart.dishes.all():
             dish = cart_dish.dish
+            dish.total_revenue += cart_dish.dish.discount_price \
+                if hasattr(cart_dish.dish, 'discount_price') else cart_dish.dish.original_price
             dish.total_orders += 1
             dish.save()
 

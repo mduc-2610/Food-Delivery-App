@@ -44,8 +44,12 @@ class Dish(models.Model):
     total_reviews = models.IntegerField(default=0, blank=True, null=True)
     total_likes = models.IntegerField(default=0, blank=True, null=True)
     total_orders = models.IntegerField(default=0, blank=True, null=True)
+    total_revenue = models.DecimalField(default=0, max_digits=12, decimal_places=2, blank=True, null=True)
 
-    # class Meta:
+    class Meta:
+        indexes = [
+            models.Index(fields=['category', 'restaurant']),
+        ]
     #     ordering = ['-created_at']
 
     def is_liked(self, user=None, request=None):

@@ -44,7 +44,7 @@ def load_food(
             category_data = {
                 "name": _x.get('name'),
                 "description": fake.word() + fake.text(max_nb_chars=200),
-                "image": _x.get('image'),
+                "image": "food/category/" + _x.get('image'),
             }
             category, created = DishCategory.objects.update_or_create(
                 name=_x.get('name'),
@@ -75,7 +75,7 @@ def load_food(
                     "description": lambda: fake.text(max_nb_chars=200),
                     "original_price": lambda: fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=10, max_value=100),
                     "discount_price": lambda: fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50),
-                    "image": lambda image_files=image_files: f"food/{category_name}/{image_files.pop(random.randint(0, len(image_files) - 1))}",
+                    "image": lambda image_files=image_files:  f"food/{category_name}/{image_files.pop(random.randint(0, len(image_files) - 1))}" if len(image_files) > 0 else "",
                 },
                 action=action
             )

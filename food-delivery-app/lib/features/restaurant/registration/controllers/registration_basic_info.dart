@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/basic_info.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
+import 'package:food_delivery_app/features/restaurant/registration/controllers/category_controller.dart';
 import 'package:food_delivery_app/features/restaurant/registration/controllers/registration_tab_controller.dart';
 import 'package:food_delivery_app/utils/hardcode/hardcode.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
@@ -14,6 +15,7 @@ class RegistrationBasicInfoController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final registrationTabController = RegistrationTabController.instance;
   Restaurant? restaurant;
+  late final CategoryController categoryController;
   RestaurantBasicInfo? basicInfo;
 
   final shopNameController = TextEditingController();
@@ -31,6 +33,7 @@ class RegistrationBasicInfoController extends GetxController {
 
   RegistrationBasicInfoController() {
     restaurant = registrationTabController.restaurant;
+    categoryController =  Get.put(CategoryController(restaurant: restaurant));
     basicInfo = restaurant?.basicInfo;
     cityOptions.value = THardCode.getVietnamLocation().map<String>((city) => city["name"] as String).toList();
 
@@ -98,6 +101,23 @@ class RegistrationBasicInfoController extends GetxController {
       final [statusCode, headers, data] = await APIService<RestaurantBasicInfo>()
           .create(basicInfoData);
       print([statusCode, headers, data]);
+    }
+    try {
+      final restaurantData = {
+        "categories": categoryController.selectedCategories.map((category) => category.id).toList(),
+        "disabled_categories": categoryController.disabledCategories.map((category) => category.id).toList(),
+      };
+      $print(restaurantData);
+      final [statusCode, headers, data] = await APIService<Restaurant>().update(
+          registrationTabController.restaurant?.id, restaurantData,);
+      if (statusCode == 200 || statusCode == 201) {
+        restaurant = data;
+        registrationTabController.restaurant = data;
+      }
+    }
+    catch(e) {
+      registrationTabController.restaurant = await APIService<Restaurant>().retrieve(registrationTabController.restaurant?.id ?? '');
+      restaurant = registrationTabController.restaurant;
     }
   }
 

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/features/restaurant/food/controllers/manage/food_manage_controller.dart';
 import 'package:food_delivery_app/features/restaurant/food/views/manage/skeleton/food_manage_skeleton.dart';
 import 'package:food_delivery_app/features/restaurant/food/views/manage/widgets/restaurant_food_card.dart';
+import 'package:food_delivery_app/features/restaurant/registration/views/widgets/category_selection.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
 class FoodManageView extends StatelessWidget {
@@ -30,6 +33,24 @@ class FoodManageView extends StatelessWidget {
                     ...controller.categories.map((category) => Tab(text: category.name)),
                   ],
                 ),
+                iconList: [
+                  {
+                    "icon": Icons.add,
+                    "onPressed": () async {
+                      final checkOnSave = await showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return MainWrapper(
+                            child: CategorySelection(onSave: () {},)
+                          );
+                        }
+                      );
+                      if(checkOnSave != null && checkOnSave == true) {
+                        await controller.initialize();
+                      }
+                    }
+                  }
+                ],
               ),
               body: TabBarView(
                 children: [

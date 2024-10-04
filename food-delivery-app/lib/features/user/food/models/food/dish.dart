@@ -28,6 +28,7 @@ class Dish {
   final List<dynamic> images;
   final String? restaurant;
   final bool isLiked;
+  final double totalRevenue;
 
   Dish({
     this.id,
@@ -49,6 +50,7 @@ class Dish {
     this.images = const [],
     this.restaurant,
     this.isLiked = false,
+    this.totalRevenue = 0,
   });
 
   Dish.fromJson(Map<String, dynamic> json)
@@ -71,7 +73,8 @@ class Dish {
         options = json['options'] != null ? json['options'] is List ? (json['options'] as List).map((instance) => DishOption.fromJson(instance)).toList() : [] : [],
         inCartsOrOrders = json['in_carts_or_orders'],
         images = json['images'] != null ? (json['images'] as List<dynamic>).map((instance) => DishImage.fromJson(instance)).toList() : [],
-        isLiked = json['is_liked'] ?? false
+        isLiked = json['is_liked'] ?? false,
+        totalRevenue = THelperFunction.formatDouble(json['total_revenue'])
   ;
 
   String get formattedName {

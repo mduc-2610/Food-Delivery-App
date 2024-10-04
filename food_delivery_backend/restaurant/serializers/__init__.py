@@ -4,7 +4,10 @@ from .restaurant import (
     RestaurantSerializer, 
     DetailRestaurantSerializer,
     CreateRestaurantSerializer, 
+    UpdateRestaurantSerializer,
+
     RestaurantCategorySerializer,
+    CreateUpdateRestaurantCategorySerializer,
     RestaurantLikeSerializer,
 )
 

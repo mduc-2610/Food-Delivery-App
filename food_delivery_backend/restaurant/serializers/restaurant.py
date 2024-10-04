@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from food.models import DishCategory
 from restaurant.models import (
     Restaurant,
     RestaurantCategory,
@@ -89,10 +90,10 @@ class DetailRestaurantSerializer(CustomRelatedModelSerializer):
             'menu_delivery': MenuDeliverySerializer,
         }
         self.many_related_serializer_class = {
-            'categories': {
-                'serializer': DishCategorySerializer,
-                'context': {'detail': True}
-            },
+            # 'categories': {
+            #     'serializer': DishCategorySerializer,
+            #     'context': {'detail': True}
+            # },
             
             # 'promotions': PromotionSerializer,
             # 'owned_promotions': RestaurantPromotionSerializer,
@@ -102,6 +103,8 @@ class DetailRestaurantSerializer(CustomRelatedModelSerializer):
     distance_from_user = serializers.SerializerMethodField()
     stats = serializers.SerializerMethodField()
     is_liked = serializers.SerializerMethodField()
+    categories = serializers.SerializerMethodField()
+
 
     def get_distance_from_user(self, obj):
         request = self.context.get('request')
@@ -124,13 +127,17 @@ class DetailRestaurantSerializer(CustomRelatedModelSerializer):
         return obj.is_liked(
             request=self.context.get('request'),
         )
-    
+
+    def get_categories(self, obj):
+        queryset = [x.category for x in obj.restaurant_categories.filter(is_disabled=False)]
+        return DishCategorySerializer(queryset, many=True, context=self.context).data
+
     class Meta:
         model = Restaurant
         exclude = [
             'user', 
             'promotions', 
-            'categories',
+            # 'categories',
         ]
 
 
@@ -142,11 +149,86 @@ class CreateRestaurantSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return DetailRestaurantSerializer(instance, context=self.context).data
+    
+class UpdateRestaurantSerializer(serializers.ModelSerializer):
+    categories = serializers.ListField(
+        child=serializers.UUIDField(),
+        required=False,
+    )
+    disabled_categories = serializers.ListField(
+        child=serializers.UUIDField(),
+        required=False,
+    )
+
+    class Meta:
+        model = Restaurant
+        fields = [
+            'categories',
+            'disabled_categories',
+        ]
+
+    def update(self, instance, validated_data):
+        restaurant = instance
+        categories = validated_data.pop('categories', [])
+        disabled_categories = validated_data.pop('disabled_categories', [])
+        updated_categories = []
+        updated_disabled_categories = []
+
+        print('categories', categories, pretty=True)
+        print('disabled_categories', disabled_categories, pretty=True)
+
+        for _category in categories:
+            _instance, _created = RestaurantCategory.objects.get_or_create(
+                restaurant_id=restaurant.id,
+                category_id=_category
+            )
+            _instance.is_disabled = False
+            _instance.save()
+            updated_categories.append(_instance)
+        print(updated_categories, pretty=True)
+
+        for _category in disabled_categories:
+            _instance, _created = RestaurantCategory.objects.get_or_create(
+                restaurant_id=restaurant.id,
+                category_id=_category
+            )
+            _instance.is_disabled = True
+            _instance.save()
+            updated_disabled_categories.append(_instance)
+        print(updated_disabled_categories, pretty=True)
+
+        return super().update(instance, validated_data)
+
+    def to_representation(self, instance):
+        return DetailRestaurantSerializer(instance, context=self.context).data
+    
 
 class RestaurantCategorySerializer(serializers.ModelSerializer):
+    category = serializers.SerializerMethodField(read_only=True)
+
+    def get_category(self, obj):
+        # context = self.context.update({
+        #     'detail': False
+        # })
+        return DishCategorySerializer(obj.category, context=self.context).data
+    
     class Meta:
         model = RestaurantCategory
         fields = '__all__'
+
+
+class CreateUpdateRestaurantCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RestaurantCategory
+        fields = [
+            'id',
+            'restaurant',
+            'category',
+            'created_at',
+            'is_disabled',
+        ]
+        read_only_fields = ['id', 'created_at',]
+    
 
 class RestaurantLikeSerializer(serializers.ModelSerializer):
     class Meta:

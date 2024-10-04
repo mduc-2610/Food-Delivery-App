@@ -6,6 +6,8 @@ from django.db.models.signals import (
     post_delete,
 )
 
+from food.models import Dish
+
 def default_rating_counts(): 
     return {
         "1": 0,
@@ -63,10 +65,17 @@ class Restaurant(models.Model):
         return f"{self.id}"
     
 class RestaurantCategory(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
     restaurant = models.ForeignKey("restaurant.Restaurant", on_delete=models.CASCADE, related_name="restaurant_categories")
     category = models.ForeignKey("food.DishCategory", on_delete=models.CASCADE, related_name="restaurant_categories")
-    created_at = models.DateTimeField(auto_now_add=True)
-    
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    is_disabled = models.BooleanField(default=False, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            Dish.objects.filter(restaurant=self.restaurant, category=self.category).update(is_disabled=self.is_disabled)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.restaurant} - {self.category}"
 

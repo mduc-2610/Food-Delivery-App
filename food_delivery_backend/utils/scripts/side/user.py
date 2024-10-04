@@ -11,6 +11,8 @@ from account.models import (
     Profile, UserLocation, 
     Setting, SecuritySetting 
 )
+
+from food.models import DishCategory
 from restaurant.models import *
 from utils.objects import Point, Distance
 from order.models import Order, Delivery, DeliveryRequest
@@ -66,6 +68,18 @@ def run(mode=None, *args):
     x = (1, 2)
     a, b = x
     print(a, b, pretty=True)
+
+    import uuid
+    from utils.function import load_intermediate_model
+    load_intermediate_model(
+        model_class=RestaurantCategory,
+        primary_field='restaurant',
+        related_field='category',
+        primary_objects=list(Restaurant.objects.all()),
+        related_objects=list(DishCategory.objects.all()),
+        max_items=5,
+        action='delete'
+    )
     # print([1][0:])
     # users = Profile.objects.all()
     # for user in users:

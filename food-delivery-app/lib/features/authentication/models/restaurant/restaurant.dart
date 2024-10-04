@@ -33,6 +33,7 @@ class Restaurant {
   final String? deliveries;
   final bool isLiked;
   int totalLikes;
+  final String? restaurantCategories;
   // final List<RestaurantPromotion>? promotions;
 
   Restaurant({
@@ -55,6 +56,7 @@ class Restaurant {
     this.deliveries,
     this.isLiked = false,
     this.totalLikes = 0,
+    this.restaurantCategories
     // required this.promotions,
   });
 
@@ -82,7 +84,8 @@ class Restaurant {
         stats = json['stats'],
         deliveries = json['deliveries'],
         isLiked = json['is_liked'] ?? false,
-        totalLikes = json['total_likes'] ?? 0
+        totalLikes = json['total_likes'] ?? 0,
+        restaurantCategories = json['restaurant_categories']
         ;
 
 
@@ -140,6 +143,56 @@ class RestaurantLike {
     Map<String, dynamic> data = {
       'user': user,
       'restaurant': restaurant,
+    };
+
+    if(patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
+  }
+
+  @override
+  String toString() {
+    return THelperFunction.formatToString(this);
+  }
+}
+
+
+@jsonSerializable
+@reflector
+class RestaurantCategory {
+  final String? id;
+  final dynamic restaurant;
+  final dynamic category;
+  final DateTime? createdAt;
+  final bool isDisabled;
+
+  RestaurantCategory({
+    this.id,
+    this.restaurant,
+    this.category,
+    this.createdAt,
+    this.isDisabled = false,
+  });
+
+  RestaurantCategory.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        restaurant = json['restaurant'] is List || json['restaurant'] is String || json['restaurant'] == null
+            ? json['restaurant']
+            : DishCategory.fromJson(json['restaurant']),
+        category = json['category'] is List || json['category'] is String || json['category'] == null
+            ? json['category']
+            : DishCategory.fromJson(json['category']),
+        createdAt = json['createdAt'] != null ? DateTime.parse(json['created_at']) : null,
+        isDisabled = json['is_disabled'] ?? false
+  ;
+
+  Map<String, dynamic> toJson({ bool patch = false}) {
+    Map<String, dynamic> data = {
+      'category': category is DishCategory ? category?.id : category,
+      'restaurant': restaurant is Restaurant ? restaurant?.id : restaurant,
+      'is_disabled': isDisabled
     };
 
     if(patch) {

@@ -1,5 +1,8 @@
 # food/views.py
-from rest_framework import viewsets
+from rest_framework import (
+    viewsets, 
+    response,
+)
 
 from food.models import DishCategory, Dish
 
@@ -17,3 +20,8 @@ class DishCategoryViewSet(DefaultGenericMixin, ManyRelatedViewSet):
         'retaurants': RestaurantSerializer,
         'restaurant_categories': RestaurantCategorySerializer,
     }
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return response.Response(serializer.data)
