@@ -1,9 +1,13 @@
 from rest_framework import serializers
+from django.contrib.auth.models import AnonymousUser
+
 from order.models import (
     Order, 
     OrderCancellation,
     RestaurantCart, 
     RestaurantPromotion, 
+    OrderRestaurantPromotion,
+    UserRestaurantPromotion,
 )
 from review.models import (
     DishReview, 
@@ -11,7 +15,7 @@ from review.models import (
     RestaurantReview
 )
 from deliverer.models import Deliverer
-
+from order.serializers.promotion import RestaurantPromotionSerializer
 from account.serializers import UserLocationSerializer
 from utils.serializers import CustomRelatedModelSerializer
     
@@ -40,9 +44,9 @@ class OrderSerializer(serializers.ModelSerializer):
             'cancellation', 
             'delivery_address', 
             'payment_method', 
+            'total_price', 
             'delivery_fee', 
             'discount', 
-            'total_price', 
             'total', 
             'status', 
             'rating',
@@ -90,7 +94,8 @@ class DetailOrderSerializer(CustomRelatedModelSerializer):
     deliverer = serializers.SerializerMethodField()
     restaurant = serializers.SerializerMethodField()
     delivery_address = UserLocationSerializer(read_only=True)
-    
+    restaurant_promotions = RestaurantPromotionSerializer(read_only=True, many=True)
+
     def get_dish_reviews(self, obj):
         from review.serializers import DishReviewSerializer
         if hasattr(obj, 'dish_reviews'):
@@ -136,9 +141,9 @@ class DetailOrderSerializer(CustomRelatedModelSerializer):
             'deliverer_review',
             'delivery_address',
             'restaurant_review',
+            'total_price', 
             'delivery_fee', 
             'discount', 
-            'total_price', 
             'total', 
             "user",
             'status', 
@@ -148,6 +153,7 @@ class DetailOrderSerializer(CustomRelatedModelSerializer):
             'is_dish_reviewed', 
             'is_deliverer_reviewed',
             'is_restaurant_reviewed',
+            'restaurant_promotions',
         ]
 
 
@@ -196,7 +202,15 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
     )
     deliverer_review = serializers.DictField(required=False)
     restaurant_review = serializers.DictField(required=False)
-    
+    restaurant_promotions = serializers.ListField(
+        child=serializers.UUIDField(),
+        required=False
+    )
+    used_restaurant_promotions = serializers.ListField(
+        child=serializers.UUIDField(),
+        required=False
+    )
+
     class Meta:
         model = Order
         fields = [
@@ -204,6 +218,8 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
             'dish_reviews', 
             'deliverer_review',
             'restaurant_review',
+            'restaurant_promotions',
+            'used_restaurant_promotions',
         ]
     
     def update(self, instance, validated_data):
@@ -211,9 +227,49 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
         dish_reviews = validated_data.pop('dish_reviews', [])
         deliverer_review = validated_data.pop('deliverer_review', None)
         restaurant_review = validated_data.pop('restaurant_review', None)
-        
-        #instance: Order
+        restaurant_promotions = validated_data.pop('restaurant_promotions', [])
+        used_restaurant_promotions = validated_data.pop('used_restaurant_promotions', [])
+
         instance = super().update(instance, validated_data)
+
+        request = self.context.get('request', None)
+        user = request.user \
+            if request \
+            and hasattr(request, 'user') \
+            and not isinstance(request.user, AnonymousUser) else None
+        
+        # print('used_restaurant_promotions', used_restaurant_promotions, pretty=True)
+
+        if user and used_restaurant_promotions:
+            for promotion_id in used_restaurant_promotions:
+                if promotion_id:
+                    try:
+                        promotion = RestaurantPromotion.objects.get(id=promotion_id)
+                        UserRestaurantPromotion.objects.get_or_create(
+                            user=user,
+                            promotion=promotion
+                        )
+                    except RestaurantPromotion.DoesNotExist:
+                        print(f"Promotion with id {promotion_id} does not exist", pretty=True)
+                    # print("add new", len(user.user_used.all()))
+        
+        print('restaurant_promotions', restaurant_promotions, pretty=True)
+
+        instance.order_used.all().delete()
+        if restaurant_promotions:
+            # user.user_used.all().delete()
+            
+            for promotion_id in restaurant_promotions:
+                if promotion_id:
+                    try:
+                        promotion = RestaurantPromotion.objects.get(id=promotion_id)
+                        OrderRestaurantPromotion.objects.get_or_create(
+                            order=instance,
+                            promotion=promotion
+                        )
+                    except RestaurantPromotion.DoesNotExist:
+                        print(f"Promotion with id {promotion_id} does not exist", pretty=True)
+                    # print("add new", len(instance.restaurant_promotions.all()))
 
         for dish_review in dish_reviews:
             _user = dish_review.pop('user', None)

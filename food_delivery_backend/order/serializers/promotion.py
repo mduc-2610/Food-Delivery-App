@@ -8,10 +8,14 @@ from order.models import (
 class RestaurantPromotionSerializer(serializers.ModelSerializer):
     promo_type = serializers.CharField(source='get_promo_type_display')
     is_available = serializers.SerializerMethodField()
-
+    is_chosen = serializers.SerializerMethodField()
+    
     def get_is_available(self, obj):
         return obj.is_available(request=self.context.get('request'))
     
+    def get_is_chosen(self, obj):
+        return obj.is_chosen(request=self.context.get('request'))
+
     class Meta:
         model = RestaurantPromotion
         fields = [
@@ -28,7 +32,8 @@ class RestaurantPromotionSerializer(serializers.ModelSerializer):
             'description',
             'terms_and_conditions',
             'is_disabled',
-            'is_available'
+            'is_available',
+            'is_chosen',
         ]
         read_only_fields = ['id', 'is_available', 'restaurant']
 

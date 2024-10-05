@@ -15,8 +15,19 @@ class BasicOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'cart', 'user', 'delivery_address', 'payment_method', 'promotion', 'delivery_fee', 
-                  'discount', 'total_price', 'total', 'status', 'rating']
+        fields = [
+            'id', 
+            'cart', 
+            'user', 
+            'delivery_address', 
+            'payment_method', 
+            'delivery_fee', 
+            'discount', 
+            'total_price', 
+            'total', 
+            'status', 
+            'rating'
+        ]
         read_only_fields = ['total']
 
 class BasicRestaurantCartSerializer(serializers.ModelSerializer):
@@ -25,4 +36,15 @@ class BasicRestaurantCartSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = RestaurantCart
-        fields = ['id', 'user', 'restaurant', 'created_at', 'updated_at', 'total_price', 'total_items', 'dishes', 'is_created_order', 'is_empty']
+        fields = [
+            'id', 
+            'user', 
+            'restaurant', 
+            'created_at', 
+            'updated_at', 
+            'total_price', 
+            'total_items', 
+            'dishes', 
+            'is_created_order', 
+            'is_empty'
+        ]

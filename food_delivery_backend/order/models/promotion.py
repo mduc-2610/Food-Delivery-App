@@ -3,7 +3,12 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.contrib.auth.models import AnonymousUser
-from order.models.used_promotion import UserRestaurantPromotion
+
+from order.models.order import Order
+from order.models.used_promotion import (
+    UserRestaurantPromotion, 
+    OrderRestaurantPromotion,
+)
 
 class BasePromotion(models.Model):
     PROMO_TYPES = [
@@ -35,6 +40,14 @@ class BasePromotion(models.Model):
             and not self.is_disabled \
             and self.start_date <= now <= self.end_date
     
+    def is_chosen(self, request=None):
+        if not request: return False
+        query_params = request.query_params
+        order_id = request.query_params.get('order')
+        order = Order.objects.get(id=order_id) if order_id else None
+        if not order: return False
+        return OrderRestaurantPromotion.objects.filter(order=order, promotion=self).exists()
+
     class Meta:
         abstract = True
         ordering = ['-start_date', '-end_date']

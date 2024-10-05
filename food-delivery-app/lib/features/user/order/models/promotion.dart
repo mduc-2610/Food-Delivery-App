@@ -16,6 +16,7 @@ class BasePromotion {
   final DateTime? endDate;
   bool isDisabled;
   bool isAvailable;
+  bool isChosen;
 
   BasePromotion({
     this.id,
@@ -29,6 +30,7 @@ class BasePromotion {
     this.endDate,
     this.isDisabled = false,
     this.isAvailable = false,
+    this.isChosen = false,
   });
 
   BasePromotion.fromJson(Map<String, dynamic> json)
@@ -42,7 +44,9 @@ class BasePromotion {
         startDate = DateTime.parse(json['start_date']),
         endDate = DateTime.parse(json['end_date']),
         isDisabled = json['is_disabled'] ?? false,
-        isAvailable = json['is_available'] ?? false;
+        isAvailable = json['is_available'] ?? false,
+        isChosen = json['is_chosen'] ?? false
+  ;
 
   Map<String, dynamic> toJson({ bool patch = false }) {
     Map<String, dynamic> data = {
@@ -87,6 +91,7 @@ class RestaurantPromotion extends BasePromotion {
     DateTime? endDate,
     bool? isActive,
     bool? isDisabled,
+    bool? isChosen,
     this.restaurant,
   }) : super(
     id: id,
@@ -100,6 +105,7 @@ class RestaurantPromotion extends BasePromotion {
     endDate: endDate,
     isAvailable: isActive ?? false,
     isDisabled: isDisabled ?? false,
+    isChosen: isChosen ?? false,
   );
 
   RestaurantPromotion.fromJson(Map<String, dynamic> json)

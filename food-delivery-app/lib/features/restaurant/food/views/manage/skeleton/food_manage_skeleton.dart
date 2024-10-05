@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
+import 'package:food_delivery_app/features/restaurant/food/views/manage/skeleton/promotion_manage_card_skeleton.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 
@@ -21,7 +23,7 @@ class FoodManageSkeleton extends StatelessWidget {
           ),
         ),
         body: TabBarView(
-          children: List.generate(5, (index) => _buildSkeletonList()),
+          children: List.generate(5, (index) => _buildSkeletonList(index)),
         ),
       ),
     );
@@ -37,17 +39,20 @@ class FoodManageSkeleton extends StatelessWidget {
     );
   }
 
-  Widget _buildSkeletonList() {
+  Widget _buildSkeletonList(int _index) {
     return ListView.separated(
       padding: EdgeInsets.all(TSize.spaceBetweenItemsSm),
       itemCount: 5,
       separatorBuilder: (context, index) => SizedBox(height: TSize.spaceBetweenItemsVertical),
-      itemBuilder: (context, index) => _buildSkeletonCard(),
+      itemBuilder: (context, index) => _buildSkeletonCard(_index),
     );
   }
 
-  Widget _buildSkeletonCard() {
-    return Card(
+  Widget _buildSkeletonCard(int index) {
+    return
+      (index == 0)
+      ? PromotionManageCardSkeleton(viewType: ViewType.restaurant)
+      : Card(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(

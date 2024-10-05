@@ -12,14 +12,18 @@ from order.serializers import (
     DetailOrderSerializer,
     UpdateOrderSerializer,
     OrderCancellationSerializer, 
+    RestaurantPromotionSerializer,
 )
 from deliverer.serializers import BasicDelivererSerializer
 
 from utils.mixins import DefaultGenericMixin, DynamicFilterMixin
 from utils.pagination import CustomPagination
-from utils.views import OneRelatedViewSet
+from utils.views import (
+    OneRelatedViewSet,
+    ManyRelatedViewSet,
+)
 
-class OrderViewSet(DefaultGenericMixin, DynamicFilterMixin, OneRelatedViewSet, viewsets.ModelViewSet):
+class OrderViewSet(DefaultGenericMixin, DynamicFilterMixin, ManyRelatedViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     pagination_class =  CustomPagination
@@ -28,6 +32,14 @@ class OrderViewSet(DefaultGenericMixin, DynamicFilterMixin, OneRelatedViewSet, v
         'create': CreateOrderSerializer,
         'update': UpdateOrderSerializer,
     }
+    many_related_serializer_class = {
+        'restaurant_promotions': RestaurantPromotionSerializer,
+    }
+
+    def get_object(self):
+        if self.action == 'retrieve':
+            return OneRelatedViewSet.get_object(self)
+        return super().get_object()
 
     # def get_queryset(self):
     #     status = self.request.query_params.get('status', None)

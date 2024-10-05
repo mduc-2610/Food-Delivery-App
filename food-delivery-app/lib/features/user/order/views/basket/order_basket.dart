@@ -8,10 +8,12 @@ import 'package:food_delivery_app/features/authentication/views/splash/splash.da
 import 'package:food_delivery_app/features/user/order/controllers/basket/order_basket_controller.dart';
 import 'package:food_delivery_app/features/user/order/controllers/common/order_info_controller.dart';
 import 'package:food_delivery_app/features/user/order/controllers/history/order_history_detail_controller.dart';
+import 'package:food_delivery_app/features/user/order/models/order.dart';
 import 'package:food_delivery_app/features/user/order/views/basket/widgets/order_card.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/order_info.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/order_bottom_navigation_bar.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';
+import 'package:food_delivery_app/features/user/order/views/promotion/order_promotion.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
@@ -78,6 +80,7 @@ class OrderBasketView extends StatelessWidget {
                                 Obx(() => OrderInfo(
                                   order: controller.foodListController.order.value,
                                   viewType: OrderViewType.basket,
+                                  onPromotionPressed: controller.onPromotionPressed,
                                 )),
                                 SizedBox(height: TSize.spaceBetweenSections,),
                               ],

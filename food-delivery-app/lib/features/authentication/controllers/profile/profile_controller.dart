@@ -42,7 +42,7 @@ class ProfileController extends GetxController {
     super.onInit();
     if (isEdit) {
       user = await APIService<Me>(pagination: false, ).list(single: true);
-      $print(user);
+      // $print(user);
       final profile = await APIService<UserProfile>().retrieve(user?.id ?? "fad06fbd-72f0-4f05-a6e0-609296184c4d");
       phoneNumber.value = PhoneNumber(dialCode: '+84', phoneNumber: user?.phoneNumber, isoCode: "VN");
       emailController.text = user?.email ?? "";

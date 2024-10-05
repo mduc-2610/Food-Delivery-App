@@ -5,9 +5,11 @@ import 'package:food_delivery_app/common/widgets/buttons/small_button.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
+import 'package:food_delivery_app/features/restaurant/food/views/manage/widgets/promotion_manage_card.dart';
 import 'package:food_delivery_app/features/user/order/controllers/common/order_info_controller.dart';
 import 'package:food_delivery_app/features/user/order/controllers/history/order_history_detail_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/order.dart';
+import 'package:food_delivery_app/features/user/order/views/promotion/order_promotion.dart';
 import 'package:food_delivery_app/features/user/order/views/rating/order_rating.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
@@ -18,10 +20,12 @@ import 'package:get/get.dart';
 class OrderInfo extends StatelessWidget {
   final Order? order;
   final OrderViewType viewType;
+  final VoidCallback? onPromotionPressed;
 
   OrderInfo({
     this.order,
     this.viewType = OrderViewType.cancel,
+    this.onPromotionPressed,
   });
 
   @override
@@ -29,6 +33,7 @@ class OrderInfo extends StatelessWidget {
     return GetBuilder<OrderInfoController>(
       init: OrderInfoController(order: order, viewType: viewType),
       builder: (controller) {
+        $print("RIGHT NA ${order?.restaurantPromotions?.length}");
         return MainWrapper(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +100,9 @@ class OrderInfo extends StatelessWidget {
 
               // Promotions Section
               InkWell(
-                onTap: () {},
+                onTap: onPromotionPressed ?? () {
+                  $print("no arguments passed");
+                },
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: TSize.sm, horizontal: TSize.md),
                   decoration: BoxDecoration(
@@ -113,10 +120,19 @@ class OrderInfo extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: TSize.spaceBetweenItemsSm),
-                      Text(
-                        "Free shipping 20%",
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
+                      if(order?.restaurantPromotions.length == 0)...[
+                        Text(
+                          "Choose your promotion",
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        )
+                      ]
+                      else...[
+                        for(var promotion in order?.restaurantPromotions ?? [])...[
+                          PromotionManageCard(
+                            promotion: promotion,
+                          )
+                        ]
+                      ]
                     ],
                   ),
                 ),

@@ -43,20 +43,25 @@ class Order(models.Model):
     is_dish_reviewed = models.BooleanField(default=False, null=True, blank=True)
     is_deliverer_reviewed = models.BooleanField(default=False, null=True, blank=True)
     is_restaurant_reviewed = models.BooleanField(default=False, null=True, blank=True)
-    restaurant_promotions = models.ManyToManyField("order.RestaurantPromotion", related_name="orders", blank=True)
+    restaurant_promotions = models.ManyToManyField("order.RestaurantPromotion", through="order.OrderRestaurantPromotion", related_name="orders", blank=True)
 
     # def is_reviewed(self):
     #     return self.is_order_reviewed and self.is_dish_reviewed and self.is_deliverer_reviewed
     
     @property
     def discount(self):
+        total_discount = 0
+        _delivery_fee = self.delivery_fee
+        _total_price = self.total_price
         promotions = self.restaurant_promotions.all()
+
         for _promotion in promotions:
             if _promotion.discount_percentage:
-                return self.total_price * _promotion.discount_percentage / 100
+                total_discount += ((_total_price if _promotion.promo_type == "ORDER" else _delivery_fee) * _promotion.discount_percentage / 100)
             elif _promotion.discount_amount:
-                return _promotion.discount_amount
-        return 0
+                total_discount += _promotion.discount_amount
+        
+        return total_discount
     
     @property
     def total_price(self):
@@ -64,7 +69,8 @@ class Order(models.Model):
 
     @property
     def total(self):
-        return float(self.cart.total_price) + float(self.delivery_fee) - float(self.discount)
+        _result = float(self.cart.total_price) + float(self.delivery_fee) - float(self.discount)
+        return _result
     
     @property
     def delivery_address(self):

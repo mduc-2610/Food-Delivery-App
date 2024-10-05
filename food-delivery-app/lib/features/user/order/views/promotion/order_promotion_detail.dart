@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 import 'package:get/get.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
@@ -16,11 +17,13 @@ class PromotionDetail extends StatefulWidget {
   final RestaurantPromotion? promotion;
   final Function()? onEdit;
   final Function()? onToggleDisable;
+  final ViewType viewType;
 
   const PromotionDetail({
     this.promotion,
     this.onEdit,
     this.onToggleDisable,
+    this.viewType = ViewType.restaurant,
     Key? key,
   }) : super(key: key);
 
@@ -46,7 +49,9 @@ class _PromotionDetailState extends State<PromotionDetail> {
             centerTitle: true,
             leading: SizedBox.shrink(),
             actions: [
-              _buildPopupMenu()
+              (widget.viewType == ViewType.restaurant)
+                ? _buildPopupMenu()
+                :SizedBox.shrink(),
             ],
           ),
           body: MainWrapper(

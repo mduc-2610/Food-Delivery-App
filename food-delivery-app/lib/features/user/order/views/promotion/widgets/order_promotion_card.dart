@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/features/user/order/models/promotion.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';
 import 'package:food_delivery_app/features/user/order/views/promotion/order_promotion_detail.dart';
-import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 import 'package:get/get.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
@@ -15,48 +14,36 @@ class PromotionManageCard extends StatelessWidget {
   final RestaurantPromotion? promotion;
   final Function()? onEdit;
   final Function()? onToggleDisable;
-  final ViewType viewType;
-  final bool isChosen;
-  final Function()? onChoose;
 
   const PromotionManageCard({
     Key? key,
     this.promotion,
     this.onEdit,
     this.onToggleDisable,
-    this.viewType = ViewType.restaurant,
-    this.isChosen = false,
-    this.onChoose,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    bool isCardDisabled = viewType == ViewType.user && promotion?.isAvailable == false;
-
     return InkWell(
-      onTap: isCardDisabled
-          ? null
-          : () {
+      onTap: () {
         showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          builder: (context) {
-            return PromotionDetail(
-              promotion: promotion,
-              onEdit: onEdit,
-              onToggleDisable: onToggleDisable,
-              viewType: viewType,
-            );
-          },
+            context: context,
+            isScrollControlled: true,
+            builder: (context) {
+              return PromotionDetail(
+                promotion: promotion,
+                onEdit: onEdit,
+                onToggleDisable: onToggleDisable,
+              );
+            }
         );
       },
       child: Card(
         child: Container(
-          padding: EdgeInsets.all(12),
+          padding: EdgeInsets.all(TSize.spaceBetweenItemsMd),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(TSize.borderRadiusLg),
-            // Apply grey color if the card is disabled
-            color: isCardDisabled ? Colors.grey[300] : null,
+            color: promotion?.isDisabled == true ? Colors.grey[300] : null,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,17 +75,11 @@ class PromotionManageCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  viewType == ViewType.restaurant
-                      ? _buildPopupMenu(isCardDisabled)
-                      : _buildChooseCircle(isCardDisabled),
+                  _buildPopupMenu(),
                   SizedBox(height: TSize.spaceBetweenItemsMd),
                   StatusChip(
-                    status: (viewType == ViewType.user && promotion?.isAvailable == false)
-                    ? "CANCELLED"
-                    : (promotion?.isDisabled == false ? "ACTIVE" : "CANCELLED"),
-                    text: (viewType == ViewType.user && promotion?.isAvailable == false)
-                    ? "USED"
-                    : (promotion?.isDisabled == false ? "ACTIVE" : "DISABLED"),
+                    status: promotion?.isDisabled == false ? "ACTIVE" : "CANCELLED",
+                    text: promotion?.isDisabled == false ? "ACTIVE" : "DISABLED",
                   ),
                 ],
               ),
@@ -153,14 +134,12 @@ class PromotionManageCard extends StatelessWidget {
     );
   }
 
-  Widget _buildPopupMenu(bool isDisabled) {
+  Widget _buildPopupMenu() {
     return PopupMenuButton<String>(
       icon: CircleIconCard(
         icon: Icons.more_horiz,
       ),
-      onSelected: isDisabled
-          ? null
-          : (String result) {
+      onSelected: (String result) {
         if (result == 'edit') {
           onEdit?.call();
         } else if (result == 'toggle') {
@@ -185,20 +164,4 @@ class PromotionManageCard extends StatelessWidget {
       ],
     );
   }
-
-  Widget _buildChooseCircle(bool isDisabled) {
-    return GestureDetector(
-      onTap: isDisabled ? null : onChoose,
-      child: CircleIconCard(
-        icon: isChosen ? Icons.check : null,
-        iconColor: Colors.white,
-        backgroundColor: isChosen ? TColor.primary : Colors.transparent,
-        shadowColor: Colors.transparent,
-        borderSideWidth: 2,
-        borderSideColor: TColor.primary,
-        padding: TSize.sm,
-      ),
-    );
-  }
 }
-

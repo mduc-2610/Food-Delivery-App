@@ -4,6 +4,7 @@ import 'package:food_delivery_app/features/authentication/models/deliverer/deliv
 import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
 import 'package:food_delivery_app/features/user/food/models/review/review.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
+import 'package:food_delivery_app/features/user/order/models/promotion.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 @reflector
@@ -31,6 +32,7 @@ class Order {
   final Deliverer? deliverer;
   final Restaurant? restaurant;
   List<DishReview> dishReviews;
+  List<RestaurantPromotion> restaurantPromotions;
 
   Order({
     this.id,
@@ -55,6 +57,7 @@ class Order {
     this.deliverer,
     this.restaurant,
     this.dishReviews = const [],
+    this.restaurantPromotions = const [],
   });
 
   Order.fromJson(Map<String, dynamic> json)
@@ -79,7 +82,10 @@ class Order {
         deliverer = json['deliverer'] == null || json['deliverer'] is String ? json['deliverer'] : Deliverer.fromJson(json['deliverer']),
         dishReviews = (json['dish_reviews'] as List<dynamic>?)?.map((instance) => DishReview.fromJson(instance)).toList() ?? [],
         delivererReview = json['deliverer_review'] == null || json['deliverer_review'] is String ? json['deliverer_review'] : DelivererReview.fromJson(json['deliverer_review']),
-        restaurantReview = json['restaurant_review'] == null || json['restaurant_review'] is String ? json['restaurant_review'] : RestaurantReview.fromJson(json['restaurant_review'])
+        restaurantReview = json['restaurant_review'] == null || json['restaurant_review'] is String ? json['restaurant_review'] : RestaurantReview.fromJson(json['restaurant_review']),
+        restaurantPromotions = json['restaurant_promotions'] != null ?
+          json['restaurant_promotions'] is String ? json['restaurant_promotions'] :
+          (json['restaurant_promotions'] as List).map((instance) => RestaurantPromotion.fromJson(instance)).toList() : []
   ;
 
   Map<String, dynamic> toJson({bool patch = false}) {

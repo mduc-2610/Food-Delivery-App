@@ -16,6 +16,7 @@ from .promotion import (
     # ActivityPromotion,
 )
 from .used_promotion import (
-    UserRestaurantPromotion
+    UserRestaurantPromotion,
+    OrderRestaurantPromotion
 )
 # from .owned_promotion import OrderPromotion, UserPromotion, RestaurantPromotion

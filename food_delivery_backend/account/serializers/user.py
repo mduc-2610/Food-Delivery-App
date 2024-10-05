@@ -38,7 +38,7 @@ class UserSerializer(CustomRelatedModelSerializer):
     restaurant_cart = serializers.SerializerMethodField()
     def get_restaurant_cart(self, obj):
         from order.models import RestaurantCart
-        from order.serializers import RestaurantCartSerializer
+        from order.serializers import BasicRestaurantCartSerializer
 
         if hasattr(self, 'request'):
             restaurant_id = self.request.query_params.get('restaurant')
@@ -51,7 +51,7 @@ class UserSerializer(CustomRelatedModelSerializer):
                 try:
                     res_cart = RestaurantCart.objects.filter(**filter_kwargs).first()
                     if res_cart:
-                        return RestaurantCartSerializer(res_cart).data
+                        return BasicRestaurantCartSerializer(res_cart, context=self.context).data
                     else:
                         return None
                 except:

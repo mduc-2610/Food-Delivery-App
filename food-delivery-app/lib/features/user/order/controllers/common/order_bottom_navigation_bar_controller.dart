@@ -21,7 +21,6 @@ class OrderBottomNavigationBarController extends GetxController {
   var controller;
   Order? order;
   final OrderViewType viewType;
-
   OrderBottomNavigationBarController({this.order, required this.viewType});
 
 
@@ -73,7 +72,13 @@ class OrderBottomNavigationBarController extends GetxController {
   Future<void> handlePendingOrder(BuildContext context) async {
     if (order?.status == "PENDING") {
       void onAccept() async {
-        final [statusCode, headers, data] = await APIService<Order>(
+        var [statusCode, headers, data] = await APIService<Order>().update(order?.id, {
+          "used_restaurant_promotions": (controller is OrderBasketController)
+              ? controller.chosenPromotionIds
+              : []
+        });
+        $print([statusCode, headers, data]);
+         [statusCode, headers, data] = await APIService<Order>(
           endpoint: 'order/order/${order?.id}/create-delivery-and-request',
         ).create({}, noBearer: true, noFromJson: true);
         if(statusCode == 200 || statusCode == 201) {

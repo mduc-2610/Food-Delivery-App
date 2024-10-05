@@ -84,7 +84,19 @@ class RestaurantCartSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = RestaurantCart
-        fields = ['id', 'user', 'restaurant', 'created_at', 'updated_at', 'total_price', 'total_items', 'dishes', 'order', 'is_created_order', 'is_empty']
+        fields = [
+            'id', 
+            'user', 
+            'restaurant', 
+            'created_at', 
+            'updated_at', 
+            'total_price', 
+            'total_items', 
+            'dishes', 
+            'order', 
+            'is_created_order', 
+            'is_empty',
+        ]
         extra_kwargs = {
             'order': {'read_only': True}
         }

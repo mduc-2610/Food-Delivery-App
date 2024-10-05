@@ -11,6 +11,11 @@ class OneRelatedViewSet(viewsets.ModelViewSet):
         self.related_attribute = self.get_related_model().name
 
     def get_object(self):
+        if not hasattr(self, 'related_attribute'):
+            self.model = self.queryset.model
+            self.related_attribute =  [field for field in self.model._meta.get_fields() if isinstance(field, models.OneToOneField)][0]
+            self.related_attribute = self.related_attribute.name if hasattr(self.related_attribute, 'name') else None
+
         pk = self.kwargs.get('pk')
         if pk is None:
             raise exceptions.NotFound('Primary key not provided')

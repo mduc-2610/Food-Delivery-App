@@ -7,6 +7,8 @@ import 'package:food_delivery_app/features/authentication/models/account/user.da
 import 'package:food_delivery_app/features/user/food/controllers/restaurant/restaurant_detail_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
 import 'package:food_delivery_app/features/user/order/models/order.dart';
+import 'package:food_delivery_app/features/user/order/models/promotion.dart';
+import 'package:food_delivery_app/features/user/order/views/promotion/order_promotion.dart';
 import 'package:food_delivery_app/utils/constants/times.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
@@ -16,6 +18,8 @@ class OrderBasketController extends GetxController {
   final restaurantDetailController = RestaurantDetailController.instance;
   final foodListController = FoodListController.instance;
   SocketService? orderSocket;
+  List<String> chosenPromotionIds = [];
+  List<RestaurantPromotion> chosenPromotions = [];
 
   Rx<bool> isLoading = true.obs;
   Order? order;
@@ -55,5 +59,17 @@ class OrderBasketController extends GetxController {
     update();
 
   }
-
+  Future<void> onPromotionPressed() async {
+    final result = await Get.to(() => OrderPromotionView(
+      order: foodListController.order.value,)
+    ) as Map<String, dynamic>?;
+    if(result?["order"] != null) {
+      foodListController.order.value = result?["order"];
+      order = result?["order"];
+    }
+    chosenPromotionIds = result?["chosenPromotionIds"] ?? [];
+    // await controller.initialize();
+    // $print("_ORDER: ${result?["order"]}");
+    // $print("_ORDER: ${result?["chosenPromotionIds"]}");
+  }
 }
