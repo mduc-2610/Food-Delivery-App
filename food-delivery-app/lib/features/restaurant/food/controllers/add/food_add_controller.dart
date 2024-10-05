@@ -33,6 +33,8 @@ class FoodAddController extends GetxController {
   late RegistrationDocumentFieldController imageController;
   late RegistrationDocumentFieldController imagesController;
 
+  FoodAddController({ this.dishId });
+
   void assignDishData() {
     if (dish != null) {
       nameController.text = dish?.name ?? '';
@@ -73,7 +75,7 @@ class FoodAddController extends GetxController {
 
   Future<void> initialize() async {
     isLoading.value = true;
-    restaurant = await RestaurantService.getRestaurant();
+    restaurant = restaurant ?? await RestaurantService.getRestaurant();
     if(dishId != null) {
       dish = await APIService<Dish>().retrieve(dishId ?? '');
     }

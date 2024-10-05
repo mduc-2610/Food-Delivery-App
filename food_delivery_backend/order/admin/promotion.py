@@ -1,8 +1,8 @@
 # promotion/admin.py
 from django.contrib import admin
-from order.models import Promotion, ActivityPromotion
+from order.models import RestaurantPromotion, ActivityPromotion
 
-class PromotionAdmin(admin.ModelAdmin):
+class RestaurantPromotionAdmin(admin.ModelAdmin):
     list_display = [
         'id', 'code', 'description', 'promo_type', 
         'discount_percentage', 'discount_amount', 

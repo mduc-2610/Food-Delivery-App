@@ -7,7 +7,7 @@ from deliverer.models import Deliverer
 from restaurant.models import Restaurant
 from food.models import Dish
 from order.models import (
-    Promotion, ActivityPromotion, OrderPromotion, 
+    RestaurantPromotion, ActivityPromotion, OrderPromotion, 
     RestaurantPromotion, UserPromotion, Order, 
     Delivery, RestaurantCart, RestaurantCartDish
 )
@@ -33,7 +33,7 @@ def load_order(
     max_restaurant_cart_dishes=10
 ):
     model_list = [
-        Promotion, ActivityPromotion, OrderPromotion, 
+        RestaurantPromotion, ActivityPromotion, OrderPromotion, 
         RestaurantPromotion, UserPromotion, Order, 
         Delivery, RestaurantCart, RestaurantCartDish
     ]
@@ -62,7 +62,7 @@ def load_order(
             "terms_and_conditions": fake.text(max_nb_chars=200),
             "active": fake.boolean()
         }
-        promotion = Promotion.objects.create(**promo_data)
+        promotion = RestaurantPromotion.objects.create(**promo_data)
         promotion_list.append(promotion)
         print(f"\tSuccessfully created Promotion: {promotion}")
 

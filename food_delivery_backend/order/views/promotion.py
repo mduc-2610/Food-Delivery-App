@@ -1,15 +1,27 @@
 from rest_framework import viewsets
 
-from order.models import Promotion, ActivityPromotion
+from order.models import (
+    RestaurantPromotion,
+    # ActivityPromotion,
+)
 
-from order.serializers import PromotionSerializer, ActivityPromotionSerializer
+from order.serializers import (
+    RestaurantPromotionSerializer,
+    CreateRestaurantPromotionSerializer,
+    # ActivityPromotionSerializer,
+)
 
+from utils.pagination import CustomPagination
 from utils.mixins import DefaultGenericMixin
 
-class PromotionViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
-    queryset = Promotion.objects.all()
-    serializer_class = PromotionSerializer
+class RestaurantPromotionViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
+    queryset = RestaurantPromotion.objects.all()
+    serializer_class = RestaurantPromotionSerializer
+    pagination_class = CustomPagination
+    mapping_serializer_class = {
+        'create': CreateRestaurantPromotionSerializer,
+    }
 
-class ActivityPromotionViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
-    queryset = ActivityPromotion.objects.all()
-    serializer_class = ActivityPromotionSerializer
+# class ActivityPromotionViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
+#     queryset = ActivityPromotion.objects.all()
+#     serializer_class = ActivityPromotionSerializer

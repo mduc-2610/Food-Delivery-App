@@ -19,12 +19,13 @@ from .order import (
     UpdateOrderSerializer,
     OrderCancellationSerializer,
 )
-from .owned_promotion import (
-    OrderPromotionSerializer, 
-    RestaurantPromotionSerializer, 
-    UserPromotionSerializer,
-)
+# from .owned_promotion import (
+#     OrderPromotionSerializer, 
+#     RestaurantPromotionSerializer, 
+#     UserPromotionSerializer,
+# )
 from .promotion import (
-    PromotionSerializer, 
-    ActivityPromotionSerializer
+    RestaurantPromotionSerializer, 
+    CreateRestaurantPromotionSerializer,
+    # ActivityPromotionSerializer
 )

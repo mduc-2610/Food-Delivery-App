@@ -11,5 +11,11 @@ from .order import (
     Order,
     OrderCancellation
 )
-from .promotion import Promotion, ActivityPromotion
-from .owned_promotion import OrderPromotion, UserPromotion, RestaurantPromotion
+from .promotion import (
+    RestaurantPromotion, 
+    # ActivityPromotion,
+)
+from .used_promotion import (
+    UserRestaurantPromotion
+)
+# from .owned_promotion import OrderPromotion, UserPromotion, RestaurantPromotion

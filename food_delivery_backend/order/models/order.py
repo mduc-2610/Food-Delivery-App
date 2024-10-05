@@ -25,12 +25,15 @@ class Order(models.Model):
         ("COMPLETED", "Completed"),
         ("PENDING", "Pending")
     ]
+    PAYMENT_CHOCES = [
+        ("CASH", "Cash"),
+        ("CARD", "Card"),
+        ("PAYPAL", "Paypal")
+    ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
     cart = models.OneToOneField("order.RestaurantCart", related_name="order", on_delete=models.CASCADE)
     user = models.ForeignKey("account.User", related_name="orders", on_delete=models.CASCADE, blank=True, null=True)
-    payment_method = models.CharField(max_length=50)
-    promotion = models.ForeignKey("order.Promotion", null=True, blank=True, on_delete=models.SET_NULL)
-    discount = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
+    payment_method = models.CharField(max_length=10, choices=PAYMENT_CHOCES, default="CASH")
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="PENDING")
     rating = models.PositiveSmallIntegerField(default=0)
     created_at = models.DateTimeField(blank=True, null=True)
@@ -40,15 +43,28 @@ class Order(models.Model):
     is_dish_reviewed = models.BooleanField(default=False, null=True, blank=True)
     is_deliverer_reviewed = models.BooleanField(default=False, null=True, blank=True)
     is_restaurant_reviewed = models.BooleanField(default=False, null=True, blank=True)
+    restaurant_promotions = models.ManyToManyField("order.RestaurantPromotion", related_name="orders", blank=True)
 
     # def is_reviewed(self):
     #     return self.is_order_reviewed and self.is_dish_reviewed and self.is_deliverer_reviewed
     
+    @property
+    def discount(self):
+        promotions = self.restaurant_promotions.all()
+        for _promotion in promotions:
+            if _promotion.discount_percentage:
+                return self.total_price * _promotion.discount_percentage / 100
+            elif _promotion.discount_amount:
+                return _promotion.discount_amount
+        return 0
+    
+    @property
     def total_price(self):
         return self.cart.total_price
 
+    @property
     def total(self):
-        return float(self.cart.total_price) + float(self.delivery_fee()) - float(self.discount)
+        return float(self.cart.total_price) + float(self.delivery_fee) - float(self.discount)
     
     @property
     def delivery_address(self):
@@ -56,6 +72,7 @@ class Order(models.Model):
         selected_location = user.locations.filter(is_selected=True).first()
         return selected_location
 
+    @property
     def delivery_fee(self):
         # print(self.delivery_address, pretty=True)
         _delivery_address = self.delivery_address
@@ -183,7 +200,7 @@ def update_restaurant_rated(sender, instance, **kwargs):
 def check_order_ratings(order):
     update_fields = []
 
-    if order.status == "COMPLETED":
+    if order and order.status == "COMPLETED":
         if order.rating > 0 and not order.is_order_reviewed:
             order.is_order_reviewed = True
             update_fields.append('is_order_reviewed')

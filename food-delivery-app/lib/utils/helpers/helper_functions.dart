@@ -86,7 +86,10 @@ class THelperFunction {
     return MediaQuery.of(Get.context!).size.width;
   }
 
-  static String formatDate(DateTime date, { String format = 'dd MMMM yyyy, HH:mm' }) {
+  static String formatDate(DateTime? date, {String format = 'dd MMMM yyyy, HH:mm'}) {
+    if (date == null) {
+      return 'N/A';
+    }
     return DateFormat(format).format(date);
   }
 

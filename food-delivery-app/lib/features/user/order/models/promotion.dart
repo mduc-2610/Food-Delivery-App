@@ -1,67 +1,67 @@
 import 'package:food_delivery_app/data/services/reflect.dart';
+import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 @reflector
 @jsonSerializable
-class Promotion {
-  final String id;
-  final String code;
-  final String description;
-  final String promoType;
+class BasePromotion {
+  final String? id;
+  final String? code;
+  final String? name;
+  final String? description;
+  final String? promoType;
   final double? discountPercentage;
   final double? discountAmount;
-  final DateTime startDate;
-  final DateTime endDate;
-  final String applicableScope;
-  final String termsAndConditions;
-  final bool active;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  bool isDisabled;
+  bool isAvailable;
 
-  Promotion({
-    required this.id,
-    required this.code,
-    required this.description,
-    required this.promoType,
+  BasePromotion({
+    this.id,
+    this.code,
+    this.name,
+    this.description,
+    this.promoType,
     this.discountPercentage,
     this.discountAmount,
-    required this.startDate,
-    required this.endDate,
-    required this.applicableScope,
-    required this.termsAndConditions,
-    required this.active,
+    this.startDate,
+    this.endDate,
+    this.isDisabled = false,
+    this.isAvailable = false,
   });
 
-  Promotion.fromJson(Map<String, dynamic> json)
+  BasePromotion.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         code = json['code'],
+        name = json['name'],
         description = json['description'],
         promoType = json['promo_type'],
-        discountPercentage = json['discount_percentage']?.toDouble(),
-        discountAmount = json['discount_amount']?.toDouble(),
+        discountPercentage = THelperFunction.formatDouble(json['discount_percentage']),
+        discountAmount = THelperFunction.formatDouble(json['discount_amount']),
         startDate = DateTime.parse(json['start_date']),
         endDate = DateTime.parse(json['end_date']),
-        applicableScope = json['applicable_scope'],
-        termsAndConditions = json['terms_and_conditions'],
-        active = json['active'];
+        isDisabled = json['is_disabled'] ?? false,
+        isAvailable = json['is_available'] ?? false;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
+  Map<String, dynamic> toJson({ bool patch = false }) {
+    Map<String, dynamic> data = {
       'code': code,
+      'name': name,
       'description': description,
-      'promo_type': promoType,
+      'promo_type': promoType?.toUpperCase(),
       'discount_percentage': discountPercentage,
       'discount_amount': discountAmount,
-      'start_date': startDate.toIso8601String(),
-      'end_date': endDate.toIso8601String(),
-      'applicable_scope': applicableScope,
-      'terms_and_conditions': termsAndConditions,
-      'active': active,
+      'start_date': startDate?.toIso8601String(),
+      'end_date': endDate?.toIso8601String(),
+      'is_disabled': isDisabled,
     };
-  }
 
-  bool isActive() {
-    final now = DateTime.now();
-    return active && startDate.isBefore(now) && endDate.isAfter(now);
+    if(patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
   }
 
   @override
@@ -72,24 +72,52 @@ class Promotion {
 
 @reflector
 @jsonSerializable
-class ActivityPromotion {
-  final String promotionId;
-  final String activityType;
+class RestaurantPromotion extends BasePromotion {
+  final dynamic restaurant;
 
-  ActivityPromotion({
-    required this.promotionId,
-    required this.activityType,
-  });
+  RestaurantPromotion({
+    String? id,
+    String? code,
+    String? name,
+    String? description,
+    String? promoType,
+    double? discountPercentage,
+    double? discountAmount,
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? isActive,
+    bool? isDisabled,
+    this.restaurant,
+  }) : super(
+    id: id,
+    code: code,
+    name: name,
+    description: description,
+    promoType: promoType,
+    discountPercentage: discountPercentage,
+    discountAmount: discountAmount,
+    startDate: startDate,
+    endDate: endDate,
+    isAvailable: isActive ?? false,
+    isDisabled: isDisabled ?? false,
+  );
 
-  ActivityPromotion.fromJson(Map<String, dynamic> json)
-      : promotionId = json['promotion'],
-        activityType = json['activity_type'];
+  RestaurantPromotion.fromJson(Map<String, dynamic> json)
+      : restaurant = json['restaurant'] is String || json['restaurant'] is List || json['restaurant'] == null
+          ? json['restaurant']
+          : Restaurant.fromJson(json['restaurant']),
+        super.fromJson(json);
 
-  Map<String, dynamic> toJson() {
-    return {
-      'promotion': promotionId,
-      'activity_type': activityType,
-    };
+  @override
+  Map<String, dynamic> toJson({ bool patch = false }) {
+    final data = super.toJson();
+    data['restaurant'] = restaurant is Restaurant ? restaurant?.id : restaurant;
+
+    if(patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return data;
   }
 
   @override
@@ -97,3 +125,30 @@ class ActivityPromotion {
     return THelperFunction.formatToString(this);
   }
 }
+// @reflector
+// @jsonSerializable
+// class ActivityPromotion {
+//   final String promotionId;
+//   final String activityType;
+//
+//   ActivityPromotion({
+//     required this.promotionId,
+//     required this.activityType,
+//   });
+//
+//   ActivityPromotion.fromJson(Map<String, dynamic> json)
+//       : promotionId = json['promotion'],
+//         activityType = json['activity_type'];
+//
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'promotion': promotionId,
+//       'activity_type': activityType,
+//     };
+//   }
+//
+//   @override
+//   String toString() {
+//     return THelperFunction.formatToString(this);
+//   }
+// }

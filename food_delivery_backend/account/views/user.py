@@ -24,7 +24,7 @@ from account.serializers import (
 )
 from food.serializers import DishSerializer, DishLikeSerializer
 from notification.serializers import NotificationSerializer
-from order.serializers import PromotionSerializer, DeliverySerializer
+from order.serializers import RestaurantPromotionSerializer, DeliverySerializer
 from deliverer.serializers import DelivererSerializer
 from restaurant.serializers import RestaurantSerializer
 from review.serializers import (
@@ -61,7 +61,7 @@ class UserViewSet(DefaultGenericMixin, OrderFilterMixin, ManyRelatedViewSet):
         'login_password': LoginPasswordSerializer,
     }
     many_related_serializer_class = {
-        'promotions': PromotionSerializer,
+        'promotions': RestaurantPromotionSerializer,
         'notifications': NotificationSerializer,
         'comments': PostSerializer,
         'posts': PostSerializer,

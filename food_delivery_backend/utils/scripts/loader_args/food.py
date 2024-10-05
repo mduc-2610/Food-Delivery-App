@@ -6,9 +6,13 @@ from django.db import transaction
 
 from account.models import User
 from food.models import (
-    Dish, DishLike, 
-    DishCategory, DishOption, DishOptionItem
+    Dish,
+    DishLike, 
+    DishCategory, 
+    DishOption,
+    DishOptionItem
 )
+from restaurant.models import Restaurant
 from review.models import DishReview, DishReviewLike
 from utils.function import load_intermediate_model, load_one_to_many_model
 from utils.scripts.data import dish_categories, category_options
@@ -55,7 +59,7 @@ def load_food(
     
     if Dish in models_to_update:
         dish_list = []
-        for category in category_list:
+        for category in map_queryset.get(DishCategory):
             category_name = category.name.lower().replace(' ', '_')
             category_folder_path = os.path.join(settings.MEDIA_ROOT, f"food/{category_name}")
             
@@ -80,7 +84,7 @@ def load_food(
                 action=action
             )
             
-            for dish in dish_list:
+            for dish in map_queryset.get(Dish):
                 if category.name in category_options:
                     options = category_options[category.name]
                     for option_type, option_list in options.items():
@@ -93,6 +97,20 @@ def load_food(
                                 price=float(fake.pydecimal(left_digits=1, right_digits=2, positive=True, min_value=0.5, max_value=10.0))
                             )
                 print(f"\tSuccessfully created or updated Dish: {dish}, {dish.image}\n")
+
+            for restaurant in map_queryset.get(Restaurant):
+                for category in restaurant.categories.all():
+                    tmp = list(category.dishes.all())
+                    for _ in range(random.randint(1, max_dishes_per_category)):
+                        if not tmp: break
+                        max_loop = 100
+                        dish = random.choice(tmp)
+                        while dish.restaurant == None and max_loop:
+                            dish.restaurant = restaurant                
+                            dish = random.choice(tmp)
+                            max_loop -= 1
+                        dish.save()
+                        print(f"\tSuccessfully added Dish: {dish} to Restaurant: {restaurant}")
 
     # if DishReview in models_to_update:
     #     user_list = list(User.objects.all())

@@ -34,6 +34,7 @@ class Restaurant {
   final bool isLiked;
   int totalLikes;
   final String? restaurantCategories;
+  final String? promotions;
   // final List<RestaurantPromotion>? promotions;
 
   Restaurant({
@@ -56,7 +57,8 @@ class Restaurant {
     this.deliveries,
     this.isLiked = false,
     this.totalLikes = 0,
-    this.restaurantCategories
+    this.restaurantCategories,
+    this.promotions,
     // required this.promotions,
   });
 
@@ -68,9 +70,6 @@ class Restaurant {
         detailInfo = json['detail_info'] != null ? RestaurantDetailInfo.fromJson(json['detail_info']) : null,
         menuDelivery = json['menu_delivery'] != null ? RestaurantMenuDelivery.fromJson(json['menu_delivery']) : null,
         paymentInfo = json['payment_info'] != null ? RestaurantPaymentInfo.fromJson(json['payment_info']) : null,
-        // promotions = json['promotions'] != null
-        //     ? (json['promotions'] as List).map((item) => RestaurantPromotion.fromJson(item)).toList()
-        //     : null
         categories = json['categories'] != null ? (json['categories'] as List).map((instance) => DishCategory.fromJson(instance)).toList() : [],
         dishes = json['dishes'] != null ?
             json['dishes'] is String ? json['dishes'] :
@@ -85,7 +84,8 @@ class Restaurant {
         deliveries = json['deliveries'],
         isLiked = json['is_liked'] ?? false,
         totalLikes = json['total_likes'] ?? 0,
-        restaurantCategories = json['restaurant_categories']
+        restaurantCategories = json['restaurant_categories'],
+        promotions = json['promotions']
         ;
 
 
@@ -97,7 +97,6 @@ class Restaurant {
       'representative_info': representativeInfo?.toJson(),
       'detail_info': detailInfo?.toJson(),
       'menu_delivery': menuDelivery?.toJson(),
-      // 'promotions': promotions?.map((promo) => promo.toJson()).toList(),
     };
 
     if(patch) {

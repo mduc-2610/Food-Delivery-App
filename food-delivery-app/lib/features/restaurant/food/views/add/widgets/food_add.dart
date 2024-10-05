@@ -15,16 +15,23 @@ import 'package:get/get.dart';
 import 'dart:io';
 
 class FoodAddView extends StatelessWidget {
+  final String? dishId;
+
+  const FoodAddView({
+    this.dishId
+  });
+
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(FoodAddController());
+    final controller = Get.put(FoodAddController(dishId: dishId));
     return Scaffold(
-      appBar: CAppBar(
-        title: "Add New Dish",
-      ),
+      // appBar: CAppBar(
+      //   title: "Add New Dish",
+      // ),
       body:
       Obx(() => (controller.isLoading.value == true)
           ? MainWrapper(
+            topMargin: TSize.spaceBetweenItemsVertical,
             child: SingleChildScrollView(
               child: Column(
                       children: List.generate(10, (_) => RegistrationSkeletonField(label: "")),

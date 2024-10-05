@@ -36,7 +36,6 @@ class RestaurantListController extends GetxController {
       (searchResult != null || queryParams != null || searchTextController.text != "")
           ? "name=${(searchTextController.text != "") ? searchTextController.text : (searchResult ?? queryParams ?? '')}" : ""
           + ((category != null) ? "${queryParams != null ? "&" : ""}category=$category" : "");
-      $print("PARAMS; $params");
       final [_result, _info] = await APIService<Restaurant>(fullUrl: fullUrl ?? '', queryParams: params).list(next: true);
       if(!isSearch) {
         restaurants.addAll(_result);

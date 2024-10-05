@@ -3,7 +3,7 @@ from order.models import (
     Order, 
     OrderCancellation,
     RestaurantCart, 
-    Promotion, 
+    RestaurantPromotion, 
 )
 from review.models import (
     DishReview, 
@@ -40,7 +40,6 @@ class OrderSerializer(serializers.ModelSerializer):
             'cancellation', 
             'delivery_address', 
             'payment_method', 
-            'promotion',
             'delivery_fee', 
             'discount', 
             'total_price', 
@@ -133,7 +132,6 @@ class DetailOrderSerializer(CustomRelatedModelSerializer):
             'deliverer',
             'restaurant',
             'payment_method', 
-            'promotion', 
             'dish_reviews',
             'deliverer_review',
             'delivery_address',

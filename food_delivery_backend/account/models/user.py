@@ -54,7 +54,8 @@ class User(AbstractBaseUser):
 
     OWN_RELATED_NAME = "owned_by_users"
     notifications = models.ManyToManyField("notification.Notification", through="notification.UserNotification", related_name=OWN_RELATED_NAME)
-    promotions = models.ManyToManyField("order.Promotion", through="order.UserPromotion", related_name=OWN_RELATED_NAME)
+    # promotions = models.ManyToManyField("order.Promotion", through="order.UserPromotion", related_name=OWN_RELATED_NAME)
+    user_restaurant_promotions = models.ManyToManyField("order.RestaurantPromotion", through="order.UserRestaurantPromotion", related_name=OWN_RELATED_NAME)
     comments = models.ManyToManyField("social.Post", through="social.Comment", related_name="commented_by_users")
     
     RATE_RELATED_NAME = "reviewed_by_users"

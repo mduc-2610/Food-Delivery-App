@@ -3,9 +3,11 @@ import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/features/restaurant/food/controllers/manage/food_manage_controller.dart';
 import 'package:food_delivery_app/features/restaurant/food/views/manage/skeleton/food_manage_skeleton.dart';
+import 'package:food_delivery_app/features/restaurant/food/views/manage/widgets/promotion_manage_card.dart';
 import 'package:food_delivery_app/features/restaurant/food/views/manage/widgets/restaurant_food_card.dart';
 import 'package:food_delivery_app/features/restaurant/registration/views/widgets/category_selection.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
+import 'package:food_delivery_app/features/user/order/models/promotion.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
@@ -20,7 +22,7 @@ class FoodManageView extends StatelessWidget {
           return (controller.isLoading.value)
               ? FoodManageSkeleton()
               : DefaultTabController(
-            length: controller.categories.length + 1,
+            length: controller.categories.length + 2,
             child: Scaffold(
               appBar: CAppBar(
                 title: 'My Food',
@@ -29,6 +31,7 @@ class FoodManageView extends StatelessWidget {
                   tabAlignment: TabAlignment.start,
                   isScrollable: true,
                   tabs: [
+                    Tab(text: "Promotions"),
                     Tab(text: 'All'),
                     ...controller.categories.map((category) => Tab(text: category.name)),
                   ],
@@ -54,6 +57,7 @@ class FoodManageView extends StatelessWidget {
               ),
               body: TabBarView(
                 children: [
+                  Obx(() => _buildPromotionList(controller.promotions, controller)),
                   Obx(() => _buildFoodList(controller.dishes, controller)),
                   ...controller.categories.map((category) =>
                       Obx(() => _buildFoodList(controller.mapCategory[category.name] ?? [], controller))),
@@ -68,14 +72,28 @@ class FoodManageView extends StatelessWidget {
 
   Widget _buildFoodList(List<Dish> dishes, FoodManageController controller) {
     return ListView.separated(
-      padding: EdgeInsets.all(TSize.spaceBetweenItemsSm),
-      itemCount: dishes.length,
-      separatorBuilder: (context, index) => SizedBox(height: TSize.spaceBetweenItemsSm),
-      itemBuilder: (context, index) => RestaurantFoodCard(
-      dish: dishes[index],
-      onToggleDisable: () => controller.handleDisable(dishes[index]),
-      onEdit: () => controller.handleEditInformation(dishes[index]),
-    )
+        padding: EdgeInsets.all(TSize.spaceBetweenItemsSm),
+        itemCount: dishes.length,
+        separatorBuilder: (context, index) => SizedBox(height: TSize.spaceBetweenItemsSm),
+        itemBuilder: (context, index) => RestaurantFoodCard(
+        dish: dishes[index],
+        onToggleDisable: () => controller.handleDishDisable(dishes[index]),
+        onEdit: () => controller.handleDishEditInformation(dishes[index]),
+      )
+    );
+  }
+
+  Widget _buildPromotionList(List<RestaurantPromotion> promotions, FoodManageController controller) {
+    return ListView.separated(
+        controller: controller.scrollController,
+        padding: EdgeInsets.all(TSize.spaceBetweenItemsSm),
+        itemCount: promotions.length,
+        separatorBuilder: (context, index) => SizedBox(height: TSize.spaceBetweenItemsSm),
+        itemBuilder: (context, index) => PromotionManageCard(
+        promotion: promotions[index],
+        onToggleDisable: () => controller.handlePromotionDisable(promotions[index]),
+        onEdit: () => controller.handlePromotionEditInformation(promotions[index]),
+      )
     );
   }
 }

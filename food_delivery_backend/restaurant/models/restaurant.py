@@ -24,7 +24,7 @@ class Restaurant(models.Model):
     total_reviews = models.IntegerField(default=0, blank=True, null=True)
     rating_counts = models.JSONField(default=default_rating_counts, blank=True, null=True)
 
-    promotions = models.ManyToManyField("order.Promotion", through="order.RestaurantPromotion", related_name="promotions")
+    # promotions = models.ManyToManyField("order.Promotion", through="order.RestaurantPromotion", related_name="promotions")
     categories = models.ManyToManyField("food.DishCategory", through="restaurant.RestaurantCategory", related_name="restaurants")
 
     avg_price = models.DecimalField(max_digits=9, decimal_places=2, default=0.00, blank=True, null=True)

@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/bars/separate_bar.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/features/restaurant/food/controllers/manage/food_manage_controller.dart';
-import 'package:food_delivery_app/features/restaurant/food/views/add/food_add.dart';
+import 'package:food_delivery_app/features/restaurant/food/views/add/widgets/food_add.dart';
 import 'package:food_delivery_app/features/restaurant/food/views/detail/food_detail.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
 import 'package:food_delivery_app/features/user/order/views/common/widgets/status_chip.dart';

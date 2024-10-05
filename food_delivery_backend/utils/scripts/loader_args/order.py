@@ -2,14 +2,20 @@ import sys
 from faker import Faker
 import random
 from django.db import transaction
+from django.utils import timezone
+from dateutil.relativedelta import relativedelta
 
 from account.models import User
 from deliverer.models import Deliverer
 from restaurant.models import Restaurant
 from food.models import Dish
 from order.models import (
-    Promotion, ActivityPromotion, OrderPromotion, 
-    RestaurantPromotion, UserPromotion, Order, 
+    RestaurantPromotion, 
+    # ActivityPromotion, 
+    # OrderPromotion, 
+    # UserPromotion, 
+    RestaurantPromotion, 
+    Order, 
     Delivery, DeliveryRequest, RestaurantCart, RestaurantCartDish
 )
 
@@ -26,11 +32,11 @@ from utils.decorators import script_runner
 fake = Faker()
 
 MODEL_MAP = {
-    'promotion': Promotion,
-    'activity_promotion': ActivityPromotion,
-    'order_promotion': OrderPromotion,
+    'promotion': RestaurantPromotion,
+    # 'activity_promotion': ActivityPromotion,
+    # 'order_promotion': OrderPromotion,
+    # 'user_promotion': UserPromotion,
     'restaurant_promotion': RestaurantPromotion,
-    'user_promotion': UserPromotion,
     'order': Order,
     'delivery': Delivery,
     'delivery_request': DeliveryRequest,
@@ -52,24 +58,6 @@ def load_order(
     map_queryset=None,
     action=None,
 ):
-    if Promotion in models_to_update:
-        promotion_list = load_normal_model(
-            model_class=Promotion,
-            max_items=max_promotions,
-            attributes={
-                "code": lambda: fake.unique.text(max_nb_chars=10).upper(),
-                "description": lambda: fake.text(max_nb_chars=200),
-                "promo_type": lambda: random.choice(['SHIPPING', 'ORDER', 'ACTIVITY']),
-                "discount_percentage": lambda: fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50),
-                "discount_amount": lambda: fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50),
-                "start_date": lambda: fake.date_time_this_year(),
-                "end_date": lambda: fake.date_time_this_year(),
-                "applicable_scope": lambda: fake.text(max_nb_chars=50),
-                "terms_and_conditions": lambda: fake.text(max_nb_chars=200),
-                "active": lambda: fake.boolean()
-            },
-            action=action
-        )
 
     if RestaurantCart in models_to_update:
         user_list = list(User.objects.all())
@@ -102,7 +90,7 @@ def load_order(
     if Order in models_to_update:
         DeliveryRequest.objects.all().delete()
         order_list = []
-        promotion_list = map_queryset.get(Promotion)
+        promotion_list = map_queryset.get(RestaurantPromotion)
         deliverers = map_queryset.get(Deliverer)
         print(promotion_list)
         for _cart in restaurant_cart_list:
@@ -110,9 +98,7 @@ def load_order(
             # print(user_location, pretty=True)
             order_data = {
                 "cart": _cart,
-                "payment_method": fake.random_element(elements=('Credit Card', 'Paypal', 'Cash on Delivery')),
-                "promotion": random.choice(promotion_list) if random.choice([True, False]) and not promotion_list else None,
-                "discount":  random.uniform(0, 10),
+                "payment_method": random.choice(['CASH', 'CARD', 'PAYPAL']),
                 "status": random.choice(['ACTIVE', 'CANCELLED', 'COMPLETED', 'PENDING']),
                 "rating": random.randint(0, 5),
                 'created_at': generate_random_time_in_year(),
@@ -200,18 +186,38 @@ def load_order(
     #         action=action
     #     )
 
-    # if RestaurantPromotion in models_to_update:
-    #     restaurant_list = list(Restaurant.objects.all())
-    #     promotion_list = map_queryset.get(Promotion, [])
-    #     load_intermediate_model(
-    #         model_class=RestaurantPromotion,
-    #         primary_field='restaurant',
-    #         related_field='promotion',
-    #         primary_objects=restaurant_list,
-    #         related_objects=promotion_list,
-    #         max_items=max_promotions_per_restaurant,
-    #         action=action
-    #     )
+    if RestaurantPromotion in models_to_update:
+        restaurant_list = list(Restaurant.objects.all())
+        def generate_interval_month_date_same_year(date_time=None, interval=1):
+            current_date = date_time or timezone.now()
+            year = current_date.year
+            month = current_date.month
+
+            start_date = current_date.replace(day=1)
+
+            end_date = current_date.replace(day=1) + relativedelta(months=interval)
+
+            return start_date, end_date
+        
+        load_one_to_many_model(
+            model_class=RestaurantPromotion,
+            primary_field='restaurant',
+            primary_objects=restaurant_list,
+            max_related_count=max_promotions_per_restaurant,
+            attributes={
+                "name": lambda: fake.unique.text(max_nb_chars=100),
+                "code": lambda: fake.unique.text(max_nb_chars=10).upper(),
+                "promo_type": lambda: random.choice(['SHIPPING', 'ORDER']),
+                "discount_percentage": lambda: fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50),
+                "discount_amount": lambda: fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50),
+                "start_date": lambda: generate_interval_month_date_same_year()[0],
+                "end_date": lambda: generate_interval_month_date_same_year()[1],
+                "applicable_price": lambda: fake.pydecimal(left_digits=8, right_digits=2, positive=True, min_value=10, max_value=1000),
+                "description": lambda: fake.text(max_nb_chars=200),
+                "terms_and_conditions": lambda: fake.text(max_nb_chars=200),
+            },
+            action=action
+        )
 
     # if UserPromotion in models_to_update:
     #     user_list = list(User.objects.all())

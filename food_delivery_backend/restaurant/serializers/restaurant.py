@@ -17,12 +17,12 @@ from restaurant.serializers.detail_info import DetailInfoSerializer
 from restaurant.serializers.menu_delivery import MenuDeliverySerializer
 from restaurant.serializers.representative_info import RepresentativeInfoSerializer
 from restaurant.serializers.payment_info import PaymentInfoSerializer
-from order.serializers.owned_promotion import (
-    RestaurantPromotionSerializer
-)
+# from order.serializers.owned_promotion import (
+#     RestaurantPromotionSerializer
+# )
 from food.serializers import DishCategorySerializer, DishSerializer
 from review.serializers import RestaurantReviewSerializer
-from order.serializers.promotion import PromotionSerializer
+from order.serializers.promotion import RestaurantPromotionSerializer
 
 from utils.serializers import CustomRelatedModelSerializer
 from utils.pagination import CustomPagination
@@ -136,7 +136,6 @@ class DetailRestaurantSerializer(CustomRelatedModelSerializer):
         model = Restaurant
         exclude = [
             'user', 
-            'promotions', 
             # 'categories',
         ]
 

@@ -33,9 +33,9 @@ from food.serializers import (
     DishCategorySerializer,
 )
 from order.serializers import (
-    PromotionSerializer,
     RestaurantPromotionSerializer,
     DeliverySerializer,    
+    # RestaurantPromotionSerializer,
 )
 from restaurant.serializers import CreateUpdateRestaurantCategorySerializer
 from review.serializers import RestaurantReviewSerializer
@@ -58,11 +58,11 @@ class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, DeliveryFilterMi
         'retrieve': DetailRestaurantSerializer,
         'create': CreateRestaurantSerializer,
         'update': UpdateRestaurantSerializer,
-        'promotions': PromotionSerializer,
+        'promotions': RestaurantPromotionSerializer,
         'reviewed_by_users': BasicUserSerializer,
         'dishes': DishSerializer,
         'restaurant_reviews': RestaurantReviewSerializer,
-        'owned_promotions': RestaurantPromotionSerializer,
+        # 'owned_promotions': RestaurantPromotionSerializer,
         'categories': DishCategorySerializer,
         'restaurant_categories': RestaurantCategorySerializer,
         'deliveries': DeliverySerializer,

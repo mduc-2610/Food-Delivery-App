@@ -37,7 +37,6 @@ import 'package:food_delivery_app/features/user/food/models/review/review_like.d
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
 import 'package:food_delivery_app/features/user/order/models/delivery.dart';
 import 'package:food_delivery_app/features/user/order/models/order.dart';
-import 'package:food_delivery_app/features/user/order/models/owned_promotion.dart';
 import 'package:food_delivery_app/features/user/order/models/promotion.dart';
 import 'package:food_delivery_app/features/user/social/models/comment.dart';
 import 'package:food_delivery_app/features/user/social/models/image.dart';
@@ -199,16 +198,16 @@ class APIConstant {
         return 'order/order';
       case OrderCancellation:
         return 'order/order-cancellation';
-      case OrderPromotion:
-        return 'order/order-promotion';
+      // case OrderPromotion:
+      //   return 'order/order-promotion';
       case RestaurantPromotion:
         return 'order/restaurant-promotion';
-      case UserPromotion:
-        return 'order/user-promotion';
-      case Promotion:
-        return 'order/promotion';
-      case ActivityPromotion:
-        return 'order/activity-promotion';
+      // case UserPromotion:
+      //   return 'order/user-promotion';
+      // case Promotion:
+      //   return 'order/promotion';
+      // case ActivityPromotion:
+      //   return 'order/activity-promotion';
 
       ///SOCIAL
       case Post:
