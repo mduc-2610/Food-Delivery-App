@@ -12,3 +12,4 @@ channels==3.0.4
 celery
 django-celery-beat
 geopy
+unidecode

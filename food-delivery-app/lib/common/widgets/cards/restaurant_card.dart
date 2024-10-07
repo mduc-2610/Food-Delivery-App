@@ -12,19 +12,37 @@ import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
 
 class RestaurantCard extends StatelessWidget {
   final Restaurant? restaurant;
+  final int dishPageSize;
+  final String? category;
 
   const RestaurantCard({
-    this.restaurant
+    this.restaurant,
+    this.dishPageSize = 3,
+    this.category,
   });
 
   @override
   Widget build(BuildContext context) {
-    List<Dish> dishes = restaurant?.dishes ?? [];
+    List<Dish> dishes = [];
+    if(category != null) {
+      for(var dish in restaurant?.dishes) {
+        $print("cat ${restaurant?.basicInfo?.name} --- ${dish?.name} --- ${dish?.category?.name}  ---  ${category}");
+      }
+      dishes = restaurant?.dishes?.where((dish) => dish?.category?.name == category).toList() ?? [];
+    }
+    else {
+      dishes = restaurant?.dishes ?? [];
+    }
+    if (dishes.isEmpty) {
+      dishes == restaurant?.dishes;
+    $print("ssslength ${dishes.length}");
+    }
     return InkWell(
       onTap: () {
         Get.to(RestaurantDetailView(), arguments: {
@@ -45,10 +63,18 @@ class RestaurantCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
-              child: Image.asset(
+              child:
+              (dishes.isNotEmpty && dishes[0].image != null)
+                  ? Image.network(
+                "${dishes[0].image}",
+                width: TSize.imageThumbSize,
+                height: TSize.imageThumbSize,
+                fit: BoxFit.cover,
+              )
+                  : Image.asset(
                 "${TImage.hcBurger1}",
-                width: TSize.imageThumbSize + 30,
-                height: TSize.imageThumbSize + 30,
+                width: TSize.imageThumbSize,
+                height: TSize.imageThumbSize,
                 fit: BoxFit.cover,
               ),
             ),
@@ -106,14 +132,22 @@ class RestaurantCard extends StatelessWidget {
                   ),
                   SizedBox(height: TSize.spaceBetweenItemsVertical),
 
-                  for(int i = 1; i < min(dishes.length, 3); i++)...[
+                  for(int i = 1; i < min(dishes.length, dishPageSize); i++)...[
                     Container(
                       height: 80,
                       child: Row(
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
-                            child: Image.asset(
+                            child:
+                            (dishes[i].image != null)
+                            ? Image.network(
+                              "${dishes[i].image}",
+                              width: TSize.imageThumbSize,
+                              height: TSize.imageThumbSize,
+                              fit: BoxFit.cover,
+                            )
+                            : Image.asset(
                               "${TImage.hcBurger1}",
                               width: TSize.imageThumbSize,
                               height: TSize.imageThumbSize,

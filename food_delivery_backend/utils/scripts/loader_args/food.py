@@ -69,13 +69,17 @@ def load_food(
             
             image_files = os.listdir(category_folder_path)
             if not image_files: continue
+            def __():
+                print("CATEGORY__: ", category.name, pretty=True)
+                return f"{category.name} {fake.word()} {fake.word()}"
+
             dish_list += load_one_to_many_model(
                 model_class=Dish,
                 primary_field='category',
                 primary_objects=[category],
                 max_related_count=min(max_dishes_per_category, len(image_files)),
                 attributes={
-                    "name": lambda: f"{category.name} {fake.word()} {fake.word()}",
+                    "name": __(),
                     "description": lambda: fake.text(max_nb_chars=200),
                     "original_price": lambda: fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=10, max_value=100),
                     "discount_price": lambda: fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50),
@@ -84,19 +88,19 @@ def load_food(
                 action=action
             )
             
-            for dish in map_queryset.get(Dish):
-                if category.name in category_options:
-                    options = category_options[category.name]
-                    for option_type, option_list in options.items():
-                        dish_option, _ = DishOption.objects.update_or_create(dish=dish, name=option_type)
+            # for dish in map_queryset.get(Dish):
+            #     if category.name in category_options:
+            #         options = category_options[category.name]
+            #         for option_type, option_list in options.items():
+            #             dish_option, _ = DishOption.objects.update_or_create(dish=dish, name=option_type)
                         
-                        for option_name in option_list:
-                            DishOptionItem.objects.update_or_create(
-                                option=dish_option,
-                                name=option_name,
-                                price=float(fake.pydecimal(left_digits=1, right_digits=2, positive=True, min_value=0.5, max_value=10.0))
-                            )
-                print(f"\tSuccessfully created or updated Dish: {dish}, {dish.image}\n")
+            #             for option_name in option_list:
+            #                 DishOptionItem.objects.update_or_create(
+            #                     option=dish_option,
+            #                     name=option_name,
+            #                     price=float(fake.pydecimal(left_digits=1, right_digits=2, positive=True, min_value=0.5, max_value=10.0))
+            #                 )
+            #     print(f"\tSuccessfully created or updated Dish: {dish}, {dish.image}\n")
 
             for restaurant in map_queryset.get(Restaurant):
                 for category in restaurant.categories.all():

@@ -131,7 +131,7 @@ class HomeView extends StatelessWidget {
                                 Text('Special Offers', style: Theme.of(context).textTheme.headlineMedium),
                                 GestureDetector(
                                   onTap: () {
-                                    controller.getToFoodCategory("Special Offers");
+                                    controller.getToFoodCategory("");
                                   },
                                   child: Row(
                                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -153,7 +153,10 @@ class HomeView extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: TSize.spaceBetweenItemsVertical,),
-                          RestaurantList(searchBar: false,),
+                          RestaurantList(
+                            searchBar: false,
+                            tag: "home",
+                          ),
                           // GridView.count(
                           //   crossAxisCount: 2,
                           //   crossAxisSpacing: 10,

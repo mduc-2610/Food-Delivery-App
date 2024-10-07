@@ -16,11 +16,11 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 class Restaurant {
   final String? id;
   final String? user;
-  final RestaurantBasicInfo? basicInfo;
-  final RestaurantRepresentativeInfo? representativeInfo;
-  final RestaurantDetailInfo? detailInfo;
-  final RestaurantMenuDelivery? menuDelivery;
-  final RestaurantPaymentInfo? paymentInfo;
+  final dynamic basicInfo;
+  final dynamic representativeInfo;
+  final dynamic detailInfo;
+  final dynamic menuDelivery;
+  final dynamic paymentInfo;
   final List<DishCategory> categories;
   final dynamic dishes;
   final double rating;
@@ -65,11 +65,21 @@ class Restaurant {
   Restaurant.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         user = json['user'],
-        basicInfo = json['basic_info'] != null ? RestaurantBasicInfo.fromJson(json['basic_info']) : null,
-        representativeInfo = json['representative_info'] != null ? RestaurantRepresentativeInfo.fromJson(json['representative_info']) : null,
-        detailInfo = json['detail_info'] != null ? RestaurantDetailInfo.fromJson(json['detail_info']) : null,
-        menuDelivery = json['menu_delivery'] != null ? RestaurantMenuDelivery.fromJson(json['menu_delivery']) : null,
-        paymentInfo = json['payment_info'] != null ? RestaurantPaymentInfo.fromJson(json['payment_info']) : null,
+        basicInfo = json['basic_info'] == null || json['basic_info'] is String
+            ? json['basic_info']
+            : RestaurantBasicInfo.fromJson(json['basic_info']),
+        representativeInfo = json['representative_info'] == null || json['representative_info'] is String
+            ? json['representative_info']
+            : RestaurantRepresentativeInfo.fromJson(json['representative_info']),
+        detailInfo = json['detail_info'] == null || json['detail_info'] is String
+            ? json['detail_info']
+            : RestaurantDetailInfo.fromJson(json['detail_info']),
+        menuDelivery = json['menu_delivery'] == null || json['menu_delivery'] is String
+            ? json['menu_delivery']
+            : RestaurantMenuDelivery.fromJson(json['menu_delivery']),
+        paymentInfo = json['payment_info'] == null || json['payment_info'] is String
+            ? json['payment_info']
+            : RestaurantPaymentInfo.fromJson(json['payment_info']),
         categories = json['categories'] != null ? (json['categories'] as List).map((instance) => DishCategory.fromJson(instance)).toList() : [],
         dishes = json['dishes'] != null ?
             json['dishes'] is String ? json['dishes'] :

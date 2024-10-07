@@ -50,6 +50,8 @@ from order.serializers import (
     OrderSerializer,
     RestaurantCartSerializer
 )
+from restaurant.serializers import RestaurantSerializer
+
 from account.throttles import OTPThrottle
 from order.mixins import OrderFilterMixin
 
@@ -89,15 +91,18 @@ class UserViewSet(DefaultGenericMixin, OrderFilterMixin, ManyRelatedViewSet):
         'reviewed_restaurants': RestaurantSerializer,
         
         'dish_likes': DishLikeSerializer,
-        'post_comments': CommentSerializer,
+        'liked_restaurants': RestaurantSerializer,
         'comment_likes': CommentLikeSerializer,
+        'post_comments': CommentSerializer,
 
         'user1_rooms': DirectRoomSerializer,
         'user2_rooms': DirectRoomSerializer,
         'restaurant_carts': RestaurantCartSerializer,
         'carts': RestaurantSerializer,
         'locations': UserLocationSerializer,
-        'orders': OrderSerializer
+        'orders': OrderSerializer,
+        'dynamic_filter_all': True,
+        "list_detail_all": False,
     }
     many_related = {
         'restaurant_carts': {
@@ -106,7 +111,7 @@ class UserViewSet(DefaultGenericMixin, OrderFilterMixin, ManyRelatedViewSet):
         },
         "locations": {
             "pagination": False
-        }
+        },
     }
     # many_related = {
     #     'reviewed_dishes': {

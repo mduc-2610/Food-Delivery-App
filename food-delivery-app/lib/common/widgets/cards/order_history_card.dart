@@ -123,7 +123,7 @@ class OrderHistoryCard extends StatelessWidget {
                   ],
                 ),
                 //
-                if(currentOrder?.isReviewed == false)...[
+                if(currentOrder?.status == "COMPLETED" && currentOrder?.isReviewed == false)...[
                   Positioned(
                     top: -5,
                     right: -5,

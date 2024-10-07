@@ -3,11 +3,18 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from utils.pagination import CustomPagination
 from django.db import models
+from utils.mixins import DynamicFilterMixin
 
 class ManyRelatedViewSet(viewsets.ModelViewSet):
     pagination_class = CustomPagination
     many_related_serializer_class = {}
     many_related = {}
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        list_detail = self.many_related.get(self.action, {}).get('list_detail', True)
+        context.update({'detail': list_detail})
+        return context
 
     def get_serializer_class(self):
         return self.many_related.get(self.action, {}).get(
@@ -36,10 +43,12 @@ class ManyRelatedViewSet(viewsets.ModelViewSet):
                 instance = model.objects.get(pk=pk)
             except self.queryset.model.DoesNotExist:
                 return None
+            
             if filter_kwargs:
-                return self.many_related[self.action]['queryset'](instance).filter(**filter_kwargs)
+                queryset = self.many_related[self.action]['queryset'](instance).filter(**filter_kwargs)
             else:
-                return self.many_related[self.action]['queryset'](instance)
+                queryset = self.many_related[self.action]['queryset'](instance)
+            return queryset
         return super().get_object()
 
     def paginate_and_response(self, request, *args, **kwargs):
@@ -53,6 +62,9 @@ class ManyRelatedViewSet(viewsets.ModelViewSet):
             )
 
         if isinstance(queryset_or_instance, list) or hasattr(queryset_or_instance, '__iter__'):
+            if self.many_related.get(self.action).get('dynamic_filter', False):
+                    queryset_or_instance = DynamicFilterMixin.filter_queryset(self, queryset_or_instance)
+
             page = self.paginate_queryset(queryset_or_instance)
             is_paginated = self.many_related.get(self.action).get('pagination', True)
             if is_paginated and page is not None:
@@ -121,6 +133,13 @@ class ManyRelatedViewSet(viewsets.ModelViewSet):
             return cls.many_related.get(field_name, {}) \
                     .get(attribute, default)
         
+        dynamic_filter_all = cls.many_related.pop('dynamic_filter_all', None)
+        list_detail_all = cls.many_related.pop('list_detail_all', None)
+        if not dynamic_filter_all:
+            dynamic_filter_all = cls.many_related_serializer_class.pop('dynamic_filter_all', None)
+        if not list_detail_all:
+            list_detail_all = cls.many_related_serializer_class.pop('list_detail_all', None)
+
         for field, _serializer_class in cls.many_related_serializer_class.items():
             if hasattr(cls.model, field):
                 cls.many_related.update({
@@ -131,6 +150,8 @@ class ManyRelatedViewSet(viewsets.ModelViewSet):
                             'create_serializer_class': get_many_related_or_default(field, 'create_serializer_class', _serializer_class),
                             'update_serializer_class': get_many_related_or_default(field, 'update_serializer_class', _serializer_class),
                             'pagination': cls.many_related.get(field, {}).get('pagination', True),
+                            'dynamic_filter': get_many_related_or_default(field, 'dynamic_filter', False) if dynamic_filter_all is None else dynamic_filter_all,
+                            'list_detail': get_many_related_or_default(field, 'list_detail', True) if list_detail_all is None else list_detail_all,
                         }
                     })
         # for field in cls.model._meta.get_fields():

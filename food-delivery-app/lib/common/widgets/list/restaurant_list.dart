@@ -15,21 +15,27 @@ class RestaurantList extends StatelessWidget {
   final String? category;
   final String? searchResult;
   final bool searchBar;
+  final bool isLike;
+  final String? tag;
 
   const RestaurantList({
     this.category,
     this.searchBar = true,
     this.searchResult,
+    this.isLike = false,
+    this.tag,
     Key? key
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String _tag = category ?? (searchResult != null ? "search" : "");
+    String _tag = tag ?? category ?? (searchResult != null ? "search" : "");
+    $print("TAG: $_tag");
     return GetBuilder<RestaurantListController>(
       init: RestaurantListController(
         category: category,
         searchResult: searchResult,
+        isLike: isLike,
       ),
       tag: _tag,
       builder: (controller) {
@@ -56,7 +62,11 @@ class RestaurantList extends StatelessWidget {
                       child: Column(
                         children: [
                           for(var restaurant in controller.restaurants)...[
-                            RestaurantCard(restaurant: restaurant),
+                            RestaurantCard(
+                              restaurant: restaurant,
+                              dishPageSize: controller.dishPageSize,
+                              category: category,
+                            ),
                             SeparateSectionBar(),
                           ],
                           SizedBox(height: TSize.spaceBetweenSections,)

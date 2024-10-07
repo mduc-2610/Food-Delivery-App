@@ -25,7 +25,10 @@ class CSearchBar extends StatelessWidget {
             onTap: prefixPressed,
             child: Icon(TIcon.search)
           ),
-          suffixIcon: InkWell(
+          suffixIcon:
+          (suffixPressed == null)
+          ? null
+          : InkWell(
             onTap: suffixPressed,
             child: Icon(TIcon.filter)
           )

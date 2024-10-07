@@ -19,7 +19,7 @@ class OrderHistoryController extends GetxController {
   var orders = <Order>[].obs;
   Rx<bool> isLoading = true.obs;
   final scrollController = ScrollController();
-
+  final searchController = TextEditingController();
   String _filterDefault = "All";
 
   @override
@@ -55,7 +55,7 @@ class OrderHistoryController extends GetxController {
   Future<void> fetchFilterOrder(String filter, { bool loadMore = false }) async {
     if(!loadMore) isLoading.value = true;
     if(_nextPage != null || !loadMore) {
-      final [_result, _info] = await APIService<Order>(fullUrl: (loadMore) ? _nextPage ?? "" : user?.orders ?? "", queryParams: (loadMore) ? "" : "star_filter=${filter}").list(next: true);
+      final [_result, _info] = await APIService<Order>(fullUrl: (loadMore) ? _nextPage ?? "" : user?.orders ?? "", queryParams: (loadMore) ? "" : "star_filter=${filter}&id=${searchController.text}").list(next: true);
       if(!loadMore) orders.value = _result;
       else orders.addAll(_result);
       _nextPage = _info["next"];
@@ -65,6 +65,10 @@ class OrderHistoryController extends GetxController {
       isLoading.value = false;
     }
     update();
+  }
+
+  Future<void> handleSearch() async {
+    await fetchFilterOrder(filterBarController.selectedFilter.value, loadMore: false);
   }
 
 }

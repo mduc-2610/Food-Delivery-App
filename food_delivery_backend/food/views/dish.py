@@ -28,14 +28,17 @@ from review.serializers import (
 from review.mixins import ReviewFilterMixin
 from utils.views import ManyRelatedViewSet
 from utils.pagination import CustomPagination
-from utils.mixins import DefaultGenericMixin
+from utils.mixins import (
+    DefaultGenericMixin,
+    DynamicFilterMixin,
+)
 
 class DishPagination(CustomPagination):
     def __init__(self):
         super().__init__()
         self.page_size_query_param = 'dish_page_size'
 
-class DishViewSet(DefaultGenericMixin, ManyRelatedViewSet, ReviewFilterMixin):
+class DishViewSet(DefaultGenericMixin, DynamicFilterMixin, ManyRelatedViewSet, ReviewFilterMixin):
     queryset = Dish.objects.all()
     serializer_class = DishSerializer
     pagination_class = CustomPagination

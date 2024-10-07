@@ -30,7 +30,10 @@ class _OrderHistoryViewState extends State<OrderHistoryView> {
             children: [
               Column(
                 children: [
-                  MainWrapper(child: CSearchBar()),
+                  MainWrapper(child: CSearchBar(
+                    controller: controller.searchController,
+                    prefixPressed: controller.handleSearch,
+                  )),
                   SizedBox(height: TSize.spaceBetweenItemsVertical),
                   MainWrapper(
                     rightMargin: 0,

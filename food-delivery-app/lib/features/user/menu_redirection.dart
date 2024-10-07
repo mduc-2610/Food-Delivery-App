@@ -5,7 +5,7 @@ import "package:food_delivery_app/data/services/user_service.dart";
 import "package:food_delivery_app/features/authentication/models/account/user.dart";
 import "package:food_delivery_app/features/notification/views/notification.dart";
 import "package:food_delivery_app/features/user/food/views/home/home.dart";
-import "package:food_delivery_app/features/user/food/views/like/food_like.dart";
+import "package:food_delivery_app/features/user/food/views/restaurant/restaurant_like.dart";
 import "package:food_delivery_app/features/user/order/views/history/order_history.dart";
 import "package:food_delivery_app/features/personal/views/profile/profile.dart";
 import "package:food_delivery_app/utils/constants/icon_strings.dart";
@@ -37,7 +37,7 @@ class UserMenuRedirection extends StatelessWidget {
     List<Widget> viewList = [
       HomeView(),
       OrderHistoryView(),
-      FoodLikeView(),
+      RestaurantLikeView(),
       NotificationView(),
       PersonalProfileView(),
     ];

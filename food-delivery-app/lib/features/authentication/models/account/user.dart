@@ -30,6 +30,8 @@ class User {
   final UserLocation? selectedLocation;
   final String? deliverer;
   final String? restaurant;
+  final String? likedRestaurants;
+
   final bool isCertifiedDeliverer;
   final bool isCertifiedRestaurant;
 
@@ -55,6 +57,8 @@ class User {
     this.selectedLocation,
     this.deliverer,
     this.restaurant,
+    this.likedRestaurants,
+
     this.isCertifiedDeliverer = false,
     this.isCertifiedRestaurant = false,
   });
@@ -81,6 +85,8 @@ class User {
         selectedLocation = json['selected_location'] != null ? UserLocation.fromJson(json['selected_location']) : null,
         deliverer = json['deliverer'],
         restaurant = json['restaurant'],
+        likedRestaurants = json['liked_restaurants'],
+
         isCertifiedDeliverer = json['is_certified_deliverer'] ?? false,
         isCertifiedRestaurant = json['is_certified_restaurant'] ?? false
   ;

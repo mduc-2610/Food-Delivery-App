@@ -47,10 +47,11 @@ from utils.pagination import CustomPagination
 from utils.mixins import (
     DefaultGenericMixin,
     ForeignKeyFilterMixin,
+    DynamicFilterMixin,
 )
 
 
-class RestaurantViewSet(DefaultGenericMixin, ReviewFilterMixin, DeliveryFilterMixin, ManyRelatedViewSet):
+class RestaurantViewSet(DefaultGenericMixin, DynamicFilterMixin, ReviewFilterMixin, DeliveryFilterMixin, ManyRelatedViewSet):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
     pagination_class = CustomPagination
