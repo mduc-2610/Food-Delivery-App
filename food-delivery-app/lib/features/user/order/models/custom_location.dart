@@ -6,17 +6,17 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 @jsonSerializable
 class BaseLocation {
   final String? id;
-  final String? address;
-  final double latitude;
-  final double longitude;
-  final String? name;
+  String? address;
+  double? latitude;
+  double? longitude;
+  String? name;
   final bool isSelected;
 
   BaseLocation({
     this.id,
     this.address,
-    this.latitude = 0,
-    this.longitude = 0,
+    this.latitude,
+    this.longitude,
     this.name,
     this.isSelected = false,
   });
@@ -24,8 +24,8 @@ class BaseLocation {
   BaseLocation.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         address = json['address'],
-        latitude = THelperFunction.formatDouble(json['latitude']),
-        longitude = THelperFunction.formatDouble(json['longitude']),
+        latitude = json['latitude'] == null ? json['latitude'] : THelperFunction.formatDouble(json['latitude']),
+        longitude = json['longitude'] == null ? json['longitude'] : THelperFunction.formatDouble(json['longitude']),
         name = json['name'],
         isSelected = json['is_selected'] ?? false;
 
@@ -33,8 +33,8 @@ class BaseLocation {
     final map = {
       'id': id,
       'address': address,
-      'latitude': latitude.toStringAsFixed(6),
-      'longitude': longitude.toStringAsFixed(6),
+      'latitude': latitude?.toStringAsFixed(6),
+      'longitude': longitude?.toStringAsFixed(6),
       'name': name,
       'is_selected': isSelected,
     };
@@ -47,7 +47,7 @@ class BaseLocation {
   }
 
   LatLng get currentCoordinate {
-    return LatLng(latitude, longitude);
+    return LatLng(latitude ?? 0, longitude ?? 0);
   }
 
   @override

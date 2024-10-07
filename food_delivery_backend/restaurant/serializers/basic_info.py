@@ -13,6 +13,7 @@ class BaseBasicInfoSerializer(serializers.ModelSerializer):
             'city', 
             'district', 
             'address', 
+            'address_name', 
             'latitude', 
             'longitude'
         ]

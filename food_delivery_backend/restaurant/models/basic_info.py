@@ -14,6 +14,7 @@ class BasicInfo(models.Model):
     address = models.CharField(max_length=400)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    address_name = models.CharField(max_length=255, null=True, blank=True)
 
     def get_distance_from_user(self, location):
         if self.latitude and self.longitude and location.latitude and location.longitude:

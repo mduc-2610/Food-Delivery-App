@@ -80,6 +80,7 @@ def load_restaurant(
                 "city": city,
                 "district": district,
                 "address": fake.street_address(),
+                "address_name": fake.street_address(),
                 "latitude": generate_latitude(),
                 "longitude": generate_longitude(),
             }

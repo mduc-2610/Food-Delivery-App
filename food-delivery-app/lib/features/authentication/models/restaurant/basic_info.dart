@@ -10,6 +10,7 @@ class RestaurantBasicInfo {
   final String? city;
   final String? district;
   final String? address;
+  final String? addressName;
   final double? latitude;
   final double? longitude;
 
@@ -20,8 +21,9 @@ class RestaurantBasicInfo {
     this.city,
     this.district,
     this.address,
-    this.latitude = 0,
-    this.longitude = 0,
+    this.addressName,
+    this.latitude,
+    this.longitude,
   });
 
   RestaurantBasicInfo.fromJson(Map<String, dynamic> json)
@@ -31,8 +33,9 @@ class RestaurantBasicInfo {
         city = json['city'],
         district = json['district'],
         address = json['address'],
-        latitude = THelperFunction.formatDouble(json['latitude']),
-        longitude = THelperFunction.formatDouble(json['longitude'])
+        addressName = json['address_name'],
+        latitude = json['latitude'] == null ? json['latitude'] : THelperFunction.formatDouble(json['latitude']),
+        longitude = json['longitude'] == null ? json['longitude'] : THelperFunction.formatDouble(json['longitude'])
   ;
 
   Map<String, dynamic> toJson({bool patch = false}) {
@@ -43,6 +46,7 @@ class RestaurantBasicInfo {
       'city': city,
       'district': district,
       'address': address,
+      'address_name': addressName,
       'latitude': latitude?.toStringAsFixed(6),
       'longitude': longitude?.toStringAsFixed(6),
     };

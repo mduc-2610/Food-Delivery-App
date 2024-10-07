@@ -13,9 +13,19 @@ from food.models import (
     DishOptionItem
 )
 from restaurant.models import Restaurant
-from review.models import DishReview, DishReviewLike
-from utils.function import load_intermediate_model, load_one_to_many_model
-from utils.scripts.data import dish_categories, category_options
+from review.models import (
+    DishReview,
+    DishReviewLike,
+)
+from utils.function import (
+    load_intermediate_model,
+    load_one_to_many_model,
+    load_normal_model,
+)
+from utils.scripts.data import (
+    dish_categories,
+    category_options
+)
 from utils.decorators import script_runner
 
 fake = Faker()
@@ -57,9 +67,40 @@ def load_food(
             category_list.append(category)
             print(f"\tSuccessfully {'created' if created else 'updated'} Dish Category: {category}")
     
+    # if Dish in models_to_update:
+    #     dish_list = []
+    #     category_list = map_queryset.get(DishCategory)
+    #     for category in category_list:
+    #         category_name = category.name.lower().replace(' ', '_')
+    #         category_folder_path = os.path.join(settings.MEDIA_ROOT, f"food/{category_name}")
+            
+    #         if not os.path.exists(category_folder_path):
+    #             print(f"Category folder not found: {category_folder_path}")
+    #             continue
+            
+    #         image_files = os.listdir(category_folder_path)
+    #         if not image_files: continue
+            
+    #         dish_list += load_one_to_many_model(
+    #             model_class=Dish,
+    #             primary_field='category',
+    #             primary_objects=category_list,
+    #             max_related_count=min(max_dishes_per_category, len(image_files)),
+    #             attributes={
+    #                 "name": lambda name=category.name: f"{name} {fake.word()} {fake.word()}",
+    #                 "description": lambda: fake.text(max_nb_chars=200),
+    #                 "original_price": lambda: fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=10, max_value=100),
+    #                 "discount_price": lambda: fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50),
+    #                 "image": lambda image_files=image_files:  f"food/{category_name}/{image_files.pop(random.randint(0, len(image_files) - 1))}" if len(image_files) > 0 else "",
+    #             },
+    #             action=action
+    #         )
+
     if Dish in models_to_update:
         dish_list = []
-        for category in map_queryset.get(DishCategory):
+        category_list = map_queryset.get(DishCategory)
+        
+        for category in category_list:
             category_name = category.name.lower().replace(' ', '_')
             category_folder_path = os.path.join(settings.MEDIA_ROOT, f"food/{category_name}")
             
@@ -68,26 +109,76 @@ def load_food(
                 continue
             
             image_files = os.listdir(category_folder_path)
-            if not image_files: continue
-            def __():
-                print("CATEGORY__: ", category.name, pretty=True)
-                return f"{category.name} {fake.word()} {fake.word()}"
-
-            dish_list += load_one_to_many_model(
-                model_class=Dish,
-                primary_field='category',
-                primary_objects=[category],
-                max_related_count=min(max_dishes_per_category, len(image_files)),
-                attributes={
-                    "name": __(),
-                    "description": lambda: fake.text(max_nb_chars=200),
-                    "original_price": lambda: fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=10, max_value=100),
-                    "discount_price": lambda: fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50),
-                    "image": lambda image_files=image_files:  f"food/{category_name}/{image_files.pop(random.randint(0, len(image_files) - 1))}" if len(image_files) > 0 else "",
-                },
-                action=action
-            )
+            if not image_files:
+                continue
             
+            max_dishes = min(max_dishes_per_category, len(image_files))
+            
+            if action == 'delete':
+                Dish.objects.filter(category=category).delete()
+
+            existing_dishes = list(Dish.objects.filter(category=category)) if action == 'update' else []
+            
+            for i in range(max_dishes):
+                if len(image_files) == 0:
+                    break
+                
+                image_file = image_files.pop(random.randint(0, len(image_files) - 1))
+                
+                if action == 'update' and i < len(existing_dishes):
+                    dish = existing_dishes[i]
+                    dish.name = f"{category.name} {fake.word()} {fake.word()}"
+                    dish.description = fake.text(max_nb_chars=200)
+                    dish.original_price = fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=10, max_value=100)
+                    dish.discount_price = fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50)
+                    dish.image = f"food/{category_name}/{image_file}" if image_file else ""
+                else:
+                    dish = Dish(
+                        category=category,
+                        name=f"{category.name} {fake.word()} {fake.word()}",
+                        description=fake.text(max_nb_chars=200),
+                        original_price=fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=10, max_value=100),
+                        discount_price=fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50),
+                        image=f"food/{category_name}/{image_file}" if image_file else "",
+                    )
+                
+                dish.save()
+                dish_list.append(dish)
+    # if Dish in models_to_update:
+    #     dish_list = []
+    #     category_list = map_queryset.get(DishCategory)
+
+    #     for category in category_list:
+    #         category_name = category.name.lower().replace(' ', '_')
+    #         category_folder_path = os.path.join(settings.MEDIA_ROOT, f"food/{category_name}")
+
+    #         if not os.path.exists(category_folder_path):
+    #             print(f"Category folder not found: {category_folder_path}")
+    #             continue
+
+    #         image_files = os.listdir(category_folder_path)
+    #         if not image_files:
+    #             continue
+
+    #         max_dishes = min(max_dishes_per_category, len(image_files))
+
+    #         def get_dish_attributes():
+    #             image_file = image_files.pop(random.randint(0, len(image_files) - 1)) if len(image_files) > 0 else ""
+    #             return {
+    #                 "name": f"{category.name} {fake.word()} {fake.word()}",
+    #                 "description": fake.text(max_nb_chars=200),
+    #                 "original_price": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=10, max_value=100),
+    #                 "discount_price": fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50),
+    #                 "image": f"food/{category_name}/{image_file}" if image_file else ""
+    #             }
+            
+    #         dish_list += load_normal_model(
+    #             model_class=Dish,
+    #             max_items=max_dishes,
+    #             oto_attribute={"category": category},
+    #             attributes=get_dish_attributes, 
+    #             action=action
+    #         )
             # for dish in map_queryset.get(Dish):
             #     if category.name in category_options:
             #         options = category_options[category.name]

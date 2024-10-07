@@ -3,7 +3,7 @@ import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/cards/container_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/radio_tick.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
-import 'package:food_delivery_app/features/user/order/controllers/location/location_controller.dart';
+import 'package:food_delivery_app/features/user/order/controllers/location/location_selection_controller.dart';
 import 'package:food_delivery_app/features/user/order/views/location/location_add.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
@@ -59,12 +59,14 @@ class LocationList extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             CircleIconCard(
+                              onTap: () => controller.handleLocationEdit(location),
                               icon: Icons.edit,
                               iconColor: TColor.light,
                               backgroundColor: TColor.primary,
                             ),
 
                             CircleIconCard(
+                              onTap: () => controller.handleLocationDelete(location),
                               icon: Icons.delete,
                               iconColor: TColor.light,
                               backgroundColor: TColor.primary,

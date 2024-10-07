@@ -14,11 +14,21 @@ class LocationAddController extends GetxController {
   RxSet<Marker> _markers = <Marker>{}.obs;
   GoogleMapController? _mapController;
   Map<String, dynamic> chosenLocation = {};
+  final BaseLocation? initLocation;
 
   final TextEditingController locationNameController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
 
   final PlaceApiService _placeApiProvider = PlaceApiService();
+
+  LocationAddController({ this.initLocation }) {
+    _selectedLocation.value = LatLng(
+        initLocation?.latitude ?? 20.9805232,
+        initLocation?.longitude ?? 105.7880024
+    );
+    addressController.text = initLocation?.address ?? "";
+    locationNameController.text = initLocation?.name ?? "";
+  }
 
   @override
   void onInit() {
@@ -118,8 +128,9 @@ class LocationAddController extends GetxController {
       formKey.currentState?.save();
       chosenLocation["name"] = locationNameController.text;
       chosenLocation["address"] = addressController.text;
-      $print("CHOSEN ${chosenLocation}");
       Get.back(result: chosenLocation);
+
+      $print("CHOSEN ${chosenLocation}");
       locationNameController.text = "";
       addressController.text = "";
     }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
 import 'package:food_delivery_app/common/widgets/cards/container_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
-import 'package:food_delivery_app/features/user/order/controllers/location/location_controller.dart';
+import 'package:food_delivery_app/features/user/order/controllers/location/location_selection_controller.dart';
 import 'package:food_delivery_app/features/user/order/views/location/location_add.dart';
 import 'package:food_delivery_app/features/user/order/views/location/widgets/order_location_list.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';

@@ -199,8 +199,8 @@ class UserLocation extends BaseLocation {
     String? id,
     this.user,
     String? address,
-    double latitude = 0,
-    double longitude = 0,
+    double? latitude,
+    double? longitude,
     String? name,
     bool isSelected = false,
   }) : super(

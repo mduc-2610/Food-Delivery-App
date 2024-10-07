@@ -32,7 +32,7 @@ class RestaurantCard extends StatelessWidget {
     List<Dish> dishes = [];
     if(category != null) {
       for(var dish in restaurant?.dishes) {
-        $print("cat ${restaurant?.basicInfo?.name} --- ${dish?.name} --- ${dish?.category?.name}  ---  ${category}");
+        // $print("cat ${restaurant?.basicInfo?.name} --- ${dish?.name} --- ${dish?.category?.name}  ---  ${category}");
       }
       dishes = restaurant?.dishes?.where((dish) => dish?.category?.name == category).toList() ?? [];
     }

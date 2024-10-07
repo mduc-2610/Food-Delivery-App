@@ -11,92 +11,95 @@ import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationAddView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return OrderLocationAddViewContent();
-  }
-}
+  final BaseLocation? initLocation;
 
-class OrderLocationAddViewContent extends StatelessWidget {
-  final controller = Get.put(LocationAddController());
+  const LocationAddView({
+    this.initLocation,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CAppBar(
-        title: 'Add New Location',
+    return GetBuilder<LocationAddController>(
+      init: LocationAddController(
+        initLocation: initLocation
       ),
-      body: Form(
-        key: controller.formKey,
-        child: Column(
-          children: [
-            SizedBox(height: TSize.spaceBetweenItemsVertical),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: TextFormField(
-                controller: controller.addressController,
-                decoration: InputDecoration(
-                  labelText: 'Search Address',
-                  suffixIcon: Icon(Icons.search),
+      builder: (controller) {
+        return Scaffold(
+          appBar: CAppBar(
+            title: 'Add New Location',
+          ),
+          body: Form(
+            key: controller.formKey,
+            child: Column(
+              children: [
+                SizedBox(height: TSize.spaceBetweenItemsVertical),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: TextFormField(
+                    controller: controller.addressController,
+                    decoration: InputDecoration(
+                      labelText: 'Search Address',
+                      suffixIcon: Icon(Icons.search),
+                    ),
+                    maxLines: 2,
+                    readOnly: true,
+                    onTap: () async {
+                      final SuggestionLocation? result = await showSearch(
+                        context: context,
+                        delegate: AddressSearch(),
+                      );
+                      if (result != null && result.placeId.isNotEmpty) {
+                        controller.addressController.text = result.description;
+                        controller.updateMapLocation(result);
+                      }
+                    },
+                    validator: (value) => value?.isEmpty ?? true ? 'Search your address' : null,
+                  ),
                 ),
-                maxLines: 2,
-                readOnly: true,
-                onTap: () async {
-                  final SuggestionLocation? result = await showSearch(
-                    context: context,
-                    delegate: AddressSearch(),
-                  );
-                  if (result != null && result.placeId.isNotEmpty) {
-                    controller.addressController.text = result.description;
-                    controller.updateMapLocation(result);
-                  }
-                },
-                validator: (value) => value?.isEmpty ?? true ? 'Search your address' : null,
-              ),
-            ),
-            SizedBox(height: TSize.spaceBetweenItemsVertical),
-            Expanded(
-              child: Obx(
-                    () => GoogleMap(
-                  initialCameraPosition: CameraPosition(
-                    target: controller.selectedLocation,
-                    zoom: 14,
+                SizedBox(height: TSize.spaceBetweenItemsVertical),
+                Expanded(
+                  child: Obx(
+                        () => GoogleMap(
+                      initialCameraPosition: CameraPosition(
+                        target: controller.selectedLocation,
+                        zoom: 14,
+                      ),
+                      onMapCreated: (GoogleMapController mapController) {
+                        controller.setMapController(mapController);
+                      },
+                      onTap: (LatLng latLng) {
+                        controller.updateSelectedLocation(latLng);
+                      },
+                      markers: controller.markers,
+                    ),
                   ),
-                  onMapCreated: (GoogleMapController mapController) {
-                    controller.setMapController(mapController);
-                  },
-                  onTap: (LatLng latLng) {
-                    controller.updateSelectedLocation(latLng);
-                  },
-                  markers: controller.markers,
                 ),
-              ),
-            ),
-            MainWrapper(
-              topMargin: TSize.spaceBetweenSections,
-              bottomMargin: TSize.spaceBetweenSections,
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: controller.locationNameController,
-                    decoration: InputDecoration(labelText: 'Location Name'),
-                    validator: (value) => value?.isEmpty ?? true ? 'Please enter a name' : null,
+                MainWrapper(
+                  topMargin: TSize.spaceBetweenSections,
+                  bottomMargin: TSize.spaceBetweenSections,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: controller.locationNameController,
+                        decoration: InputDecoration(labelText: 'Location Name'),
+                        validator: (value) => value?.isEmpty ?? true ? 'Please enter a name' : null,
+                      ),
+                      SizedBox(height: TSize.spaceBetweenInputFields),
+                      MainButton(
+                        text: 'Save',
+                        onPressed: () => controller.saveLocation(context),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: TSize.spaceBetweenInputFields),
-                  MainButton(
-                    text: 'Save',
-                    onPressed: () => controller.saveLocation(context),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
-
-
 }
+
 
 

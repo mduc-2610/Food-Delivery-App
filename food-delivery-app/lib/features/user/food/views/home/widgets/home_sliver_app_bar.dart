@@ -21,9 +21,9 @@ class HomeSliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController _controller = HomeController.instance;
-    var addressName = _controller.user?.selectedLocation?.name;
+    var addressName = _controller.user?.selectedLocation?.name ?? "Select your location";
     bool isLonger = (addressName?.length ?? 0) > 30;
-    addressName = addressName?.substring(0, max(addressName.length, 0)) ?? "";
+    addressName = addressName?.substring(0, min(addressName.length, 30)) ?? "";
     return SliverAppBar(
       pinned: true,
       toolbarHeight: TDeviceUtil.getAppBarHeight(),
@@ -41,7 +41,7 @@ class HomeSliverAppBar extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  "${addressName ?? "Select your location  "}${isLonger ? "..." : ""}",
+                  "${addressName}${isLonger ? "..." : ""}",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.primary),

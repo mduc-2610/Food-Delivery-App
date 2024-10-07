@@ -49,6 +49,14 @@ class RegistrationBasicInfoController extends GetxController {
       contactPhoneController.text = basicInfo?.phoneNumber ?? '';
       city.value = basicInfo?.city ?? '';
       district.value = basicInfo?.district ?? '';
+
+      chosenLocation = BaseLocation(
+        latitude: basicInfo?.latitude,
+        longitude: basicInfo?.longitude,
+        address: addressController.text,
+        name: basicInfo?.addressName,
+      );
+      $print("Address name: ${basicInfo?.addressName}");
     }
     _updateDistrictOptions(city.value);
   }
@@ -79,12 +87,14 @@ class RegistrationBasicInfoController extends GetxController {
   }
 
   Future<void> onCallApi() async {
+    $print("onCallAPI $chosenLocation");
     final basicInfoData = RestaurantBasicInfo(
       name: shopNameController.text,
       phoneNumber: contactPhoneController.text,
       city: city.value,
       district: district.value,
       address: addressController.text,
+      addressName: chosenLocation?.name,
       latitude: chosenLocation?.latitude,
       longitude: chosenLocation?.longitude,
     );
@@ -137,11 +147,18 @@ class RegistrationBasicInfoController extends GetxController {
   }
 
   void handleLocationAdd() async {
-    final result = await Get.to(() => LocationAddView()) as Map<String, dynamic>?;
+    final result = await Get.to(() => LocationAddView(
+      initLocation: chosenLocation,
+    )) as Map<String, dynamic>?;
     if(result != null) {
-      chosenLocation = BaseLocation.fromJson(result);
+      var tmp = BaseLocation.fromJson(result);
+      // chosenLocation?.latitude = tmp.latitude ?? chosenLocation?.latitude;
+      // chosenLocation?.longitude = tmp.longitude ?? chosenLocation?.longitude;
+      chosenLocation?.name = tmp.name;
+      chosenLocation?.address = tmp.address;
       addressController.text = chosenLocation?.address ?? "";
-      $print("DATA: $chosenLocation");
+
+      $print("DATA: $result $chosenLocation");
     }
   }
 
