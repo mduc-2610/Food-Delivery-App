@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
 import 'package:food_delivery_app/common/widgets/cards/container_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
-import 'package:food_delivery_app/features/user/order/controllers/location/order_location_controller.dart';
-import 'package:food_delivery_app/features/user/order/views/location/order_location_add.dart';
-import 'package:food_delivery_app/features/user/order/views/location/widgets/location.dart';
+import 'package:food_delivery_app/features/user/order/controllers/location/location_controller.dart';
+import 'package:food_delivery_app/features/user/order/views/location/location_add.dart';
 import 'package:food_delivery_app/features/user/order/views/location/widgets/order_location_list.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
@@ -12,13 +11,12 @@ import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class OrderLocationSelectView extends StatelessWidget {
+class LocationSelectView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<OrderLocationController>(
-      init: OrderLocationController(),
+    return GetBuilder<LocationSelectController>(
+      init: LocationSelectController(),
       builder: (controller) {
-        final List userLocations = controller.userLocations;
         return Scaffold(
           appBar: CAppBar(
             title: "Select Location",
@@ -30,7 +28,10 @@ class OrderLocationSelectView extends StatelessWidget {
                 SizedBox(height: TSize.spaceBetweenItemsVertical,),
                 if (!controller.isLoading.value)...[
                   Expanded(
-                    child: LocationList(locations: userLocations),
+                    child: Obx(() => LocationList(
+                        locations: controller.userLocations.value
+                      )
+                    ),
                   ),
                 ],
                 // Spacer(),
@@ -40,9 +41,7 @@ class OrderLocationSelectView extends StatelessWidget {
                     bgColor: TColor.iconBgCancel,
                     borderColor: Colors.transparent,
                     child: ListTile(
-                      onTap: () {
-                        Get.to(() => OrderLocationAddView());
-                      },
+                      onTap: controller.handleLocationAdd,
                       contentPadding: EdgeInsets.zero,
                       leading: Icon(
                         TIcon.add,

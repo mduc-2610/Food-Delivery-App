@@ -9,7 +9,7 @@ import 'package:food_delivery_app/features/personal/views/privacy_policy/persona
 import 'package:food_delivery_app/features/personal/views/security/personal_security.dart';
 import 'package:food_delivery_app/features/personal/views/term_of_service/personal_term_of_service.dart';
 import 'package:food_delivery_app/features/restaurant/registration/views/registration_tab.dart';
-import 'package:food_delivery_app/features/user/order/views/location/order_location.dart';
+import 'package:food_delivery_app/features/user/order/views/location/location_select.dart';
 import 'package:food_delivery_app/features/user/payment/views/payment/payment_list.dart';
 import 'package:food_delivery_app/features/personal/controllers/profile/personal_profile_controller.dart';
 import 'package:food_delivery_app/features/personal/views/profile/profile.dart';
@@ -87,7 +87,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
             title: Text('My Locations'),
             trailing: Icon(TIcon.arrowForward),
             onTap: () {
-              Get.to(OrderLocationSelectView());
+              Get.to(LocationSelectView());
             },
           ),
         ],

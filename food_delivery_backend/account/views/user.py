@@ -19,8 +19,17 @@ from account.models import (
 )
 
 from account.serializers import (
-    UserSerializer, SendOTPSerializer, OTPSerializer, UserLocationSerializer,
-    VerifyOTPSerializer, LoginPasswordSerializer, SetPasswordSerializer
+    UserSerializer, 
+    SendOTPSerializer, 
+    OTPSerializer, 
+
+    UserLocationSerializer,
+    CreateUserLocationSerializer,
+    UpdateUserLocationSerializer,
+
+    VerifyOTPSerializer, 
+    LoginPasswordSerializer, 
+    SetPasswordSerializer,
 )
 from food.serializers import DishSerializer, DishLikeSerializer
 from notification.serializers import NotificationSerializer
@@ -95,6 +104,9 @@ class UserViewSet(DefaultGenericMixin, OrderFilterMixin, ManyRelatedViewSet):
             'action': (['GET', 'POST'], 'restaurant-carts'),
             'create_serializer_class': CreateRestaurantCartSerializer
         },
+        "locations": {
+            "pagination": False
+        }
     }
     # many_related = {
     #     'reviewed_dishes': {
@@ -264,6 +276,10 @@ class UserViewSet(DefaultGenericMixin, OrderFilterMixin, ManyRelatedViewSet):
         serializer = self.get_serializer(request.user)
         return response.Response(serializer.data, status=status.HTTP_200_OK)
 
-class UserLocationViewSet(viewsets.ModelViewSet):
+class UserLocationViewSet(DefaultGenericMixin, viewsets.ModelViewSet):
     queryset = UserLocation.objects.all()
     serializer_class = UserLocationSerializer
+    mapping_serializer_class = {
+        "create": CreateUserLocationSerializer,
+        "update": UpdateUserLocationSerializer,
+    }

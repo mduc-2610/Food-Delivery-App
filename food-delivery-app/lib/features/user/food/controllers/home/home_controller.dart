@@ -4,7 +4,7 @@ import 'package:food_delivery_app/features/authentication/models/account/user.da
 import 'package:food_delivery_app/features/user/food/views/detail/food_detail.dart';
 import 'package:food_delivery_app/features/user/food/views/more/food_more.dart';
 import 'package:food_delivery_app/features/user/food/views/restaurant/restaurant_category.dart';
-import 'package:food_delivery_app/features/user/order/views/location/order_location.dart';
+import 'package:food_delivery_app/features/user/order/views/location/location_select.dart';
 import 'package:food_delivery_app/utils/constants/times.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
@@ -46,7 +46,7 @@ class HomeController extends GetxController {
 
 
   void getToOrderLocation() async {
-    final result = await Get.to(() => OrderLocationSelectView()) as bool?;
+    final result = await Get.to(() => LocationSelectView()) as bool?;
     $print("Updated ${result}");
     if(result == true) {
       await initialize();

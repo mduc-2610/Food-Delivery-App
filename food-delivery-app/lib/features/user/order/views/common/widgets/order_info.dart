@@ -59,7 +59,7 @@ class OrderInfo extends StatelessWidget {
                       ),
                       SizedBox(height: TSize.spaceBetweenItemsSm),
                       Text(
-                        order?.deliveryAddress?.address ?? "Choose your address",
+                        order?.deliveryAddress?.name ?? "Choose your address",
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     ],

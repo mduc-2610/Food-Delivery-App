@@ -22,7 +22,34 @@ class UserLocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserLocation
 
-        fields = ['id', 'address', 'latitude', 'longitude', 'name', 'user', 'is_selected']
+        fields = [
+            'id', 
+            'address', 
+            'latitude', 
+            'longitude', 
+            'name', 
+            'user', 
+            'is_selected'
+        ]
+
+class CreateUserLocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserLocation
+        fields = "__all__"
+        read_only_fields = [
+            "id",
+            "is_selected"
+        ]
+
+class UpdateUserLocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserLocation
+        fields = "__all__"
+        read_only_fields = [
+            "id", 
+            "is_selected",
+            "user"
+        ]
 
 class UserSerializer(CustomRelatedModelSerializer):
     def __init__(self, *args, **kwargs):

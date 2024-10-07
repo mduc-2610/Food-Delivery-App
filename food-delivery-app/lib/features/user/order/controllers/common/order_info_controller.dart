@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 import 'package:food_delivery_app/features/user/order/controllers/basket/order_basket_controller.dart';
 import 'package:food_delivery_app/features/user/order/controllers/history/order_history_detail_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/order.dart';
-import 'package:food_delivery_app/features/user/order/views/location/order_location.dart';
+import 'package:food_delivery_app/features/user/order/views/location/location_select.dart';
 
 enum OrderViewType { basket, history, cancel, other }
 
@@ -39,7 +39,7 @@ class OrderInfoController extends GetxController {
 
   Future<void> onAddressTapped() async {
     if (viewType != OrderViewType.history) {
-      await Get.to(() => OrderLocationSelectView());
+      await Get.to(() => LocationSelectView());
       await initializeUser();
     }
   }

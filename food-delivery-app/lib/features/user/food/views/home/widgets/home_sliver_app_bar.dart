@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
@@ -19,7 +21,9 @@ class HomeSliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController _controller = HomeController.instance;
-
+    var addressName = _controller.user?.selectedLocation?.name;
+    bool isLonger = (addressName?.length ?? 0) > 30;
+    addressName = addressName?.substring(0, max(addressName.length, 0)) ?? "";
     return SliverAppBar(
       pinned: true,
       toolbarHeight: TDeviceUtil.getAppBarHeight(),
@@ -37,7 +41,7 @@ class HomeSliverAppBar extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  "${_controller.user?.selectedLocation?.address ?? "Select your location  "}",
+                  "${addressName ?? "Select your location  "}${isLonger ? "..." : ""}",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.primary),

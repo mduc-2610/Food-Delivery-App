@@ -79,7 +79,7 @@ def load_restaurant(
                 "phone_number": generate_phone_number(),
                 "city": city,
                 "district": district,
-                "street_address": fake.street_address(),
+                "address": fake.street_address(),
                 "latitude": generate_latitude(),
                 "longitude": generate_longitude(),
             }

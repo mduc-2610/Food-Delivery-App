@@ -7,7 +7,7 @@ import 'package:food_delivery_app/features/user/order/controllers/basket/order_b
 import 'package:food_delivery_app/features/user/order/controllers/common/order_info_controller.dart';
 import 'package:food_delivery_app/features/user/order/controllers/history/order_history_detail_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/delivery.dart';
-import 'package:food_delivery_app/features/user/order/views/location/order_location.dart';
+import 'package:food_delivery_app/features/user/order/views/location/location_select.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
@@ -108,6 +108,11 @@ class OrderBottomNavigationBarController extends GetxController {
             declineButtonColor: TColor.secondary
           );
         }
+      }
+
+      if(order?.deliveryAddress == null) {
+        Get.snackbar("Error", "Choose your address before ordering", backgroundColor: TColor.errorSnackBar);
+        return;
       }
       showConfirmDialog(context, onAccept: onAccept,
         title: "Are you sure?",

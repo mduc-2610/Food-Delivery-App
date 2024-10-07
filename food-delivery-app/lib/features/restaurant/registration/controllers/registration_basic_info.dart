@@ -1,10 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
+import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/basic_info.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
 import 'package:food_delivery_app/features/restaurant/registration/controllers/category_controller.dart';
 import 'package:food_delivery_app/features/restaurant/registration/controllers/registration_tab_controller.dart';
+import 'package:food_delivery_app/features/user/order/models/custom_location.dart';
+import 'package:food_delivery_app/features/user/order/views/location/location_add.dart';
 import 'package:food_delivery_app/utils/hardcode/hardcode.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
@@ -21,10 +24,11 @@ class RegistrationBasicInfoController extends GetxController {
   final shopNameController = TextEditingController();
   final streetController = TextEditingController();
   final contactPhoneController = TextEditingController();
-  final streetAddressController = TextEditingController();
+  final addressController = TextEditingController();
   final shopType = ''.obs;
   final city = ''.obs;
   final district = ''.obs;
+  BaseLocation? chosenLocation;
 
   final RxList<String> hometownOptions = <String>[].obs;
   final RxList<String> cityOptions = <String>[].obs;
@@ -41,7 +45,7 @@ class RegistrationBasicInfoController extends GetxController {
       shopNameController.text = basicInfo?.name ?? '';
 
 
-      streetAddressController.text = basicInfo?.streetAddress ?? '';
+      addressController.text = basicInfo?.address ?? '';
       contactPhoneController.text = basicInfo?.phoneNumber ?? '';
       city.value = basicInfo?.city ?? '';
       district.value = basicInfo?.district ?? '';
@@ -80,7 +84,9 @@ class RegistrationBasicInfoController extends GetxController {
       phoneNumber: contactPhoneController.text,
       city: city.value,
       district: district.value,
-      streetAddress: streetAddressController.text,
+      address: addressController.text,
+      latitude: chosenLocation?.latitude,
+      longitude: chosenLocation?.longitude,
     );
 
     if (basicInfo != null) {
@@ -130,6 +136,15 @@ class RegistrationBasicInfoController extends GetxController {
     }
   }
 
+  void handleLocationAdd() async {
+    final result = await Get.to(() => LocationAddView()) as Map<String, dynamic>?;
+    if(result != null) {
+      chosenLocation = BaseLocation.fromJson(result);
+      addressController.text = chosenLocation?.address ?? "";
+      $print("DATA: $chosenLocation");
+    }
+  }
+
   void onContinue() async {
     await onCallApi();
     registrationTabController.setTab();
@@ -144,7 +159,7 @@ class RegistrationBasicInfoController extends GetxController {
     shopNameController.dispose();
     streetController.dispose();
     contactPhoneController.dispose();
-    streetAddressController.dispose();
+    addressController.dispose();
     super.onClose();
   }
 }

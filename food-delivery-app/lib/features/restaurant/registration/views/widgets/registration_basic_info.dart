@@ -82,19 +82,22 @@ class RegistrationBasicInfo extends StatelessWidget {
                 )),
                 SizedBox(height: TSize.spaceBetweenItemsVertical),
             
+                MainButton(
+                  onPressed: controller.handleLocationAdd,
+                  text: 'Choose location',
+                ),
+                SizedBox(height: TSize.spaceBetweenItemsVertical),
+
                 RegistrationTextField(
                   label: 'House Number and Street',
-                  controller: controller.streetAddressController,
+                  controller: controller.addressController,
+                  hintText: "Choose your location above",
                   validator: (value) => value!.isEmpty ? 'Please enter house and street' : null,
+                  enabled: false,
+                  maxLines: 3,
                 ),
                 SizedBox(height: TSize.spaceBetweenItemsVertical),
-            
-                MainButton(
-                  onPressed: () {},
-                  text: 'Check on Map',
-                ),
-                SizedBox(height: TSize.spaceBetweenItemsVertical),
-            
+
                 CategorySelection()
             
               ],

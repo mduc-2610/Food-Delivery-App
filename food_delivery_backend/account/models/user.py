@@ -121,10 +121,14 @@ class UserLocation(models.Model):
     id = models.UUIDField(db_index=True, primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey("account.User", on_delete=models.CASCADE, related_name="locations")
     name = models.TextField(max_length=200, blank=True, null=True, default="Home")
-    address = models.CharField(max_length=300, blank=True, null=True)
+    address = models.CharField(max_length=400, blank=True, null=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     is_selected = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
+    class Meta:
+        ordering = ['-created_at']
+        
     def __str__(self):
         return f"{self.address} ({self.latitude}, {self.longitude})"

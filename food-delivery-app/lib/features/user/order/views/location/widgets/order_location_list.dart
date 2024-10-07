@@ -3,9 +3,8 @@ import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/cards/container_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/radio_tick.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
-import 'package:food_delivery_app/features/user/order/controllers/location/order_location_controller.dart';
-import 'package:food_delivery_app/features/user/order/views/location/widgets/location.dart';
-import 'package:food_delivery_app/features/user/order/views/location/order_location_add.dart';
+import 'package:food_delivery_app/features/user/order/controllers/location/location_controller.dart';
+import 'package:food_delivery_app/features/user/order/views/location/location_add.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
@@ -21,7 +20,7 @@ class LocationList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<OrderLocationController>(
+    return GetBuilder<LocationSelectController>(
       builder: (controller) {
         return ListView.builder(
           itemCount: locations.length,

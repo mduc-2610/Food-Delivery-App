@@ -2,6 +2,7 @@ import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/profile.dart';
 import 'package:food_delivery_app/features/authentication/models/account/setting.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
+import 'package:food_delivery_app/features/user/order/models/custom_location.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -185,50 +186,42 @@ class OTP {
 
 @reflector
 @jsonSerializable
-class UserLocation {
-  final String? id;
-  final String? address;
-  final double latitude;
-  final double longitude;
-  final String? name;
-  final bool isSelected;
+class UserLocation extends BaseLocation {
+  final dynamic user;
 
   UserLocation({
-    this.id,
-    this.address,
-    this.latitude = 0,
-    this.longitude = 0,
-    this.name,
-    this.isSelected = false,
-  });
+    String? id,
+    this.user,
+    String? address,
+    double latitude = 0,
+    double longitude = 0,
+    String? name,
+    bool isSelected = false,
+  }) : super(
+    id: id,
+    address: address,
+    latitude: latitude,
+    longitude: longitude,
+    name: name,
+    isSelected: isSelected,
+  );
 
   UserLocation.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        address = json['address'],
-        latitude = THelperFunction.formatDouble(json['latitude']),
-        longitude = THelperFunction.formatDouble(json['longitude']),
-        name = json['name'],
-        isSelected = json['is_selected'] ?? false;
+      : user = json['user'] == null || json['user'] is String || json['user'] is List
+      ? json['user']
+      : BasicUser.fromJson(json['user']),
+        super.fromJson(json);
 
+  @override
   Map<String, dynamic> toJson({bool patch = false}) {
-    final map = {
-      'id': id,
-      'address': address,
-      'latitude': latitude,
-      'longitude': longitude,
-      'name': name,
-      'is_selected': isSelected,
-    };
+    final map = super.toJson(patch: patch);
+    map['user'] = user is BasicUser ? user?.id : user;
 
     if (patch) {
       map.removeWhere((key, value) => value == null);
     }
 
     return map;
-  }
-
-  LatLng get currentCoordinate {
-    return LatLng(latitude, longitude);
   }
 
   @override

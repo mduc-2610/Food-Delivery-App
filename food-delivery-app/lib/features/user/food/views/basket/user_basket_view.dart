@@ -108,7 +108,7 @@ class RestaurantCartCard extends StatelessWidget {
                   ),
 
                   Text(
-                    "${restaurant?.basicInfo?.streetAddress}"
+                    "${restaurant?.basicInfo?.address}"
                   ),
 
                   Row(

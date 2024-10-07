@@ -10,8 +10,9 @@ class RegistrationTextField extends StatefulWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
+  final bool enabled;
 
-  RegistrationTextField({
+  const RegistrationTextField({
     Key? key,
     required this.label,
     required this.controller,
@@ -20,6 +21,7 @@ class RegistrationTextField extends StatefulWidget {
     this.maxLength,
     this.validator,
     this.keyboardType = TextInputType.text,
+    this.enabled = true,
   }) : super(key: key);
 
   @override
@@ -73,6 +75,7 @@ class _RegistrationTextFieldState extends State<RegistrationTextField> {
             maxLength: widget.maxLength,
             validator: validator,
             keyboardType: widget.keyboardType,
+            enabled: widget.enabled,
           ),
         ],
       ),

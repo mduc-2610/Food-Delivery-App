@@ -30,7 +30,7 @@ class APIService<T> {
     this.fullResponse = false,
     this.allNoBearer = false,
     this.dio,
-    this.utf_8 = false,
+    this.utf_8 = true,
   });
 
   dynamic decodeMessage(response) {

@@ -65,6 +65,7 @@ class TColor {
   static const Color cancel = Color(0xFF7f7e7c);
   static const Color reject = Color(0xFFD32F2F);
   static const Color complete = Colors.green;
+  static Color errorSnackBar = Color(0xFFFFCDD2);
 
   // Icon Bg Color
   static const Color iconBgSuccess = Color(0xFFe7f9f5);
