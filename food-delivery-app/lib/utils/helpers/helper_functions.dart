@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:food_delivery_app/common/widgets/bars/snack_bar.dart';
 import 'package:food_delivery_app/data/services/reflect.dart';
@@ -356,6 +357,87 @@ class THelperFunction {
     }
     return 0;
   }
+
+  static Widget getValidImage(
+      String? imageUrl, {
+        String? defaultAsset,
+        String? defaultNetworkAsset,
+        double? width,
+        double? height,
+      }) {
+    return FutureBuilder<bool>(
+      future: _checkImageValidity(imageUrl),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasData && snapshot.data == true) {
+          return Image.network(
+            imageUrl!,
+            width: width,
+            height: height,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return getFallbackImage(
+                defaultAsset,
+                defaultNetworkAsset,
+                width: width,
+                height: height,
+              );
+            },
+          );
+        } else {
+          return getFallbackImage(
+            defaultAsset,
+            defaultNetworkAsset,
+            width: width,
+            height: height,
+          );
+        }
+      },
+    );
+  }
+
+  static Widget getFallbackImage(
+      String? defaultAsset,
+      String? defaultNetworkAsset, {
+        double? width,
+        double? height,
+      }) {
+    if (defaultNetworkAsset != null) {
+      return Image.network(
+        defaultNetworkAsset,
+        width: width,
+        height: height,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Image.asset(
+            defaultAsset ?? TImage.hcBurger1,
+            width: width,
+            height: height,
+            fit: BoxFit.cover,
+          );
+        },
+      );
+    } else {
+      return Image.asset(
+        defaultAsset ?? TImage.hcBurger1,
+        width: width,
+        height: height,
+        fit: BoxFit.cover,
+      );
+    }
+  }
+
+  static Future<bool> _checkImageValidity(String? imageUrl) async {
+    if (imageUrl == null) return false;
+    try {
+      final response = await NetworkImage(imageUrl).obtainKey(ImageConfiguration());
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
 }
 
 void $print(dynamic message) {

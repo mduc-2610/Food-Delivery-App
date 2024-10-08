@@ -9,6 +9,7 @@ import 'package:food_delivery_app/features/user/order/models/cart.dart';
 import 'package:food_delivery_app/features/user/order/models/order.dart';
 import 'package:food_delivery_app/features/user/order/models/promotion.dart';
 import 'package:food_delivery_app/features/user/order/views/promotion/order_promotion.dart';
+import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/times.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
@@ -59,6 +60,7 @@ class OrderBasketController extends GetxController {
     update();
 
   }
+
   Future<void> onPromotionPressed() async {
     final result = await Get.to(() => OrderPromotionView(
       order: foodListController.order.value,)
@@ -71,5 +73,22 @@ class OrderBasketController extends GetxController {
     // await controller.initialize();
     // $print("_ORDER: ${result?["order"]}");
     // $print("_ORDER: ${result?["chosenPromotionIds"]}");
+  }
+
+  Future<void> onDeletePromotion(RestaurantPromotion? promotion) async {
+    try {
+      final [statusCode, headers, data] = await APIService<Order>().update(order?.id, {
+        'delete_restaurant_promotion': promotion?.id
+      });
+      foodListController.order.value = data;
+      $print([statusCode, headers, data]);
+    }
+    catch(e) {
+      Get.snackbar(
+        "Error delete",
+        "An error occurred when delete promotion!",
+        backgroundColor: TColor.errorSnackBar
+      );
+    }
   }
 }

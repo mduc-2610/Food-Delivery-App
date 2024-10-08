@@ -96,27 +96,27 @@ class OrderBottomNavigationBar extends StatelessWidget {
                           SizedBox(height: TSize.spaceBetweenItemsVertical),
                         ],
 
-                        Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                          decoration: BoxDecoration(
-                            color: controller.isCancellationPending() ? Color(0xfffbc972) : Colors.transparent,
-                            borderRadius: BorderRadius.circular(30),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 10,
-                                offset: Offset(0, 5),
-                              ),
-                            ],
-                          ),
-                          child: controller.isCancellationPending()
-                              ? TextWithDotAnimation(text: "Waiting for response")
-                              : Text(
-                            controller.getCancellationStatusText(),
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: TColor.success),
-                          ),
-                        ),
+                        // Container(
+                        //   width: double.infinity,
+                        //   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        //   decoration: BoxDecoration(
+                        //     color: controller.isCancellationPending() ? Color(0xfffbc972) : Colors.transparent,
+                        //     borderRadius: BorderRadius.circular(30),
+                        //     boxShadow: [
+                        //       BoxShadow(
+                        //         color: Colors.black.withOpacity(0.1),
+                        //         blurRadius: 10,
+                        //         offset: Offset(0, 5),
+                        //       ),
+                        //     ],
+                        //   ),
+                        //   child: controller.isCancellationPending()
+                        //       ? TextWithDotAnimation(text: "Waiting for response")
+                        //       : Text(
+                        //     controller.getCancellationStatusText(),
+                        //     style: Theme.of(context).textTheme.titleMedium?.copyWith(color: TColor.success),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -150,12 +150,12 @@ class OrderBottomNavigationBar extends StatelessWidget {
           backgroundColor: TColor.primary,
         ),
 
-        CircleIconCard(
-          onTap: controller.deleteCancelRequest,
-          icon: TIcon.delete,
-          iconColor: TColor.light,
-          backgroundColor: TColor.error,
-        ),
+        // CircleIconCard(
+        //   onTap: controller.deleteCancelRequest,
+        //   icon: TIcon.delete,
+        //   iconColor: TColor.light,
+        //   backgroundColor: TColor.error,
+        // ),
       ],
     );
   }

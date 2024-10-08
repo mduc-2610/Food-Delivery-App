@@ -15,7 +15,7 @@ import 'package:food_delivery_app/utils/device/device_utility.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
-class RestaurantFoodCard extends StatefulWidget {
+class RestaurantFoodCard extends StatelessWidget {
   final Dish? dish;
   final Function()? onEdit;
   final Function()? onToggleDisable;
@@ -28,17 +28,12 @@ class RestaurantFoodCard extends StatefulWidget {
   });
 
   @override
-  State<RestaurantFoodCard> createState() => _RestaurantFoodCardState();
-}
-
-class _RestaurantFoodCardState extends State<RestaurantFoodCard> {
-  @override
   Widget build(BuildContext context) {
-    $print(widget?.dish?.isDisabled);
+    // $print(dish?.isDisabled);
     return InkWell(
       onTap: () async {
         Get.to(() => FoodDetailView(), arguments: {
-          "id": widget.dish?.id
+          "id": dish?.id
         });
       },
       child: Container(
@@ -48,7 +43,7 @@ class _RestaurantFoodCardState extends State<RestaurantFoodCard> {
             padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(TSize.borderRadiusLg),
-              color: widget.dish?.isDisabled == true? Colors.grey[300] : null,
+              color: dish?.isDisabled == true? Colors.grey[300] : null,
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -57,14 +52,14 @@ class _RestaurantFoodCardState extends State<RestaurantFoodCard> {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
-                      child: Image.asset(
-                         TImage.hcBurger1,
-                        width: TSize.imageThumbSize + 30,
-                        height: TSize.imageThumbSize + 30,
-                        fit: BoxFit.cover,
-                      ),
+                      child:
+                        THelperFunction.getValidImage(
+                          dish?.image,
+                          width: TSize.foodImage,
+                          height: TSize.foodImage,
+                        ),
                     ),
-                    if (widget.dish?.isDisabled == true)
+                    if (dish?.isDisabled == true)
                       Positioned.fill(
                         child: Container(
                           color: Colors.black.withOpacity(0.5),
@@ -86,7 +81,7 @@ class _RestaurantFoodCardState extends State<RestaurantFoodCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${widget.dish?.name ?? ''}",
+                        "${dish?.name ?? ''}",
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       Row(
@@ -95,7 +90,7 @@ class _RestaurantFoodCardState extends State<RestaurantFoodCard> {
                           SvgPicture.asset(TIcon.fillStar),
                           SizedBox(width: TSize.spaceBetweenItemsSm),
                           Text(
-                            "${widget.dish?.rating}",
+                            "${dish?.rating}",
                             style: Theme.of(context).textTheme.titleLarge?.copyWith(color: TColor.star),
                           ),
                           SizedBox(width: TSize.spaceBetweenItemsHorizontal),
@@ -108,7 +103,7 @@ class _RestaurantFoodCardState extends State<RestaurantFoodCard> {
                           ),
                           SizedBox(width: TSize.spaceBetweenItemsSm),
                           Text(
-                            "${widget.dish?.totalLikes}",
+                            "${dish?.totalLikes}",
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
@@ -119,7 +114,7 @@ class _RestaurantFoodCardState extends State<RestaurantFoodCard> {
                         children: [
                           Icon(Icons.shopping_cart, color: TColor.primary,),
                           Text(
-                            "Orders: ${widget.dish?.totalOrders}",
+                            "Orders: ${dish?.totalOrders}",
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                 color: TColor.primary,
                                 fontWeight: FontWeight.bold
@@ -136,7 +131,7 @@ class _RestaurantFoodCardState extends State<RestaurantFoodCard> {
                           Row(
                             children: [
                               Text(
-                                "£${widget.dish?.originalPrice}",
+                                "£${dish?.originalPrice}",
                                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                     color: TColor.textDesc,
                                     decoration: TextDecoration.lineThrough,
@@ -146,7 +141,7 @@ class _RestaurantFoodCardState extends State<RestaurantFoodCard> {
                               ),
                               SizedBox(width: TSize.spaceBetweenItemsMd),
                               Text(
-                                "£${widget.dish?.discountPrice}",
+                                "£${dish?.discountPrice}",
                                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.primary),
                               ),
                             ],
@@ -168,22 +163,22 @@ class _RestaurantFoodCardState extends State<RestaurantFoodCard> {
                       ),
                       onSelected: (String result) {
                         if (result == 'edit') {
-                          widget.onEdit?.call();
+                          onEdit?.call();
                         } else if (result == 'toggle') {
-                          widget.onToggleDisable?.call();
+                          onToggleDisable?.call();
                         }
                       },
                       itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                         PopupMenuItem<String>(
-                          onTap: widget.onToggleDisable,
+                          onTap: onToggleDisable,
                           value: 'toggle',
                           child: Text(
-                            widget.dish?.isDisabled == true ? 'Enable' : 'Disable',
+                            dish?.isDisabled == true ? 'Enable' : 'Disable',
                             style: Get.theme.textTheme.bodyMedium,
                           ),
                         ),
                         PopupMenuItem<String>(
-                          onTap: widget.onEdit,
+                          onTap: onEdit,
                           value: 'edit',
                           child: Text(
                             'Edit Information',
@@ -194,8 +189,8 @@ class _RestaurantFoodCardState extends State<RestaurantFoodCard> {
                     ),
                     // SizedBox(height: TSize.spaceBetweenItemsMd),
                     StatusChip(
-                      status: widget.dish?.isDisabled == false ? "ACTIVE" : "CANCELLED",
-                      text: widget.dish?.isDisabled == false ? "ACTIVE" : "DISABLED",
+                      status: dish?.isDisabled == false ? "ACTIVE" : "CANCELLED",
+                      text: dish?.isDisabled == false ? "ACTIVE" : "DISABLED",
                     ),
                   ],
                 )

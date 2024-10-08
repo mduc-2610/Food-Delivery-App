@@ -6,5 +6,5 @@ class TEmoji {
   static String faceSavoringFood = "😋";
   static String pleadingFace = "🥺";
   static String faceHoldingBackTears = "🥹";
-
+  static String faceSad = "🙁";
 }

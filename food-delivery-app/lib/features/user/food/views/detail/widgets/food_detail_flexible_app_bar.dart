@@ -7,6 +7,7 @@ import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 
 class FoodDetailFlexibleAppBar extends StatelessWidget {
@@ -17,7 +18,12 @@ class FoodDetailFlexibleAppBar extends StatelessWidget {
     return Stack(
       children: [
         AppBarScrollBehavior(
-          child: getImage(TImage.hcBurger1),
+          child: Container(
+            width: TDeviceUtil.getScreenWidth(),
+            child: THelperFunction.getValidImage(
+              controller.dish?.image,
+            ),
+          ),
         ),
         Positioned(
           bottom: 12,
@@ -76,16 +82,6 @@ class FoodDetailFlexibleAppBar extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Widget getImage(String image) {
-    return Container(
-      width: TDeviceUtil.getScreenWidth(),
-      child: Image.asset(
-        image,
-        fit: BoxFit.cover,
-      ),
     );
   }
 

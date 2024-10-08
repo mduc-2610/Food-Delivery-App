@@ -6,14 +6,17 @@ import 'package:food_delivery_app/common/widgets/bars/separate_bar.dart';
 import 'package:food_delivery_app/common/widgets/bars/separate_section_bar.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/features/user/food/controllers/restaurant/restaurant_detail_controller.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 class RestaurantDetailFlexibleAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final controller = RestaurantDetailController.instance;
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -22,13 +25,12 @@ class RestaurantDetailFlexibleAppBar extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Flexible(
-                  child: Container(
-                    width: TDeviceUtil.getScreenWidth(),
-                    child: Image.asset(
-                      TImage.hcBurger1,
-                      fit: BoxFit.cover,
-                    ),
-                  )
+                child: Container(
+                  width: TDeviceUtil.getScreenWidth(),
+                  child: THelperFunction.getValidImage(
+                      controller.restaurant?.detailInfo?.coverImage
+                  ),
+                ),
               ),
             ],
           ),
@@ -47,7 +49,6 @@ class RestaurantDetailFlexibleAppBar extends StatelessWidget {
                         icon: TIcon.search,
                         backgroundColor: Colors.black.withOpacity(0.2),
                       ),
-
                     ],
                   ),
                 ),
@@ -58,4 +59,5 @@ class RestaurantDetailFlexibleAppBar extends StatelessWidget {
       ],
     );
   }
+
 }

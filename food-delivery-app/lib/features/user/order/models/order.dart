@@ -128,7 +128,7 @@ class OrderCancellation {
   final String? reason;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final bool isAccepted;
+  final bool? isAccepted;
 
   OrderCancellation({
     this.order,
@@ -137,7 +137,7 @@ class OrderCancellation {
     this.reason,
     this.createdAt,
     this.updatedAt,
-    this.isAccepted = false,
+    this.isAccepted,
   });
 
   OrderCancellation.fromJson(Map<String, dynamic> json)
@@ -147,16 +147,23 @@ class OrderCancellation {
       reason = json['reason'],
       createdAt = json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
       updatedAt = json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
-      isAccepted = json['is_accepted'] ?? false
+      isAccepted = json['is_accepted']
   ;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson({ bool patch = false}) {
+    Map<String, dynamic> data = {
       'order': order is String ? order : order?.id,
       'user': user is String ? user : user?.id,
       'restaurant': restaurant is String ? restaurant : restaurant?.id,
       'reason': reason,
+      'is_accepted': isAccepted,
     };
+
+    if(patch) {
+      data.removeWhere((key, value)  => value == null);
+    }
+
+    return data;
   }
 
   @override

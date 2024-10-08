@@ -41,7 +41,7 @@ class DynamicFilterMixin:
                                     formatted_value = re.sub(r'\W+', '_', field_param.strip()).upper()
                                     valid_choices = dict(field.choices)
                                     if formatted_value in valid_choices:
-                                        filter_kwargs &= Q(**{full_field_name: valid_choices[formatted_value]})
+                                        filter_kwargs |= Q(**{full_field_name: valid_choices[formatted_value]})
                                     else:
                                         raise ValidationError({
                                             full_field_name: f"Must be one of: {', '.join([choice[0] for choice in field.choices])}"

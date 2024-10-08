@@ -56,7 +56,7 @@ def run(mode=None, *args):
     result = DeliveryRequest.objects.all().order_by('-created_at').first()
     if result:
         latest_order = result.delivery.order
-        print('Total price', result.delivery.order.total_price(), pretty=True)
+        print('Total price', result.delivery.order.total_price, pretty=True)
         result = result.deliverer
         print(f"Deliverer ID: {result.id}")
         print(f"User: {result.user.id} - {result.user.phone_number} - {result.user.profile.name}")
@@ -69,17 +69,6 @@ def run(mode=None, *args):
     a, b = x
     print(a, b, pretty=True)
 
-    import uuid
-    from utils.function import load_intermediate_model
-    load_intermediate_model(
-        model_class=RestaurantCategory,
-        primary_field='restaurant',
-        related_field='category',
-        primary_objects=list(Restaurant.objects.all()),
-        related_objects=list(DishCategory.objects.all()),
-        max_items=5,
-        action='delete'
-    )
     # print([1][0:])
     # users = Profile.objects.all()
     # for user in users:

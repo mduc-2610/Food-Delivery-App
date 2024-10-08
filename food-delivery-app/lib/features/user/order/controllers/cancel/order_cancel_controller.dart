@@ -78,8 +78,9 @@ class OrderCancelController extends GetxController {
       order: order?.id,
       restaurant: restaurant is String ? restaurant : restaurant?.id,
       reason: reason,
+      isAccepted: true,
     );
-    $print(orderCancellationData);
+    $print("ORDER: $orderCancellationData");
 
     if (order?.cancellation == null) {
       final [statusCode, headers, data] = await APIService<OrderCancellation>().create(

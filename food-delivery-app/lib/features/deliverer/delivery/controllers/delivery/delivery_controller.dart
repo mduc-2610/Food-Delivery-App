@@ -7,6 +7,8 @@ import 'package:food_delivery_app/features/deliverer/delivery/views/delivery/wid
 import 'package:food_delivery_app/features/deliverer/delivery/views/delivery/widgets/delivery_tracking_order.dart';
 import 'package:food_delivery_app/features/deliverer/home/controllers/home/home_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/delivery.dart';
+import 'package:food_delivery_app/features/user/order/models/order.dart';
+import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:food_delivery_app/utils/helpers/map_functions.dart';
@@ -52,7 +54,7 @@ class DeliveryController extends GetxController {
     delivererHomeController.isOccupied.value = true;
   }
 
-  void handleAccept(DeliveryRequest? deliveryRequest) {
+  void handleAccept(DeliveryRequest? deliveryRequest) async {
     final Delivery? delivery = deliveryRequest?.delivery;
     curDeliveryRequest = deliveryRequest;
     delivererHomeController.currentDeliveryRequest = curDeliveryRequest;
@@ -63,6 +65,34 @@ class DeliveryController extends GetxController {
         title: "Are you sure ?",
         description: "Please check the route carefully",
         onAccept: () async {
+          String? orderId = (delivery?.order != null)
+              ? delivery?.order is String ? delivery?.order : delivery?.order?.id
+              : null;
+          if(orderId == null) {
+            Get.snackbar(
+              "Error check",
+              "Error occurred when checking order status",
+              backgroundColor: TColor.errorSnackBar,
+            );
+            return;
+          }
+          try {
+            final Order? order = await APIService<Order>().retrieve(orderId ?? "");
+            if(order?.status == "COMPLETED" || order?.status == "CANCELLED") {
+              delivererHomeController.deliveryRequests.removeWhere((request) => request.delivery == delivery);
+              Get.snackbar(
+                "Order cancelled",
+                "This order has been ${order?.status?.toLowerCase()}. ""Please choose another",
+                backgroundColor: TColor.infoSnackBar,
+              );
+              return;
+            }
+          }
+          catch(e) {
+            Get.snackbar("Error", "An error occurred");
+            return;
+          }
+
           delivererHomeController.deliveryRequests.removeWhere((request) => request.delivery == delivery);
           if(deliveryRequest?.accept != null) {
             final [statusCode, headers, data] = await APIService<DeliveryRequest>(fullUrl: deliveryRequest?.accept ?? "")

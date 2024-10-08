@@ -88,30 +88,31 @@ class OrderTracking extends StatelessWidget {
               ],
             ),
             SizedBox(height: TSize.spaceBetweenItemsVertical,),
-
-            Obx(() => Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(TSize.borderRadiusCircle)
-              ),
-              child: MainButton(
-                onPressed: (forTrackingStage.trackingStage.value < 3)
-                    ? onCancel
-                    : viewType == ViewType.user
-                    ? null
-                    : () => controller.handleCompleteOrder(),
-                text: (forTrackingStage.trackingStage.value < 3)
-                    ? 'Cancel Order'
-                    : viewType == ViewType.user
-                    ? 'Completed'
-                    : 'Complete Order',
-                textColor: (forTrackingStage.trackingStage.value < 3)
-                    ? TColor.reject
-                    : TColor.complete,
-                backgroundColor: Colors.transparent,
-                borderColor: Colors.transparent,
-                borderRadius: TSize.borderRadiusCircle,
-              ),
-            )),
+            if(viewType == ViewType.deliverer)...[
+              Obx(() => Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(TSize.borderRadiusCircle)
+                ),
+                child: MainButton(
+                  onPressed: (forTrackingStage.trackingStage.value < 3)
+                      ? onCancel
+                      : viewType == ViewType.user
+                      ? null
+                      : () => controller.handleCompleteOrder(),
+                  text: (forTrackingStage.trackingStage.value < 3)
+                      ? 'Cancel Order'
+                      : viewType == ViewType.user
+                      ? 'Completed'
+                      : 'Complete Order',
+                  textColor: (forTrackingStage.trackingStage.value < 3)
+                      ? TColor.reject
+                      : TColor.complete,
+                  backgroundColor: Colors.transparent,
+                  borderColor: Colors.transparent,
+                  borderRadius: TSize.borderRadiusCircle,
+                ),
+              )),
+            ],
             SizedBox(height: TSize.spaceBetweenSections,),
           ],
         ),

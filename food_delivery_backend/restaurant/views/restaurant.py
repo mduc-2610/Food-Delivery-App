@@ -67,6 +67,7 @@ class RestaurantViewSet(DefaultGenericMixin, DynamicFilterMixin, ReviewFilterMix
         'categories': DishCategorySerializer,
         'restaurant_categories': RestaurantCategorySerializer,
         'deliveries': DeliverySerializer,
+        "dynamic_filter_all": True
     }
     many_related = {
         'dishes': {

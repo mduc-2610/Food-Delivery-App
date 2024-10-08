@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
+import 'package:food_delivery_app/common/widgets/bars/search_bar.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/misc/not_found.dart';
 import 'package:food_delivery_app/features/restaurant/food/controllers/manage/food_manage_controller.dart';
 import 'package:food_delivery_app/features/restaurant/food/views/manage/skeleton/food_manage_skeleton.dart';
 import 'package:food_delivery_app/features/restaurant/food/views/manage/widgets/promotion_manage_card.dart';
@@ -35,18 +37,19 @@ class FoodManageView extends StatelessWidget {
                     Tab(text: 'All'),
                     ...controller.categories.map((category) => Tab(text: category.name)),
                   ],
+                  onTap: controller.setCurrentTabIndex,
                 ),
                 iconList: [
                   {
                     "icon": Icons.add,
                     "onPressed": () async {
                       final checkOnSave = await showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return MainWrapper(
-                            child: CategorySelection(onSave: () {},)
-                          );
-                        }
+                          context: context,
+                          builder: (context) {
+                            return MainWrapper(
+                                child: CategorySelection(onSave: () {},)
+                            );
+                          }
                       );
                       if(checkOnSave != null && checkOnSave == true) {
                         await controller.initialize();
@@ -55,12 +58,28 @@ class FoodManageView extends StatelessWidget {
                   }
                 ],
               ),
-              body: TabBarView(
+              body: Column(
                 children: [
-                  Obx(() => _buildPromotionList(controller.promotions, controller)),
-                  Obx(() => _buildFoodList(controller.dishes, controller)),
-                  ...controller.categories.map((category) =>
-                      Obx(() => _buildFoodList(controller.mapCategory[category.name] ?? [], controller))),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CSearchBar(
+                      hintText: 'Search...',
+                      controller: controller.searchController,
+                      prefixPressed: controller.triggerSearch,
+                    ),
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      physics: NeverScrollableScrollPhysics(),
+
+                      children: [
+                        Obx(() => _buildPromotionList(controller.promotions, controller)),
+                        Obx(() => _buildFoodList(controller.dishes, controller)),
+                        ...controller.categories.map((category) =>
+                            Obx(() => _buildFoodList(controller.mapCategory[category.name] ?? [], controller))),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -70,30 +89,35 @@ class FoodManageView extends StatelessWidget {
     );
   }
 
+
   Widget _buildFoodList(List<Dish> dishes, FoodManageController controller) {
-    return ListView.separated(
+    return (dishes.isEmpty)
+      ? NotFoundWidget(message: "No dishes found.\nTry a different search term.")
+      : ListView.separated(
         padding: EdgeInsets.all(TSize.spaceBetweenItemsSm),
         itemCount: dishes.length,
         separatorBuilder: (context, index) => SizedBox(height: TSize.spaceBetweenItemsSm),
         itemBuilder: (context, index) => RestaurantFoodCard(
-        dish: dishes[index],
-        onToggleDisable: () => controller.handleDishDisable(dishes[index]),
-        onEdit: () => controller.handleDishEditInformation(dishes[index]),
-      )
+          dish: dishes[index],
+          onToggleDisable: () => controller.handleDishDisable(dishes[index]),
+          onEdit: () => controller.handleDishEditInformation(dishes[index]),
+        )
     );
   }
 
   Widget _buildPromotionList(List<RestaurantPromotion> promotions, FoodManageController controller) {
-    return ListView.separated(
+    return (promotions.isEmpty)
+      ? NotFoundWidget(message: "No promotions found.\nTry a different search term.")
+      : ListView.separated(
         controller: controller.scrollController,
         padding: EdgeInsets.all(TSize.spaceBetweenItemsSm),
         itemCount: promotions.length,
         separatorBuilder: (context, index) => SizedBox(height: TSize.spaceBetweenItemsSm),
         itemBuilder: (context, index) => PromotionManageCard(
-        promotion: promotions[index],
-        onToggleDisable: () => controller.handlePromotionDisable(promotions[index]),
-        onEdit: () => controller.handlePromotionEditInformation(promotions[index]),
-      )
+          promotion: promotions[index],
+          onToggleDisable: () => controller.handlePromotionDisable(promotions[index]),
+          onEdit: () => controller.handlePromotionEditInformation(promotions[index]),
+        )
     );
   }
 }

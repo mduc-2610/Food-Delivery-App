@@ -18,6 +18,11 @@ class PromotionManageCard extends StatelessWidget {
   final ViewType viewType;
   final bool isChosen;
   final Function()? onChoose;
+  final bool? isCardDisabled;
+  final Function()? onDeletePressed;
+  final bool isShown;
+
+  // isShown if show true display choose button else delete button
 
   const PromotionManageCard({
     Key? key,
@@ -27,14 +32,17 @@ class PromotionManageCard extends StatelessWidget {
     this.viewType = ViewType.restaurant,
     this.isChosen = false,
     this.onChoose,
+    this.isCardDisabled,
+    this.onDeletePressed,
+    this.isShown = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    bool isCardDisabled = viewType == ViewType.user && promotion?.isAvailable == false;
+    bool _isCardDisabled = isCardDisabled ?? viewType == ViewType.user && promotion?.isAvailable == false;
 
     return InkWell(
-      onTap: isCardDisabled
+      onTap: _isCardDisabled
           ? null
           : () {
         showModalBottomSheet(
@@ -56,7 +64,7 @@ class PromotionManageCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(TSize.borderRadiusLg),
             // Apply grey color if the card is disabled
-            color: isCardDisabled ? Colors.grey[300] : null,
+            color: _isCardDisabled || promotion?.isDisabled == true ? Colors.grey[300] : null,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,16 +96,26 @@ class PromotionManageCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  viewType == ViewType.restaurant
-                      ? _buildPopupMenu(isCardDisabled)
-                      : _buildChooseCircle(isCardDisabled),
-                  SizedBox(height: TSize.spaceBetweenItemsMd),
+                  if(onDeletePressed != null)...[
+                    CircleIconCard(
+                      onTap: onDeletePressed,
+                      icon: Icons.delete,
+                      iconColor: TColor.error,
+                    ),
+                    SizedBox(height: TSize.spaceBetweenItemsMd),
+                  ],
+                  if(!_isCardDisabled)...[
+                    viewType == ViewType.restaurant
+                        ? _buildPopupMenu(_isCardDisabled)
+                        : (isShown == false) ? _buildChooseCircle(_isCardDisabled) : SizedBox.shrink(),
+                    SizedBox(height: TSize.spaceBetweenItemsMd),
+                  ],
                   StatusChip(
                     status: (viewType == ViewType.user && promotion?.isAvailable == false)
                     ? "CANCELLED"
                     : (promotion?.isDisabled == false ? "ACTIVE" : "CANCELLED"),
                     text: (viewType == ViewType.user && promotion?.isAvailable == false)
-                    ? "USED"
+                    ? "UNAVAIL"
                     : (promotion?.isDisabled == false ? "ACTIVE" : "DISABLED"),
                   ),
                 ],

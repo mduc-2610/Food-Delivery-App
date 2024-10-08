@@ -16,7 +16,8 @@ from order.models import (
     # UserPromotion, 
     RestaurantPromotion, 
     Order, 
-    Delivery, DeliveryRequest, RestaurantCart, RestaurantCartDish
+    Delivery, DeliveryRequest, RestaurantCart, RestaurantCartDish,
+    OrderCancellation
 )
 
 from utils.function import (
@@ -89,6 +90,7 @@ def load_order(
 
     if Order in models_to_update:
         DeliveryRequest.objects.all().delete()
+        OrderCancellation.objects.all().delete()
         order_list = []
         promotion_list = map_queryset.get(RestaurantPromotion)
         deliverers = map_queryset.get(Deliverer)
@@ -104,6 +106,27 @@ def load_order(
                 'created_at': generate_random_time_in_year(),
             }
             order = Order.objects.create(**order_data)
+            if order.status == "CANCELLED":
+                cancel_list = [
+                    "Change of mind",
+                    "Found better price elsewhere",
+                    "Delivery delay",
+                    "Incorrect item selected",
+                    "Duplicate order",
+                    "Unable to fullfill order",
+                ]
+                random_len = len(cancel_list)
+                random_index = random.randint(0, random_len)
+                random_reason = cancel_list[random_index] if random_index < random_len else fake.text(max_nb_chars=50)
+                    
+                OrderCancellation.objects.create(
+                    order=order,
+                    user=order.user,
+                    restaurant=order.cart.restaurant,
+                    reason=random_reason,
+                    is_accepted=True
+                )
+
             if order.status == 'ACTIVE':
                 order.create_delivery_and_request()
             else:
@@ -118,7 +141,7 @@ def load_order(
                         restaurant=_restaurant,
                         deliverer=random.choice(deliverers),
                         defaults={
-                            'pickup_location': _restaurant.basic_info.street_address,
+                            'pickup_location': _restaurant.basic_info.address,
                             'pickup_latitude': _restaurant.basic_info.latitude,
                             'pickup_longitude': _restaurant.basic_info.longitude,
                             'dropoff_location': _delivery_address.address,
@@ -218,6 +241,25 @@ def load_order(
             },
             action=action
         )
+
+        for _order in map_queryset.get(Order):
+            restaurant = order.cart.restaurant
+            _promotions = restaurant.promotions.all()
+            _shipping_promotions = _promotions.filter(promo_type="SHIPPING")
+            _order_promotions = _promotions.filter(promo_type="ORDER")
+            number_promotion = random.randint(0, 2)
+
+            if number_promotion == 0: continue
+            elif number_promotion == 1:
+                _order.restaurant_promotions.add(random.choice(_promotions))
+            elif number_promotion == 2:
+                _order.restaurant_promotions.add(random.choice(_shipping_promotions))
+                _order.restaurant_promotions.add(random.choice(_order_promotions))
+            
+            print(f"\tSuccessfully created Restaurant Promotions for {_order}: ")
+            for __promotion in restaurant.promotions.all():
+                print(__promotion)
+            
 
     # if UserPromotion in models_to_update:
     #     user_list = list(User.objects.all())

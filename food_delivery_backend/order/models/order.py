@@ -121,7 +121,7 @@ class Order(models.Model):
             user=user,
             restaurant=restaurant,
             defaults={
-                'pickup_location': restaurant.basic_info.street_address,
+                'pickup_location': restaurant.basic_info.address,
                 'pickup_latitude': restaurant.basic_info.latitude,
                 'pickup_longitude': restaurant.basic_info.longitude,
                 'dropoff_location': _delivery_address.address,
@@ -259,3 +259,10 @@ def update_order_status(sender, instance, **kwargs):
     if instance.is_accepted:
         instance.order.status = 'CANCELLED'
         instance.order.save()
+    else:
+        instance.order.status = 'ACTIVE'
+        instance.order.save()
+
+@receiver(post_delete, sender='order.OrderCancellation')
+def update_order_status_on_delete(sender, instance, **kwargs):
+    instance.order.status = "ACTIVE"

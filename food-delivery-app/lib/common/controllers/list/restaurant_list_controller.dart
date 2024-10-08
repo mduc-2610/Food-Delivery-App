@@ -17,7 +17,7 @@ class RestaurantListController extends GetxController {
   final searchTextController = TextEditingController();
   String? category;
   String? searchResult;
-  int dishPageSize = 5;
+  int dishPageSize = 3;
 
   RestaurantListController({
     this.category,

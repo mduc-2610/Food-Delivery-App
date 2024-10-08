@@ -19,17 +19,17 @@ class NotificationTab extends StatelessWidget {
         children: [
           CSearchBar(),
           SizedBox(height: TSize.spaceBetweenSections,),
-          Text(
-            "Not Found",
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.textDesc),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: TSize.spaceBetweenSections,),
-          Text(
-            "Empty",
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.textDesc),
-            textAlign: TextAlign.center,
-          ),
+          // Text(
+          //   "Not Found",
+          //   style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.textDesc),
+          //   textAlign: TextAlign.center,
+          // ),
+          // SizedBox(height: TSize.spaceBetweenSections,),
+          // Text(
+          //   "Empty",
+          //   style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.textDesc),
+          //   textAlign: TextAlign.center,
+          // ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

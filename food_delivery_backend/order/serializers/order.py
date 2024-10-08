@@ -211,6 +211,8 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
         required=False
     )
 
+    delete_restaurant_promotion = serializers.UUIDField(required=False)
+
     class Meta:
         model = Order
         fields = [
@@ -220,6 +222,7 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
             'restaurant_review',
             'restaurant_promotions',
             'used_restaurant_promotions',
+            'delete_restaurant_promotion'
         ]
     
     def update(self, instance, validated_data):
@@ -229,6 +232,8 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
         restaurant_review = validated_data.pop('restaurant_review', None)
         restaurant_promotions = validated_data.pop('restaurant_promotions', [])
         used_restaurant_promotions = validated_data.pop('used_restaurant_promotions', [])
+        delete_restaurant_promotion = validated_data.pop('delete_restaurant_promotion', None)
+
 
         instance = super().update(instance, validated_data)
 
@@ -255,8 +260,22 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
         
         print('restaurant_promotions', restaurant_promotions, pretty=True)
 
-        instance.order_used.all().delete()
+
+        print("delete_restaurant_promotion", delete_restaurant_promotion, pretty=True)
+        if delete_restaurant_promotion:
+            promotion = OrderRestaurantPromotion.objects.filter(
+                order=instance,
+                promotion_id=delete_restaurant_promotion
+            ).first()
+
+            if promotion:
+                promotion.delete()  
+                print("Promotion deleted:", promotion)
+            else:
+                print("No promotion found with the specified criteria.")
+
         if restaurant_promotions:
+            instance.order_used.all().delete()
             # user.user_used.all().delete()
             
             for promotion_id in restaurant_promotions:
@@ -271,6 +290,7 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
                         print(f"Promotion with id {promotion_id} does not exist", pretty=True)
                     # print("add new", len(instance.restaurant_promotions.all()))
 
+        print('promotions_add', instance.restaurant_promotions.all(), pretty=True)
         for dish_review in dish_reviews:
             _user = dish_review.pop('user', None)
             _dish = dish_review.pop('dish', None)

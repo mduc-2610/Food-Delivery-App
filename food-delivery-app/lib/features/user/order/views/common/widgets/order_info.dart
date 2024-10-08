@@ -6,12 +6,15 @@ import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
 import 'package:food_delivery_app/features/restaurant/food/views/manage/widgets/promotion_manage_card.dart';
+import 'package:food_delivery_app/features/user/order/controllers/basket/order_basket_controller.dart';
 import 'package:food_delivery_app/features/user/order/controllers/common/order_info_controller.dart';
 import 'package:food_delivery_app/features/user/order/controllers/history/order_history_detail_controller.dart';
 import 'package:food_delivery_app/features/user/order/models/order.dart';
+import 'package:food_delivery_app/features/user/order/models/promotion.dart';
 import 'package:food_delivery_app/features/user/order/views/promotion/order_promotion.dart';
 import 'package:food_delivery_app/features/user/order/views/rating/order_rating.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
@@ -30,10 +33,17 @@ class OrderInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    OrderBasketController? basketController;
+    try {
+      basketController = OrderBasketController.instance;
+    }
+    catch(e) {
+      basketController = null;
+    }
+    print("VIEW TYPE $viewType");
     return GetBuilder<OrderInfoController>(
       init: OrderInfoController(order: order, viewType: viewType),
       builder: (controller) {
-        $print("RIGHT NA ${order?.restaurantPromotions?.length}");
         return MainWrapper(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,9 +110,9 @@ class OrderInfo extends StatelessWidget {
 
               // Promotions Section
               InkWell(
-                onTap: onPromotionPressed ?? () {
+                onTap: (viewType != OrderViewType.basket) ? null : (onPromotionPressed ?? () {
                   $print("no arguments passed");
-                },
+                }),
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: TSize.sm, horizontal: TSize.md),
                   decoration: BoxDecoration(
@@ -130,6 +140,12 @@ class OrderInfo extends StatelessWidget {
                         for(var promotion in order?.restaurantPromotions ?? [])...[
                           PromotionManageCard(
                             promotion: promotion,
+                            viewType: ViewType.user,
+                            isCardDisabled: (viewType != OrderViewType.basket) ? true : false,
+                            isShown: true,
+                            onDeletePressed: (viewType == OrderViewType.basket)
+                                ? () => basketController?.onDeletePromotion(promotion)
+                                : null,
                           )
                         ]
                       ]

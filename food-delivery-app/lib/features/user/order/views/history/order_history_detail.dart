@@ -29,7 +29,7 @@ class OrderHistoryDetailView extends StatelessWidget {
         return
           Scaffold(
               appBar: CAppBar(
-                title: "My Basket",
+                title: "My History",
                 result: {
                   'order': controller.order
                 },
@@ -43,45 +43,47 @@ class OrderHistoryDetailView extends StatelessWidget {
                   if(!controller.isLoading.value)...[
                     Expanded(
                       child: SingleChildScrollView(
-                          child: ListCheck(
-                            checkEmpty: controller.order?.cart.cartDishes.length == 0,
-                            child: Column(
-                              children: [
-                                MainWrapper(
-                                  topMargin: TSize.spaceBetweenItemsVertical,
-                                  bottomMargin: TSize.spaceBetweenItemsVertical,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Order summary',
-                                        style: Theme.of(context).textTheme.headlineSmall,
-                                      ),
-
-                                      StatusChip(status: controller.order?.status ?? "")
-                                    ],
-                                  ),
-                                ),
-                                Column(
-                                    children: [
-                                      for (var cartDish in controller.order?.cart.cartDishes)
-                                        OrderCard(
-                                          cartDish: cartDish,
-                                          isCompletedOrder: false,
-                                          canEdit: false,
+                          child: Center(
+                            child: ListCheck(
+                              checkEmpty: controller.order?.cart.cartDishes.length == 0,
+                              child: Column(
+                                children: [
+                                  MainWrapper(
+                                    topMargin: TSize.spaceBetweenItemsVertical,
+                                    bottomMargin: TSize.spaceBetweenItemsVertical,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Order summary',
+                                          style: Theme.of(context).textTheme.headlineSmall,
                                         ),
-                                    ],
+
+                                        StatusChip(status: controller.order?.status ?? "")
+                                      ],
+                                    ),
                                   ),
+                                  Column(
+                                      children: [
+                                        for (var cartDish in controller.order?.cart.cartDishes)
+                                          OrderCard(
+                                            cartDish: cartDish,
+                                            isCompletedOrder: false,
+                                            canEdit: false,
+                                          ),
+                                      ],
+                                    ),
 
 
-                                SizedBox(height: TSize.spaceBetweenSections,),
+                                  SizedBox(height: TSize.spaceBetweenSections,),
 
-                                OrderInfo(
-                                  order: controller.order,
-                                  viewType: OrderViewType.history,
-                                ),
-                                SizedBox(height: TSize.spaceBetweenSections,),
-                              ],
+                                  OrderInfo(
+                                    order: controller.order,
+                                    viewType: OrderViewType.history,
+                                  ),
+                                  SizedBox(height: TSize.spaceBetweenSections,),
+                                ],
+                              ),
                             ),
                           )
                       ),

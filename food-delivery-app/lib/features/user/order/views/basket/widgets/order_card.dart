@@ -141,22 +141,22 @@ class _OrderCardState extends State<OrderCard> {
                     ],
                   ),
 
-                  Row(
-                    children: [
-                      GestureDetector(
-                        child: Icon(
-                          TIcon.edit
-                        ),
-                      ),
-                      SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
-
-                      GestureDetector(
-                        child: Icon(
-                            TIcon.delete
-                        ),
-                      ),
-                    ],
-                  )
+                  // Row(
+                  //   children: [
+                  //     GestureDetector(
+                  //       child: Icon(
+                  //         TIcon.edit
+                  //       ),
+                  //     ),
+                  //     SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
+                  //
+                  //     GestureDetector(
+                  //       child: Icon(
+                  //           TIcon.delete
+                  //       ),
+                  //     ),
+                  //   ],
+                  // )
                 ],
               ),
 

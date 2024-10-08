@@ -11,13 +11,14 @@ import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
 enum FoodCardType { grid, list }
 
 class FoodCard extends StatelessWidget {
   final FoodCardType type;
-  final Dish dish;
+  final Dish? dish;
   final void Function()? addPressed;
   final void Function()? removePressed;
 
@@ -44,7 +45,7 @@ class FoodCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Get.to(FoodDetailView(), arguments: {
-          'id': dish.id
+          'id': dish?.id
         });
       },
       child: Card(
@@ -60,11 +61,11 @@ class FoodCard extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(TSize.sm),
-                    child: Image.asset(
-                      "${TImage.hcBurger1 ?? dish.image}",
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
+                    child: THelperFunction.getValidImage(
+                    dish?.image,
+                      width: 110,
+                      height: 110,
+                    )
                   ),
                   Positioned(
                     top: TSize.sm,
@@ -87,7 +88,7 @@ class FoodCard extends StatelessWidget {
               ),
               SizedBox(height: TSize.xs),
               Text(
-                "${dish.name ?? "Burger"}",
+                "${dish?.name ?? "Burger"}",
                 style: Theme.of(context).textTheme.titleLarge,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -99,7 +100,7 @@ class FoodCard extends StatelessWidget {
                   SvgPicture.asset(TIcon.fillStar),
                   SizedBox(width: TSize.spaceBetweenItemsSm),
                   Text(
-                    "${dish.rating ?? 0}",
+                    "${dish?.rating ?? 0}",
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(color: TColor.star),
                   ),
                   SizedBox(width: TSize.spaceBetweenItemsSm),
@@ -112,7 +113,7 @@ class FoodCard extends StatelessWidget {
                   ),
                   SizedBox(width: TSize.spaceBetweenItemsSm),
                   Text(
-                    "${dish.totalLikes ?? 0}",
+                    "${dish?.totalLikes ?? 0}",
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
@@ -120,11 +121,11 @@ class FoodCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "£${dish.originalPrice ?? 0}",
+                    "£${dish?.originalPrice ?? 0}",
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(decoration: TextDecoration.lineThrough),
                   ),
                   SizedBox(width: TSize.spaceBetweenItemsHorizontal),
-                  Obx(() => Text("${controller.restaurantDetailController.mapDishQuantity[dish.id] ?? 0}")),
+                  Obx(() => Text("${controller.restaurantDetailController.mapDishQuantity[dish?.id] ?? 0}")),
                   RoundIconButton(
                     onPressed: () => controller.handleCartUpdate(dishId: dish?.id ?? '', quantity: 1, extra: addPressed),
                   ),
@@ -141,7 +142,7 @@ class FoodCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Get.to(FoodDetailView(), arguments: {
-          'id': dish.id
+          'id': dish?.id
         });
       },
       child: Container(
@@ -157,12 +158,11 @@ class FoodCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(TSize.borderRadiusMd),
-                  child: Image.asset(
-                    "${TImage.hcBurger1 ?? dish.image}",
-                    width: TSize.imageThumbSize + 30,
-                    height: TSize.imageThumbSize + 30,
-                    fit: BoxFit.cover,
-                  ),
+                  child: THelperFunction.getValidImage(
+                    dish?.image,
+                    width: 110,
+                    height: 110,
+                  )
                 ),
                 SizedBox(width: TSize.spaceBetweenItemsHorizontal),
 
@@ -172,7 +172,7 @@ class FoodCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${dish.name ?? "Burger"}",
+                        "${dish?.name ?? "Burger"}",
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       Row(
@@ -181,7 +181,7 @@ class FoodCard extends StatelessWidget {
                           SvgPicture.asset(TIcon.fillStar),
                           SizedBox(width: TSize.spaceBetweenItemsSm),
                           Text(
-                            "${dish.rating ?? 0}",
+                            "${dish?.rating ?? 0}",
                             style: Theme.of(context).textTheme.titleLarge?.copyWith(color: TColor.star),
                           ),
                           SizedBox(width: TSize.spaceBetweenItemsHorizontal),
@@ -194,7 +194,7 @@ class FoodCard extends StatelessWidget {
                           ),
                           SizedBox(width: TSize.spaceBetweenItemsSm),
                           Text(
-                            "${dish.totalLikes ?? 0}",
+                            "${dish?.totalLikes ?? 0}",
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
@@ -204,7 +204,7 @@ class FoodCard extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            "£${dish.originalPrice ?? 0}",
+                            "£${dish?.originalPrice ?? 0}",
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                 color: TColor.textDesc,
                                 decoration: TextDecoration.lineThrough,
@@ -220,12 +220,12 @@ class FoodCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            "£${dish.discountPrice ?? 0}",
+                            "£${dish?.discountPrice ?? 0}",
                             style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.primary),
                           ),
                           Spacer(),
 
-                          Obx(() => (controller.restaurantDetailController.mapDishQuantity[dish.id] != null) ?
+                          Obx(() => (controller.restaurantDetailController.mapDishQuantity[dish?.id] != null) ?
                           Row(
                             children: [
                               RoundIconButton(
@@ -237,7 +237,7 @@ class FoodCard extends StatelessWidget {
                               SizedBox(width: TSize.spaceBetweenItemsHorizontal),
 
                               Text(
-                                  "${controller.restaurantDetailController.mapDishQuantity[dish.id]}"
+                                  "${controller.restaurantDetailController.mapDishQuantity[dish?.id]}"
                               ),
                             ],
                           )

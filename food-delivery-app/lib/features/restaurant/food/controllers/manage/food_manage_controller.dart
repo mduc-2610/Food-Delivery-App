@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/data/services/restaurant_service.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
 import 'package:food_delivery_app/features/restaurant/food/views/add/restaurant_add.dart';
-import 'package:food_delivery_app/features/restaurant/food/views/add/widgets/food_add.dart';
-import 'package:food_delivery_app/features/restaurant/food/views/add/widgets/promotion_add.dart';
 import 'package:food_delivery_app/features/user/food/models/food/category.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
 import 'package:food_delivery_app/features/user/order/models/promotion.dart';
@@ -22,6 +20,9 @@ class FoodManageController extends GetxController {
   RxMap<String, List<Dish>> mapCategory = <String, List<Dish>>{}.obs;
   RxList<RestaurantPromotion> promotions = <RestaurantPromotion>[].obs;
   ScrollController scrollController = ScrollController();
+  TextEditingController searchController = TextEditingController();
+  RxString searchQuery = ''.obs;
+  RxInt currentTabIndex = 0.obs;
 
   @override
   void onInit() {
@@ -30,10 +31,41 @@ class FoodManageController extends GetxController {
     initialize();
   }
 
+  void setCurrentTabIndex(int index) {
+    currentTabIndex.value = index;
+    searchController.clear();
+    searchQuery.value = '';
+    _performSearch();
+  }
+
+  void triggerSearch() {
+    searchQuery.value = searchController.text;
+    _performSearch();
+  }
+
+  Future<void> _performSearch() async {
+    if (currentTabIndex.value == 0) {
+      await _searchPromotions();
+    } else {
+      await _searchDishes();
+    }
+  }
+
+  Future<void> _searchPromotions() async {
+    promotions.clear();
+    nextPage = null;
+    await loadPromotions(next: true);
+  }
+
+  Future<void> _searchDishes() async {
+    dishes.clear();
+    mapCategory.clear();
+    await loadDishes();
+  }
+
   void scrollListener() {
     if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
       loadPromotions();
-      $print("info ${promotions.length} $nextPage");
     }
   }
 
@@ -42,7 +74,6 @@ class FoodManageController extends GetxController {
   Future<void> initialize() async {
     isLoading.value = true;
     restaurant = await RestaurantService.getRestaurant();
-    $print(restaurant);
     categories = restaurant?.categories ?? [];
     await loadDishes();
     await loadPromotions(next: true);
@@ -51,22 +82,25 @@ class FoodManageController extends GetxController {
     update();
   }
 
-  Future<void> loadPromotions({ bool next = false }) async {
+  Future<void> loadPromotions({bool next = false}) async {
     if (nextPage != null || next) {
       String url = nextPage ?? "${restaurant?.promotions}" ?? '';
-      final [_result, info] = await APIService<RestaurantPromotion>
-        (fullUrl: url, queryParams: "").list(next: true);
+      final queryParams = searchQuery.isNotEmpty ? "name=${searchQuery.value}" : "";
+      final [_result, info] = await APIService<RestaurantPromotion>(fullUrl: url, queryParams: queryParams).list(next: true);
       promotions.addAll(_result);
       nextPage = info["next"];
-      $print(info["next"]);
     }
   }
 
   Future<void> loadDishes() async {
     for (var category in categories) {
+      String queryParams = 'category=${category.id}';
+      if (searchQuery.isNotEmpty) {
+        queryParams += '&name=${searchQuery.value}';
+      }
       mapCategory[category.name ?? ""] = await APIService<Dish>(
         fullUrl: restaurant?.dishes ?? "",
-        queryParams: 'category=${category.id}',
+        queryParams: queryParams,
       ).list(pagination: false);
       if (mapCategory[category.name ?? ""]!.isNotEmpty) {
         dishes.addAll(mapCategory[category.name ?? ""]!);
@@ -100,6 +134,11 @@ class FoodManageController extends GetxController {
   void handleDishEditInformation(Dish dish) async {
     final created = await Get.to(() => RestaurantAddView(dishId: dish.id,), arguments: {'id': dish.id}) as bool?;
     if (created == true) {
+      nextPage == null;
+      dishes.clear();
+      categories.clear();
+      mapCategory.clear();
+      promotions.clear();
       await initialize();
     }
   }
@@ -123,9 +162,9 @@ class FoodManageController extends GetxController {
   void handlePromotionEditInformation(RestaurantPromotion promotion) async {
     final created = await Get.to(() => RestaurantAddView(promotionId: promotion.id,), arguments: {'id': promotion.id}) as bool?;
     if (created == true) {
-      nextPage == null;
+      nextPage = null;
       promotions.clear();
-      await initialize();
+      await loadPromotions(next: true);
       $print("FIRST PROMOTION NAME ${promotions[0].name}");
       // $print("ni");
     }

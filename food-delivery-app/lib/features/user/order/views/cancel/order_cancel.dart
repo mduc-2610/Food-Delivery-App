@@ -72,7 +72,7 @@ class OrderCancelView extends StatelessWidget {
                       await controller.handleSubmit();
                       Get.back();
                     },
-                    title: "Are you sure you want to cancel this order ${TEmoji.faceHoldingBackTears}?",
+                    title: "Are you sure you want to cancel this order ${TEmoji.faceSad}?",
                     description: "You have to wait for restaurant to response",
                   );
                 }

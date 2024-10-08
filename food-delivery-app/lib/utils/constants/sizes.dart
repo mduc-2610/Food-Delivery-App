@@ -24,6 +24,7 @@ class TSize {
   static const double iconMd = 24.0;
   static const double iconLg = 32.0;
   static const double iconXl = 40.0;
+  static const double iconNotify = 64.0;
 
   // Font sizes
   static const double fontSizeSm = 14.0;
@@ -91,6 +92,7 @@ class TSize {
   static const double cardRadiusLg = 16.0;
 
   // Image carousel height
+  static const double foodImage = 110.0;
   static const double imageCarouselHeight = 200.0;
   static const double imageDialogSize = 200.0;
   static const double imageSm = 40.0;
