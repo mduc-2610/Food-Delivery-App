@@ -68,7 +68,7 @@ class TColor {
   static Color errorSnackBar = Color(0xFFFFCDD2);
   static const Color infoSnackBar = Color(0xFFBBDEFB);
   static const Color warningSnackBar = Color(0xFFFFFFF9C4);
-  static const Color successfulSnackBar = Color(0xFFC8E6C9);
+  static const Color successSnackBar = Color(0xFFC8E6C9);
 
   // Icon Bg Color
   static const Color iconBgSuccess = Color(0xFFe7f9f5);

@@ -100,19 +100,29 @@ class AuthController extends GetxController {
           phoneNumber: phoneNumber.value,
           password: password.value
       );
-      final [statusCode, headers, body] = await APIService<LoginPassword>().create(loginPasswordData, fromJson: Token.fromJson);
-      if(statusCode == 200) {
-        // token = Token.fromJson(body);
-        await TokenService.saveToken(body);
-        Get.offAll(() => UserMenuRedirection());
+      try {
+        final [statusCode, headers, body] = await APIService<LoginPassword>().create(loginPasswordData, fromJson: Token.fromJson);
+        if(statusCode == 200) {
+          // token = Token.fromJson(body);
+          await TokenService.saveToken(body);
+          Get.offAll(() => UserMenuRedirection());
+        }
+        else {
+          final message = RMessage.fromJson(body ?? "");
+          THelperFunction.showCSnackBar(
+            Get.context!,
+            message.message,
+            SnackBarType.error,
+          );
+        }
       }
-      else {
-        final message = RMessage.fromJson(body ?? "");
-        THelperFunction.showCSnackBar(
-          Get.context!,
-          message.message,
-          SnackBarType.error,
+      catch(e) {
+        Get.snackbar(
+          "Login failed",
+          "Invalid phone number or password",
+          backgroundColor: TColor.errorSnackBar
         );
+        return;
       }
     }
     else if(loginType.value == "Login with Password"){

@@ -9,6 +9,7 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 class DirectRoom {
   final String? id;
   final String? name;
+  final String? avatar;
   final String? user1;
   final String? user2;
   final String? messages;
@@ -17,6 +18,7 @@ class DirectRoom {
   DirectRoom({
     this.id,
     this.name,
+    this.avatar,
     this.user1,
     this.user2,
     this.messages,
@@ -26,6 +28,7 @@ class DirectRoom {
   DirectRoom.fromJson(Map<String, dynamic> json)
     : id = json['id'],
       name = json['name'],
+      avatar = json['avatar'],
       user1 = json['user1'],
       user2 = json['user2'],
       messages = json['messages'],
@@ -35,6 +38,7 @@ class DirectRoom {
     Map<String, dynamic> data = {
       'id': id,
       'name': name,
+      'avatar': avatar,
       'user1': user1,
       'user2': user2,
       'latest_message': latestMessage,

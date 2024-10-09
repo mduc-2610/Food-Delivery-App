@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:food_delivery_app/data/services/reflect.dart';
+import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http_parser/http_parser.dart';
@@ -9,7 +10,7 @@ import 'package:flutter/material.dart';
 @reflector
 class BaseMessage {
   final String? id;
-  final String? user;
+  final dynamic user;
   final String? room;
   final String? content;
   final double? latitude;
@@ -36,7 +37,9 @@ class BaseMessage {
 
   BaseMessage.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        user = json['user'],
+        user = json['user'] is String || json['user'] == null || json['user'] is List
+          ? json['user']
+          : BasicUser.fromJson(json['user']),
         room = json['room'],
         content = json['content'],
         latitude = THelperFunction.formatDouble(json['latitude']),

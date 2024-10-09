@@ -12,6 +12,7 @@ import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class MessageTab extends StatelessWidget {
   @override
@@ -40,11 +41,9 @@ class MessageTab extends StatelessWidget {
                   contentPadding: EdgeInsets.zero,
                   leading: ClipRRect(
                     borderRadius:
-                    BorderRadius.circular(TSize.borderRadiusLg),
-                    child: Image.asset(
-                      TImage.hcBurger1,
-                      height: TSize.imageMd,
-                      fit: BoxFit.cover,
+                    BorderRadius.circular(TSize.borderRadiusCircle),
+                    child: THelperFunction.getValidImage(
+                      rooms[roomId]?.avatar,
                     ),
                   ),
                   title: Text(
@@ -67,7 +66,7 @@ class MessageTab extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            "${rooms[roomId]?.latestMessage?.createdAt != null ? THelperFunction.formatDate(rooms[roomId]?.latestMessage?.createdAt ?? DateTime.now()) : ""}",
+                            "${rooms[roomId]?.latestMessage?.createdAt != null ? timeago.format(rooms[roomId]?.latestMessage?.createdAt ?? DateTime.now()) : ""}",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,

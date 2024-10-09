@@ -1,5 +1,14 @@
 from rest_framework import serializers
-from notification.models import DirectMessage, GroupMessage, DirectImageMessage, DirectVideoMessage, GroupImageMessage, GroupVideoMessage
+
+from notification.models import (
+    DirectMessage,
+    GroupMessage,
+    DirectImageMessage,
+    DirectVideoMessage,
+    GroupImageMessage,
+    GroupVideoMessage,
+)
+from account.serializers import BasicUserSerializer
 
 class DirectImageMessageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,6 +33,7 @@ class GroupVideoMessageSerializer(serializers.ModelSerializer):
 class DirectMessageSerializer(serializers.ModelSerializer):
     images = DirectImageMessageSerializer(read_only=True, many=True)
     videos = DirectVideoMessageSerializer(read_only=True, many=True)
+    user = BasicUserSerializer(read_only=True, required=False)
     
     class Meta:
         model = DirectMessage
@@ -77,6 +87,8 @@ class CreateDirectMessageSerializer(serializers.ModelSerializer):
 class GroupMessageSerializer(serializers.ModelSerializer):
     images = GroupImageMessageSerializer(read_only=True, many=True)
     videos = GroupVideoMessageSerializer(read_only=True, many=True)
+    user = BasicUserSerializer(read_only=True, required=False)
+
 
     class Meta:
         model = GroupMessage

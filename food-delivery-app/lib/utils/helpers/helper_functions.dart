@@ -364,6 +364,7 @@ class THelperFunction {
         String? defaultNetworkAsset,
         double? width,
         double? height,
+        double? radius,
       }) {
     return FutureBuilder<bool>(
       future: _checkImageValidity(imageUrl),
@@ -371,19 +372,23 @@ class THelperFunction {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         } else if (snapshot.hasData && snapshot.data == true) {
-          return Image.network(
-            imageUrl!,
-            width: width,
-            height: height,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return getFallbackImage(
-                defaultAsset,
-                defaultNetworkAsset,
-                width: width,
-                height: height,
-              );
-            },
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(radius ?? 0),
+            child: Image.network(
+              imageUrl!,
+              width: width,
+              height: height,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return getFallbackImage(
+                  defaultAsset,
+                  defaultNetworkAsset,
+                  width: width,
+                  height: height,
+                  radius: radius,
+                );
+              },
+            ),
           );
         } else {
           return getFallbackImage(
@@ -391,6 +396,7 @@ class THelperFunction {
             defaultNetworkAsset,
             width: width,
             height: height,
+            radius: radius,
           );
         }
       },
@@ -402,28 +408,38 @@ class THelperFunction {
       String? defaultNetworkAsset, {
         double? width,
         double? height,
+        double? radius,
       }) {
     if (defaultNetworkAsset != null) {
-      return Image.network(
-        defaultNetworkAsset,
-        width: width,
-        height: height,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          return Image.asset(
-            defaultAsset ?? TImage.hcBurger1,
-            width: width,
-            height: height,
-            fit: BoxFit.cover,
-          );
-        },
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(radius ?? 0),
+        child: Image.network(
+          defaultNetworkAsset,
+          width: width,
+          height: height,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(radius ?? 0),
+              child: Image.asset(
+                defaultAsset ?? TImage.hcBurger1,
+                width: width,
+                height: height,
+                fit: BoxFit.cover,
+              ),
+            );
+          },
+        ),
       );
     } else {
-      return Image.asset(
-        defaultAsset ?? TImage.hcBurger1,
-        width: width,
-        height: height,
-        fit: BoxFit.cover,
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(radius ?? 0),
+        child: Image.asset(
+          defaultAsset ?? TImage.hcBurger1,
+          width: width,
+          height: height,
+          fit: BoxFit.cover,
+        ),
       );
     }
   }

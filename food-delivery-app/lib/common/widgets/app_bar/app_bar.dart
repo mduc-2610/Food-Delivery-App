@@ -14,10 +14,13 @@ class CAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool noLeading;
   final PreferredSizeWidget? bottom;
   final TextStyle? textStyle;
+  final List<Widget>? actions;
+
 
   const CAppBar({
     this.title,
     this.iconList = const [],
+    this.actions,
     this.backButtonOnPressed,
     this.result,
     this.isBigTitle = false,
@@ -53,7 +56,7 @@ class CAppBar extends StatelessWidget implements PreferredSizeWidget {
           // Navigator.pop(context);
         },
       ),
-      actions: iconList.map((iconData) {
+      actions: actions ?? iconList.map((iconData) {
         return CircleIconCard(
           elevation: TSize.iconCardElevation,
           icon: iconData['icon'],

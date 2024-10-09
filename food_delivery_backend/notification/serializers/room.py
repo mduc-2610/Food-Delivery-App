@@ -8,39 +8,41 @@ from utils.serializers import CustomRelatedModelSerializer
 class DirectRoomSerializer(CustomRelatedModelSerializer):
     latest_message = DirectMessageSerializer(read_only=True, required=False)
     name = serializers.SerializerMethodField()
+    avatar = serializers.SerializerMethodField()
+
+    def get_user_info(self, obj, request):
+        user = request.user
+        other_user = obj.user2 if user == obj.user1 else obj.user1
+        name_type = request.query_params.get('name_type')
+
+        if name_type == 'deliverer' and hasattr(other_user, 'deliverer'):
+            return other_user.deliverer.basic_info, 'full_name', 'avatar'
+        elif name_type == 'restaurant' and hasattr(other_user, 'restaurant'):
+            return other_user.restaurant.basic_info, 'name', 'logo'
+        else:
+            return other_user.profile, 'name', 'avatar'
 
     def get_name(self, obj):
         request = self.context.get('request')
         if request:
-            user = request.user
-            user1 = obj.user1
-            user2 = obj.user2
-            
-            params = request.query_params
-            name_type = params.get('name_type', None)
-            print(name_type, pretty=True)
-            if name_type == 'deliverer':
-                if user == user1 and hasattr(user2, 'deliverer'):
-                    return user2.deliverer.basic_info.full_name
-                elif user == user2 and hasattr(user1, 'deliverer'):
-                    return user1.deliverer.basic_info.full_name
-            
-            elif name_type == 'restaurant':
-                if user == user1 and hasattr(user2, 'restaurant') and user2.restaurant.basic_info.name:
-                    return user2.restaurant.basic_info.name
-                elif user == user2 and hasattr(user1, 'restaurant') and user1.restaurant.basic_info.name:
-                    return user1.restaurant.basic_info.name
-            
-            if user == user1:
-                return user2.profile.name
-            else:
-                return user1.profile.name
+            info, name_attr, _ = self.get_user_info(obj, request)
+            return getattr(info, name_attr, "Anonymous")
         return "Anonymous"
+
+    def get_avatar(self, obj):
+        request = self.context.get('request')
+        if request:
+            info, _, avatar_attr = self.get_user_info(obj, request)
+            avatar = getattr(info, avatar_attr, None)
+            if avatar:
+                return request.build_absolute_uri(avatar.url)
+        return None
 
     class Meta:
         model = DirectRoom
         fields = '__all__'
-        read_only_fields = ('id', 'created_at', 'latest_message', 'name')
+        read_only_fields = ('id', 'created_at', 'latest_message', 'name', 'avatar')
+        
 
     def validate(self, data):
         user1 = data.get('user1')

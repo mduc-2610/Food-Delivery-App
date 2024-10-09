@@ -67,7 +67,7 @@ Future<String> getLocalIpAddress() async {
 }
 
 class APIConstant {
-  static const String ip = "10.20.155.160";
+  static const String ip = "192.168.1.45";
   static const String tSecretAPIKey = "";
   // static const baseUrl = 'http://10.0.2.2:8000/api';
   // static const baseUrl = 'http://192.168.1.8:8000/api'; // VANSAU

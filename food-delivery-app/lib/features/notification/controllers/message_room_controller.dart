@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:food_delivery_app/common/widgets/dialogs/image_detail_dialog.dart';
+import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/data/services/image_picker_service.dart';
 import 'package:food_delivery_app/features/notification/controllers/message_tab_controller.dart';
 import 'package:food_delivery_app/features/notification/models/room.dart';
 import 'package:food_delivery_app/features/personal/views/profile/profile.dart';
+import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/enums.dart';
+import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
@@ -240,5 +244,108 @@ class MessageRoomController extends GetxController {
 
   void removeVideo(int index) {
     _selectedVideos.removeAt(index);
+  }
+
+  void viewImageDetail({int index = 0}) {
+    List<dynamic> allImages = [];
+
+    allImages.addAll(selectedImages);
+
+    allImages.addAll(
+      messages.expand((message) => message.images.map((image) => image.image).toList()).toList(),
+    );
+
+    $print("LEN IMAGES: ${allImages.length}");
+    showDialog(
+      context: Get.context!,
+      useSafeArea: false,
+      barrierColor: TColor.dark.withOpacity(0.1),
+      builder: (BuildContext context) => ImageDetailDialog(
+        images: allImages,
+        initialIndex: index,
+      ),
+    );
+  }
+
+
+  void viewVideoDetail(String videoPath) {
+    showDialog(
+      context: Get.context!,
+      useSafeArea: false,
+      barrierColor: TColor.dark.withOpacity(0.1),
+      builder: (BuildContext context) => VideoDetailDialog(videoPath: videoPath),
+    );
+  }
+
+  void showDeleteModal(BuildContext context, MessageRoomController controller, DirectMessage message) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: MainWrapper(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.delete),
+                  title: Text('Delete Message'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    deleteMessage(message);
+                  },
+                ),
+                SizedBox(height: TSize.spaceBetweenSections,)
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> deleteMessage(DirectMessage? message) async {
+    try {
+      bool result = await APIService<DirectMessage>().delete(message?.id ?? '');
+      if (result) {
+        _messages.remove(message);
+        Get.snackbar(
+          'Success',
+          'Message deleted successfully',
+          backgroundColor: TColor.successSnackBar,
+        );
+      } else {
+        Get.snackbar(
+          'Error',
+          'Failed to delete message',
+          backgroundColor: TColor.errorSnackBar,
+        );
+      }
+    } catch (e) {
+      print('Error deleting message: $e');
+      Get.snackbar(
+        'Error',
+        'An error occurred while deleting the message',
+        backgroundColor: TColor.errorSnackBar,
+      );
+    }
+  }
+}
+
+class VideoDetailDialog extends StatelessWidget {
+  final String videoPath;
+
+  const VideoDetailDialog({Key? key, required this.videoPath}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Container(
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height * 0.8,
+        child: Center(
+          child: Text("Video Player: $videoPath"),
+        ),
+      ),
+    );
   }
 }
