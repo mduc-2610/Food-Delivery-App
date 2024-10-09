@@ -3,12 +3,13 @@ import 'package:get/get.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 class EmptyWidget extends StatelessWidget {
+  final String message;
+
   const EmptyWidget({
     super.key,
-    required this.message,
+    this.message = "No items available\n at the moment.",
   });
 
-  final String message;
 
   @override
   Widget build(BuildContext context) {

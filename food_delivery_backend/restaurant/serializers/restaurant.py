@@ -42,7 +42,14 @@ class RestaurantSerializer(CustomRelatedModelSerializer):
     is_liked = serializers.SerializerMethodField()
 
     def get_dishes(self, obj):
-        queryset = obj.dishes.all()
+        requrest = self.context.get('request', None)
+        query_params = requrest.query_params if requrest else None
+        category = query_params.get('category', None)
+
+        queryset = obj.dishes.all() \
+            if category is None \
+            else obj.dishes.filter(category__name=category)
+        
         paginator = CustomPagination(page_size_query_param='dish_page_size', page_query_param='dish_page')
         request = self.context.get('request')
         page = paginator.paginate_queryset(queryset, request)

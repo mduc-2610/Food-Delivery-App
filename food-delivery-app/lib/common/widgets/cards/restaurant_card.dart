@@ -29,20 +29,20 @@ class RestaurantCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Dish> dishes = [];
-    if(category != null) {
-      for(var dish in restaurant?.dishes) {
-        // $print("cat ${restaurant?.basicInfo?.name} --- ${dish?.name} --- ${dish?.category?.name}  ---  ${category}");
-      }
-      dishes = restaurant?.dishes?.where((dish) => dish?.category?.name == category).toList() ?? [];
-    }
-    else {
-      dishes = restaurant?.dishes ?? [];
-    }
-    if (dishes.isEmpty) {
-      dishes == restaurant?.dishes;
-    $print("ssslength ${dishes.length}");
-    }
+    List<Dish> dishes = restaurant?.dishes ?? [];
+    // if(category != null) {
+    //   for(var dish in restaurant?.dishes) {
+    //     // $print("cat ${restaurant?.basicInfo?.name} --- ${dish?.name} --- ${dish?.category?.name}  ---  ${category}");
+    //   }
+    //   dishes = restaurant?.dishes?.where((dish) => dish?.category?.name == category).toList() ?? [];
+    // }
+    // else {
+    //   dishes = restaurant?.dishes ?? [];
+    // }
+    // if (dishes.isEmpty) {
+    //   dishes == restaurant?.dishes;
+    // $print("ssslength ${dishes.length}");
+    // }
     return InkWell(
       onTap: () {
         Get.to(RestaurantDetailView(), arguments: {

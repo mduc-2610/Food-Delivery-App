@@ -3,12 +3,13 @@ import 'package:get/get.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 class NotFoundWidget extends StatelessWidget {
+  final String message;
+
   const NotFoundWidget({
     super.key,
-    required this.message,
+    this.message = "Sorry, we couldn't find \nwhat you're looking for.",
   });
 
-  final String message;
 
   @override
   Widget build(BuildContext context) {

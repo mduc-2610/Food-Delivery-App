@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/controllers/list/restaurant_list_controller.dart';
 import 'package:food_delivery_app/common/widgets/bars/search_bar.dart';
+import 'package:food_delivery_app/common/widgets/misc/empty.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/common/widgets/misc/not_found.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/skeleton_list.dart';
+import 'package:food_delivery_app/utils/device/device_utility.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 import 'package:food_delivery_app/common/widgets/bars/separate_section_bar.dart';
@@ -57,21 +60,30 @@ class RestaurantList extends StatelessWidget {
                       SizedBox(height: TSize.spaceBetweenItemsVertical,),
                     ],
 
-                    ListCheck(
-                      checkNotFound: controller.restaurants.length == 0,
-                      child: Column(
-                        children: [
+                    Column(
+                      children: [
+                        if(controller.restaurants.isEmpty)...[
+                          if(controller.searchTextController.text == "")...[
+                            SizedBox(height: TDeviceUtil.getScreenHeight() * 0.3),
+                            Center(child: EmptyWidget()),
+                          ]
+                          else...[
+                            SizedBox(height: TDeviceUtil.getScreenHeight() * 0.3),
+                            Center(child: NotFoundWidget()),
+                          ]
+                        ]
+                        else...[
                           for(var restaurant in controller.restaurants)...[
-                            RestaurantCard(
-                              restaurant: restaurant,
-                              dishPageSize: controller.dishPageSize,
-                              category: category,
-                            ),
-                            SeparateSectionBar(),
+                              RestaurantCard(
+                                restaurant: restaurant,
+                                dishPageSize: controller.dishPageSize,
+                                category: category,
+                              ),
+                              SeparateSectionBar(),
                           ],
                           SizedBox(height: TSize.spaceBetweenSections,)
-                        ],
-                      ),
+                        ]
+                      ],
                     ),
                   ]
               ),

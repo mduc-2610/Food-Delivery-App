@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
 import 'package:food_delivery_app/common/widgets/bars/search_bar.dart';
+import 'package:food_delivery_app/common/widgets/misc/empty.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/misc/not_found.dart';
 import 'package:food_delivery_app/features/restaurant/food/controllers/manage/food_manage_controller.dart';
@@ -75,6 +76,7 @@ class FoodManageView extends StatelessWidget {
                       children: [
                         Obx(() => _buildPromotionList(controller.promotions, controller)),
                         Obx(() => _buildFoodList(controller.dishes, controller)),
+                        // _buildFoodList([], controller),
                         ...controller.categories.map((category) =>
                             Obx(() => _buildFoodList(controller.mapCategory[category.name] ?? [], controller))),
                       ],
@@ -92,7 +94,9 @@ class FoodManageView extends StatelessWidget {
 
   Widget _buildFoodList(List<Dish> dishes, FoodManageController controller) {
     return (dishes.isEmpty)
-      ? NotFoundWidget(message: "No dishes found.\nTry a different search term.")
+      ? (controller.searchQuery.value != "")
+        ? NotFoundWidget(message: "No dishes found.\nTry a different search term.")
+        : EmptyWidget()
       : ListView.separated(
         padding: EdgeInsets.all(TSize.spaceBetweenItemsSm),
         itemCount: dishes.length,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/widgets/misc/empty.dart';
+import 'package:food_delivery_app/common/widgets/misc/not_found.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 
@@ -21,18 +23,12 @@ class ListCheck extends StatelessWidget {
       children: [
         if(checkEmpty)...[
           SizedBox(height: TSize.spaceBetweenSections,),
-          Text(
-            "Empty",
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.textDesc),
-          ),
+          EmptyWidget(),
         ]
 
         else if(checkNotFound)...[
           SizedBox(height: TSize.spaceBetweenSections,),
-          Text(
-            "Not Found",
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: TColor.textDesc),
-          ),
+          NotFoundWidget()
         ]
         else...[
           child

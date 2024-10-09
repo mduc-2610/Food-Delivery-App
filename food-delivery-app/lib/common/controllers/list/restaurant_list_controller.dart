@@ -78,7 +78,7 @@ class RestaurantListController extends GetxController {
     }
 
     if (category != null) {
-      paramList.add("category=$category");
+      paramList.add("category=$category&dish_category=$category");
     }
     paramList.add("dish_page_size=$dishPageSize");
 
