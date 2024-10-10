@@ -15,10 +15,12 @@ class RegistrationDocumentFieldController extends GetxController {
   int maxLength = 1;
   final RxList<dynamic> selectedImages = <dynamic>[].obs;
   final ImagePickerService _imagePickerService = ImagePickerService();
+  final Function()? cRemoveImage;
 
   RegistrationDocumentFieldController({
     List<dynamic>? databaseImages,
     int? maxLength,
+    this.cRemoveImage,
   }) {
     if (databaseImages != null && databaseImages.isNotEmpty && !databaseImages.contains(null)) {
       selectedImages.addAll(databaseImages);
@@ -42,7 +44,21 @@ class RegistrationDocumentFieldController extends GetxController {
   }
 
   void removeImage(int index) {
-    selectedImages.removeAt(index);
+    if(cRemoveImage == null) {
+     selectedImages.removeAt(index);
+    }
+    else {
+      try {
+        cRemoveImage?.call();
+      }
+      catch(e) {
+        Get.snackbar(
+          "Error",
+          "An error occurred while delete image",
+          backgroundColor: TColor.errorSnackBar
+        );
+      }
+    }
   }
 
   void viewImageDetail({int index = 0}) {

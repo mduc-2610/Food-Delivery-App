@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar_scroll_behavior.dart';
 import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
+import 'package:food_delivery_app/features/restaurant/food/controllers/detail/food_detail_controller.dart';
 import 'package:food_delivery_app/features/user/food/controllers/detail/food_detail_controller.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
@@ -14,7 +15,13 @@ class FoodDetailFlexibleAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = FoodDetailController.instance;
+    var controller;
+    try {
+      controller = FoodDetailController.instance;
+    }
+    catch(e) {
+      controller = RestaurantFoodDetailController.instance;
+    }
     return Stack(
       children: [
         AppBarScrollBehavior(
@@ -31,16 +38,18 @@ class FoodDetailFlexibleAppBar extends StatelessWidget {
           child: MainWrapper(
             child: Row(
               children: [
-                AppBarScrollBehavior(
-                  child: CircleIconCard(
-                    onTap: () {
-                      controller.toggleLike();
-                    },
-                    iconSize: TSize.iconSm,
-                    iconStr: controller.isLiked.value ? TIcon.fillHeart : TIcon.heart,
-                    elevation: TSize.cardElevation,
+                if(controller is FoodDetailController)...[
+                  AppBarScrollBehavior(
+                    child: CircleIconCard(
+                      onTap: () {
+                        controller.toggleLike();
+                      },
+                      iconSize: TSize.iconSm,
+                      iconStr: controller.isLiked.value ? TIcon.fillHeart : TIcon.heart,
+                      elevation: TSize.cardElevation,
+                    ),
                   ),
-                ),
+                ]
               ],
             ),
           ),
@@ -64,20 +73,22 @@ class FoodDetailFlexibleAppBar extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              AppBarScrollBehavior(
-                isScrollHidden: false,
-                child: Container(
-                  margin: EdgeInsets.only(top: TSize.verticalCenterAppBar),
-                  child: CircleIconCard(
-                    onTap: () {
-                      controller.toggleLike();
-                    },
-                    iconSize: TSize.iconSm,
-                    iconStr: controller.isLiked.value ? TIcon.fillHeart : TIcon.heart,
-                    elevation: TSize.cardElevation,
+              if(controller is FoodDetailController)...[
+                AppBarScrollBehavior(
+                  isScrollHidden: false,
+                  child: Container(
+                    margin: EdgeInsets.only(top: TSize.verticalCenterAppBar),
+                    child: CircleIconCard(
+                      onTap: () {
+                        controller.toggleLike();
+                      },
+                      iconSize: TSize.iconSm,
+                      iconStr: controller.isLiked.value ? TIcon.fillHeart : TIcon.heart,
+                      elevation: TSize.cardElevation,
+                    ),
                   ),
                 ),
-              ),
+              ]
             ],
           ),
         ),

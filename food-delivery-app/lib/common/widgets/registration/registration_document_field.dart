@@ -15,6 +15,10 @@ class RegistrationDocumentField extends StatelessWidget {
   final double imageWidth;
   final double? imageHeight;
   final RegistrationDocumentFieldController controller;
+  final bool highlight;
+  final bool viewEx;
+  final Widget? labelWidget;
+
 
   const RegistrationDocumentField({
     Key? key,
@@ -24,6 +28,9 @@ class RegistrationDocumentField extends StatelessWidget {
     this.buttonHeight,
     this.imageWidth = 120,
     this.imageHeight,
+    this.highlight = true,
+    this.viewEx = true,
+    this.labelWidget,
     required this.controller,
   });
 
@@ -34,23 +41,30 @@ class RegistrationDocumentField extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "*$label",
-            style: Get.textTheme.titleSmall?.copyWith(color: Colors.red),
+          (labelWidget != null)
+          ? labelWidget ?? SizedBox.shrink()
+          : Text(
+            "${highlight ? "*" : ""}$label",
+            style:
+            (highlight)
+              ? Get.textTheme.titleSmall?.copyWith(color: Colors.red)
+              : Get.textTheme.titleSmall,
           ),
           const SizedBox(height: 8),
           Obx(() => _buildImageSection()),
           const SizedBox(height: 8),
-          Row(
-            children: [
-              SmallButton(
-                onPressed: () {},
-                text: "Xem ví dụ",
-                width: buttonWidth,
-                height: buttonHeight,
-              ),
-            ],
-          )
+          if(viewEx)...[
+            Row(
+              children: [
+                SmallButton(
+                  onPressed: () {},
+                  text: "Example",
+                  width: buttonWidth,
+                  height: buttonHeight,
+                ),
+              ],
+            )
+          ]
         ],
       ),
     );

@@ -18,7 +18,7 @@ class APIService<T> {
   final bool pagination;
   final bool fullResponse;
   final bool allNoBearer;
-  final Dio? dio;
+  Dio? dio;
   final bool utf_8;
 
   APIService({
@@ -91,6 +91,7 @@ class APIService<T> {
           Uri.parse(url_),
           headers: await _getHeaders(token),
         );
+
         return _handleResponse(decodeMessage(response), response.statusCode, next: next, pagination: pagination, single: single);
       }
     });
@@ -129,6 +130,7 @@ class APIService<T> {
       final requestData = isFormData
           ? await data.toFormData()
           : (data is Map<String, dynamic> || data is Map) ? data : data.toJson();
+      if(isFormData && dio == null) this.dio = Dio();
       if (dio != null) {
         final response = await dio!.post(
           url(),
@@ -173,6 +175,7 @@ class APIService<T> {
           ? await data.toFormData(patch: patch)
           : (data is Map<String, dynamic>) ? data : data.toJson(patch: patch);
       $print(requestData);
+      if(isFormData && dio == null) this.dio = Dio();
       if (dio != null) {
         final response = await dio!.request(
           uri,

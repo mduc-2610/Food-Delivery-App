@@ -5,6 +5,9 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 from django.apps import apps
 from django.contrib.auth.models import AnonymousUser
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+
 
 from review.models.review_like import (
     DishReviewLike,
@@ -17,10 +20,11 @@ class Review(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
     rating = models.PositiveSmallIntegerField(default=0 ,blank=True, null=True)
     title = models.CharField(max_length=255, blank=True, null=True)
-    content = models.TextField(blank=True, null=True)
+    content = models.TextField(default="")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     total_likes = models.IntegerField(default=0, blank=True, null=True)
+    total_replies = models.IntegerField(default=0, blank=True, null=True)
 
     class Meta:
         abstract = True
@@ -40,8 +44,8 @@ class DishReview(Review):
             return DishReviewLike.objects.filter(user=_user, review=self).exists()
         return False
     
-    class Meta:
-        unique_together = ['user', 'dish', 'order']
+    # class Meta:
+    #     unique_together = ['user', 'dish', 'order']
 
     def __str__(self):
         return f"{self.user}'s review of {self.dish}"
@@ -57,8 +61,8 @@ class DelivererReview(Review):
             return DelivererReviewLike.objects.filter(user=_user, review=self).exists()
         return False
     
-    class Meta:
-        unique_together = ['user', 'deliverer', 'order']
+    # class Meta:
+    #     unique_together = ['user', 'deliverer', 'order']
 
     def __str__(self):
         return f"{self.user}'s review of {self.deliverer}"
@@ -74,8 +78,8 @@ class RestaurantReview(Review):
             return RestaurantReviewLike.objects.filter(user=_user, review=self).exists()
         return False
     
-    class Meta:
-        unique_together = ['user', 'restaurant', 'order']
+    # class Meta:
+    #     unique_together = ['user', 'restaurant', 'order']
 
     def __str__(self):
         return f"{self.user}'s review of {self.restaurant}"
@@ -91,8 +95,8 @@ class DeliveryReview(Review):
             return DeliveryReviewLike.objects.filter(user=_user, review=self).exists()
         return False
     
-    class Meta: 
-        unique_together = ['user', 'delivery', 'order']
+    # class Meta: 
+    #     unique_together = ['user', 'delivery', 'order']
 
     def __str__(self):
         return f"{self.user}'s review of {self.delivery}"
@@ -112,26 +116,21 @@ def update_review_stats(instance, created=False, deleted=False):
 
     related_model = getattr(instance, related_field)
     
-    if created:
-        related_model.total_reviews += 1
-    elif deleted:
-        related_model.total_reviews = max(0, related_model.total_reviews - 1)
-    
-    if instance.rating:
-        rating_key = str(int(instance.rating))
-        if created:
-            related_model.rating_counts[rating_key] = related_model.rating_counts.get(rating_key, 0) + 1
-        elif deleted:
-            related_model.rating_counts[rating_key] = max(0, related_model.rating_counts.get(rating_key, 0) - 1)
-        
-        # print(related_model, rating_key, related_model.rating_counts, pretty=True)
-
-    
     Review = apps.get_model('review', f'{model_name}Review')
     reviews = Review.objects.filter(**{related_field: related_model})
+    
+    related_model.total_reviews = reviews.count()
+    
+    rating_counts = {str(i): 0 for i in range(1, 6)}  
+    for review in reviews:
+        if review.rating:
+            rating_key = str(int(review.rating))
+            rating_counts[rating_key] += 1
+    related_model.rating_counts = rating_counts
+    
     average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
-    related_model.rating = average_rating or 0  
-
+    related_model.rating = average_rating or 0
+    
     related_model.save()
 
 @receiver(post_save, sender=DishReview)

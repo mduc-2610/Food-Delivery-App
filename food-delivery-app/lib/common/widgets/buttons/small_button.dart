@@ -97,7 +97,7 @@ class SmallButton extends StatelessWidget {
               Text(
                   text,
                   style: Theme.of(context).textTheme.bodyLarge
-                      ?.copyWith(color: TColor.light)
+                      ?.copyWith(color: textColor ?? TColor.light)
               ),
               if (suffixIcon != null || suffixIconStr != null) ...[
                 SizedBox(width: TSize.sm,),

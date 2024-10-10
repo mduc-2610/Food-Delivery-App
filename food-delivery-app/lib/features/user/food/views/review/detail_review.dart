@@ -9,19 +9,20 @@ import 'package:food_delivery_app/features/user/food/models/review/review.dart';
 import 'package:food_delivery_app/features/user/food/views/review/skeleton/detail_review_view_skeleton.dart';
 import 'package:food_delivery_app/features/user/food/views/review/widgets/detail_review_list.dart';
 import 'package:food_delivery_app/features/user/food/views/review/widgets/detail_review_rating_distribution.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
-enum ReviewType { food, restaurant, deliverer }
-
 class DetailReviewView extends StatelessWidget {
   final ReviewType reviewType;
+  final ViewType viewType;
   final item;
 
   DetailReviewView({
     this.reviewType = ReviewType.food,
+    this.viewType = ViewType.user,
     required this.item,
   });
 
@@ -137,23 +138,22 @@ class DetailReviewView extends StatelessWidget {
                 ),
               ];
             },
-            body: MainWrapper(
-                topMargin: TSize.spaceBetweenItemsVertical,
-                child: Obx(() => controller.isReviewLoading.value
-                    ? FoodReviewListSkeleton()
-                    : TabBarView(
-                  physics: NeverScrollableScrollPhysics(),
-                  controller: controller.tabController,
-                  children: [
-                    for(var type in controller.tabTypes)...[
-                      DetailReviewList(
-                        controller: controller,
-                        filter: type,
-                      )
-                    ]
-                  ],
-                )
-                )
+            body: Obx(() => controller.isReviewLoading.value
+                ? FoodReviewListSkeleton()
+                : TabBarView(
+              physics: NeverScrollableScrollPhysics(),
+              controller: controller.tabController,
+              children: [
+                for(var type in controller.tabTypes)...[
+                  DetailReviewList(
+                    controller: controller,
+                    filter: type,
+                    reviewType: reviewType,
+                    viewType: viewType,
+                  )
+                ]
+              ],
+            )
             ),
           ),
         )

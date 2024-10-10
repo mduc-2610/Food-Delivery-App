@@ -57,7 +57,7 @@ class FoodAddController extends GetxController {
     imagesController = Get.put(
         RegistrationDocumentFieldController(
             databaseImages: dish?.images.map((image) => image.image ?? '').toList() ?? [],
-            maxLength: 6
+            maxLength: 6,
         ),
         tag: "dishImages"
     );

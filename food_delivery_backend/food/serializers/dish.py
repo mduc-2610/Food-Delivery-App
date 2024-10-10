@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db.models import Q
 
 from food.models import (
     Dish,
@@ -14,6 +15,7 @@ from review.serializers import DishReviewSerializer
 
 from utils.function import update_attr
 from utils.serializers import CustomRelatedModelSerializer
+from utils.function import reverse_absolute_uri
 
 class DishImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -132,25 +134,35 @@ class CreateUpdateDishSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         _id = validated_data.pop('id', None)
         _restaurant = validated_data.pop('restaurant', None)
-        images_data = validated_data.pop('images', None)
-        images_url_data = validated_data.pop('image_urls', None)
-        print(images_data, pretty=True)
-        print(images_url_data, pretty=True)
-        
+        images = validated_data.pop('images', None)
+        image_urls = validated_data.pop('image_urls', None)
+
         if _id and _restaurant:
             print("No need to update")
 
-        update_attr(instance, **validated_data)
-        instance.save()
+        instance = super().update(instance, validated_data)
 
-        # if images_data:
-        #     existing_images = set(instance.images.values_list('image', flat=True))
-        #     for image_data in images_data:
-        #         if image_data not in existing_images:
-        #             DishImage.objects.create(dish=instance, image=image_data)
-        if images_data:            
-            instance.images.filter(image__in=images_url_data).delete()
-            for image_data in images_data:
+        dish_images = instance.images.all()
+
+        if image_urls:
+            image_urls_reverse = [reverse_absolute_uri(url, self.context['request']) for url in image_urls]
+            print('image_urls', image_urls_reverse, pretty=True)
+
+            image_url_count = {url: image_urls_reverse.count(url) for url in image_urls_reverse}
+
+            for dish_image in dish_images:
+                image_url = dish_image.image
+                # reverse_absolute_uri(dish_image.image.url, self.context['request'])                
+                if image_url in image_url_count and image_url_count[image_url] > 0:
+                    image_url_count[image_url] -= 1
+                else:
+                    print(f"Deleted image: {dish_image.image.url}")
+                    dish_image.delete()
+        else:
+            dish_images.delete()
+
+        if images:
+            for image_data in images:
                 DishImage.objects.create(dish=instance, image=image_data)
 
         return instance

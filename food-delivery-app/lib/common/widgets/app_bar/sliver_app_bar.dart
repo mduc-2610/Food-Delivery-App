@@ -3,7 +3,7 @@ import 'package:food_delivery_app/common/widgets/cards/circle_icon_card.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
-
+import 'package:get/get.dart';
 
 class CSliverAppBar extends StatelessWidget {
   final dynamic title;
@@ -16,12 +16,14 @@ class CSliverAppBar extends StatelessWidget {
   final PreferredSizeWidget? bottom;
   final Widget? flexibleSpace;
   final double? expandedHeight;
+  final dynamic result;
   final Color? titleColor;
 
   const CSliverAppBar({
     required this.title,
     this.iconList = const [],
     this.backButtonOnPressed,
+    this.result,
     this.isBigTitle = false,
     this.centerTitle = true,
     this.noLeading = false,
@@ -76,10 +78,11 @@ class CSliverAppBar extends StatelessWidget {
             backgroundColor: Colors.white,
             child: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () {
-                backButtonOnPressed?.call();
-                Navigator.pop(context);
-              },
+                onPressed: () {
+                  backButtonOnPressed?.call();
+                  Get.back(result: result);
+                  // Navigator.pop(context);
+                },
             ),
           ),
         ) : null,

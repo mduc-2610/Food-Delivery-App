@@ -1,4 +1,3 @@
-# reviews/views.py
 from rest_framework import viewsets
 
 from review.models import (
@@ -11,8 +10,8 @@ from review.serializers import (
     DishReviewSerializer, DelivererReviewSerializer, 
     RestaurantReviewSerializer, DeliveryReviewSerializer,
 
-    CreateDelivererReviewSerializer, CreateDishReviewSerializer, 
-    CreateDeliveryReviewSerializer, CreateRestaurantReviewSerializer,
+    CreateUpdateDelivererReviewSerializer, CreateUpdateDishReviewSerializer, 
+    CreateUpdateDeliveryReviewSerializer, CreateUpdateRestaurantReviewSerializer,
 
     DishReviewLikeSerializer, DelivererReviewLikeSerializer, 
     RestaurantReviewLikeSerializer, DeliveryReviewLikeSerializer,
@@ -31,7 +30,8 @@ class DishReviewViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     pagination_class = CustomPagination
     many_related_serializer_class = {
         # 'liked_by_users': UserAbbrSerializer,
-        'create': CreateDishReviewSerializer,
+        'create': CreateUpdateDishReviewSerializer,
+        'update': CreateUpdateDishReviewSerializer,
         'dish_review_likes': DishReviewLikeSerializer,
     }
 
@@ -40,7 +40,8 @@ class DelivererReviewViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     serializer_class = DelivererReviewSerializer
     pagination_class = CustomPagination
     many_related_serializer_class = {
-        'create': CreateDelivererReviewSerializer,
+        'create': CreateUpdateDelivererReviewSerializer,
+        'update':CreateUpdateDelivererReviewSerializer,
     }
 
 class RestaurantReviewViewSet(DefaultGenericMixin, ManyRelatedViewSet):
@@ -48,7 +49,8 @@ class RestaurantReviewViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     serializer_class = RestaurantReviewSerializer
     pagination_class = CustomPagination
     many_related_serializer_class = {
-        'create': CreateRestaurantReviewSerializer,
+        'create': CreateUpdateRestaurantReviewSerializer,
+        'update':CreateUpdateRestaurantReviewSerializer,
     }
 
 class DeliveryReviewViewSet(DefaultGenericMixin, ManyRelatedViewSet):
@@ -56,6 +58,7 @@ class DeliveryReviewViewSet(DefaultGenericMixin, ManyRelatedViewSet):
     serializer_class = DeliveryReviewSerializer
     pagination_class = CustomPagination
     many_related_serializer_class = {
-        'create': CreateDeliveryReviewSerializer,
+        'create': CreateUpdateDeliveryReviewSerializer,
+        'update':CreateUpdateDeliveryReviewSerializer,
     }
 

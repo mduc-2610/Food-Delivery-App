@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_delivery_app/common/widgets/registration/registration_document_field.dart';
 import 'package:food_delivery_app/features/user/order/controllers/rating/order_rating_controller.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
@@ -58,6 +59,15 @@ class _RatingReviewState extends State<RatingReview> {
                 )
             ),
             maxLines: TSize.lgMaxLines,
+          ),
+        ],
+        if(_controller.tabController.index == 2)...[
+          SizedBox(height: TSize.spaceBetweenItemsVertical),
+          RegistrationDocumentField(
+            label: "Upload extra image",
+            controller: _controller.restaurantImagesController,
+            viewEx: false,
+            highlight: false,
           ),
         ]
       ],

@@ -1,6 +1,8 @@
 import 'dart:ffi';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/controllers/field/registration_document_field_controller.dart';
 import 'package:food_delivery_app/common/widgets/dialogs/show_confirm_dialog.dart';
 import 'package:food_delivery_app/common/widgets/dialogs/show_success_dialog.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
@@ -33,7 +35,8 @@ class OrderRatingController extends GetxController with GetSingleTickerProviderS
 
   final delivererTitleTextController = TextEditingController();
   final delivererContentTextController = TextEditingController();
-
+  late RegistrationDocumentFieldController restaurantImagesController;
+  Map<String, RegistrationDocumentFieldController> foodImagesController = {};
   final restaurantTitleTextController = TextEditingController();
   final restaurantContentTextController = TextEditingController();
 
@@ -73,6 +76,13 @@ class OrderRatingController extends GetxController with GetSingleTickerProviderS
 
     restaurantTitleTextController.text = order.value?.restaurantReview?.title ?? "";
     restaurantContentTextController.text = order.value?.restaurantReview?.content ?? "";
+    restaurantImagesController = Get.put(
+        RegistrationDocumentFieldController(
+          databaseImages: order.value?.restaurantReview?.images.map((image) => image.image ?? '').toList() ?? [],
+          maxLength: 6,
+        ),
+        tag: "restaurantImages"
+    );
 
     int dishReviewsLen = order.value?.dishReviews.length ?? 0;
     int cartDishesLen = order.value?.cart?.cartDishes?.length ?? 0;
@@ -85,6 +95,13 @@ class OrderRatingController extends GetxController with GetSingleTickerProviderS
         orElse: () => DishReview(dish: dish.id, rating: 0, title: '', content: ''),
       );
 
+      foodImagesController[dish?.id] = Get.put(
+          RegistrationDocumentFieldController(
+            databaseImages: matchingReview?.images.map((image) => image.image ?? '').toList() ?? [],
+            maxLength: 6,
+          ),
+          tag: "dishImages_${dish?.id}"
+      );
       mapDishTextController[dish] = {
         "rating": matchingReview?.rating ?? 0,
         "title": TextEditingController(
@@ -186,6 +203,18 @@ class OrderRatingController extends GetxController with GetSingleTickerProviderS
               content: restaurantContentTextController.text
           )
       ).toJson(patch: true), );
+
+      if(statusCode == 200 || statusCode == 201)  {
+        var _restaurantReview = data.restaurantReview;
+        _restaurantReview.images = restaurantImagesController.selectedImages;
+        $print(_restaurantReview.images);
+        final [_statusCode, _headers, _data] = await APIService<RestaurantReview>(dio: Dio()).update(
+          _restaurantReview?.id,
+          _restaurantReview,
+          isFormData: true,
+        );
+        $print([_statusCode, _headers, _data]);
+      }
       $print("Restaurant review update: ${statusCode} ${headers} ${data?.restaurantReview}");
     }
     else if (currentTab == 4) {
@@ -203,11 +232,37 @@ class OrderRatingController extends GetxController with GetSingleTickerProviderS
       $print(Order(
           dishReviews: dishReviews
       ).dishReviews);
-
-      final [statusCode, headers, data] = await APIService<Order>().update(order.value?.id, Order(
-          dishReviews: dishReviews
-      ).toJson(patch: true),);
-      $print(data);
+      try {
+        final [statusCode, headers, data] = await APIService<Order>().update(order.value?.id, Order(
+            dishReviews: dishReviews
+        ).toJson(patch: true),);
+        $print("success uodatsse");
+        if(statusCode == 200 || statusCode == 201)  {
+          $print("success uodate");
+          List<DishReview> _dishReviews = data.dishReviews;
+          for(var _dishReview in _dishReviews) {
+            var dishId = _dishReview.dish;
+            _dishReview.images = foodImagesController[dishId]?.selectedImages ?? [];
+            $print(_dishReview);
+            final [_statusCode, _headers, _data] = await APIService<DishReview>(dio: Dio()).update(
+              _dishReview.id,
+              _dishReview,
+              isFormData: true,
+            );
+            $print([_statusCode, _headers, _data]);
+          }
+        }
+        $print(data);
+      }
+      catch(e) {
+        $print(e);
+        Get.snackbar(
+          "Error",
+          "Error when update rating",
+          backgroundColor: TColor.errorSnackBar,
+        );
+        return;
+      }
     }
 
     if(currentTab != 4) {

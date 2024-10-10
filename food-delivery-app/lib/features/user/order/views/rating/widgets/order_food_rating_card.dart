@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_delivery_app/common/controllers/field/registration_document_field_controller.dart';
+import 'package:food_delivery_app/common/widgets/registration/registration_document_field.dart';
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
 import 'package:food_delivery_app/features/user/order/controllers/rating/order_rating_controller.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 
 class OrderFoodRatingCard extends StatefulWidget {
@@ -26,7 +29,10 @@ class _OrderFoodRatingCardState extends State<OrderFoodRatingCard> {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(
+          vertical: 8,
+          horizontal: 16
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -35,7 +41,11 @@ class _OrderFoodRatingCardState extends State<OrderFoodRatingCard> {
               children: [
                 ClipRRect(
                     borderRadius: BorderRadius.circular(TSize.borderRadiusLg),
-                    child: Image.asset(TImage.hcBurger1, fit: BoxFit.cover, width: TSize.imageThumbSize, height: TSize.imageThumbSize)
+                    child: THelperFunction.getValidImage(
+                      widget.dish?.image,
+                      width: TSize.imageThumbSize,
+                      height: TSize.imageThumbSize
+                    )
                 ),
                 SizedBox(width: TSize.spaceBetweenItemsVertical),
                 Expanded(
@@ -49,7 +59,9 @@ class _OrderFoodRatingCardState extends State<OrderFoodRatingCard> {
                       SizedBox(height: TSize.spaceBetweenItemsHorizontal,),
                       RatingBarIndicator(
                         itemPadding: EdgeInsets.only(right: TSize.spaceBetweenItemsHorizontal),
-                        rating: controller.mapDishTextController[widget.dish]["rating"]?.toDouble(),
+                        rating: THelperFunction.formatDouble(
+                            controller.mapDishTextController[widget.dish]?["rating"]
+                        ),
                         itemBuilder: (context, index) => GestureDetector(
                           onTap: () {
                             controller.handleDishRating(index, widget.dish);
@@ -82,6 +94,13 @@ class _OrderFoodRatingCardState extends State<OrderFoodRatingCard> {
                 hintText: 'Type your review ...',
               ),
               maxLines: TSize.smMaxLines,
+            ),
+            SizedBox(height: TSize.spaceBetweenItemsVertical),
+            RegistrationDocumentField(
+              label: "Upload extra image",
+              controller: controller.foodImagesController["${widget.dish?.id}"] ?? RegistrationDocumentFieldController(),
+              viewEx: false,
+              highlight: false,
             ),
           ],
         ),

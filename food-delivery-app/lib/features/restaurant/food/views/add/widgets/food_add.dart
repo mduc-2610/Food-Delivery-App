@@ -51,7 +51,7 @@ class FoodAddView extends StatelessWidget {
               imageHeight: 300,
             ),
             RegistrationDocumentField(
-              label: "Upload image",
+              label: "Upload extra image",
               controller: controller.imagesController,
             ),
 

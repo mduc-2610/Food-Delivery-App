@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/sliver_app_bar.dart';
+import 'package:food_delivery_app/common/widgets/bars/separate_section_bar.dart';
 import 'package:food_delivery_app/common/widgets/misc/main_wrapper.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
@@ -83,35 +84,45 @@ class FoodReviewListSkeleton extends StatelessWidget {
       child: Column(
         children: List.generate(length, (index) =>
             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        BoxSkeleton(height: 40, width: 40, borderRadius: 20),
-                        SizedBox(width: TSize.spaceBetweenItemsHorizontal),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            BoxSkeleton(height: 16, width: 80),
-                            SizedBox(height: 4),
-                            BoxSkeleton(height: 14, width: 60),
-                          ],
-                        ),
-                      ],
-                    ),
-                    BoxSkeleton(height: 20, width: 100),
-                  ],
+                MainWrapper(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: TSize.spaceBetweenItemsVertical),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              BoxSkeleton(height: 40, width: 40, borderRadius: 20),
+                              SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  BoxSkeleton(height: 16, width: 80),
+                                  SizedBox(height: 4),
+                                  BoxSkeleton(height: 14, width: 60),
+                                ],
+                              ),
+                            ],
+                          ),
+                          BoxSkeleton(height: 20, width: 100),
+                        ],
+                      ),
+                      SizedBox(height: TSize.spaceBetweenItemsVertical),
+                      BoxSkeleton(height: 14, width: double.infinity),
+                      SizedBox(height: 4),
+                      BoxSkeleton(height: 14, width: double.infinity),
+                      SizedBox(height: 4),
+                      BoxSkeleton(height: 14, width: 200),
+                      SizedBox(height: TSize.spaceBetweenSections),
+
+                    ],
+                  ),
                 ),
-                SizedBox(height: TSize.spaceBetweenItemsVertical),
-                BoxSkeleton(height: 14, width: double.infinity),
-                SizedBox(height: 4),
-                BoxSkeleton(height: 14, width: double.infinity),
-                SizedBox(height: 4),
-                BoxSkeleton(height: 14, width: 200),
-                SizedBox(height: TSize.spaceBetweenSections),
+                SeparateSectionBar()
+
               ],
             )
         ),

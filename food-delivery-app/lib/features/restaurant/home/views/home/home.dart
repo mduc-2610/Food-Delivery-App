@@ -5,6 +5,7 @@ import 'package:food_delivery_app/features/restaurant/home/views/common/widgets/
 import 'package:food_delivery_app/features/restaurant/home/views/home/skeleton/home_skeleton.dart';
 import 'package:food_delivery_app/features/user/menu_redirection.dart';
 import 'package:food_delivery_app/utils/constants/emojis.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:get/get.dart';
 import 'package:food_delivery_app/features/restaurant/home/controllers/home/home_controller.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
@@ -62,6 +63,7 @@ class HomeView extends StatelessWidget {
                                   Get.to(() => DetailReviewView(
                                     reviewType: ReviewType.restaurant,
                                     item: controller.restaurant,
+                                    viewType: ViewType.restaurant,
                                   ));
                                 },
                               ),

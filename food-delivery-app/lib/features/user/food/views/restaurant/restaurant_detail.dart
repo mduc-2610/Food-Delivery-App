@@ -13,6 +13,7 @@ import 'package:food_delivery_app/features/user/food/views/review/detail_review.
 import 'package:food_delivery_app/features/user/food/views/restaurant/widgets/restaurant_detail_skeleton.dart';
 import 'package:food_delivery_app/features/user/food/views/restaurant/widgets/restaurant_detail_sliver_app_bar.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';

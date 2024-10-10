@@ -7,9 +7,16 @@ import sys
 import random
 from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError
-
-
+from django.conf import settings
 from django.apps import apps
+
+
+def reverse_absolute_uri(absolute_url, request):
+    media_url = request.build_absolute_uri(settings.MEDIA_URL)  
+    if absolute_url.startswith(media_url) or settings.MEDIA_URL in absolute_url:
+        return absolute_url.split(media_url)[-1]
+    return absolute_url  
+
 
 def update_attr(instance, **kwargs):
     save = kwargs.pop('save', True)

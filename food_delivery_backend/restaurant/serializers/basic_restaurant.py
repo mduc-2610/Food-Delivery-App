@@ -16,6 +16,6 @@ class BasicRestaurantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Restaurant
         fields = [
-            'id', 'basic_info', 'distance_from_user', 'rating', 'total_reviews', 'avg_price'
+            'id', 'basic_info', 'detail_info', 'distance_from_user', 'rating', 'total_reviews', 'avg_price'
         ]
         depth = 1

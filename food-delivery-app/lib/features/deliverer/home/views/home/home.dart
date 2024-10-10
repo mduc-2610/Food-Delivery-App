@@ -14,6 +14,7 @@ import 'package:food_delivery_app/features/user/food/views/review/detail_review.
 import 'package:food_delivery_app/features/user/menu_redirection.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/emojis.dart';
+import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:get/get.dart';
@@ -67,6 +68,7 @@ class HomeView extends StatelessWidget {
                                   Get.to(() => DetailReviewView(
                                     reviewType: ReviewType.deliverer,
                                     item: controller.deliverer,
+                                    viewType: ViewType.deliverer,
                                   ));
                                 },
                               ),

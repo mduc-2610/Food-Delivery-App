@@ -258,10 +258,10 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
                         print(f"Promotion with id {promotion_id} does not exist", pretty=True)
                     # print("add new", len(user.user_used.all()))
         
-        print('restaurant_promotions', restaurant_promotions, pretty=True)
+        # print('restaurant_promotions', restaurant_promotions, pretty=True)
 
 
-        print("delete_restaurant_promotion", delete_restaurant_promotion, pretty=True)
+        # print("delete_restaurant_promotion", delete_restaurant_promotion, pretty=True)
         if delete_restaurant_promotion:
             promotion = OrderRestaurantPromotion.objects.filter(
                 order=instance,
@@ -290,8 +290,9 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
                         print(f"Promotion with id {promotion_id} does not exist", pretty=True)
                     # print("add new", len(instance.restaurant_promotions.all()))
 
-        print('promotions_add', instance.restaurant_promotions.all(), pretty=True)
+        print('dish_reviwes', dish_reviews, pretty=True)
         for dish_review in dish_reviews:
+            _replies = dish_review.pop('replies', [])
             _user = dish_review.pop('user', None)
             _dish = dish_review.pop('dish', None)
             _order = dish_review.pop('order', None)
@@ -303,6 +304,7 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
             )
             print(_instance.id, _updated, pretty=True)
         
+        print('deliverer_validated_data', deliverer_review, pretty=True)
         if deliverer_review:
             _user = deliverer_review.pop('user', None)
             _deliverer = deliverer_review.pop('deliverer', None)
@@ -313,8 +315,9 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
                 deliverer=_deliverer if _deliverer else instance.delivery.deliverer,
                 defaults=deliverer_review
             )
-            print(_instance.id, _updated, pretty=True)
+            # print(_instance.id, _updated, pretty=True)
         
+        print('restaurant_validated_data', restaurant_review, pretty=True)
         if restaurant_review:
             _user = restaurant_review.pop('user', None)
             _restaurant = restaurant_review.pop('restaurant', None)
@@ -325,7 +328,7 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
                 restaurant=_restaurant if _restaurant else instance.cart.restaurant,
                 defaults=restaurant_review
             )
-            print(_instance.id, _instance.rating, _updated, pretty=True)
+            # print(_instance.id, _instance.rating, _updated, pretty=True)
 
         return instance
     

@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:food_delivery_app/data/services/reflect.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
 import 'package:food_delivery_app/features/authentication/models/deliverer/deliverer.dart';
@@ -112,6 +115,29 @@ class Order {
     return data;
   }
 
+  Future<FormData> toFormData({bool patch = false}) async {
+    final Map<String, dynamic> data = {
+      'id': id,
+      'cart': cart is String ? cart : cart?.toJson(),
+      'delivery_address': deliveryAddress is String ? deliveryAddress : jsonEncode(deliveryAddress?.toJson()),
+      'payment_method': paymentMethod,
+      'promotion': promotion,
+      'delivery_fee': deliveryFee,
+      'discount': discount,
+      'total': total,
+      'status': status,
+      'rating': rating,
+      'deliverer_review': delivererReview is String ? delivererReview : await delivererReview?.toFormData(patch: patch),
+      'restaurant_review': restaurantReview is String ? restaurantReview : await restaurantReview?.toFormData(patch: patch),
+      'dish_reviews': dishReviews.map((dish) async => await dish.toFormData(patch: patch)).toList(),
+    };
+
+    if (patch) {
+      data.removeWhere((key, value) => value == null);
+    }
+
+    return FormData.fromMap(data);
+  }
 
   @override
   String toString() {

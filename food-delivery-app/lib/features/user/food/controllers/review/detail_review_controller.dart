@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/data/services/user_service.dart';
@@ -11,12 +12,13 @@ import 'package:food_delivery_app/features/user/food/controllers/restaurant/rest
 import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
 import 'package:food_delivery_app/features/user/food/models/review/review.dart';
 import 'package:food_delivery_app/features/user/food/models/review/review_like.dart';
+import 'package:food_delivery_app/features/user/food/models/review/review_reply.dart';
 import 'package:food_delivery_app/features/user/order/models/delivery.dart';
 import 'package:food_delivery_app/utils/constants/times.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
-class ReviewController<T, R extends Review> extends GetxController with SingleGetTickerProviderMixin {
+class ReviewController<T, R extends BaseReview> extends GetxController with SingleGetTickerProviderMixin {
   static ReviewController get instance => Get.find();
 
   T? item;
@@ -26,6 +28,7 @@ class ReviewController<T, R extends Review> extends GetxController with SingleGe
   var reviews = <R>[].obs; // Now strongly typed
   Rx<bool> isPageLoading = true.obs;
   Rx<bool> isReviewLoading = false.obs;
+  Rx<bool> isReplyLoading = false.obs;
   late TabController tabController;
   final List<String> tabTypes = ['All', 'Positive', 'Negative', '5', '4', '3', '2', '1'];
   final scrollController = ScrollController();
@@ -75,6 +78,7 @@ class ReviewController<T, R extends Review> extends GetxController with SingleGe
     await Future.delayed(Duration(milliseconds: TTime.init));
     isPageLoading.value = false;
     isReviewLoading.value = false;
+    isReplyLoading.value = false;
     update();
   }
 
@@ -115,6 +119,41 @@ class ReviewController<T, R extends Review> extends GetxController with SingleGe
       return "review/delivery-review-like";
     }
     return "review/dish-review-like";
+  }
+
+  Future<dynamic> callCreateUpdateDeleteReviewReply(
+      dynamic reviewReply, {
+        bool isFormData = true,
+        String? id,
+        bool delete = false,
+      }) async {
+    late final APIService apiService;
+
+    if (T == Restaurant) {
+      apiService = APIService<RestaurantReviewReply>();
+    }
+    else if (T == Deliverer) {
+      apiService = APIService<DelivererReviewReply>();
+    }
+    else if (T == Delivery) {
+      apiService = APIService<DeliveryReviewReply>();
+    }
+    else {
+      apiService = APIService<DishReviewReply>();
+    }
+
+    if (delete) {
+      $print("Deleting review reply with id: $id");
+      return await apiService.delete(id!);
+    }
+
+    if (id == null) {
+      $print("Creating new review reply");
+      return await apiService.create(reviewReply, isFormData: isFormData);
+    } else {
+      $print("Updating review reply with id: $id");
+      return await apiService.update(id, reviewReply, isFormData: isFormData);
+    }
   }
 
   Future<dynamic> callCreateReview(like) async {
@@ -171,6 +210,10 @@ class ReviewController<T, R extends Review> extends GetxController with SingleGe
       await likeReview(review);
     }
     update();
+  }
+
+  Future<void> handleReply() async {
+
   }
 
   Future<void> likeReview(R review) async {

@@ -51,8 +51,8 @@ class HomeView extends StatelessWidget {
                                   Get.offAll(() => DelivererMenuRedirection());
                                 },
                               ),
+                              SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
                             ],
-                            SizedBox(width: TSize.spaceBetweenItemsHorizontal,),
 
                             if(controller.user?.isCertifiedRestaurant ?? false)...[
                               SmallButton(

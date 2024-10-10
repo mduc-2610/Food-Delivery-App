@@ -170,7 +170,7 @@ class OrderInfo extends StatelessWidget {
               SizedBox(height: TSize.spaceBetweenSections),
 
               // Review or Cancellation Section
-              if (viewType == OrderViewType.history && order?.status == "COMPLETED") _buildReviewSection(context),
+              // if (viewType == OrderViewType.history && order?.status == "COMPLETED") _buildReviewSection(context),
 
 
               SizedBox(height: TSize.spaceBetweenSections),

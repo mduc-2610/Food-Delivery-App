@@ -1,3 +1,4 @@
+from .review_image import ReviewImage
 from .review import (
     DishReview, 
     DelivererReview,
@@ -9,4 +10,10 @@ from .review_like import (
     DelivererReviewLike,
     RestaurantReviewLike,
     DeliveryReviewLike
+)
+from .review_reply import (
+    DishReviewReply, 
+    DelivererReviewReply,
+    RestaurantReviewReply,
+    DeliveryReviewReply,
 )

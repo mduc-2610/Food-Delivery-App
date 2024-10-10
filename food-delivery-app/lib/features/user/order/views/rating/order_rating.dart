@@ -40,6 +40,7 @@ class OrderRatingView extends StatelessWidget {
         ),
         body: MainWrapper(
           child: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
             controller: controller.tabController,
             children: [
               _buildOrderRatingStep(),

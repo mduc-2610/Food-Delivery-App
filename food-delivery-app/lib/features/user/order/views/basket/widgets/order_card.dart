@@ -13,6 +13,7 @@ import 'package:food_delivery_app/utils/constants/icon_strings.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
 
@@ -62,12 +63,11 @@ class _OrderCardState extends State<OrderCard> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(TSize.sm),
-                        child: Image.asset(
-                          TImage.hcBurger1,
+                        child: THelperFunction.getValidImage(
+                          "${widget.cartDish.dish?.image}",
                           width: 80,
                           height: 80,
-                          fit: BoxFit.cover,
-                        ),
+                        )
                       ),
                       SizedBox(width: TSize.spaceBetweenItemsHorizontal),
                       SizedBox(

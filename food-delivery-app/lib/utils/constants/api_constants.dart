@@ -34,6 +34,7 @@ import 'package:food_delivery_app/features/user/food/models/food/dish_like.dart'
 import 'package:food_delivery_app/features/user/food/models/food/option.dart';
 import 'package:food_delivery_app/features/user/food/models/review/review.dart';
 import 'package:food_delivery_app/features/user/food/models/review/review_like.dart';
+import 'package:food_delivery_app/features/user/food/models/review/review_reply.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
 import 'package:food_delivery_app/features/user/order/models/delivery.dart';
 import 'package:food_delivery_app/features/user/order/models/order.dart';
@@ -67,7 +68,7 @@ Future<String> getLocalIpAddress() async {
 }
 
 class APIConstant {
-  static const String ip = "192.168.1.45";
+  static const String ip = "192.168.1.53";
   static const String tSecretAPIKey = "";
   // static const baseUrl = 'http://10.0.2.2:8000/api';
   // static const baseUrl = 'http://192.168.1.8:8000/api'; // VANSAU
@@ -178,6 +179,16 @@ class APIConstant {
         return 'review/restaurant-review';
       case DeliveryReview:
         return 'review/delivery-review';
+      case DishReviewReply:
+        return 'review/dish-review-reply';
+      case DelivererReviewReply:
+        return 'review/deliverer-review-reply';
+      case RestaurantReviewReply:
+        return 'review/restaurant-review-reply';
+      case DeliveryReviewReply:
+        return 'review/delivery-review-reply';
+      case DishReviewLike:
+        return 'review/dish-review-like';
       case DishReviewLike:
         return 'review/dish-review-like';
       case RestaurantReviewLike:
