@@ -4,7 +4,7 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
 @reflector
-class Review {
+class BaseReview {
   final String? id;
   final BasicUser? user;
   final int? rating;
@@ -15,8 +15,7 @@ class Review {
   late Rx<bool> isLiked;
   late Rx<int> totalLikes;
 
-  // Constructor
-  Review({
+  BaseReview({
     this.id,
     this.user,
     this.rating,
@@ -31,8 +30,7 @@ class Review {
     this.totalLikes = (totalLikes ?? 0).obs;
   }
 
-  // From JSON constructor
-  Review.fromJson(Map<String, dynamic> json)
+  BaseReview.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         user = (json['user'] is String || json['user'] == null)
             ? null
@@ -50,7 +48,6 @@ class Review {
         totalLikes = Rx<int>(json['total_likes'] ?? 0)
   ;
 
-  // Convert to JSON
   Map<String, dynamic> toJson({bool patch = false}) {
     final Map<String, dynamic> data = {
       'id': id,
@@ -77,7 +74,7 @@ class Review {
 
 @reflector
 @jsonSerializable
-class DishReview extends Review {
+class DishReview extends BaseReview {
   final String? dish;
 
   DishReview({
@@ -128,7 +125,7 @@ class DishReview extends Review {
 
 @reflector
 @jsonSerializable
-class DelivererReview extends Review {
+class DelivererReview extends BaseReview {
   final String? deliverer;
 
   DelivererReview({
@@ -179,7 +176,7 @@ class DelivererReview extends Review {
 
 @reflector
 @jsonSerializable
-class RestaurantReview extends Review {
+class RestaurantReview extends BaseReview {
   final String? restaurant;
 
   RestaurantReview({
@@ -230,7 +227,7 @@ class RestaurantReview extends Review {
 
 @reflector
 @jsonSerializable
-class DeliveryReview extends Review {
+class DeliveryReview extends BaseReview {
   final String? delivery;
 
   DeliveryReview({

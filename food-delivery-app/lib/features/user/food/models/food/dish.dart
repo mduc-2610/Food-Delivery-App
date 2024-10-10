@@ -118,7 +118,7 @@ class Dish {
       'discount_price': discountPrice,
       'image': await multiPartImage,
       'images': _multiPartImages,
-      'image_urls': _imageUrls,
+      'image_urls_delete': _imageUrls,
       'rating': rating ?? 0,
       'is_disabled': isDisabled,
       'category': category,

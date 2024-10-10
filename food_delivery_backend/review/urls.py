@@ -2,8 +2,9 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
-    DishReviewViewSet, DelivererReviewViewSet, RestaurantReviewViewSet, DeliveryReviewViewSet,
-    DishReviewLikeViewSet, RestaurantReviewLikeViewSet, DelivererReviewLikeViewSet, DeliveryReviewLikeViewSet
+    DishReviewViewSet, RestaurantReviewViewSet, DelivererReviewViewSet, DeliveryReviewViewSet,
+    DishReviewLikeViewSet, RestaurantReviewLikeViewSet, DelivererReviewLikeViewSet, DeliveryReviewLikeViewSet,
+    DishReviewReplyViewSet, RestaurantReviewReplyViewSet, DelivererReviewReplyViewSet, DeliveryReviewReplyViewSet,
 )
 
 router = DefaultRouter()
@@ -15,6 +16,10 @@ router.register(r'dish-review-like', DishReviewLikeViewSet)
 router.register(r'restaurant-review-like', RestaurantReviewLikeViewSet)
 router.register(r'deliverer-review-like', DelivererReviewLikeViewSet)
 router.register(r'delivery-review-like', DeliveryReviewLikeViewSet)
+router.register(r'dish-review-reply', DishReviewReplyViewSet)
+router.register(r'deliverer-review-reply', DelivererReviewReplyViewSet)
+router.register(r'restaurant-review-reply', RestaurantReviewReplyViewSet)
+router.register(r'delivery-review-reply', DeliveryReviewReplyViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

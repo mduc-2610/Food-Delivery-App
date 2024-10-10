@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db.models import Q
 
 from food.models import (
     Dish,
@@ -14,6 +15,7 @@ from review.serializers import DishReviewSerializer
 
 from utils.function import update_attr
 from utils.serializers import CustomRelatedModelSerializer
+from utils.function import reverse_absolute_uri
 
 class DishImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -97,7 +99,7 @@ class CreateUpdateDishSerializer(serializers.ModelSerializer):
         required=False  
     )
 
-    image_urls = serializers.ListField(
+    image_urls_delete = serializers.ListField(
         child=serializers.CharField(),
         write_only=True,
         required=False  
@@ -116,7 +118,7 @@ class CreateUpdateDishSerializer(serializers.ModelSerializer):
             'is_disabled', 
             'rating_counts', 
             'images',
-            'image_urls',
+            'image_urls_delete',
         ]
 
     def create(self, validated_data):
@@ -132,28 +134,59 @@ class CreateUpdateDishSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         _id = validated_data.pop('id', None)
         _restaurant = validated_data.pop('restaurant', None)
-        images_data = validated_data.pop('images', None)
-        images_url_data = validated_data.pop('image_urls', None)
-        print(images_data, pretty=True)
-        print(images_url_data, pretty=True)
-        
+        images = validated_data.pop('images', None)
+        image_urls_delete = validated_data.pop('image_urls_delete', None)
+
         if _id and _restaurant:
             print("No need to update")
+        
+        instance = super().update(instance, validated_data)
 
-        update_attr(instance, **validated_data)
-        instance.save()
-
-        # if images_data:
-        #     existing_images = set(instance.images.values_list('image', flat=True))
-        #     for image_data in images_data:
-        #         if image_data not in existing_images:
-        #             DishImage.objects.create(dish=instance, image=image_data)
-        if images_data:            
-            instance.images.filter(image__in=images_url_data).delete()
-            for image_data in images_data:
+        if images:
+            for image_data in images:
                 DishImage.objects.create(dish=instance, image=image_data)
 
+        if image_urls_delete:
+            image_names_to_delete = [reverse_absolute_uri(url, self.context['request']) for url in image_urls_delete]
+            print('image_urls_delete', image_names_to_delete, pretty=True)
+            for image_name in image_names_to_delete:
+                _image = DishImage.objects.filter(
+                    dish=instance,
+                    image=image_name,
+                ).first()
+                print('_imsage', _image, pretty=True)
+
+                # if not _image:
+                #     _image.delete()
+
         return instance
+    
+    # def update(self, instance, validated_data):
+    #     _id = validated_data.pop('id', None)
+    #     _restaurant = validated_data.pop('restaurant', None)
+    #     images_data = validated_data.pop('images', None)
+    #     images_url_data = validated_data.pop('image_urls_delete', None)
+        
+    #     if _id and _restaurant:
+    #         print("No need to update")
+
+    #     update_attr(instance, **validated_data)
+    #     instance.save()
+
+    #     if images_url_data:
+    #         image_names_to_delete = [reverse_absolute_uri(url, self.context['request']) for url in images_url_data]
+    #         images_to_delete = instance.images.filter(image__in=image_names_to_delete)
+    #         if images_to_delete:
+    #             images_to_delete.delete()
+
+    #     if images_data:
+    #         existing_images = set(instance.images.values_list('image', flat=True))
+    #         for image_data in images_data:
+    #             if image_data not in existing_images:
+    #                 DishImage.objects.create(dish=instance, image=image_data)
+
+    #     return instance
+
     
     def to_representation(self, instance):
         return DishSerializer(instance, context=self.context).data

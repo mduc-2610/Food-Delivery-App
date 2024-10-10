@@ -14,7 +14,7 @@ import "package:get/get.dart";
 
 class UserMenuController extends GetxController {
   static UserMenuController get instance => Get.find();
-  User? user;
+  // User? user;
 
   @override
   void onInit() {
@@ -23,8 +23,8 @@ class UserMenuController extends GetxController {
   }
 
   Future<void> initializeUser() async  {
-    user = await UserService.getUser();
-    update();
+    // user = await UserService.getUser();
+    // update();
   }
 
 }

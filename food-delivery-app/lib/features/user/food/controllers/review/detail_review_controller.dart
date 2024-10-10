@@ -16,7 +16,7 @@ import 'package:food_delivery_app/utils/constants/times.dart';
 import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
-class ReviewController<T, R extends Review> extends GetxController with SingleGetTickerProviderMixin {
+class ReviewController<T, R extends BaseReview> extends GetxController with SingleGetTickerProviderMixin {
   static ReviewController get instance => Get.find();
 
   T? item;
