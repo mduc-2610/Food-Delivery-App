@@ -71,12 +71,12 @@ class RestaurantDetailInfo {
   Map<String, dynamic> toJson({bool patch = false}) {
     final data = {
       'restaurant': restaurant,
-      'operating_hours': jsonEncode(convertOperatingHours),
+      // 'operating_hours': convertOperatingHours  ,
       'keywords': keywords,
       'description': description,
-      'avatar_image': avatarImage is XFile ? avatarImage.path : avatarImage,
-      'cover_image': coverImage is XFile ? coverImage.path : coverImage,
-      'facade_image': facadeImage is XFile ? facadeImage.path : facadeImage,
+      // 'avatar_image': avatarImage is XFile ? avatarImage.path : avatarImage,
+      // 'cover_image': coverImage is XFile ? coverImage.path : coverImage,
+      // 'facade_image': facadeImage is XFile ? facadeImage.path : facadeImage,
       'restaurant_type': restaurantType,
       'cuisine': cuisine,
       'specialty_dishes': specialtyDishes,

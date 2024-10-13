@@ -98,7 +98,7 @@ class _OrderFoodRatingCardState extends State<OrderFoodRatingCard> {
             SizedBox(height: TSize.spaceBetweenItemsVertical),
             RegistrationDocumentField(
               label: "Upload extra image",
-              controller: controller.foodImagesController["${widget.dish?.id}"] ?? RegistrationDocumentFieldController(),
+              controller: controller.dishImagesController["${widget.dish?.id}"] ?? RegistrationDocumentFieldController(),
               viewEx: false,
               highlight: false,
             ),

@@ -100,6 +100,7 @@ class TSize {
   static const double imageLg = 160.0;
   static const double imageXl = 320.0;
   static const double avatarMd = 50.0;
+  static const double avatarXl = 100.0;
 
 
   // Loading indicator size

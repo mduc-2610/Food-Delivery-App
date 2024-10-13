@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/app_bar.dart';
 import 'package:food_delivery_app/features/notification/controllers/message_room_controller.dart';
 import 'package:food_delivery_app/features/notification/models/message.dart';
+import 'package:food_delivery_app/features/notification/views/skeleton/message_room_skeleton.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/enums.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
@@ -24,7 +25,10 @@ class MessageRoomView extends StatelessWidget {
     return GetBuilder<MessageRoomController>(
       init: MessageRoomController(viewType: viewType),
       builder: (controller) {
-        return Scaffold(
+        return Obx(() =>
+          (controller.isLoading.value)
+            ? MessageRoomSkeleton()
+            : Scaffold(
           appBar: CAppBar(
             title: "${controller.room?.name ?? ""}",
             actions: [
@@ -33,6 +37,7 @@ class MessageRoomView extends StatelessWidget {
                   controller.room?.avatar,
                   width: TSize.avatarMd,
                   height: TSize.avatarMd,
+                  radius: TSize.borderRadiusCircle,
                 ),
               )
             ],
@@ -64,7 +69,7 @@ class MessageRoomView extends StatelessWidget {
                                   borderRadius:
                                   BorderRadius.circular(TSize.borderRadiusCircle),
                                   child: THelperFunction.getValidImage(
-                                    message.user?.avatar,
+                                    controller.room?.avatar,
                                     width: TSize.avatarMd,
                                     height: TSize.avatarMd,
                                   ),
@@ -85,9 +90,9 @@ class MessageRoomView extends StatelessWidget {
                                         child: Text(
                                           "${message.content}",
                                           style: Get.textTheme.bodySmall?.copyWith(
-                                            color: THelperFunction.isDarkMode(context)
-                                                ? TColor.light
-                                                : TColor.dark
+                                              color: THelperFunction.isDarkMode(context)
+                                                  ? TColor.light
+                                                  : TColor.dark
                                           ),
                                         ),
                                       ),
@@ -169,6 +174,7 @@ class MessageRoomView extends StatelessWidget {
               _buildInputRow(controller),
             ],
           ),
+        )
         );
       },
     );

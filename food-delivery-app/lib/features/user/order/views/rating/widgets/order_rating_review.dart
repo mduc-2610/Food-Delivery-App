@@ -61,11 +61,13 @@ class _RatingReviewState extends State<RatingReview> {
             maxLines: TSize.lgMaxLines,
           ),
         ],
-        if(_controller.tabController.index == 2)...[
+        if(_controller.tabController.index >= 1)...[
           SizedBox(height: TSize.spaceBetweenItemsVertical),
           RegistrationDocumentField(
             label: "Upload extra image",
-            controller: _controller.restaurantImagesController,
+            controller: (_controller.tabController.index == 1)
+                ? _controller.delivererImagesController
+                : _controller.restaurantImagesController,
             viewEx: false,
             highlight: false,
           ),

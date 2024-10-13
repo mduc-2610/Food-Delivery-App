@@ -24,6 +24,7 @@ import 'package:dio/dio.dart';
 
 
 class MessageRoomController extends GetxController {
+  Rx<bool> isLoading = true.obs;
   WebSocketChannel? _channel;
   WebSocketChannel? _channel2;
   late final messageTabController ;
@@ -66,8 +67,7 @@ class MessageRoomController extends GetxController {
       _connectWebSocket2();
     }
 
-    initializeUser();
-    initializeMessage(roomId: roomId, user1Id: user1Id, user2Id: user2Id);
+    initialize();
     scrollController.addListener(_scrollListener);
   }
 
@@ -76,6 +76,13 @@ class MessageRoomController extends GetxController {
     textController.dispose();
     _disconnectWebSocket();
     super.onClose();
+  }
+
+  Future<void> initialize() async {
+    isLoading.value = true;
+    await initializeUser();
+    await initializeMessage(roomId: roomId, user1Id: user1Id, user2Id: user2Id);
+    isLoading.value = false;
   }
 
   Future<void> _connectWebSocket2() async {

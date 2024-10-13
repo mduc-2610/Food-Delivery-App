@@ -36,7 +36,8 @@ class OrderRatingController extends GetxController with GetSingleTickerProviderS
   final delivererTitleTextController = TextEditingController();
   final delivererContentTextController = TextEditingController();
   late RegistrationDocumentFieldController restaurantImagesController;
-  Map<String, RegistrationDocumentFieldController> foodImagesController = {};
+  late RegistrationDocumentFieldController delivererImagesController;
+  Map<String, RegistrationDocumentFieldController> dishImagesController = {};
   final restaurantTitleTextController = TextEditingController();
   final restaurantContentTextController = TextEditingController();
 
@@ -83,6 +84,13 @@ class OrderRatingController extends GetxController with GetSingleTickerProviderS
         ),
         tag: "restaurantImages"
     );
+    delivererImagesController = Get.put(
+        RegistrationDocumentFieldController(
+          databaseImages: order.value?.delivererReview?.images.map((image) => image.image ?? '').toList() ?? [],
+          maxLength: 6,
+        ),
+        tag: "delivererImages"
+    );
 
     int dishReviewsLen = order.value?.dishReviews.length ?? 0;
     int cartDishesLen = order.value?.cart?.cartDishes?.length ?? 0;
@@ -95,7 +103,7 @@ class OrderRatingController extends GetxController with GetSingleTickerProviderS
         orElse: () => DishReview(dish: dish.id, rating: 0, title: '', content: ''),
       );
 
-      foodImagesController[dish?.id] = Get.put(
+      dishImagesController[dish?.id] = Get.put(
           RegistrationDocumentFieldController(
             databaseImages: matchingReview?.images.map((image) => image.image ?? '').toList() ?? [],
             maxLength: 6,
@@ -186,6 +194,17 @@ class OrderRatingController extends GetxController with GetSingleTickerProviderS
           content: delivererContentTextController.text
         )
       ).toJson(patch: true), );
+      if(statusCode == 200 || statusCode == 201)  {
+        var _delivererReview = data.delivererReview;
+        _delivererReview.images = delivererImagesController.selectedImages;
+        $print(_delivererReview.images);
+        final [_statusCode, _headers, _data] = await APIService<DelivererReview>(dio: Dio()).update(
+          _delivererReview?.id,
+          _delivererReview,
+          isFormData: true,
+        );
+        $print([_statusCode, _headers, _data]);
+      }
       $print("Deliverer review update: ${statusCode} ${headers} ${data?.delivererReview}");
     }
     else if(currentTab == 2) {
@@ -242,7 +261,7 @@ class OrderRatingController extends GetxController with GetSingleTickerProviderS
           List<DishReview> _dishReviews = data.dishReviews;
           for(var _dishReview in _dishReviews) {
             var dishId = _dishReview.dish;
-            _dishReview.images = foodImagesController[dishId]?.selectedImages ?? [];
+            _dishReview.images = dishImagesController[dishId]?.selectedImages ?? [];
             $print(_dishReview);
             final [_statusCode, _headers, _data] = await APIService<DishReview>(dio: Dio()).update(
               _dishReview.id,

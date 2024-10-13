@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/features/user/food/views/restaurant/restaurant_detail.dart';
+import 'package:get/get.dart';
 import 'package:food_delivery_app/features/authentication/models/deliverer/deliverer.dart';
 import 'package:food_delivery_app/features/authentication/models/restaurant/restaurant.dart';
 import 'package:food_delivery_app/utils/constants/colors.dart';
 import 'package:food_delivery_app/utils/constants/image_strings.dart';
 import 'package:food_delivery_app/utils/constants/sizes.dart';
+import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 
 class OrderRestaurantInformation extends StatelessWidget {
   final String? head;
@@ -26,8 +29,19 @@ class OrderRestaurantInformation extends StatelessWidget {
         ),
         SizedBox(height: TSize.spaceBetweenSections),
 
-        Image.asset(
-          TImage.hcBurger1
+        // Image.asset(
+        //   TImage.hcBurger1
+        // ),
+
+        InkWell(
+          onTap: () {
+            Get.to(() => RestaurantDetailView(), arguments: {
+              'id': restaurant?.id
+            });
+          },
+          child: THelperFunction.getValidImage(
+            restaurant?.detailInfo?.coverImage
+          ),
         ),
         SizedBox(height: TSize.spaceBetweenItemsVertical),
         Text(
