@@ -19,9 +19,10 @@ from account.models import (
 )
 
 from account.serializers import (
-    UserSerializer, 
+    UserSerializer,
+    BasicUserSerializer, 
     SendOTPSerializer, 
-    OTPSerializer, 
+    OTPSerializer,
 
     UserLocationSerializer,
     CreateUserLocationSerializer,
@@ -147,6 +148,11 @@ class UserViewSet(DefaultGenericMixin, OrderFilterMixin, ManyRelatedViewSet):
     # }
 
     def get_serializer_class(self):
+        basic = self.request.query_params.get('basic', None)
+        if basic is not None:
+            basic = basic.lower() in ['true', '1', 't']
+            if self.action == 'list' and basic:
+                return BasicUserSerializer
         return self.many_related_serializer_class.get(self.action, super().get_serializer_class())
 
     def get_permissions(self):

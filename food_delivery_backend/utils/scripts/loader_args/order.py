@@ -54,7 +54,7 @@ def load_order(
     max_promotions_per_user=40,
     max_deliveries_per_deliverer=100,
     max_restaurant_carts_per_user=150,
-    max_dishes_per_restaurant_cart=10,
+    max_dishes_per_restaurant_cart=20,
     models_to_update=None,
     map_queryset=None,
     action=None,
@@ -84,6 +84,7 @@ def load_order(
             primary_objects=restaurant_cart_list,
             related_objects=dish_list,
             max_items=max_dishes_per_restaurant_cart,
+            min_items=1,
             attributes={"quantity": lambda: fake.random_int(min=1, max=5)},
             action=action
         )

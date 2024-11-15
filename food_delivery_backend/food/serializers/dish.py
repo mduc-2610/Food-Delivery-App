@@ -57,6 +57,7 @@ class DishSerializer(serializers.ModelSerializer):
             'total_orders',
             'is_disabled',
             'images',
+            'restaurant',
             'is_liked',
         ]
 

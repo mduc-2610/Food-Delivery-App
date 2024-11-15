@@ -36,6 +36,9 @@ class OrderViewSet(DefaultGenericMixin, DynamicFilterMixin, ManyRelatedViewSet):
         'restaurant_promotions': RestaurantPromotionSerializer,
     }
 
+    def get_pagination_class(self):
+        return super().get_pagination_class()
+
     def get_object(self):
         if self.action == 'retrieve':
             return OneRelatedViewSet.get_object(self)
