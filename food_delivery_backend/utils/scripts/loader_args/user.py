@@ -28,7 +28,7 @@ MODEL_MAP = {
 @script_runner(MODEL_MAP)
 @transaction.atomic
 def load_user(
-    max_users=5000,
+    max_users=500,
     models_to_update=None,
     map_queryset=None,
     action=None,

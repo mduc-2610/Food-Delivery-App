@@ -90,8 +90,9 @@ def load_review(
         dishes = list(Dish.objects.all())
         users = list(User.objects.all())
         for _order in orders:
-            has_inner_loop = random.randint(1, 3)
-            if has_inner_loop % 3 == 0: 
+            # has_inner_loop = random.randint(1, 3)
+            # if has_inner_loop % 3 == 0: 
+            if _order.status == 'COMPLETED':
                 for _dish in _order.cart.dishes.all():
                     instance, created = DishReview.objects.get_or_create(
                         user=_order.cart.user,
