@@ -8,3 +8,4 @@ from .option import (
     DishOptionViewSet,
     DishOptionItemViewSet,
 )
+from .weather import WeatherView

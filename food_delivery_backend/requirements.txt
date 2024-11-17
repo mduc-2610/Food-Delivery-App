@@ -13,3 +13,9 @@ celery
 django-celery-beat
 geopy
 unidecode
+requests
+pandas
+scikit-learn
+scipy
+seaborn
+numpy

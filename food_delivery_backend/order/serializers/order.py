@@ -58,7 +58,7 @@ class OrderSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         from order.serializers.basic import BasicRestaurantCartSerializer
-        data['cart'] = BasicRestaurantCartSerializer(instance.cart).data
+        data['cart'] = BasicRestaurantCartSerializer(instance.cart, context=self.context).data
         return data
     
     # def create(self, validated_data):

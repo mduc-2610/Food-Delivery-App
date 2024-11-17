@@ -116,14 +116,48 @@ def load_food(
             
             if action == 'delete':
                 Dish.objects.filter(category=category).delete()
-
+            
             existing_dishes = list(Dish.objects.filter(category=category)) if action == 'update' else []
             
+            category_temp_min, category_temp_max = {
+                "Burger": (20, 30),      
+                "Taco": (25, 35),        
+                "Burrito": (15, 25),     
+                "Drink": (30, 40),       
+                "Pizza": (20, 30),       
+                "Donut": (15, 25),       
+                "Salad": (25, 35),       
+                "Pho": (10, 20),         
+                "Sandwich": (15, 25),    
+                "Pasta": (15, 25),       
+                "Ice Cream": (30, 40),   
+                "Rice": (20, 30),        
+                "Takoyaki": (15, 25),    
+                "Fruit": (25, 35),       
+                "Hot Dog": (20, 30),     
+                "Goi Cuon": (25, 35),    
+                "Cookie": (10, 20),      
+                "Pudding": (10, 20),     
+                "Banh Mi": (20, 30),     
+                "Dumpling": (10, 20),    
+            }.get(category.name, (15, 25))  
+
             for i in range(max_dishes):
                 if len(image_files) == 0:
                     break
                 
                 image_file = image_files.pop(random.randint(0, len(image_files) - 1))
+                
+                # Generate a random environmental temperature within the suitable range
+                optimal_temp = round(fake.pyfloat(
+                    left_digits=2, right_digits=2, positive=True, 
+                    min_value=category_temp_min, max_value=category_temp_max
+                ), 2)
+                
+                temp_tolerance = round(fake.pyfloat(
+                    left_digits=1, right_digits=2, positive=True, 
+                    min_value=2, max_value=10  # Larger tolerances for broader enjoyment
+                ), 2)
                 
                 if action == 'update' and i < len(existing_dishes):
                     dish = existing_dishes[i]
@@ -132,6 +166,8 @@ def load_food(
                     dish.original_price = fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=10, max_value=100)
                     dish.discount_price = fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50)
                     dish.image = f"food/{category_name}/{image_file}" if image_file else ""
+                    dish.optimal_temp = optimal_temp
+                    dish.temp_tolerance = temp_tolerance
                 else:
                     dish = Dish(
                         category=category,
@@ -140,10 +176,13 @@ def load_food(
                         original_price=fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=10, max_value=100),
                         discount_price=fake.pydecimal(left_digits=2, right_digits=2, positive=True, min_value=5, max_value=50),
                         image=f"food/{category_name}/{image_file}" if image_file else "",
+                        optimal_temp=optimal_temp,
+                        temp_tolerance=temp_tolerance,
                     )
                 
                 dish.save()
                 dish_list.append(dish)
+
     # if Dish in models_to_update:
     #     dish_list = []
     #     category_list = map_queryset.get(DishCategory)

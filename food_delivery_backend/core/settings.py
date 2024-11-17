@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 from datetime import timedelta
 from celery.schedules import crontab, schedule
@@ -38,15 +38,21 @@ INSTALLED_APPS = [
     'channels',
     'django_celery_beat',
     "geopy",
-    
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
     "rest_framework",    
     "corsheaders",
+    "pandas",
+    # "scikit-learn",
+    "scipy",
+    "seaborn",
+    "numpy",
+
     "rest_framework_simplejwt",
     "django_extensions",
     "account.apps.AccountConfig",
@@ -57,7 +63,7 @@ INSTALLED_APPS = [
     "restaurant.apps.RestaurantConfig",
     "review.apps.ReviewConfig",
     "social.apps.SocialConfig",
-    "utils.apps.UtilsConfig",
+    "utils.apps.UtilsConfig", 
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -102,6 +108,9 @@ ASGI_APPLICATION = "core.asgi.application"
 # }
 
 # settings.py
+
+RECOMMENDER_MODEL_PATH = os.path.join(BASE_DIR, 'w_rc_sys', 'ml_models', 'dish_recommender.pkl')
+
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'  
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'

@@ -45,6 +45,40 @@ class Dish(models.Model):
     total_likes = models.IntegerField(default=0, blank=True, null=True)
     total_orders = models.IntegerField(default=0, blank=True, null=True)
     total_revenue = models.DecimalField(default=0, max_digits=12, decimal_places=2, blank=True, null=True)
+    optimal_temp = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True,
+        help_text="The ideal temperature (°C) for this dish."
+    )
+    temp_tolerance = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True,
+        help_text="The acceptable tolerance for temperature (±°C)."
+    )
+    # optimal_humidity = models.DecimalField(
+    #     max_digits=5, decimal_places=2, null=True, blank=True,
+    #     help_text="The ideal humidity (%) for this dish."
+    # )
+    # humidity_tolerance = models.DecimalField(
+    #     max_digits=5, decimal_places=2, null=True, blank=True,
+    #     help_text="The acceptable tolerance for humidity (±%)."
+    # )
+
+    def calculate_suitability_score(self, temperature=None, humidity=None):
+        temp_score = 0
+        humidity_score = 0
+    
+        if self.optimal_temp is not None and self.temp_tolerance is not None:
+            optimal_temp = float(self.optimal_temp)
+            temp_tolerance = float(self.temp_tolerance)
+
+            temp_diff = abs(temperature - optimal_temp)
+            temp_score = max(0, 1 - (temp_diff / temp_tolerance))
+
+        # if self.optimal_humidity is not None and self.humidity_tolerance is not None:
+        #     humidity_diff = abs(humidity - self.optimal_humidity)
+        #     humidity_score = max(0, 1 - (humidity_diff / self.humidity_tolerance))
+
+        # return (temp_score + humidity_score) / 2
+        return temp_score
 
     class Meta:
         indexes = [

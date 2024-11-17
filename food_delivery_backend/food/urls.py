@@ -8,6 +8,7 @@ from .views import (
     DishLikeViewSet, 
     DishViewSet,
     DishImageViewSet,
+    WeatherView
 )
 
 router = DefaultRouter()
@@ -20,4 +21,5 @@ router.register(r'dish-image', DishImageViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('weather/', WeatherView.as_view(), name='weather'),
 ]

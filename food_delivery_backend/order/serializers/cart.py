@@ -10,7 +10,7 @@ from food.serializers import DishSerializer, DishOptionItemSerializer
 from order.serializers.order import OrderSerializer
 
 class RestaurantCartDishSerializer(serializers.ModelSerializer):
-    dish = DishSerializer(read_only=True)
+    dish = serializers.SerializerMethodField()
     options = serializers.ListSerializer(
         child=serializers.PrimaryKeyRelatedField(queryset=DishOptionItemSerializer.Meta.model.objects.all()),
         write_only=True,
@@ -18,9 +18,13 @@ class RestaurantCartDishSerializer(serializers.ModelSerializer):
     )
     chosen_options = DishOptionItemSerializer(read_only=True, many=True, source='options')
 
+    def get_dish(self, obj):
+        return DishSerializer(obj.dish, context=self.context).data
+
     class Meta:
         model = RestaurantCartDish
         fields = ['id', 'cart', 'dish', 'quantity', 'price', 'options', 'chosen_options']
+        read_only_fields = ['dish']
 
     def update(self, instance, validated_data):
         options_data = validated_data.pop('options', [])
@@ -79,8 +83,12 @@ class CreateRestaurantCartDishSerializer(serializers.ModelSerializer):
         return data
 
 class RestaurantCartSerializer(serializers.ModelSerializer):
-    dishes = RestaurantCartDishSerializer(many=True, read_only=True)  
+    dishes = serializers.SerializerMethodField()  
     restaurant = BasicRestaurantSerializer(read_only=True)
+    
+    def get_dishes(self, obj):
+        print(self.context, pretty=True)
+        return RestaurantCartDishSerializer(obj.dishes.all(), many=True, context=self.context).data
     
     class Meta:
         model = RestaurantCart
@@ -98,7 +106,8 @@ class RestaurantCartSerializer(serializers.ModelSerializer):
             'is_empty',
         ]
         extra_kwargs = {
-            'order': {'read_only': True}
+            'order': {'read_only': True},
+            'dishes': {'read_only': True},
         }
 
     def to_representation(self, instance):

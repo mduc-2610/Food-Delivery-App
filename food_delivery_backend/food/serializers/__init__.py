@@ -7,7 +7,8 @@ from .dish_like import (
 )
 
 from .dish import (
-    DishSerializer, 
+    DishSerializer,
+    SuggestedDishSerializer,
     DishImageSerializer,
     DetailDishSerializer,
     DishInCartOrOrderSerializer,

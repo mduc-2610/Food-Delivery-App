@@ -16,6 +16,7 @@ from review.serializers import DishReviewSerializer
 from utils.function import update_attr
 from utils.serializers import CustomRelatedModelSerializer
 from utils.function import reverse_absolute_uri
+from utils.function import get_related_url
 
 class DishImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,6 +26,7 @@ class DishImageSerializer(serializers.ModelSerializer):
 
 class DishSerializer(serializers.ModelSerializer):
     images = DishImageSerializer(many=True, read_only=True)
+    image = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
     is_liked = serializers.SerializerMethodField()
 
@@ -36,6 +38,15 @@ class DishSerializer(serializers.ModelSerializer):
             }).data
         return None
     
+    def get_image(self, obj):
+        request = self.context.get('request')
+        url = request.build_absolute_uri(obj.image)
+        if url:
+            url = '/'.join(url.split('/')[:3])
+            url = f"{url}{obj.image.url}"
+            # print(url)
+        return url if  obj.image else None
+
     def get_is_liked(self, obj):
         return obj.is_liked(
             request=self.context.get('request')
@@ -59,6 +70,28 @@ class DishSerializer(serializers.ModelSerializer):
             'images',
             'restaurant',
             'is_liked',
+        ]
+
+class SuggestedDishSerializer(DishSerializer):
+    suitability_score = serializers.SerializerMethodField()
+
+    def get_suitability_score(self, obj):
+        request = self.context.get('request')
+        temperature = request.query_params.get('temperature', None) if request is not None else None
+        if temperature is None: return None
+        try:
+            temperature = float(temperature)
+        except ValueError:
+            return None
+        
+        print(temperature, pretty=True)
+        return obj.calculate_suitability_score(temperature) if temperature else None
+
+    class Meta(DishSerializer.Meta):
+        fields = DishSerializer.Meta.fields + [
+            'temp_tolerance',
+            'optimal_temp',
+            'suitability_score'
         ]
 
 class DetailDishSerializer(CustomRelatedModelSerializer):
