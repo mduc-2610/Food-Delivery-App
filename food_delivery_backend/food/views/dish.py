@@ -42,11 +42,11 @@ class DishPagination(CustomPagination):
         self.page_size_query_param = 'dish_page_size'
 
 class DishViewSet(DefaultGenericMixin, DynamicFilterMixin, ManyRelatedViewSet, ReviewFilterMixin):
-    queryset = Dish.objects.filter(is_disabled=False)
+    queryset = Dish.objects.filter(is_disabled=False, restaurant__isnull=False)
     serializer_class = DishSerializer
     pagination_class = CustomPagination
     mapping_serializer_class = {
-        'suggested_food': SuggestedDishSerializer,
+        'suggested_dish': SuggestedDishSerializer,
     }
     many_related_serializer_class = {
         'retrieve': DetailDishSerializer,
@@ -87,14 +87,33 @@ class DishViewSet(DefaultGenericMixin, DynamicFilterMixin, ManyRelatedViewSet, R
             self._recommender = DishRecommender.load(settings.RECOMMENDER_MODEL_PATH)
         return self._recommender
 
-    @action(detail=False, methods=['GET'], url_path='suggested-food')
-    def suggested_food(self, request, *args, **kwargs):
+    @action(detail=False, methods=['GET'], url_path='suggested-dish')
+    def suggested_dish(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         flag = request.query_params.get('flag', 'temperature')
         temperature = request.query_params.get('temperature', None)
+        w_name = request.query_params.get('w_name', "").lower()
+        p_name = request.query_params.get('p_name', "").lower()
+        dish_id = request.query_params.get('id', None)
 
         try:
-            if flag == 'temperature':
+            if dish_id is not None:
+                try:
+                    base_dish = queryset.get(id=dish_id)
+                    recommender = self.get_recommender()
+                    similar_dishes = recommender.find_similar_dishes(dish_id=base_dish.id, k=5)
+                    
+                    similar_dish_ids = [dish_id for _, dish_id in similar_dishes]
+                    
+                    queryset = queryset.filter(id__in=similar_dish_ids)
+                    
+                except queryset.model.DoesNotExist:
+                    return response.Response(
+                        {"error": "Dish not found."}, 
+                        status=status.HTTP_404_NOT_FOUND
+                    )
+            
+            elif flag == 'temperature':
                 if temperature is None:
                     return response.Response(
                         {"error": "Temperature value is required."}, 
@@ -104,12 +123,13 @@ class DishViewSet(DefaultGenericMixin, DynamicFilterMixin, ManyRelatedViewSet, R
                 temperature = float(temperature)
                 queryset = [
                     dish for dish in queryset 
-                    if dish.calculate_suitability_score(temperature) > 0.5
+                    if dish.calculate_suitability_score(temperature) > 0.5 and w_name in dish.name.lower()
                 ]
                 queryset.sort(
                     key=lambda x: x.calculate_suitability_score(temperature), 
                     reverse=True
                 )
+                
             elif flag == 'preferences':
                 recommender = self.get_recommender()
                 if not self.request.user.is_authenticated:
@@ -138,9 +158,7 @@ class DishViewSet(DefaultGenericMixin, DynamicFilterMixin, ManyRelatedViewSet, R
                         seen.add(dish_id)
                         unique_suggestions.append(dish_id)
                 
-                queryset = Dish.objects.filter(id__in=unique_suggestions)
-
-                print(len(unique_suggestions), queryset)
+                queryset = queryset.filter(id__in=unique_suggestions, name__icontains=p_name)
 
             if flag in ['temperature', 'preferences']:
                 page = self.paginate_queryset(queryset)

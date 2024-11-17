@@ -25,6 +25,7 @@ class FoodDetailController extends GetxController {
 
   late final foodListController = FoodListController.instance;
   late final restaurantDetailController = RestaurantDetailController.instance;
+  List<Dish> suggestedDish = [];
 
   @override
   void onInit() {
@@ -38,6 +39,7 @@ class FoodDetailController extends GetxController {
   Future<void> initializeDish(String id) async {
     user = await UserService.getUser();
     dish = await APIService<Dish>().retrieve(id);
+    suggestedDish = await APIService<Dish>(endpoint: "food/dish/suggested-dish", queryParams: "flag=preferences&id=${dish?.id}").list();
     isLiked.value = dish?.isLiked ?? false;
     await Future.delayed(Duration(milliseconds: TTime.init));
     isLoading.value = false;

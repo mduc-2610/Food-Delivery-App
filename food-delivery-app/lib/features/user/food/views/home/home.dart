@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/common/widgets/buttons/main_button.dart';
 import 'package:food_delivery_app/common/widgets/buttons/small_button.dart';
+import 'package:food_delivery_app/common/widgets/cards/food_card.dart';
+import 'package:food_delivery_app/common/widgets/cards/suggested_food_card.dart';
+import 'package:food_delivery_app/common/widgets/list/food_list.dart';
 import 'package:food_delivery_app/common/widgets/list/restaurant_list.dart';
 import 'package:food_delivery_app/features/deliverer/menu_redirection.dart';
 import 'package:food_delivery_app/features/restaurant/menu_redirection.dart';
 import 'package:food_delivery_app/features/user/food/controllers/home/home_controller.dart';
+import 'package:food_delivery_app/features/user/food/controllers/suggested_food/suggested_food_controller.dart';
 import 'package:food_delivery_app/features/user/food/views/common/widgets/category_card.dart';
 import 'package:food_delivery_app/features/user/food/views/home/skeleton/home_skeleton.dart';
 import 'package:food_delivery_app/features/user/food/views/home/widgets/home_sliver_app_bar.dart';
 import 'package:food_delivery_app/features/user/food/views/restaurant/restaurant_search.dart';
+import 'package:food_delivery_app/features/user/food/views/suggested/suggested_food.dart';
 import 'package:food_delivery_app/features/user/menu_redirection.dart';
 import 'package:food_delivery_app/utils/device/device_utility.dart';
 import 'package:food_delivery_app/utils/hardcode/hardcode.dart';
@@ -23,6 +28,7 @@ import 'package:food_delivery_app/utils/constants/sizes.dart';
 
 class HomeView extends StatelessWidget {
   final searchController = TextEditingController();
+  final suggestedFoodController = Get.put(SuggestedFoodController());
 
   @override
   Widget build(BuildContext context) {
@@ -128,10 +134,11 @@ class HomeView extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Special Offers', style: Theme.of(context).textTheme.headlineMedium),
+                                Text('Dishes for you', style: Theme.of(context).textTheme.headlineMedium),
                                 GestureDetector(
                                   onTap: () {
-                                    controller.getToFoodCategory("");
+                                    Get.to(() => SuggestedFoodView());
+                                    // controller.getToFoodCategory("");
                                   },
                                   child: Row(
                                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -153,10 +160,24 @@ class HomeView extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: TSize.spaceBetweenItemsVertical,),
-                          RestaurantList(
-                            searchBar: false,
-                            tag: "home",
+                          MainWrapper(
+                            child: Column(
+                              children: [
+                                for(var sDish in controller.suggestedDishes ?? [])...[
+                                  SuggestedFoodCard(
+                                    type: FoodCardType.list,
+                                    dish: sDish,
+                                    resTag: false,
+                                  ),
+                                  SizedBox(height: TSize.spaceBetweenItemsVertical,),
+                                ],
+                              ],
+                            ),
                           ),
+                          // RestaurantList(
+                          //   searchBar: false,
+                          //   tag: "home",
+                          // ),
                           // GridView.count(
                           //   crossAxisCount: 2,
                           //   crossAxisSpacing: 10,

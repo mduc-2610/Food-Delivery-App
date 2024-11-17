@@ -365,6 +365,7 @@ class THelperFunction {
         double? width,
         double? height,
         double? radius,
+        BoxFit? fit,
       }) {
     return FutureBuilder<bool>(
       future: _checkImageValidity(imageUrl),
@@ -378,7 +379,7 @@ class THelperFunction {
               imageUrl!,
               width: width,
               height: height,
-              fit: BoxFit.cover,
+              fit: fit ?? BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
                 return getFallbackImage(
                   defaultAsset,
@@ -386,6 +387,7 @@ class THelperFunction {
                   width: width,
                   height: height,
                   radius: radius,
+                  fit: fit,
                 );
               },
             ),
@@ -397,6 +399,7 @@ class THelperFunction {
             width: width,
             height: height,
             radius: radius,
+            fit: fit
           );
         }
       },
@@ -409,6 +412,7 @@ class THelperFunction {
         double? width,
         double? height,
         double? radius,
+        BoxFit? fit,
       }) {
     if (defaultNetworkAsset != null) {
       return ClipRRect(
@@ -417,7 +421,7 @@ class THelperFunction {
           defaultNetworkAsset,
           width: width,
           height: height,
-          fit: BoxFit.cover,
+          fit: fit ??  BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
             return ClipRRect(
               borderRadius: BorderRadius.circular(radius ?? 0),
@@ -425,7 +429,7 @@ class THelperFunction {
                 defaultAsset ?? TImage.hcBurger1,
                 width: width,
                 height: height,
-                fit: BoxFit.cover,
+                fit: fit ?? BoxFit.cover,
               ),
             );
           },

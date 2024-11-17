@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/common/widgets/cards/food_card.dart';
 import 'package:food_delivery_app/common/widgets/skeleton/box_skeleton.dart';
 import 'package:food_delivery_app/features/user/food/views/detail/skeleton/food_detail_bottom_app_bar_skeleton.dart';
 import 'package:food_delivery_app/features/user/food/views/detail/skeleton/food_detail_sliver_app_bar_skeleton.dart';
@@ -48,22 +49,23 @@ class DetailViewSkeleton extends StatelessWidget {
                   BoxSkeleton(height: 30, width: double.infinity),
                   SizedBox(height: TSize.spaceBetweenItemsVertical),
 
-                  for (int i = 0; i < 3; i++) ...[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        BoxSkeleton(height: 20, width: 100),
-                        Row(
-                          children: [
-                            BoxSkeleton(height: 20, width: 60),
-                            SizedBox(width: TSize.spaceBetweenItemsHorizontal),
-                            BoxSkeleton(height: 24, width: 24),
-                          ],
-                        )
-                      ],
-                    ),
-                    SizedBox(height: TSize.spaceBetweenItemsVertical),
-                  ],
+                  FoodCardListSkeleton(),
+                  // for (int i = 0; i < 3; i++) ...[
+                  //   Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       BoxSkeleton(height: 20, width: 100),
+                  //       Row(
+                  //         children: [
+                  //           BoxSkeleton(height: 20, width: 60),
+                  //           SizedBox(width: TSize.spaceBetweenItemsHorizontal),
+                  //           BoxSkeleton(height: 24, width: 24),
+                  //         ],
+                  //       )
+                  //     ],
+                  //   ),
+                  //   SizedBox(height: TSize.spaceBetweenItemsVertical),
+                  // ],
                 ],
               ),
             ),

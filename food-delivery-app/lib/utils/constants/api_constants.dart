@@ -35,6 +35,7 @@ import 'package:food_delivery_app/features/user/food/models/food/option.dart';
 import 'package:food_delivery_app/features/user/food/models/review/review.dart';
 import 'package:food_delivery_app/features/user/food/models/review/review_like.dart';
 import 'package:food_delivery_app/features/user/food/models/review/review_reply.dart';
+import 'package:food_delivery_app/features/user/food/models/weather.dart';
 import 'package:food_delivery_app/features/user/order/models/cart.dart';
 import 'package:food_delivery_app/features/user/order/models/delivery.dart';
 import 'package:food_delivery_app/features/user/order/models/order.dart';
@@ -68,7 +69,7 @@ Future<String> getLocalIpAddress() async {
 }
 
 class APIConstant {
-  static const String ip = "192.168.1.53";
+  static const String ip = "192.168.1.71";
   static const String tSecretAPIKey = "";
   // static const baseUrl = 'http://10.0.2.2:8000/api';
   // static const baseUrl = 'http://192.168.1.8:8000/api'; // VANSAU
@@ -247,6 +248,8 @@ class APIConstant {
         return 'food/dish';
       case DishImage:
         return 'food/dish-image';
+      case Weather:
+        return 'food/weather';
       default:
         return null;
     }

@@ -5,6 +5,7 @@ import 'package:flutter_google_maps_webservices/places.dart';
 import 'package:food_delivery_app/data/services/token_service.dart';
 import 'package:food_delivery_app/features/authentication/models/auth/token.dart';
 import 'package:food_delivery_app/features/authentication/views/login/login.dart';
+import 'package:food_delivery_app/features/authentication/views/splash/splash.dart';
 import 'package:food_delivery_app/features/deliverer/registration/views/first/registration_first_step.dart';
 import 'package:food_delivery_app/features/deliverer/registration/views/registration_step.dart';
 import 'package:food_delivery_app/features/restaurant/registration/views/registration_tab.dart';
@@ -50,7 +51,7 @@ class _MyAppState extends State<MyApp> {
         page = UserMenuRedirection();
       }
       else {
-        page = LoginView();
+        page = SplashView();
       }
     });
     super.didChangeDependencies();

@@ -42,6 +42,7 @@ class OrderHistoryCard extends StatelessWidget {
     catch(e) {
 
     }
+    final List<RestaurantCartDish> dishes = order?.cart?.cartDishes ?? [];
     return GestureDetector(
       onTap: onTap ?? () async {
         // $print("INITIALIZE");
@@ -77,15 +78,21 @@ class OrderHistoryCard extends StatelessWidget {
                           Stack(
                             clipBehavior: Clip.none,
                             children: [
-                              _buildImage(context, TImage.hcBurger1),
-                              Positioned(
-                                left: TSize.md,
-                                child: _buildImage(context, TImage.hcBurger1),
-                              ),
-                              Positioned(
-                                left: TSize.md * 2,
-                                child: _buildImage(context, TImage.hcBurger1),
-                              ),
+                              if(dishes.length > 0)...[
+                                _buildImage(context, dishes[0].dish.image)
+                              ],
+                              if(dishes.length > 1)...[
+                                Positioned(
+                                  left: TSize.md,
+                                  child: _buildImage(context, dishes[1].dish.image)
+                                ),
+                              ],
+                              if(dishes.length > 2)...[
+                                Positioned(
+                                  left: TSize.md * 2,
+                                  child: _buildImage(context, dishes[2].dish.image)
+                                ),
+                              ]
                             ],
                           ),
                         ],
@@ -148,11 +155,10 @@ class OrderHistoryCard extends StatelessWidget {
         padding: EdgeInsets.all(TSize.xs),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(TSize.borderRadiusSm),
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.cover,
-            width: 80,
-            height: 80,
+          child: THelperFunction.getValidImage(
+              imagePath,
+              width: 80,
+              height: 80
           ),
         ),
       ),

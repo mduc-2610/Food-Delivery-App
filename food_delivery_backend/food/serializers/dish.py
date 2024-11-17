@@ -40,6 +40,7 @@ class DishSerializer(serializers.ModelSerializer):
     
     def get_image(self, obj):
         request = self.context.get('request')
+        if request is None: return None
         url = request.build_absolute_uri(obj.image)
         if url:
             url = '/'.join(url.split('/')[:3])

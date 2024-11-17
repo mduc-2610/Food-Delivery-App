@@ -255,9 +255,9 @@ class OrderRatingController extends GetxController with GetSingleTickerProviderS
         final [statusCode, headers, data] = await APIService<Order>().update(order.value?.id, Order(
             dishReviews: dishReviews
         ).toJson(patch: true),);
-        $print("success uodatsse");
+        // $print("success uodatsse");
         if(statusCode == 200 || statusCode == 201)  {
-          $print("success uodate");
+          // $print("success uodate");
           List<DishReview> _dishReviews = data.dishReviews;
           for(var _dishReview in _dishReviews) {
             var dishId = _dishReview.dish;

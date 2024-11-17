@@ -26,12 +26,14 @@ class RestaurantDetailController extends GetxController with SingleGetTickerProv
   var totalItems = 0.obs;
   var totalPrice = 0.0.obs;
   var cartDishes = [].obs;
+  Dish? clickedDish;
 
   @override
   void onInit() {
     super.onInit();
     if (Get.arguments != null) {
       restaurantId = Get.arguments['id'];
+      clickedDish = Get.arguments['dish'];
       initializeRestaurant();
     }
   }

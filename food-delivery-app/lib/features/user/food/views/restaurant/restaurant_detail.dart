@@ -1,3 +1,4 @@
+import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,10 +22,17 @@ import 'package:food_delivery_app/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
 
 class RestaurantDetailView extends StatelessWidget {
+  final String? tag;
+
+  const RestaurantDetailView({
+    this.tag,
+  });
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<RestaurantDetailController>(
       init: RestaurantDetailController(),
+      tag: tag,
       builder: (controller) {
         final restaurant = controller.restaurant;
         final dishes = controller.dishes;
@@ -116,7 +124,7 @@ class RestaurantDetailView extends StatelessWidget {
                               style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColor.primary),
                             ),
                             SizedBox(height: TSize.spaceBetweenItemsVertical),
-                            FoodList(dishes: dishes, direction: Direction.horizontal,)
+                            FoodList(dishes: dishes, extraDishes: controller.clickedDish != null ? [controller.clickedDish!] : [] , direction: Direction.horizontal,)
                           ],
                         ),
                       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery_app/common/widgets/app_bar/delivery_bottom_navigation_bar.dart';
 import 'package:food_delivery_app/common/widgets/buttons/round_icon_button.dart';
+import 'package:food_delivery_app/common/widgets/list/food_list.dart';
 import 'package:food_delivery_app/features/user/food/controllers/detail/food_detail_controller.dart';
 import 'package:food_delivery_app/features/user/food/views/review/skeleton/detail_review_skeleton.dart';
 import 'package:food_delivery_app/features/user/food/views/detail/widgets/food_detail_sliver_app_bar.dart';
@@ -136,35 +137,39 @@ class FoodDetailView extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                         SizedBox(height: TSize.spaceBetweenItemsVertical),
-                        Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Text(
-                                    "See all",
-                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                        // Column(
+                        //   children: [
+                        //     Row(
+                        //       mainAxisAlignment: MainAxisAlignment.end,
+                        //       children: [
+                        //         GestureDetector(
+                        //           onTap: () {},
+                        //           child: Text(
+                        //             "See all",
+                        //             style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        //               decoration: TextDecoration.underline,
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //
+                        //   ],
+                        // ),
 
-                          ],
-                        ),
 
-                        SizedBox(height: TSize.spaceBetweenItemsVertical),
                         Text(
-                          'Additional Options:',
+                          'May be you also like',
                           style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         SizedBox(height: TSize.spaceBetweenItemsVertical),
-                        _buildOptionRow("Add Cheese", "+ £0.50", controller),
-                        _buildOptionRow("Add Bacon", "+ £0.50", controller),
-                        _buildOptionRow("Add Meat", "+ £0.50", controller),
+                        FoodList(
+                          dishes: controller.suggestedDish,
+                          direction: Direction.vertical,
+                          noMargin: true,
+                          suggested: true
+                        ),
+                        SizedBox(height: TSize.spaceBetweenItemsVertical),
                       ],
                     ),
                   ),

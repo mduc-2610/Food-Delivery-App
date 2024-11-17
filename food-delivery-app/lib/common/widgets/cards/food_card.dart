@@ -21,12 +21,14 @@ class FoodCard extends StatelessWidget {
   final Dish? dish;
   final void Function()? addPressed;
   final void Function()? removePressed;
+  final Color? cardColor;
 
   const FoodCard({
     required this.type,
     required this.dish,
     this.addPressed,
     this.removePressed,
+    this.cardColor,
     Key? key,
   }) : super(key: key);
 
@@ -151,6 +153,7 @@ class FoodCard extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
             decoration: BoxDecoration(
+              color: cardColor,
               borderRadius: BorderRadius.circular(TSize.borderRadiusLg),
             ),
             child: Row(

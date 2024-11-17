@@ -29,6 +29,9 @@ class Dish {
   final String? restaurant;
   final bool isLiked;
   final double totalRevenue;
+  final double? tempTolerance;
+  final double? optimalTemp;
+  final double? suitabilityScore;
 
   Dish({
     this.id,
@@ -51,6 +54,9 @@ class Dish {
     this.restaurant,
     this.isLiked = false,
     this.totalRevenue = 0,
+    this.tempTolerance,
+    this.optimalTemp,
+    this.suitabilityScore,
   });
 
   Dish.fromJson(Map<String, dynamic> json)
@@ -74,7 +80,10 @@ class Dish {
         inCartsOrOrders = json['in_carts_or_orders'],
         images = json['images'] != null ? (json['images'] as List<dynamic>).map((instance) => DishImage.fromJson(instance)).toList() : [],
         isLiked = json['is_liked'] ?? false,
-        totalRevenue = THelperFunction.formatDouble(json['total_revenue'])
+        totalRevenue = THelperFunction.formatDouble(json['total_revenue']),
+        tempTolerance = THelperFunction.formatDouble(json['temp_tolerance']),
+        optimalTemp = THelperFunction.formatDouble(json['optimal_temp']),
+        suitabilityScore = THelperFunction.formatDouble(json['suitability_score'])
   ;
 
   String get formattedName {

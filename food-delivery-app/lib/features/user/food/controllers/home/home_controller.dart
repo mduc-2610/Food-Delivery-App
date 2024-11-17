@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/data/services/api_service.dart';
 import 'package:food_delivery_app/data/services/user_service.dart';
 import 'package:food_delivery_app/features/authentication/models/account/user.dart';
+import 'package:food_delivery_app/features/user/food/models/food/dish.dart';
 import 'package:food_delivery_app/features/user/food/views/detail/food_detail.dart';
 import 'package:food_delivery_app/features/user/food/views/more/food_more.dart';
 import 'package:food_delivery_app/features/user/food/views/restaurant/restaurant_category.dart';
@@ -14,6 +16,7 @@ class HomeController extends GetxController {
 
   User? user;
   Rx<bool> isLoading = true.obs;
+  List<Dish> suggestedDishes = [];
 
   @override
   void onInit() {
@@ -25,6 +28,10 @@ class HomeController extends GetxController {
     isLoading.value = true;
     user = await UserService.getUser();
     await Future.delayed(Duration(milliseconds: TTime.init));
+    suggestedDishes = await APIService<Dish>(
+      endpoint:'food/dish/suggested-dish',
+      queryParams:"flag=preferences",
+    ).list();
     update();
     $print("RESTAURANT ${user?.restaurant} - DELIVERER: ${user?.deliverer}");
     isLoading.value = false;

@@ -5,7 +5,7 @@ from pathlib import Path
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-import w_rc_sys.recommendations_test as rec 
+import w_rc_sys.recommendations as rec 
 from utils.recommender import DishRecommender
 
 class Command(BaseCommand):
