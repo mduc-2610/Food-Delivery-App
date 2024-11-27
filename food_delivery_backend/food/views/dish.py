@@ -103,7 +103,7 @@ class DishViewSet(DefaultGenericMixin, DynamicFilterMixin, ManyRelatedViewSet, R
                 try:
                     base_dish = queryset.get(id=dish_id)
                     recommender = self.get_recommender()
-                    similar_dishes = recommender.find_similar_dishes(dish_id=base_dish.id, k=5)
+                    similar_dishes = recommender.find_similar_dishes(dish_id=base_dish.id, n_similar_dishes=5)
                     
                     similar_dish_ids = [dish_id for _, dish_id in similar_dishes]
                     

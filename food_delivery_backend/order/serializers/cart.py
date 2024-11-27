@@ -80,7 +80,7 @@ class CreateRestaurantCartDishSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         from order.serializers.basic import BasicRestaurantCartSerializer
         data['cart'] = RestaurantCartSerializer(instance.cart, context=self.context).data
-        [print(_) for _ in data['cart']['dishes']]
+        # [print(_) for _ in data['cart']['dishes']]
         return data
 
 class RestaurantCartSerializer(serializers.ModelSerializer):

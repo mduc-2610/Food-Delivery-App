@@ -69,10 +69,14 @@ class OrderHistoryDetailView extends StatelessWidget {
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(
-                                                "${controller.order?.restaurant?.basicInfo?.name}",
-                                                style: Get.textTheme.headlineMedium?.copyWith(
-                                                  // color: TColor.primary,
+                                              Expanded(
+                                                child: Text(
+                                                  "${controller.order?.restaurant?.basicInfo?.name}",
+                                                  style: Get.textTheme.headlineMedium?.copyWith(
+                                                    // color: TColor.primary,
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
                                                 ),
                                               ),
                                           
