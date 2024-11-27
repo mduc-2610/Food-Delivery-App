@@ -38,6 +38,7 @@ class _OrderCardState extends State<OrderCard> {
 
   @override
   Widget build(BuildContext context) {
+    $print(" UNIQUE: ${widget.cartDish.dish}");
     var _controller;
     bool canEdit = widget.canEdit;
     if(canEdit) {

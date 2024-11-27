@@ -54,7 +54,7 @@ class OrderBasketController extends GetxController {
     }
 
     foodListController.order.value = order;
-    $print("CHECK: ${foodListController.order.value}");
+    $print("CHECK: ${foodListController.order.value?.cart.cartDishes}");
     Future.delayed(Duration(milliseconds: TTime.init));
     isLoading.value = false;
     update();

@@ -57,7 +57,7 @@ class RestaurantDetailController extends GetxController with SingleGetTickerProv
     totalPrice.value = user?.restaurantCart?.totalPrice ?? 0;
     cartDishes.addAll(user?.restaurantCart?.cartDishes ?? []);
     $print(cartDishes.length);
-    $print(user?.restaurantCart?.cartDishes);
+    $print("ABC: ss ${user?.restaurantCart?.cartDishes}");
     isLoading.value = false;
     update();
   }

@@ -25,6 +25,7 @@ class OrderBasketView extends StatelessWidget {
     return GetBuilder<OrderBasketController>(
       init: OrderBasketController(),
       builder: (controller) {
+        print("FINDsc: ${controller.restaurantDetailController.cartDishes}");
         final restaurantCart = controller.order?.cart;
         // $print(controller.restaurantDetailController.user?.restaurantCart);
         return

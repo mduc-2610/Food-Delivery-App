@@ -18,7 +18,7 @@ class RestaurantCart {
   final bool isEmpty;
   final double totalPrice;
   final int totalItems;
-  final List<RestaurantCartDish> cartDishes;
+  List<RestaurantCartDish> cartDishes;
   final Order? order;
 
   RestaurantCart({
@@ -69,7 +69,7 @@ class RestaurantCart {
 class RestaurantCartDish {
   final String? id;
   final dynamic cart;
-  final dynamic dish;
+  dynamic dish;
   int quantity;
   final double price;
 

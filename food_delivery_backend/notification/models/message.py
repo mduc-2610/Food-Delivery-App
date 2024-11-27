@@ -39,8 +39,10 @@ def update_room_latest_message(sender, instance, created, **kwargs):
     if created:
         room = instance.room
         print('sdad', instance, room, pretty=True)
+        if not hasattr(room, 'latest_message'): return
         room.latest_message = instance
         room.save(update_fields=['latest_message'])
+        
 
 post_save.connect(update_room_latest_message, sender=DirectMessage)
 post_save.connect(update_room_latest_message, sender=GroupMessage)

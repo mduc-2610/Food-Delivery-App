@@ -214,7 +214,7 @@ class OrderTracking extends StatelessWidget {
             child: IconButton(
               icon: Icon(Icons.chat, color: TColor.dark),
               onPressed: () {
-                Get.to(() => MessageRoomView(), arguments: {
+                Get.to(() => const MessageRoomView(), arguments: {
                   "user1Id": "${delivery?.deliverer == null ? controller.deliverer?.user : delivery?.deliverer is String ? delivery?.deliverer : delivery?.deliverer?.user}",
                   "user2Id": "${delivery?.user is String ? delivery?.user : delivery?.user?.id}",
                 });
@@ -297,9 +297,9 @@ class OrderTracking extends StatelessWidget {
               child: IconButton(
                 icon: Icon(Icons.chat, color: TColor.dark),
                 onPressed: () {
-                  $print('abd');
+                  $print('abd ${delivery?.order.cart.user}');
                   Get.to(() => MessageRoomView(viewType: ViewType.deliverer,), arguments: {
-                    "user1Id": "${delivery?.user is String ? delivery?.user : delivery?.user?.id}",
+                    "user1Id": "${delivery?.order.cart.user is String ? delivery?.order.cart.user : delivery?.order.cart.user?.id}",
                     "user2Id": "${controller.deliverer?.value.user}",
                   });
                 },
